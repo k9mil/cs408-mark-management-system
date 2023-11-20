@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 import Sidebar from "../../common/Sidebar";
 
+import { toast } from "sonner";
+
 import {
   DocumentArrowUpIcon,
-  XMarkIcon,
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 
@@ -36,6 +37,8 @@ const MarksPage = () => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     preventEventDefaults(e);
     setIsDragging(false);
+
+    toast.success("Your file has been succesfully uploaded!");
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
@@ -50,12 +53,12 @@ const MarksPage = () => {
         <Card className="w-1/2 h-3/5 space-y-4 p-2">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Upload Marks</CardTitle>
-            <XMarkIcon className="h-6 w-6 text-card-foreground cursor-pointer" />
+            {/* <XMarkIcon className="h-6 w-6 text-card-foreground cursor-pointer" /> */}
           </CardHeader>
           <div
             className={
               "mx-6 rounded-md border-2 border-dashed border-gray-300 p-28 flex flex-col justify-center items-center space-y-8 " +
-              (isDragging ? "border-primary-blue" : "")
+              (isDragging ? "border-primary-blue bg-slate-50" : "")
             }
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -109,7 +112,9 @@ const MarksPage = () => {
               <Button variant="secondary" className="w-20">
                 Cancel
               </Button>
-              <Button className="w-20">Next</Button>
+              <Button disabled className="w-20">
+                Next
+              </Button>
             </div>
           </div>
         </Card>
