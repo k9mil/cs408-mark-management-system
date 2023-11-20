@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link } from "react-router-dom";
+
 import {
   HomeIcon,
   PencilIcon,
@@ -14,47 +16,51 @@ import {
 const Sidebar = () => {
   return (
     <>
-      <div className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-[1px] border-black">
-        <div className="space-y-8">
-          <div className="border-b-[1px] border-black">
+      <nav className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-2 border-black">
+        <div>
+          <div className="border-b-2 border-black">
             <img src="/strathclyde_logo.svg" alt="Strathclyde Logo" />
           </div>
-          <div className="space-y-12">
-            <div className="ml-7 flex space-x-4">
-              <HomeIcon className="h-6 w-6 text-white" />
-              <h2 className="text-white">Dashboard</h2>
-            </div>
-            <div className="ml-7 flex space-x-4">
-              <PencilIcon className="h-6 w-6 text-white" />
-              <h2 className="text-white">Marks</h2>
-            </div>
-            <div className="ml-7 flex space-x-4">
+          <ul>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
+              <Link to="/" className="flex items-center space-x-4">
+                <HomeIcon className="h-6 w-6 text-white" />
+                <h2 className="text-white">Dashboard</h2>
+              </Link>
+            </li>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
+              <Link to="/marks" className="flex items-center space-x-4">
+                <PencilIcon className="h-6 w-6 text-white" />
+                <h2 className="text-white">Marks</h2>
+              </Link>
+            </li>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
               <UserGroupIcon className="h-6 w-6 text-white" />
               <h2 className="text-white">Students</h2>
-            </div>
-            <div className="ml-7 flex space-x-4">
+            </li>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
               <ClipboardDocumentListIcon className="h-6 w-6 text-white" />
               <h2 className="text-white">Reports</h2>
-            </div>
-            <div className="ml-7 flex space-x-4">
+            </li>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
               <UserIcon className="h-6 w-6 text-white" />
               <h2 className="text-white">User Management</h2>
-            </div>
-            <div className="ml-7 flex space-x-4">
+            </li>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
               <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
               <h2 className="text-white">Help & Support</h2>
-            </div>
-            <div className="ml-7 flex space-x-4">
+            </li>
+            <li className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer">
               <Cog8ToothIcon className="h-6 w-6 text-white" />
               <h2 className="text-white">Settings</h2>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
         <div className="flex justify-between mx-6 my-4">
-          <InformationCircleIcon className="h-6 w-6 text-white" />
-          <h2 className="text-gray-400">Log Out</h2>
+          <InformationCircleIcon className="h-6 w-6 text-white cursor-pointer" />
+          <h2 className="text-gray-400 cursor-pointer">Log Out</h2>
         </div>
-      </div>
+      </nav>
     </>
   );
 };
