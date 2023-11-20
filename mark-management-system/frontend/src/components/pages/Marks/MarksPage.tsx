@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 
 import Sidebar from "../../common/Sidebar";
 
@@ -12,6 +12,28 @@ import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 import { Button } from "@/components/common/Button";
 
 const MarksPage = () => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const preventEventDefaults = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    preventEventDefaults(e);
+    setIsDragging(true);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    preventEventDefaults(e);
+    setIsDragging(false);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    preventEventDefaults(e);
+    setIsDragging(false);
+  };
+
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
@@ -19,13 +41,21 @@ const MarksPage = () => {
         <Card className="w-1/2 h-3/5 space-y-4 p-2">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Upload Marks</CardTitle>
-            <XMarkIcon className="h-6 w-6 text-card-foreground" />
+            <XMarkIcon className="h-6 w-6 text-card-foreground cursor-pointer" />
           </CardHeader>
-          <div className="mx-6 rounded-md border-2 border-dashed border-gray-300 p-28 flex flex-col justify-center items-center space-y-8">
+          <div
+            className={
+              "mx-6 rounded-md border-2 border-dashed border-gray-300 p-28 flex flex-col justify-center items-center space-y-8 " +
+              (isDragging ? "border-primary-blue" : "")
+            }
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
             <DocumentArrowUpIcon className="h-16 w-16 text-card-foreground" />
             <h2 className="text-card-foreground font-semibold">
-              Drag and Drop file here or{" "}
-              <span className="underline font-bold underline-offset-4">
+              Drag and Drop files here or{" "}
+              <span className="underline font-bold underline-offset-4 cursor-pointer">
                 Choose File
               </span>
             </h2>
