@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, HTTPException
 from faker import Faker
 
 from sqlalchemy.orm import Session
@@ -10,6 +10,8 @@ from api.system.schemas import schemas
 from api.users.repositories.user_repository import UserRepository
 
 from api.users.use_cases.create_user_use_case import CreateUserUseCase
+
+from api.users.errors.user_already_exists import UserAlreadyExists
 
 from api.users.hashers.bcrypt_hasher import BCryptHasher
 
@@ -29,7 +31,12 @@ def create_user(request: schemas.UserCreate, db: Session = Depends(get_db)):
         faker
     )
 
-    return create_user_use_case.execute(request)
+    try:
+        return create_user_use_case.execute(request)
+    except UserAlreadyExists as e:
+        raise UserAlreadyExists(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @users.get("/users/", response_model=list[schemas.User])
 def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
