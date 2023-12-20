@@ -20,7 +20,6 @@ class UserBase(BaseModel):
     email_address: str
     first_name: str
     last_name: str
-    personal_circumstances: str | None = None
 
 class UserCreate(UserBase):
     password: str
@@ -30,6 +29,7 @@ class User(UserBase):
     
     reg_no: str
     roles: List[Role] = []
+    personal_circumstances: str | None = None
 
     class Config:
         orm_mode = True
@@ -44,7 +44,7 @@ class DegreeCreate(DegreeBase):
 
 class Degree(DegreeBase):
     id: int
-    
+
     classes: List["Class"] = []
 
     class Config:
