@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+
 from typing import List
 
 
@@ -16,7 +17,6 @@ class Role(RoleBase):
 
 
 class UserBase(BaseModel):
-    reg_no: int
     email_address: str
     first_name: str
     last_name: str
@@ -27,6 +27,8 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
+    
+    reg_no: str
     roles: List[Role] = []
 
     class Config:
