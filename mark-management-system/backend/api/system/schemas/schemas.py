@@ -44,6 +44,7 @@ class DegreeCreate(DegreeBase):
 
 class Degree(DegreeBase):
     id: int
+    
     classes: List["Class"] = []
 
     class Config:
@@ -86,6 +87,7 @@ class Class(ClassBase):
 
 class MarksBase(BaseModel):
     mark: int
+
     class_id: int
     student_id: int
 
@@ -94,9 +96,6 @@ class MarksCreate(MarksBase):
 
 class Marks(MarksBase):
     id: int
-
-    class_id: int
-    student_id: int
 
     class Config:
         orm_mode = True
