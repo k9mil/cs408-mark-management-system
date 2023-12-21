@@ -17,6 +17,8 @@ from api.users.hashers.bcrypt_hasher import BCryptHasher
 
 from api.users.dependencies import get_user_repository
 
+from api.users.validators import EmailAddressValidator, PasswordValidator
+
 
 users = APIRouter()
 faker = Faker()
@@ -28,6 +30,21 @@ def create_user(
     user_repository: UserRepository = Depends(get_user_repository)
 ):
     bcrypt_hasher = BCryptHasher()
+
+    email_address_validator = EmailAddressValidator()
+    password_validator = PasswordValidator()
+
+    validation_email_errors = email_address_validator.validate_user_email_address(request.email_address)
+    validation_password_errors = password_validator.validate_user_password(request.password)
+
+    if validation_email_errors or validation_password_errors:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "email_errors": validation_email_errors,
+                "password_errors": validation_password_errors
+            }
+        )
 
     create_user_use_case = CreateUserUseCase(
         user_repository,
