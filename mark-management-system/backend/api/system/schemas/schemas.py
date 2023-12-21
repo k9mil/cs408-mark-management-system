@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+
 from typing import List
 
 
@@ -16,18 +17,19 @@ class Role(RoleBase):
 
 
 class UserBase(BaseModel):
-    reg_no: int
     email_address: str
     first_name: str
     last_name: str
-    personal_circumstances: str | None = None
 
 class UserCreate(UserBase):
     password: str
 
 class User(UserBase):
     id: int
+    
+    reg_no: str
     roles: List[Role] = []
+    personal_circumstances: str | None = None
 
     class Config:
         orm_mode = True
@@ -42,6 +44,7 @@ class DegreeCreate(DegreeBase):
 
 class Degree(DegreeBase):
     id: int
+
     classes: List["Class"] = []
 
     class Config:
@@ -84,6 +87,7 @@ class Class(ClassBase):
 
 class MarksBase(BaseModel):
     mark: int
+
     class_id: int
     student_id: int
 
@@ -92,9 +96,6 @@ class MarksCreate(MarksBase):
 
 class Marks(MarksBase):
     id: int
-
-    class_id: int
-    student_id: int
 
     class Config:
         orm_mode = True
