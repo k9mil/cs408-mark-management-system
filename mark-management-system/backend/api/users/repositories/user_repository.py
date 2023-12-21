@@ -18,3 +18,6 @@ class UserRepository:
     
     def get_users(self, skip: int, limit: int) -> list[User]:
         return self.db.query(User).offset(skip).limit(limit).all()
+
+    def get_user(self, user_id: int) -> User:
+        return self.db.query(User).filter_by(id=user_id).first()
