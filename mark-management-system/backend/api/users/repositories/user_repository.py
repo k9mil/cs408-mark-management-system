@@ -15,3 +15,6 @@ class UserRepository:
 
     def find_by_email(self, email_address: str) -> User:
         return self.db.query(User).filter_by(email_address=email_address).first()
+    
+    def get_users(self, skip: int, limit: int) -> list[User]:
+        return self.db.query(User).offset(skip).limit(limit).all()
