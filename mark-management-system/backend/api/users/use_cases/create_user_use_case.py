@@ -25,7 +25,6 @@ class CreateUserUseCase:
         hashed_password = self.bcrypt_hasher.hash(request.password)
 
         user = User(
-            reg_no=f"{self.faker.random_lowercase_letter()}{self.faker.random_lowercase_letter()}{self.faker.random_lowercase_letter()}{self.faker.random_number(5)}",
             email_address=request.email_address,
             first_name=request.first_name,
             last_name=request.last_name,

@@ -12,24 +12,26 @@ class RoleCreate(RoleBase):
 class Role(RoleBase):
     id: int
 
-    class Config:
+    # TODO: fix circular dependency via ForwardRef
+    users: List["User"] = []
+
+    class Config:   
         orm_mode = True
 
+class MarksBase(BaseModel):
+    mark: int
 
-class UserBase(BaseModel):
-    email_address: str
-    first_name: str
-    last_name: str
+    class_id: int
+    student_id: int
 
-class UserCreate(UserBase):
-    password: str
+class MarksCreate(MarksBase):
+    pass
 
-class User(UserBase):
+class Marks(MarksBase):
     id: int
-    
-    reg_no: str
-    roles: List[Role] = []
-    personal_circumstances: str | None = None
+
+    # TODO: fix circular dependency via ForwardRef
+    classes: List["Class"] = []
 
     class Config:
         orm_mode = True
@@ -45,7 +47,74 @@ class DegreeCreate(DegreeBase):
 class Degree(DegreeBase):
     id: int
 
+    # TODO: fix circular dependency via ForwardRef
     classes: List["Class"] = []
+
+    class Config:
+        orm_mode = True
+
+class DegreeClassBase(BaseModel):
+    pass
+
+class DegreeClassCreate(DegreeClassBase):
+    degree_id: int
+    class_id: int
+
+class DegreeClass(DegreeClassBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class ClassBase(BaseModel):
+    name: str
+    code: str
+    credit: int
+
+class ClassCreate(ClassBase):
+    pass
+
+class Class(ClassBase):
+    id: int
+
+    # TODO: fix circular dependency via ForwardRef
+    lecturer: "User" # type: ignore
+    
+    students: List["Student"] = [] # type: ignore
+    marks: List[Marks] = []
+
+    class Config:
+        orm_mode = True
+
+
+class UserBase(BaseModel):
+    email_address: str
+    first_name: str
+    last_name: str
+
+class UserCreate(UserBase):
+    password: str
+
+class User(UserBase):
+    id: int
+    
+    roles: List[Role] = []
+    classes: List[Class] = []
+
+    class Config:
+        orm_mode = True
+
+class StudentBase(BaseModel):
+    reg_no: str
+    personal_circumstances: str | None = None
+
+class StudentCreate(StudentBase):
+    pass
+
+class Student(StudentBase):
+    id: int
+
+    classes: List[Class] = []
 
     class Config:
         orm_mode = True
@@ -59,56 +128,6 @@ class RoleMembersCreate(RoleMembersBase):
     user_id: int
 
 class RoleMembers(RoleMembersBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-class ClassBase(BaseModel):
-    name: str
-    code: str
-    credit: int
-
-class ClassCreate(ClassBase):
-    pass
-
-class Class(ClassBase):
-    id: int
-
-    lecturer: User
-    
-    marks: List["Marks"] = []
-    degrees: List[Degree] = []
-
-    class Config:
-        orm_mode = True
-
-
-class MarksBase(BaseModel):
-    mark: int
-
-    class_id: int
-    student_id: int
-
-class MarksCreate(MarksBase):
-    pass
-
-class Marks(MarksBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-class DegreeClassBase(BaseModel):
-    pass
-
-class DegreeClassCreate(DegreeClassBase):
-    degree_id: int
-    class_id: int
-
-class DegreeClass(DegreeClassBase):
     id: int
 
     class Config:
