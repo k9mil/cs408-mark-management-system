@@ -11,10 +11,10 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    email_address = Column(String, unique=True, index=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    password = Column(String, nullable=False)
+    email_address = Column(String(256), unique=True, index=True)
+    first_name = Column(String(64), nullable=False)
+    last_name = Column(String(64), nullable=False)
+    password = Column(String(256), nullable=False)
 
     classes = relationship("Class", back_populates="lecturer")
 
@@ -25,8 +25,8 @@ class Student(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    reg_no = Column(String, unique=True, index=True)
-    personal_circumstances = Column(String)
+    reg_no = Column(String(256), unique=True, index=True)
+    personal_circumstances = Column(String(1024))
 
     classes = relationship("Class", secondary="student_classes", back_populates="students")
 
@@ -35,8 +35,8 @@ class Degree(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    level = Column(String, nullable=False)
-    name = Column(String, nullable=False)
+    level = Column(String(64), nullable=False)
+    name = Column(String(256), nullable=False)
 
     classes = relationship("Class", secondary="degree_classes", back_populates="degrees")
 
@@ -44,7 +44,7 @@ class Role(Base):
     __tablename__ = "roles"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
+    title = Column(String(64), nullable=False)
 
     users = relationship("User", secondary="role_users", back_populates="roles")
 
@@ -61,8 +61,8 @@ class Class(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     
-    name = Column(String, nullable=False)
-    code = Column(String, nullable=False)
+    name = Column(String(128), nullable=False)
+    code = Column(String(32), nullable=False)
     credit = Column(Integer, nullable=False)
 
     lecturer_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
