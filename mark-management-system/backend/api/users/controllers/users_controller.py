@@ -1,9 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException
-from faker import Faker
 
 from api.system.schemas import schemas
-
-from api.users.repositories.user_repository import UserRepository
 
 from api.users.use_cases.create_user_use_case import CreateUserUseCase
 from api.users.use_cases.get_users_use_case import GetUsersUseCase
@@ -13,7 +10,6 @@ from api.users.errors.user_already_exists import UserAlreadyExists
 from api.users.errors.users_not_found import UsersNotFound
 from api.users.errors.user_not_found import UserNotFound
 
-from api.users.dependencies import get_user_repository
 from api.users.dependencies import get_email_address_validator
 from api.users.dependencies import get_password_validator
 
