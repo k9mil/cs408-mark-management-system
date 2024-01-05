@@ -26,9 +26,13 @@ class Student(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     reg_no = Column(String(256), unique=True, index=True)
+    student_name = Column(String(128), nullable=False)
     personal_circumstances = Column(String(1024))
 
-    classes = relationship("Class", secondary="student_classes", back_populates="students")
+    degree_id = Column(Integer, ForeignKey("degrees.id"), index=True, nullable=False)
+
+    degree = relationship("Degree", back_populates="students")
+    classes = relationship("Class", secondary="marks", back_populates="students")
 
 class Degree(Base):
     __tablename__ = "degrees"
@@ -38,6 +42,7 @@ class Degree(Base):
     level = Column(String(64), nullable=False)
     name = Column(String(256), nullable=False)
 
+    students = relationship("Student", back_populates="degree")
     classes = relationship("Class", secondary="degree_classes", back_populates="degrees")
 
 class Role(Base):
@@ -70,16 +75,8 @@ class Class(Base):
     lecturer = relationship("User", back_populates="classes")
     marks = relationship("Marks", back_populates="class_")
 
-    students = relationship("Student", secondary="student_classes", back_populates="classes")
+    students = relationship("Student", secondary="marks", back_populates="classes")
     degrees = relationship("Degree", secondary="degree_classes", back_populates="classes")
-
-class StudentClasses(Base):
-    __tablename__ = "student_classes"
-
-    id = Column(Integer, primary_key=True, index=True)
-
-    student_id = Column(Integer, ForeignKey("students.id"), primary_key=True, nullable=False)
-    class_id = Column(Integer, ForeignKey("classes.id"), primary_key=True, nullable=False)
 
 class Marks(Base):
     __tablename__ = "marks"
