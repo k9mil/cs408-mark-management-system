@@ -1,5 +1,3 @@
-from faker import Faker
-
 from api.system.models.models import User
 
 from api.system.schemas.schemas import UserCreate
@@ -13,10 +11,9 @@ from api.users.hashers.bcrypt_hasher import BCryptHasher
 
 
 class CreateUserUseCase:
-    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher, faker: Faker):
+    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher):
         self.user_repository = user_repository
         self.bcrypt_hasher = bcrypt_hasher
-        self.faker = faker
     
     def execute(self, request: UserCreate) -> UserSchema:
         if self.user_repository.find_by_email(request.email_address):
@@ -32,5 +29,7 @@ class CreateUserUseCase:
         )
 
         self.user_repository.add(user)
+
+        print(vars(user))
 
         return user
