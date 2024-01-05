@@ -48,6 +48,7 @@ class Degree(DegreeBase):
     id: int
 
     # TODO: fix circular dependency via ForwardRef
+    students: List["Student"] = []
     classes: List["Class"] = []
 
     class Config:
@@ -106,6 +107,7 @@ class User(UserBase):
 
 class StudentBase(BaseModel):
     reg_no: str
+    student_name: str
     personal_circumstances: str | None = None
 
 class StudentCreate(StudentBase):
@@ -114,6 +116,9 @@ class StudentCreate(StudentBase):
 class Student(StudentBase):
     id: int
 
+    degree_id: int
+
+    degree: Degree
     classes: List[Class] = []
 
     class Config:
