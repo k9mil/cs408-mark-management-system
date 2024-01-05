@@ -45,7 +45,7 @@ def create_user(
     try:
         return create_user_use_case.execute(request)
     except UserAlreadyExists as e:
-        raise UserAlreadyExists(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

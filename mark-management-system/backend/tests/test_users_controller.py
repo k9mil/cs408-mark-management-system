@@ -12,25 +12,13 @@ from api.users.dependencies import get_create_user_use_case
 from api.users.dependencies import get_email_address_validator
 from api.users.dependencies import get_password_validator
 
+from api.users.errors.user_already_exists import UserAlreadyExists
+
 from api import create_app
 
 
 app = create_app()
 client = TestClient(app)
-
-class MockCreateUserUseCase:
-    def __init__(self):
-        pass
-
-    def execute(self, _):
-        return {
-            "id": 1,
-            "email_address": "sample@sample.com",
-            "first_name": "Joe",
-            "last_name": "Doe",
-            "roles": [],
-            "classes": [],
-        }
 
 class MockBCryptHasher:
     def hash(self, password: str):
@@ -84,13 +72,40 @@ class MockUserRepository:
         self.database.add(class_)
 
     def find_by_email(self, email_address: str):
-        pass
+        if email_address == "john@doe2.com":
+            return {
+                "id": 1,
+                "email_address": email_address,
+                "first_name": "John",
+                "last_name": "Doe",
+                "roles": [],
+                "classes": [],
+            }
+        
+        return None
 
     def get_users(self, skip: int, limit: int):
         pass
 
     def get_user(self, user_id: int):
         pass
+
+class MockCreateUserUseCase:
+    def __init__(self, user_repository: MockUserRepository):
+        self.user_repository = user_repository
+
+    def execute(self, request: object):
+        if self.user_repository.find_by_email(request.email_address):
+            raise UserAlreadyExists("User already exists")
+
+        return {
+            "id": 1,
+            "email_address": request.email_address,
+            "first_name": "John",
+            "last_name": "Doe",
+            "roles": [],
+            "classes": [],
+        }
 
 def override_database_dependency():
     return MockDatabase()
@@ -101,8 +116,8 @@ def override_user_repository_dependency(db = Depends(override_database_dependenc
 def override_bcrypt_hasher_dependency():
     return MockCreateUserUseCase()
 
-def override_create_user_use_case_dependency():
-    return MockCreateUserUseCase()
+def override_create_user_use_case_dependency(user_repository = Depends(override_user_repository_dependency)):
+    return MockCreateUserUseCase(user_repository)
 
 def override_email_adress_validator_dependency():
     return MockEmailAddressValidator()
@@ -119,16 +134,16 @@ app.dependency_overrides[get_password_validator] = override_password_validator_d
 
 def test_given_valid_user_request_when_create_user_is_called_then_status_code_is_200():
     SAMPLE_USER_DATA = {
-        "email_address": "sample@sample.com",
-        "first_name": "Joe",
+        "email_address": "john@doe1.com",
+        "first_name": "John",
         "last_name": "Doe",
         "password": "strathclyde123",
     }
 
     SAMPLE_RESPONSE_OBJECT = {
         "id": 1,
-        "email_address": "sample@sample.com",
-        "first_name": "Joe",
+        "email_address": "john@doe1.com",
+        "first_name": "John",
         "last_name": "Doe",
         "roles": [],
         "classes": [],
@@ -141,3 +156,31 @@ def test_given_valid_user_request_when_create_user_is_called_then_status_code_is
 
     assert response.status_code == 200
     assert response.json() == SAMPLE_RESPONSE_OBJECT
+
+def test_given_invalid_user_request_when_create_user_is_called_then_status_code_is_422():
+    SAMPLE_USER_DATA = {
+        "first_name": "John",
+        "last_name": "Doe",
+    }
+
+    response = client.post(
+        "/users/",
+        json=SAMPLE_USER_DATA,
+    )
+
+    assert response.status_code == 422
+
+def test_given_valid_user_request_but_user_exists_when_create_user_is_called_then_status_code_is_409():
+    SAMPLE_USER_DATA = {
+        "email_address": "john@doe2.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "password": "strathclyde123",
+    }
+
+    response = client.post(
+        "/users/",
+        json=SAMPLE_USER_DATA,
+    )
+
+    assert response.status_code == 409
