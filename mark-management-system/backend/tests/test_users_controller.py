@@ -3,6 +3,10 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from sqlalchemy import create_engine
+
+from unittest.mock import MagicMock
+
 from fastapi import Depends
 from fastapi.testclient import TestClient
 
@@ -14,6 +18,8 @@ from api.users.dependencies import get_password_validator
 from api.users.dependencies import get_create_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
+
+from api.database import get_db
 
 from api.users.errors.user_already_exists import UserAlreadyExists
 from api.users.errors.users_not_found import UsersNotFound
@@ -180,6 +186,16 @@ def override_get_users_use_case_dependency(user_repository = Depends(override_us
 def override_get_user_use_case_dependency(user_repository = Depends(override_user_repository_dependency)):
     return MockGetUserUseCase(user_repository)
 
+def override_create_engine():
+    return MagicMock()
+
+def override_get_db():
+    db = MagicMock()
+    try:
+        yield db
+    finally:
+        db.close()
+
 app.dependency_overrides[get_user_repository] = override_user_repository_dependency
 app.dependency_overrides[get_bcrypt_hasher] = override_bcrypt_hasher_dependency
 app.dependency_overrides[get_email_address_validator] = override_email_adress_validator_dependency
@@ -187,6 +203,8 @@ app.dependency_overrides[get_password_validator] = override_password_validator_d
 app.dependency_overrides[get_create_user_use_case] = override_create_user_use_case_dependency
 app.dependency_overrides[get_users_use_case] = override_get_users_use_case_dependency
 app.dependency_overrides[get_user_use_case] = override_get_user_use_case_dependency
+app.dependency_overrides[get_db] = override_get_db
+app.dependency_overrides[create_engine] = override_create_engine
 
 
 def test_given_valid_user_request_when_create_user_is_called_then_status_code_is_200():
