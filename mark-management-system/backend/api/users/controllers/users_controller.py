@@ -15,6 +15,7 @@ from api.users.dependencies import get_password_validator
 
 from api.users.dependencies import get_create_user_use_case
 from api.users.dependencies import get_users_use_case
+from api.users.dependencies import get_user_use_case
 
 from api.users.validators import EmailAddressValidator
 from api.users.validators import PasswordValidator
@@ -58,18 +59,18 @@ def get_users(
     try:
         return get_users_use_case.execute(skip, limit)
     except UsersNotFound as e:
-        raise UsersNotFound(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @users.get("/users/{user_id}", response_model=schemas.User)
 def get_user(
     user_id: int,
-    get_user_use_case: GetUserUseCase = Depends(get_users_use_case),
+    get_user_use_case: GetUserUseCase = Depends(get_user_use_case),
 ):
     try:
         return get_user_use_case.execute(user_id)
     except UserNotFound as e:
-        raise UsersNotFound(status_code=409, detail=str(e))
+        raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
