@@ -6,7 +6,7 @@ from api.config import DevelopmentConfig
 from api.config import TestingConfig
 
 
-database_url = DevelopmentConfig.DATABASE_URL or TestingConfig.TESTING_URL
+database_url = DevelopmentConfig.DATABASE_URL or TestingConfig.DATABASE_URL
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
