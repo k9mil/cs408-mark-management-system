@@ -23,6 +23,7 @@ class MarksBase(BaseModel):
 
     class_id: int
     student_id: int
+    unique_code: str
 
 class MarksCreate(MarksBase):
     pass
@@ -71,6 +72,7 @@ class ClassBase(BaseModel):
     name: str
     code: str
     credit: int
+    credit_level: int
 
 class ClassCreate(ClassBase):
     pass
