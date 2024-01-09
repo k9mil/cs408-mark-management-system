@@ -69,6 +69,7 @@ class Class(Base):
     name = Column(String(128), nullable=False)
     code = Column(String(32), nullable=False)
     credit = Column(Integer, nullable=False)
+    credit_level = Column(Integer, nullable=False)
 
     lecturer_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
 
@@ -87,6 +88,7 @@ class Marks(Base):
 
     class_id = Column(Integer, ForeignKey("classes.id"), index=True)
     student_id = Column(Integer, ForeignKey("students.id"), index=True)
+    unique_code = Column(String(32), nullable=False)
 
     class_ = relationship("Class", back_populates="marks")
 
