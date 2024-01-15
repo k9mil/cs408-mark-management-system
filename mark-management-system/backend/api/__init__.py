@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from api.users.controllers.users_controller import users
+from api.classes.controllers.classes_controller import classes
 
 from api.database import engine
 
@@ -18,6 +19,7 @@ def create_app(config_class=DevelopmentConfig):
 
     Base.metadata.create_all(bind=engine)
 
-    app.include_router(users)
+    app.include_router(users, tags=["users"])
+    app.include_router(classes, tags=["classes"])
 
     return app

@@ -1,6 +1,11 @@
 from pydantic import BaseModel
 
-from typing import List
+from typing import List, ForwardRef
+
+
+Class = ForwardRef('Class')
+Student = ForwardRef('Student')
+Marks = ForwardRef('Marks')
 
 
 class RoleBase(BaseModel):
@@ -68,28 +73,6 @@ class DegreeClass(DegreeClassBase):
     class Config:
         orm_mode = True
 
-class ClassBase(BaseModel):
-    name: str
-    code: str
-    credit: int
-    credit_level: int
-
-class ClassCreate(ClassBase):
-    pass
-
-class Class(ClassBase):
-    id: int
-
-    # TODO: fix circular dependency via ForwardRef
-    lecturer: "User" # type: ignore
-    
-    students: List["Student"] = [] # type: ignore
-    marks: List[Marks] = []
-
-    class Config:
-        orm_mode = True
-
-
 class UserBase(BaseModel):
     email_address: str
     first_name: str
@@ -102,7 +85,26 @@ class User(UserBase):
     id: int
     
     roles: List[Role] = []
-    classes: List[Class] = []
+    classes: List["Class"] = [] # type: ignore
+
+    class Config:
+        orm_mode = True
+
+class ClassBase(BaseModel):
+    name: str
+    code: str
+    credit: int
+    credit_level: int
+
+class ClassCreate(ClassBase):
+    lecturer_id: int
+
+class Class(ClassBase):
+    id: int
+    
+    lecturer: UserBase # type: ignore
+    students: List["Student"] = [] # type: ignore
+    marks: List[Marks] = []
 
     class Config:
         orm_mode = True
@@ -139,3 +141,7 @@ class RoleMembers(RoleMembersBase):
 
     class Config:
         orm_mode = True
+
+User.model_rebuild()
+Class.model_rebuild()
+Student.model_rebuild()
