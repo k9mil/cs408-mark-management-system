@@ -15,3 +15,6 @@ class ClassRepository:
 
     def find_by_code(self, code: int) -> Class:
         return self.db.query(Class).filter_by(code=code).first()
+
+    def get_classes(self, skip: int, limit: int) -> list[Class]:
+        return self.db.query(Class).offset(skip).limit(limit).all()

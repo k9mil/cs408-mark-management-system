@@ -8,6 +8,7 @@ from api.classes.repositories.class_repository import ClassRepository
 from api.users.repositories.user_repository import UserRepository
 
 from api.classes.use_cases.create_class_use_case import CreateClassUseCase
+from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
 
 
 def get_class_repository(db: Session = Depends(get_db)) -> ClassRepository:
@@ -23,4 +24,11 @@ def create_class_use_case(
     return CreateClassUseCase(
         class_repository, 
         user_repository
+    )
+
+def get_classes_use_case(
+        class_repository: ClassRepository = Depends(get_class_repository),
+    ) -> GetClassesUseCase:
+    return GetClassesUseCase(
+        class_repository, 
     )
