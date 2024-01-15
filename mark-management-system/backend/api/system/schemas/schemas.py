@@ -99,6 +99,11 @@ class ClassBase(BaseModel):
 class ClassCreate(ClassBase):
     lecturer_id: int
 
+class ClassEdit(ClassBase):
+    id: int
+    
+    lecturer_id: int
+
 class Class(ClassBase):
     id: int
     
