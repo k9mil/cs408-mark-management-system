@@ -4,6 +4,7 @@ from api.system.schemas import schemas
 
 from api.classes.use_cases.create_class_use_case import CreateClassUseCase
 from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
+from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesForLecturerUseCase
 
 from api.classes.errors.class_already_exists import ClassAlreadyExists
 from api.classes.errors.classes_not_found import ClassesNotFound
@@ -12,6 +13,7 @@ from api.users.errors.user_not_found import UserNotFound
 
 from api.classes.dependencies import create_class_use_case
 from api.classes.dependencies import get_classes_use_case
+from api.classes.dependencies import get_classes_for_lecturer_use_case
 
 
 classes = APIRouter()
@@ -45,4 +47,19 @@ def get_classes(
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+@classes.get("/classes/{lecturer_id}", response_model=list[schemas.Class])
+def get_classes_for_lecturer(
+    lecturer_id: int,
+    skip: int = 0,
+    limit: int = 100,
+    get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
+):
+    try:
+        return get_classes_for_lecturer_use_case.execute(lecturer_id, skip, limit)
+    except UserNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except ClassesNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
