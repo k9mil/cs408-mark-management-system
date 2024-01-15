@@ -15,7 +15,7 @@ from api.users.dependencies import get_bcrypt_hasher
 from api.users.dependencies import get_email_address_validator
 from api.users.dependencies import get_password_validator
 
-from api.users.dependencies import get_create_user_use_case
+from api.users.dependencies import create_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
 
@@ -200,7 +200,7 @@ app.dependency_overrides[get_user_repository] = override_user_repository_depende
 app.dependency_overrides[get_bcrypt_hasher] = override_bcrypt_hasher_dependency
 app.dependency_overrides[get_email_address_validator] = override_email_adress_validator_dependency
 app.dependency_overrides[get_password_validator] = override_password_validator_dependency
-app.dependency_overrides[get_create_user_use_case] = override_create_user_use_case_dependency
+app.dependency_overrides[create_user_use_case] = override_create_user_use_case_dependency
 app.dependency_overrides[get_users_use_case] = override_get_users_use_case_dependency
 app.dependency_overrides[get_user_use_case] = override_get_user_use_case_dependency
 app.dependency_overrides[get_db] = override_get_db

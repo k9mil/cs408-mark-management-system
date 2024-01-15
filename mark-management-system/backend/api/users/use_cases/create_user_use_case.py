@@ -30,6 +30,4 @@ class CreateUserUseCase:
 
         self.user_repository.add(user)
 
-        print(vars(user))
-
         return user
