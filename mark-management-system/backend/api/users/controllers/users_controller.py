@@ -13,7 +13,7 @@ from api.users.errors.user_not_found import UserNotFound
 from api.users.dependencies import get_email_address_validator
 from api.users.dependencies import get_password_validator
 
-from api.users.dependencies import get_create_user_use_case
+from api.users.dependencies import create_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
 
@@ -27,7 +27,7 @@ users = APIRouter()
 @users.post("/users/", response_model=schemas.User)
 def create_user(
     request: schemas.UserCreate,
-    create_user_use_case: CreateUserUseCase = Depends(get_create_user_use_case),
+    create_user_use_case: CreateUserUseCase = Depends(create_user_use_case),
     email_address_validator: EmailAddressValidator = Depends(get_email_address_validator),
     password_validator: PasswordValidator = Depends(get_password_validator)
 ):

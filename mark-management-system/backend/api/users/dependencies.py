@@ -28,7 +28,7 @@ def get_email_address_validator() -> EmailAddressValidator:
 def get_password_validator() -> PasswordValidator:
     return PasswordValidator()
 
-def get_create_user_use_case(
+def create_user_use_case(
         user_repository: UserRepository = Depends(get_user_repository),
         bcrypt_hasher: BCryptHasher = Depends(get_bcrypt_hasher)
     ) -> CreateUserUseCase:
