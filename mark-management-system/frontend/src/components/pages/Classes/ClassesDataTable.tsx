@@ -1,6 +1,8 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 
-import { useState } from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -15,6 +17,20 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/common/Command";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/common/Popover";
 
 import {
   Table,
@@ -34,9 +50,22 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
+import { User } from "./ClassesColumns";
+
+import { userService } from "../../../services/UserService";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+}
+
+function formatLecturerName(lecturer: User) {
+  return `${lecturer.first_name} ${lecturer.last_name}`;
+}
+
+function getNumOfStudents(students: Array<User>) {
+  if (students) return students.length;
+  return 0;
 }
 
 export function ClassesDataTable<TData, TValue>({
@@ -45,6 +74,27 @@ export function ClassesDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
+  const [lecturerOpen, setLecturerOpen] = React.useState(false);
+  const [lecturer, setLecturer] = React.useState("");
+  const [lecturers, setLecturers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const lecturerData = async () => {
+      try {
+        const result = await userService.getUsers();
+        setLecturers(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    lecturerData();
+  }, []);
+
+  const lecturerList = lecturers.map((user) => ({
+    value: user.id.toString(),
+    label: `${user.first_name} ${user.last_name}`,
+  }));
 
   const table = useReactTable({
     data,
@@ -93,10 +143,14 @@ export function ClassesDataTable<TData, TValue>({
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        {cell.column.id === "lecturer"
+                          ? formatLecturerName(cell.row.original.lecturer)
+                          : cell.column.id === "number_of_students"
+                          ? getNumOfStudents(cell.row.original.students)
+                          : flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -125,7 +179,7 @@ export function ClassesDataTable<TData, TValue>({
                             <Input
                               id="name"
                               className="col-span-3"
-                              value={row.original.name}
+                              defaultValue={row.original.name}
                             />
                           </div>
                           <div>
@@ -135,7 +189,7 @@ export function ClassesDataTable<TData, TValue>({
                             <Input
                               id="name"
                               className="col-span-3"
-                              value={row.original.code}
+                              defaultValue={row.original.code}
                             />
                           </div>
                           <div>
@@ -145,7 +199,7 @@ export function ClassesDataTable<TData, TValue>({
                             <Input
                               id="name"
                               className="col-span-3"
-                              value={row.original.credit}
+                              defaultValue={row.original.credit}
                             />
                           </div>
                         </div>
@@ -157,7 +211,7 @@ export function ClassesDataTable<TData, TValue>({
                             <Input
                               id="name"
                               className="col-span-3"
-                              value={row.original.credit_level}
+                              defaultValue={row.original.credit_level}
                             />
                           </div>
                           <div>
@@ -170,18 +224,69 @@ export function ClassesDataTable<TData, TValue>({
                             <Input
                               id="name"
                               className="col-span-3"
-                              value={row.original.number_of_students}
+                              value={row.original.students.length}
+                              disabled
                             />
                           </div>
-                          <div>
-                            <Label htmlFor="lecturer" className="text-right">
+                          <div className="flex flex-col space-y-2">
+                            <Label htmlFor="lecturer" className="text-left">
                               Lecturer
                             </Label>
-                            <Input
-                              id="name"
-                              className="col-span-3"
-                              value={row.original.lecturer.first_name}
-                            />
+                            <Popover
+                              open={lecturerOpen}
+                              onOpenChange={setLecturerOpen}
+                            >
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  aria-expanded={open}
+                                  className="w-[200px] justify-between"
+                                >
+                                  {lecturer
+                                    ? lecturerList.find(
+                                        (lecturerDropdown) =>
+                                          lecturerDropdown.value === lecturer
+                                      )?.label
+                                    : "Select lecturer..."}
+                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[200px] p-0">
+                                <Command>
+                                  <CommandInput placeholder="Search lecturers..." />
+                                  <CommandEmpty>
+                                    No lecturer found.
+                                  </CommandEmpty>
+                                  <CommandGroup>
+                                    {lecturerList.map((lecturerDropdown) => (
+                                      <CommandItem
+                                        key={lecturerDropdown.value}
+                                        value={lecturerDropdown.value}
+                                        onSelect={(currentValue) => {
+                                          setLecturer(
+                                            currentValue === lecturer
+                                              ? ""
+                                              : currentValue
+                                          );
+                                          setLecturerOpen(false);
+                                        }}
+                                      >
+                                        <Check
+                                          className={cn(
+                                            "mr-2 h-4 w-4",
+                                            lecturer === lecturerDropdown.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                        {lecturerDropdown.label}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
                           </div>
                         </div>
                       </div>
