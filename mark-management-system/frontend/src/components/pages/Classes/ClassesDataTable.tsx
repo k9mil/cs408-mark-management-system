@@ -51,8 +51,9 @@ import {
 } from "@/components/common/Dialog";
 
 import { User } from "./ClassesColumns";
-
 import { userService } from "../../../services/UserService";
+
+import { toast } from "sonner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -15,6 +15,14 @@ export type Class = {
   lecturer: User;
 };
 
+export type ClassDTO = {
+  name: string;
+  code: string;
+  credit: number;
+  credit_level: number;
+  lecturer_id: number;
+};
+
 export const ClassColumns: ColumnDef<Class>[] = [
   {
     accessorKey: "name",
