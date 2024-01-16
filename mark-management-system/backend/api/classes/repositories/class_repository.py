@@ -36,3 +36,7 @@ class ClassRepository:
         class_.lecturer = lecturer
 
         self.db.commit()
+
+    def delete(self, class_: Class) -> None:
+        self.db.delete(class_)
+        self.db.commit()

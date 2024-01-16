@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.users.controllers.users_controller import users
 from api.classes.controllers.classes_controller import classes
@@ -16,6 +17,14 @@ from api.utils.singleton import singleton
 def create_app(config_class=DevelopmentConfig):
     app = FastAPI()
     app.config = config_class
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     Base.metadata.create_all(bind=engine)
 

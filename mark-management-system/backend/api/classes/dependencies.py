@@ -11,6 +11,7 @@ from api.classes.use_cases.create_class_use_case import CreateClassUseCase
 from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
 from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesForLecturerUseCase
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
+from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 
 
 def get_class_repository(db: Session = Depends(get_db)) -> ClassRepository:
@@ -51,4 +52,11 @@ def edit_class_use_case(
     return EditClassUseCase(
         class_repository, 
         user_repository
+    )
+
+def delete_class_use_case(
+        class_repository: ClassRepository = Depends(get_class_repository),
+    ) -> DeleteClassUseCase:
+    return DeleteClassUseCase(
+        class_repository, 
     )
