@@ -1,14 +1,11 @@
 import axios from "axios";
 
-import {
-  ClassDTO,
-  ClassDTOWithId,
-} from "../components/pages/Classes/ClassesColumns";
+import { IClassWithLecturerId, IClassWithId } from "../models/IClass";
 
-import { API_BASE_URL } from "../utils/constants";
+import { API_BASE_URL } from "../utils/Constants";
 
 export const classService = {
-  createClass: async (classDetails: ClassDTO) => {
+  createClass: async (classDetails: IClassWithLecturerId) => {
     return await axios
       .post(`${API_BASE_URL}/classes`, {
         name: classDetails.name,
@@ -39,7 +36,7 @@ export const classService = {
       });
   },
 
-  editClass: async (classDetails: ClassDTOWithId) => {
+  editClass: async (classDetails: IClassWithId) => {
     return await axios
       .post(`${API_BASE_URL}/classes/${classDetails.id}`, {
         id: classDetails.id,
@@ -61,7 +58,7 @@ export const classService = {
   deleteClass: async (classId: number) => {
     return await axios
       .delete(`${API_BASE_URL}/classes/${classId}`, {
-        class_id: classId,
+        data: { class_id: classId },
       })
       .catch((error) => {
         console.error(

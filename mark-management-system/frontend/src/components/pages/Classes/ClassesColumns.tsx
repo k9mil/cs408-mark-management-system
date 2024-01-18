@@ -1,38 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-export type User = {
-  id: number;
-  first_name: string;
-  last_name: string;
-};
+import { IClass } from "../../../models/IClass";
 
-export type Class = {
-  name: string;
-  code: string;
-  credit: number;
-  credit_level: number;
-  number_of_students: number;
-  lecturer: User;
-};
-
-export type ClassDTO = {
-  name: string;
-  code: string;
-  credit: number;
-  credit_level: number;
-  lecturer_id: number;
-};
-
-export type ClassDTOWithId = {
-  id: number;
-  name: string;
-  code: string;
-  credit: number;
-  credit_level: number;
-  lecturer_id: number;
-};
-
-export const ClassColumns: ColumnDef<Class>[] = [
+export const ClassColumns: ColumnDef<IClass>[] = [
   {
     accessorKey: "name",
     header: "Class Name",

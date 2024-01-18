@@ -35,21 +35,23 @@ import { Input } from "@/components/common/Input";
 import { Button } from "@/components/common/Button";
 
 import { ClassesDataTable } from "./ClassesDataTable";
-import { ClassDTO, Class, ClassColumns } from "./ClassesColumns";
-import { classService } from "../../../services/ClassService";
+import { ClassColumns } from "./ClassesColumns";
 
-import { User } from "./ClassesColumns";
+import { classService } from "../../../services/ClassService";
 import { userService } from "../../../services/UserService";
+
+import { IClass, IClassWithLecturerId } from "../../../models/IClass";
+import { IUser } from "../../../models/IUser";
 
 import { toast } from "sonner";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
 
 const ClassesPage = () => {
-  const [classes, setClasses] = useState<Class[]>([]);
+  const [classes, setClasses] = useState<IClass[]>([]);
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
-  const [lecturers, setLecturers] = useState<User[]>([]);
+  const [lecturers, setLecturers] = useState<IUser[]>([]);
 
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -82,7 +84,7 @@ const ClassesPage = () => {
     lecturerData();
   }, []);
 
-  const createClass = async (classDetails: ClassDTO) => {
+  const createClass = async (classDetails: IClassWithLecturerId) => {
     try {
       await classService.createClass(classDetails);
       toast.success("Class was created successfully!");
@@ -151,7 +153,7 @@ const ClassesPage = () => {
                         <Input
                           id="credits"
                           className="col-span-3"
-                          onChange={(e) => setCredits(e.target.value)}
+                          onChange={(e) => setCredits(+e.target.value)}
                         />
                       </div>
                     </div>
@@ -163,7 +165,7 @@ const ClassesPage = () => {
                         <Input
                           id="creditLevel"
                           className="col-span-3"
-                          onChange={(e) => setCreditLevel(e.target.value)}
+                          onChange={(e) => setCreditLevel(+e.target.value)}
                         />
                       </div>
                       <div className="flex flex-col space-y-2">
@@ -230,7 +232,7 @@ const ClassesPage = () => {
                     <Button
                       type="submit"
                       onClick={() => {
-                        const classDetails: ClassDTO = {
+                        const classDetails: IClassWithLecturerId = {
                           name: name,
                           code: code,
                           credit: +credits,
@@ -239,6 +241,7 @@ const ClassesPage = () => {
                         };
 
                         createClass(classDetails);
+                        // setOpenDialogRow(false);
                       }}
                     >
                       Done
