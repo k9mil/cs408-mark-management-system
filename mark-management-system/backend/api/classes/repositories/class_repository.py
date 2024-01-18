@@ -29,6 +29,7 @@ class ClassRepository:
         return self.db.query(Class).filter_by(lecturer_id=lecturer_id).offset(skip).limit(limit).all()
 
     def update(self, class_: Class, lecturer: User, request: ClassEdit) -> None:
+        class_.name = request.name
         class_.code = request.code
         class_.credit = request.credit
         class_.credit_level = request.credit_level

@@ -23,6 +23,15 @@ export type ClassDTO = {
   lecturer_id: number;
 };
 
+export type ClassDTOWithId = {
+  id: number;
+  name: string;
+  code: string;
+  credit: number;
+  credit_level: number;
+  lecturer_id: number;
+};
+
 export const ClassColumns: ColumnDef<Class>[] = [
   {
     accessorKey: "name",

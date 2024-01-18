@@ -53,6 +53,9 @@ import {
 import { User } from "./ClassesColumns";
 import { userService } from "../../../services/UserService";
 
+import { ClassDTO, ClassDTOWithId } from "./ClassesColumns";
+import { classService } from "../../../services/ClassService";
+
 import { toast } from "sonner";
 
 interface DataTableProps<TData, TValue> {
@@ -75,9 +78,15 @@ export function ClassesDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
+
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
   const [lecturers, setLecturers] = useState<User[]>([]);
+
+  const [name, setName] = useState("");
+  const [code, setCode] = useState("");
+  const [credits, setCredits] = useState(0);
+  const [creditLevel, setCreditLevel] = useState(0);
 
   useEffect(() => {
     const lecturerData = async () => {
@@ -91,6 +100,26 @@ export function ClassesDataTable<TData, TValue>({
 
     lecturerData();
   }, []);
+
+  const deleteClass = async (classId: number) => {
+    try {
+      await classService.deleteClass(classId);
+      toast.success("Class was deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when deleting the class.");
+    }
+  };
+
+  const editClass = async (classDetails: ClassDTO) => {
+    try {
+      await classService.editClass(classDetails);
+      toast.success("Class was edited successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when editing the class details.");
+    }
+  };
 
   const lecturerList = lecturers.map((user) => ({
     value: user.id.toString(),
@@ -181,6 +210,7 @@ export function ClassesDataTable<TData, TValue>({
                               id="name"
                               className="col-span-3"
                               defaultValue={row.original.name}
+                              onChange={(e) => setName(e.target.value)}
                             />
                           </div>
                           <div>
@@ -191,6 +221,7 @@ export function ClassesDataTable<TData, TValue>({
                               id="name"
                               className="col-span-3"
                               defaultValue={row.original.code}
+                              onChange={(e) => setCode(e.target.value)}
                             />
                           </div>
                           <div>
@@ -201,6 +232,7 @@ export function ClassesDataTable<TData, TValue>({
                               id="name"
                               className="col-span-3"
                               defaultValue={row.original.credit}
+                              onChange={(e) => setCredits(e.target.value)}
                             />
                           </div>
                         </div>
@@ -213,6 +245,7 @@ export function ClassesDataTable<TData, TValue>({
                               id="name"
                               className="col-span-3"
                               defaultValue={row.original.credit_level}
+                              onChange={(e) => setCreditLevel(e.target.value)}
                             />
                           </div>
                           <div>
@@ -292,10 +325,34 @@ export function ClassesDataTable<TData, TValue>({
                         </div>
                       </div>
                       <DialogFooter className="flex flex-row sm:justify-between mt-8">
-                        <Button type="submit" variant="destructive">
+                        <Button
+                          type="submit"
+                          variant="destructive"
+                          onClick={() => {
+                            deleteClass(row.original.id);
+                            setOpenDialogRowId(null);
+                          }}
+                        >
                           Remove
                         </Button>
-                        <Button type="submit">Save changes</Button>
+                        <Button
+                          type="submit"
+                          onClick={() => {
+                            const classDetails: ClassDTOWithId = {
+                              id: +row.original.id,
+                              name: name,
+                              code: code,
+                              credit: +credits,
+                              credit_level: +creditLevel,
+                              lecturer_id: +lecturer,
+                            };
+
+                            editClass(classDetails);
+                            setOpenDialogRowId(null);
+                          }}
+                        >
+                          Save changes
+                        </Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
