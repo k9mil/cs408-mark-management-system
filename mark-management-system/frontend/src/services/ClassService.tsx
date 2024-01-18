@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../utils/Constants";
 
 export const classService = {
   createClass: async (classDetails: IClassWithLecturerId) => {
+    console.log(classDetails);
     return await axios
       .post(`${API_BASE_URL}/classes`, {
         name: classDetails.name,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -32,7 +32,7 @@ import {
 } from "@/components/common/Popover";
 
 import { IClassWithId } from "../../../models/IClass";
-import { IUser } from "../../../models/IUser";
+import { IUser, IUserDropdown } from "../../../models/IUser";
 
 import { classService } from "../../../services/ClassService";
 
@@ -41,11 +41,13 @@ export const ClassesModal = ({
   openDialogRowId,
   setOpenDialogRowId,
   lecturers,
+  lecturerData,
 }: {
   row: any;
-  openDialogRowId: number | null;
-  setOpenDialogRowId: (id: number | null) => void;
+  openDialogRowId: string | null;
+  setOpenDialogRowId: (id: string | null) => void;
   lecturers: IUser[];
+  lecturerData: () => Promise<void>;
 }) => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -55,15 +57,26 @@ export const ClassesModal = ({
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
 
-  const lecturerList = lecturers.map((user: IUser) => ({
-    value: user.id.toString(),
-    label: `${user.first_name} ${user.last_name}`,
-  }));
+  const [lecturerList, setLecturerList] = React.useState(Array<IUserDropdown>);
+
+  useEffect(() => {
+    if (lecturers && Array.isArray(lecturers)) {
+      const mappedLecturers = lecturers.map((user: IUser) => ({
+        value: user.id.toString(),
+        label: `${user.first_name} ${user.last_name}`,
+      }));
+
+      setLecturerList(mappedLecturers);
+    }
+  }, [lecturers]);
 
   const deleteClass = async (classId: number) => {
     try {
       await classService.deleteClass(classId);
       toast.success("Class was deleted successfully!");
+
+      lecturerData();
+      setOpenDialogRowId(null);
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when deleting the class.");
@@ -74,6 +87,9 @@ export const ClassesModal = ({
     try {
       await classService.editClass(classDetails);
       toast.success("Class was edited successfully!");
+
+      lecturerData();
+      setOpenDialogRowId(null);
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when editing the class details.");
@@ -214,7 +230,6 @@ export const ClassesModal = ({
             variant="destructive"
             onClick={() => {
               deleteClass(row.original.id);
-              setOpenDialogRowId(null);
             }}
           >
             Remove
@@ -232,7 +247,6 @@ export const ClassesModal = ({
               };
 
               editClass(classDetails);
-              setOpenDialogRowId(null);
             }}
           >
             Save changes

@@ -40,19 +40,19 @@ export function ClassesDataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [openDialogRowId, setOpenDialogRowId] = useState<number | null>(null);
+  const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
   const [lecturers, setLecturers] = useState<IUser[]>([]);
 
-  useEffect(() => {
-    const lecturerData = async () => {
-      try {
-        const result = await userService.getUsers();
-        setLecturers(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const lecturerData = async () => {
+    try {
+      const result = await userService.getUsers();
+      setLecturers(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  useEffect(() => {
     lecturerData();
   }, []);
 
@@ -98,7 +98,7 @@ export function ClassesDataTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
-                      setOpenDialogRowId(+row.id);
+                      setOpenDialogRowId(row.id);
                     }}
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -117,6 +117,7 @@ export function ClassesDataTable<TData, TValue>({
                             openDialogRowId={openDialogRowId}
                             setOpenDialogRowId={setOpenDialogRowId}
                             lecturers={lecturers}
+                            lecturerData={lecturerData}
                           />
                         )}
                       </TableCell>

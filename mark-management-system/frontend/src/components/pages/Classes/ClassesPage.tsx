@@ -48,6 +48,8 @@ import { toast } from "sonner";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
 const ClassesPage = () => {
+  const [openDialogRow, setOpenDialogRow] = useState<boolean>(false);
+
   const [classes, setClasses] = useState<IClass[]>([]);
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
@@ -88,6 +90,8 @@ const ClassesPage = () => {
     try {
       await classService.createClass(classDetails);
       toast.success("Class was created successfully!");
+
+      setOpenDialogRow(false);
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when creating the class.");
@@ -110,9 +114,19 @@ const ClassesPage = () => {
               <h2 className="text-gray-400">
                 View a list of classes in the system
               </h2>
-              <Dialog>
+              <Dialog
+                open={openDialogRow === true}
+                onOpenChange={(open) => {
+                  if (!open) setOpenDialogRow(false);
+                }}
+              >
                 <DialogTrigger asChild>
-                  <PlusIcon className="h-6 w-6 text-black cursor-pointer" />
+                  <PlusIcon
+                    className="h-6 w-6 text-black cursor-pointer"
+                    onClick={() => {
+                      setOpenDialogRow(true);
+                    }}
+                  />
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader className="space-y-4">
@@ -241,7 +255,6 @@ const ClassesPage = () => {
                         };
 
                         createClass(classDetails);
-                        // setOpenDialogRow(false);
                       }}
                     >
                       Done
