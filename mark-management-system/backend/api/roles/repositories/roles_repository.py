@@ -25,5 +25,5 @@ class RolesRepository:
         self.db.commit()
 
     def remove_user(self, role_user: RoleUsers) -> None:
-        self.db.session.delete(role_user)
-        self.db.session.commit()
+        self.db.delete(role_user)
+        self.db.commit()
