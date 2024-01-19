@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { ClassesLecturerDropdown } from "./ClassesLecturerDropdown";
+
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
 import { Input } from "@/components/common/Input";
@@ -15,12 +17,12 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
-import { ClassesLecturerDropdown } from "./ClassesLecturerDropdown";
-
 import { IClassWithId } from "../../../models/IClass";
 import { IUser, IUserDropdown } from "../../../models/IUser";
 
 import { classService } from "../../../services/ClassService";
+
+import { validateClassDetails } from "../../../utils/ClassUtils";
 
 export const ClassesModal = ({
   row,
@@ -37,10 +39,10 @@ export const ClassesModal = ({
   classData: () => Promise<void>;
   lecturerData: () => Promise<void>;
 }) => {
-  const [name, setName] = useState("");
-  const [code, setCode] = useState("");
-  const [credits, setCredits] = useState(0);
-  const [creditLevel, setCreditLevel] = useState(0);
+  const [name, setName] = useState(row.original.name);
+  const [code, setCode] = useState(row.original.code);
+  const [credits, setCredits] = useState(row.original.credit);
+  const [creditLevel, setCreditLevel] = useState(row.original.credit_level);
 
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
@@ -200,7 +202,9 @@ export const ClassesModal = ({
                 lecturer_id: +lecturer,
               };
 
-              editClass(classDetails);
+              if (validateClassDetails(classDetails)) {
+                editClass(classDetails);
+              }
             }}
           >
             Save changes

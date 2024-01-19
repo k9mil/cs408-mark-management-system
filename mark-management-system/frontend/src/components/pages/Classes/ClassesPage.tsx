@@ -27,6 +27,8 @@ import { userService } from "../../../services/UserService";
 import { IClass, IClassWithLecturerId } from "../../../models/IClass";
 import { IUser } from "../../../models/IUser";
 
+import { validateClassDetails } from "../../../utils/ClassUtils";
+
 import { toast } from "sonner";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
@@ -185,7 +187,9 @@ const ClassesPage = () => {
                           lecturer_id: +lecturer,
                         };
 
-                        createClass(classDetails);
+                        if (validateClassDetails(classDetails)) {
+                          createClass(classDetails);
+                        }
                       }}
                     >
                       Done
