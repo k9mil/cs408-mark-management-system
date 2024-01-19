@@ -21,7 +21,7 @@ class Role(RoleBase):
     users: List["User"] = []
 
     class Config:   
-        orm_mode = True
+        from_attributes = True
 
 class MarksBase(BaseModel):
     mark: int
@@ -40,7 +40,7 @@ class Marks(MarksBase):
     classes: List["Class"] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class DegreeBase(BaseModel):
@@ -58,7 +58,7 @@ class Degree(DegreeBase):
     classes: List["Class"] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class DegreeClassBase(BaseModel):
     pass
@@ -71,7 +71,7 @@ class DegreeClass(DegreeClassBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserBase(BaseModel):
     email_address: str
@@ -88,7 +88,7 @@ class User(UserBase):
     classes: List["Class"] = [] # type: ignore
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ClassBase(BaseModel):
     name: str
@@ -112,7 +112,7 @@ class Class(ClassBase):
     marks: List[Marks] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class StudentBase(BaseModel):
     reg_no: str
@@ -131,7 +131,7 @@ class Student(StudentBase):
     classes: List[Class] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class RoleMembersBase(BaseModel):
@@ -145,7 +145,7 @@ class RoleMembers(RoleMembersBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 User.model_rebuild()
 Class.model_rebuild()

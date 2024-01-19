@@ -17,7 +17,6 @@ class User(Base):
     password = Column(String(256), nullable=False)
 
     classes = relationship("Class", back_populates="lecturer")
-
     roles = relationship("Role", secondary="role_users", back_populates="users")
 
 class Student(Base):
@@ -74,8 +73,6 @@ class Class(Base):
     lecturer_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
 
     lecturer = relationship("User", back_populates="classes")
-    marks = relationship("Marks", back_populates="class_")
-
     students = relationship("Student", secondary="marks", back_populates="classes")
     degrees = relationship("Degree", secondary="degree_classes", back_populates="classes")
 
@@ -84,13 +81,11 @@ class Marks(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+    unique_code = Column(String(32), nullable=False)
     mark = Column(Integer, nullable=False)
 
     class_id = Column(Integer, ForeignKey("classes.id"), index=True)
     student_id = Column(Integer, ForeignKey("students.id"), index=True)
-    unique_code = Column(String(32), nullable=False)
-
-    class_ = relationship("Class", back_populates="marks")
 
 class DegreeClasses(Base):
     __tablename__ = "degree_classes"
