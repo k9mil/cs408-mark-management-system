@@ -134,14 +134,14 @@ class Student(StudentBase):
         from_attributes = True
 
 
-class RoleMembersBase(BaseModel):
+class RoleUsersBase(BaseModel):
     pass
 
-class RoleMembersCreate(RoleMembersBase):
+class RoleUsersData(RoleUsersBase):
     role_id: int
     user_id: int
 
-class RoleMembers(RoleMembersBase):
+class RoleUsers(RoleUsersBase):
     id: int
 
     class Config:
