@@ -23,6 +23,9 @@ class Role(RoleBase):
     class Config:   
         from_attributes = True
 
+class RoleInUser(RoleBase):
+    id: int
+
 class MarksBase(BaseModel):
     mark: int
 
@@ -84,7 +87,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     
-    roles: List[Role] = []
+    roles: List[RoleInUser] = []
     classes: List["Class"] = [] # type: ignore
 
     class Config:
@@ -141,7 +144,7 @@ class RoleUsersData(RoleUsersBase):
     role_id: int
     user_id: int
 
-class RoleUsers(RoleUsersBase):
+class RoleUsers(RoleUsersData):
     id: int
 
     class Config:

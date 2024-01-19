@@ -15,20 +15,15 @@ class RolesRepository:
         return self.db.query(Role).filter_by(id=role_id).first()
 
     def find_role_association(self, request: RoleUsersData) -> RoleUsers:
-        return RoleUsers.query.filter_by(
+        return self.db.query(RoleUsers).filter_by(
             role_id=request.role_id,
             user_id=request.user_id
         ).first()
 
-    def add_user(self, request: RoleUsersData) -> None:
-        role_member = RoleUsers(
-            role_id=request.role_id,
-            user_id=request.user_id
-        )
-
-        self.db.add(role_member)
+    def add_user(self, role_user: RoleUsers) -> None:
+        self.db.add(role_user)
         self.db.commit()
 
-    def remove_user(self, request: RoleUsersData) -> None:
-        self.db.session.delete(request)
+    def remove_user(self, role_user: RoleUsers) -> None:
+        self.db.session.delete(role_user)
         self.db.session.commit()

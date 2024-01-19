@@ -13,7 +13,7 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(user)
 
-    def find_by_email(self, user_id: str) -> User:
+    def find_by_id(self, user_id: str) -> User:
         return self.db.query(User).filter_by(id=user_id).first()
 
     def find_by_email(self, email_address: str) -> User:

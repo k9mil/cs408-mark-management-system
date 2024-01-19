@@ -1,3 +1,5 @@
+from api.system.models.models import RoleUsers
+
 from api.system.schemas.schemas import RoleUsersData
 
 from api.roles.repositories.roles_repository import RolesRepository
@@ -31,4 +33,11 @@ class AddUserToRoleUseCase:
         if user_role is not None:
             raise RoleAssociationAlreadyExists("Role association already exists.")
 
-        self.roles_repository.add_user(request)
+        role_user = RoleUsers(
+            user_id=request.user_id,
+            role_id=request.role_id
+        )
+
+        self.roles_repository.add_user(role_user)
+
+        return role_user

@@ -15,7 +15,7 @@ from api.roles.dependencies import add_user_to_role_use_case
 roles = APIRouter()
 
 
-@roles.post("/roles/add_user", response_model=schemas.RoleUsersData)
+@roles.post("/roles/add_user", response_model=schemas.RoleUsers)
 def add_user_to_role(
     request: schemas.RoleUsersData,
     add_user_to_role_use_case: AddUserToRoleUseCase = Depends(add_user_to_role_use_case),
