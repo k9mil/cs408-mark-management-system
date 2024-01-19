@@ -4,8 +4,6 @@ import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
 import { Input } from "@/components/common/Input";
 
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 import {
@@ -17,19 +15,7 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/common/Command";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/common/Popover";
+import { ClassesLecturerDropdown } from "./ClassesLecturerDropdown";
 
 import { IClassWithId } from "../../../models/IClass";
 import { IUser, IUserDropdown } from "../../../models/IUser";
@@ -41,12 +27,14 @@ export const ClassesModal = ({
   openDialogRowId,
   setOpenDialogRowId,
   lecturers,
+  classData,
   lecturerData,
 }: {
   row: any;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
   lecturers: IUser[];
+  classData: () => Promise<void>;
   lecturerData: () => Promise<void>;
 }) => {
   const [name, setName] = useState("");
@@ -67,8 +55,18 @@ export const ClassesModal = ({
       }));
 
       setLecturerList(mappedLecturers);
+
+      const defaultLecturer = lecturers.find(
+        (lecturer) =>
+          lecturer.first_name === row.original.lecturer.first_name &&
+          lecturer.last_name === row.original.lecturer.last_name
+      );
+
+      if (defaultLecturer) {
+        setLecturer(defaultLecturer.id.toString());
+      }
     }
-  }, [lecturers]);
+  }, [lecturers, row.original]);
 
   const deleteClass = async (classId: number) => {
     try {
@@ -76,6 +74,7 @@ export const ClassesModal = ({
       toast.success("Class was deleted successfully!");
 
       lecturerData();
+      classData();
       setOpenDialogRowId(null);
     } catch (error) {
       console.error(error);
@@ -89,6 +88,7 @@ export const ClassesModal = ({
       toast.success("Class was edited successfully!");
 
       lecturerData();
+      classData();
       setOpenDialogRowId(null);
     } catch (error) {
       console.error(error);
@@ -169,59 +169,13 @@ export const ClassesModal = ({
                 disabled
               />
             </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="lecturer" className="text-left">
-                Lecturer
-              </Label>
-              <Popover open={lecturerOpen} onOpenChange={setLecturerOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-[200px] justify-between"
-                  >
-                    {lecturer
-                      ? lecturerList.find(
-                          (lecturerDropdown) =>
-                            lecturerDropdown.value === lecturer
-                        )?.label
-                      : "Select lecturer..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search lecturers..." />
-                    <CommandEmpty>No lecturer found.</CommandEmpty>
-                    <CommandGroup>
-                      {lecturerList.map((lecturerDropdown) => (
-                        <CommandItem
-                          key={lecturerDropdown.value}
-                          value={lecturerDropdown.value}
-                          onSelect={(currentValue) => {
-                            setLecturer(
-                              currentValue === lecturer ? "" : currentValue
-                            );
-                            setLecturerOpen(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              lecturer === lecturerDropdown.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {lecturerDropdown.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
+            <ClassesLecturerDropdown
+              lecturer={lecturer}
+              lecturerOpen={lecturerOpen}
+              setLecturer={setLecturer}
+              setLecturerOpen={setLecturerOpen}
+              lecturerList={lecturerList}
+            />
           </div>
         </div>
         <DialogFooter className="flex flex-row sm:justify-between mt-8">

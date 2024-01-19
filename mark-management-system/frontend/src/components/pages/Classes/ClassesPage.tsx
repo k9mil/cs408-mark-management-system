@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import Sidebar from "../../common/Sidebar";
 
-import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-
 import {
   Dialog,
   DialogContent,
@@ -16,23 +12,11 @@ import {
   DialogTrigger,
 } from "@/components/common/Dialog";
 
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/common/Command";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/common/Popover";
-
 import { Label } from "@/components/common/Label";
 import { Input } from "@/components/common/Input";
 import { Button } from "@/components/common/Button";
+
+import { ClassesLecturerDropdown } from "./ClassesLecturerDropdown";
 
 import { ClassesDataTable } from "./ClassesDataTable";
 import { ClassColumns } from "./ClassesColumns";
@@ -60,29 +44,26 @@ const ClassesPage = () => {
   const [credits, setCredits] = useState(0);
   const [creditLevel, setCreditLevel] = useState(0);
 
-  useEffect(() => {
-    const classData = async () => {
-      try {
-        const result = await classService.getClasses();
-        setClasses(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const classData = async () => {
+    try {
+      const result = await classService.getClasses();
+      setClasses(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const lecturerData = async () => {
+    try {
+      const result = await userService.getUsers();
+      setLecturers(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
     classData();
-  }, []);
-
-  useEffect(() => {
-    const lecturerData = async () => {
-      try {
-        const result = await userService.getUsers();
-        setLecturers(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     lecturerData();
   }, []);
 
@@ -91,6 +72,7 @@ const ClassesPage = () => {
       await classService.createClass(classDetails);
       toast.success("Class was created successfully!");
 
+      classData();
       setOpenDialogRow(false);
     } catch (error) {
       console.error(error);
@@ -182,64 +164,13 @@ const ClassesPage = () => {
                           onChange={(e) => setCreditLevel(+e.target.value)}
                         />
                       </div>
-                      <div className="flex flex-col space-y-2">
-                        <Label htmlFor="lecturer" className="text-left">
-                          Lecturer
-                        </Label>
-                        <Popover
-                          open={lecturerOpen}
-                          onOpenChange={setLecturerOpen}
-                        >
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              aria-expanded={open}
-                              className="w-[200px] justify-between"
-                            >
-                              {lecturer
-                                ? lecturerList.find(
-                                    (lecturerDropdown) =>
-                                      lecturerDropdown.value === lecturer
-                                  )?.label
-                                : "Select lecturer..."}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
-                            <Command>
-                              <CommandInput placeholder="Search lecturers..." />
-                              <CommandEmpty>No lecturer found.</CommandEmpty>
-                              <CommandGroup>
-                                {lecturerList.map((lecturerDropdown) => (
-                                  <CommandItem
-                                    key={lecturerDropdown.value}
-                                    value={lecturerDropdown.value}
-                                    onSelect={(currentValue) => {
-                                      setLecturer(
-                                        currentValue === lecturer
-                                          ? ""
-                                          : currentValue
-                                      );
-                                      setLecturerOpen(false);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        lecturer === lecturerDropdown.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {lecturerDropdown.label}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
+                      <ClassesLecturerDropdown
+                        lecturer={lecturer}
+                        lecturerOpen={lecturerOpen}
+                        setLecturer={setLecturer}
+                        setLecturerOpen={setLecturerOpen}
+                        lecturerList={lecturerList}
+                      />
                     </div>
                   </div>
                   <DialogFooter>
@@ -264,7 +195,13 @@ const ClassesPage = () => {
               </Dialog>
             </div>
           </div>
-          <ClassesDataTable columns={ClassColumns} data={classes} />
+          <ClassesDataTable
+            columns={ClassColumns}
+            data={classes}
+            lecturers={lecturers}
+            classData={classData}
+            lecturerData={lecturerData}
+          />
         </div>
       </div>
     </div>

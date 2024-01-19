@@ -27,34 +27,31 @@ import {
   TableRow,
 } from "@/components/common/Table";
 
-import { userService } from "../../../services/UserService";
 import { IUser } from "../../../models/IUser";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  lecturers: IUser[];
+  classData: () => Promise<void>;
+  lecturerData: () => Promise<void>;
 }
 
 export function ClassesDataTable<TData, TValue>({
   columns,
   data,
+  lecturers,
+  classData,
+  lecturerData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [lecturers, setLecturers] = useState<IUser[]>([]);
+  const [selectedRow, setSelectedRow] = useState(null);
 
-  const lecturerData = async () => {
-    try {
-      const result = await userService.getUsers();
-      setLecturers(result);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleRowClick = (row: any) => {
+    setOpenDialogRowId(row.id);
+    setSelectedRow(row);
   };
-
-  useEffect(() => {
-    lecturerData();
-  }, []);
 
   const table = useReactTable({
     data,
@@ -98,7 +95,7 @@ export function ClassesDataTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
-                      setOpenDialogRowId(row.id);
+                      handleRowClick(row);
                     }}
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -111,15 +108,6 @@ export function ClassesDataTable<TData, TValue>({
                               cell.column.columnDef.cell,
                               cell.getContext()
                             )}
-                        {openDialogRowId !== null && (
-                          <ClassesModal
-                            row={cell.row}
-                            openDialogRowId={openDialogRowId}
-                            setOpenDialogRowId={setOpenDialogRowId}
-                            lecturers={lecturers}
-                            lecturerData={lecturerData}
-                          />
-                        )}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -136,6 +124,16 @@ export function ClassesDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {openDialogRowId !== null && (
+            <ClassesModal
+              row={selectedRow}
+              openDialogRowId={openDialogRowId}
+              setOpenDialogRowId={setOpenDialogRowId}
+              lecturers={lecturers}
+              classData={classData}
+              lecturerData={lecturerData}
+            />
+          )}
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
