@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../../AuthProvider";
+
 import Sidebar from "../../common/Sidebar";
 
 import {
@@ -34,6 +38,15 @@ import { toast } from "sonner";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
 const ClassesPage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [navigate, isAuthenticated]);
+
   const [openDialogRow, setOpenDialogRow] = useState<boolean>(false);
 
   const [classes, setClasses] = useState<IClass[]>([]);

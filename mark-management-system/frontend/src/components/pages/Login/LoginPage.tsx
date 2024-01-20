@@ -9,12 +9,15 @@ import { Spinner } from "@/components/common/Spinner";
 
 import { userService } from "../../../services/UserService";
 
+import { useAuth } from "../../../AuthProvider";
+
 import { IUserLoginDetails } from "../../../models/IUser";
 
 import { toast } from "sonner";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { updateAuthentication } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +39,7 @@ const LoginPage = () => {
 
     try {
       await userService.authenticateUser(userDetails);
+      updateAuthentication(true);
       toast.success("You have successfully been authenticated!");
       navigate("/dashboard");
     } catch (error) {

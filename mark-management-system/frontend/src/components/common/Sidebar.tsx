@@ -3,6 +3,8 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+import { useAuth } from "../../AuthProvider";
+
 import { userService } from "../../services/UserService";
 
 import { toast } from "sonner";
@@ -19,11 +21,13 @@ import {
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { updateAuthentication } = useAuth();
 
   const logout = async () => {
     try {
       await userService.logout();
       toast.success("You have successfully been logged out!");
+      updateAuthentication(false);
       navigate("/");
     } catch (error) {
       console.error(error);

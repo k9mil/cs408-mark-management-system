@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../../AuthProvider";
 
 import Sidebar from "../../common/Sidebar";
 
@@ -23,6 +27,15 @@ import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 import { Button } from "@/components/common/Button";
 
 const MarksPage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [navigate, isAuthenticated]);
+
   const [isDragging, setIsDragging] = useState(false);
 
   const preventEventDefaults = (e: React.DragEvent<HTMLDivElement>) => {
