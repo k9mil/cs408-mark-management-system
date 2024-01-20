@@ -159,6 +159,7 @@ class UserDetails(UserBase):
     access_token: str
     refresh_token: str
     
+    roles: List[RoleInUser] = []
     classes: List[Class] = [] # type: ignore
 
     class Config:

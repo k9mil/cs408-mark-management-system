@@ -4,7 +4,10 @@ from typing import List
 from jose import jwt
 from datetime import datetime, timedelta
 
-from api.system.schemas.schemas import UserDetails
+from api.system.models.models import Role, Class
+
+from api.system.schemas.schemas import UserDetails, RoleInUser, UserBase
+from api.system.schemas.schemas import Class as ClassSchema
 
 from api.users.repositories.user_repository import UserRepository
 
@@ -34,12 +37,15 @@ class LoginUserUseCase:
         access_token = self.create_access_token(user.email_address, user.roles)
         refresh_token = self.create_refresh_token(user.email_address)
 
+        roles = [RoleInUser(id=role.id, title=role.title) for role in user.roles]
+
         user_details = UserDetails(
             access_token=access_token,
             refresh_token=refresh_token,
             email_address=user.email_address,
             first_name=user.first_name,
             last_name=user.last_name,
+            roles=roles,
         )
 
         return user_details

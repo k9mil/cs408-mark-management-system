@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 
 import { IAuthContext, IAuthProvider } from "./models/IAuth";
+import { IRole } from "./models/IRole";
 
 const defaultAuthContext: IAuthContext = {
   isAuthenticated: false,
+  isAdmin: false,
   updateAuthentication: () => {},
   getAccessToken: () => null,
 };
@@ -17,11 +19,24 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     return !!token;
   });
 
-  const [localData, _] = useState(() => {
+  const [localData, setLocalData] = useState(() => {
     const userData = localStorage.getItem("user");
 
     if (userData) {
       return JSON.parse(userData);
+    }
+  });
+
+  const [isAdmin, setIsAdmin] = useState(() => {
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      const rolesAsAnArray: IRole[] = Object.values(parsedUserData.roles);
+
+      console.log(userData);
+
+      return rolesAsAnArray.some((role) => role.title === "admin");
     }
   });
 
@@ -31,7 +46,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
   const getAccessToken = () => {
     try {
-      if (localData.access_token) return localData.access_token;
+      if (localData.access_token && isAuthenticated)
+        return localData.access_token;
     } catch (error) {
       console.error(error);
     }
@@ -39,7 +55,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, updateAuthentication, getAccessToken }}
+      value={{ isAuthenticated, isAdmin, updateAuthentication, getAccessToken }}
     >
       {children}
     </AuthContext.Provider>

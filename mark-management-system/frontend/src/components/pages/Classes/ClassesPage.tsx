@@ -39,7 +39,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 
 const ClassesPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, getAccessToken } = useAuth();
+  const { isAdmin, isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -64,8 +64,13 @@ const ClassesPage = () => {
   const classData = async () => {
     try {
       if (accessToken) {
-        const result = await classService.getClasses(accessToken);
-        setClasses(result);
+        if (isAdmin) {
+          const result = await classService.getClasses(accessToken);
+          setClasses(result);
+        } else {
+          const result = await classService.getClassesForLecturer(accessToken);
+          setClasses(result);
+        }
       }
     } catch (error) {
       console.error(error);

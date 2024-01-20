@@ -76,14 +76,12 @@ def get_classes(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/classes/{lecturer_id}", response_model=list[schemas.Class])
+@classes.get("/classes/lecturer", response_model=list[schemas.Class])
 def get_classes_for_lecturer(
-    lecturer_id: int,
     skip: int = 0,
     limit: int = 100,
     current_user: str = Depends(get_current_user),
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
-    check_user_identity_use_case: CheckUserIdentityUseCase = Depends(check_user_identity_use_case)
 ):
     if current_user is None:
         raise HTTPException(
@@ -92,11 +90,7 @@ def get_classes_for_lecturer(
         )
 
     try:
-        is_identity_verified = check_user_identity_use_case.execute(lecturer_id, current_user)
-
-        if is_identity_verified:
-            return get_classes_for_lecturer_use_case.execute(lecturer_id, skip, limit)
-        raise HTTPException(status_code=409, detail=str(e))
+        return get_classes_for_lecturer_use_case.execute(current_user, skip, limit)
     except UserNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

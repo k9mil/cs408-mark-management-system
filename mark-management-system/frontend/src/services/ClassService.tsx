@@ -51,6 +51,23 @@ export const classService = {
       });
   },
 
+  getClassesForLecturer: async (accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/classes/lecturer`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when fetching classes for a lecturer.",
+          error
+        );
+        throw error;
+      });
+  },
+
   editClass: async (classDetails: IClassWithId, accessToken: string) => {
     return await axios
       .post(
