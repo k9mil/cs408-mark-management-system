@@ -11,10 +11,13 @@ import SettingsPage from "./components/pages/Settings/SettingsPage";
 
 const Routes = () => {
   const router = createBrowserRouter([
-    { path: "/", element: <DashboardPage /> },
     {
       path: "/login",
       element: <LoginPage />,
+    },
+    {
+      path: "/dashboard",
+      element: <DashboardPage />,
     },
     {
       path: "/marks",
