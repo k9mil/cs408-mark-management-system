@@ -33,6 +33,6 @@ class RemoveUserFromRoleUseCase:
         if user_role is None:
             raise RoleAssociationNotFound("Role association not found.")
 
-        self.roles_repository.remove_user(user_role)
+        self.roles_repository.remove_user(user_role, user)
 
         return user_role

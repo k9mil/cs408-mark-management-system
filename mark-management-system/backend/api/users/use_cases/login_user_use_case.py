@@ -39,8 +39,6 @@ class LoginUserUseCase:
             email_address=user.email_address,
             first_name=user.first_name,
             last_name=user.last_name,
-            # roles=user.roles,
-            # classes=user.classes,
         )
 
         return user_details

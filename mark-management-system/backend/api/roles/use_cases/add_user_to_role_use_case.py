@@ -38,6 +38,6 @@ class AddUserToRoleUseCase:
             role_id=request.role_id
         )
 
-        self.roles_repository.add_user(role_user)
+        self.roles_repository.add_user(role_user, user)
 
         return role_user

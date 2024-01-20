@@ -1,5 +1,6 @@
 from api.system.models.models import Role
 from api.system.models.models import RoleUsers
+from api.system.models.models import User
 
 from api.system.schemas.schemas import RoleUsersData
 
@@ -20,10 +21,14 @@ class RolesRepository:
             user_id=request.user_id
         ).first()
 
-    def add_user(self, role_user: RoleUsers) -> None:
+    def add_user(self, role_user: RoleUsers, user: User) -> None:
         self.db.add(role_user)
-        self.db.commit()
 
-    def remove_user(self, role_user: RoleUsers) -> None:
-        self.db.delete(role_user)
         self.db.commit()
+        self.db.refresh(user)
+
+    def remove_user(self, role_user: RoleUsers, user: User) -> None:
+        self.db.delete(role_user)
+        
+        self.db.commit()
+        self.db.refresh(user)
