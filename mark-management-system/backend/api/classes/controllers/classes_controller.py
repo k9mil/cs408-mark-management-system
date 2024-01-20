@@ -1,5 +1,7 @@
 from fastapi import Depends, APIRouter, HTTPException
 
+from typing import Tuple
+
 from api.system.schemas import schemas
 
 from api.classes.use_cases.create_class_use_case import CreateClassUseCase
@@ -7,6 +9,7 @@ from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
 from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesForLecturerUseCase
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
+from api.classes.use_cases.check_user_identity_use_case import CheckUserIdentityUseCase
 
 from api.classes.errors.class_already_exists import ClassAlreadyExists
 from api.classes.errors.classes_not_found import ClassesNotFound
@@ -19,8 +22,10 @@ from api.classes.dependencies import get_classes_use_case
 from api.classes.dependencies import get_classes_for_lecturer_use_case
 from api.classes.dependencies import edit_class_use_case
 from api.classes.dependencies import delete_class_use_case
+from api.classes.dependencies import check_user_identity_use_case
 
 from api.middleware.dependencies import get_current_user
+from api.middleware.dependencies import get_current_user_with_roles
 
 
 classes = APIRouter()
@@ -53,7 +58,7 @@ def create_class(
 def get_classes(
     skip: int = 0,
     limit: int = 100,
-    current_user: str = Depends(get_current_user),
+    current_user: Tuple[str, bool] = Depends(get_current_user_with_roles),
     get_classes_use_case: GetClassesUseCase = Depends(get_classes_use_case),
 ):
     if current_user is None:
@@ -63,7 +68,9 @@ def get_classes(
         )
 
     try:
-        return get_classes_use_case.execute(skip, limit)
+        return get_classes_use_case.execute(skip, limit, current_user)
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     except ClassesNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
@@ -76,16 +83,23 @@ def get_classes_for_lecturer(
     limit: int = 100,
     current_user: str = Depends(get_current_user),
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
+    check_user_identity_use_case: CheckUserIdentityUseCase = Depends(check_user_identity_use_case)
 ):
     if current_user is None:
         raise HTTPException(
             status_code=401,
             detail="Invalid JWT provided",
-        )    
+        )
 
     try:
-        return get_classes_for_lecturer_use_case.execute(lecturer_id, skip, limit)
+        is_identity_verified = check_user_identity_use_case.execute(lecturer_id, current_user)
+
+        if is_identity_verified:
+            return get_classes_for_lecturer_use_case.execute(lecturer_id, skip, limit)
+        raise HTTPException(status_code=409, detail=str(e))
     except UserNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except ClassesNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))

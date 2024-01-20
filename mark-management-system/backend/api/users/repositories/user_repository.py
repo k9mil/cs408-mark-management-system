@@ -11,6 +11,7 @@ class UserRepository:
     def add(self, user: User) -> None:
         self.db.add(user)
         self.db.commit()
+        
         self.db.refresh(user)
 
     def find_by_id(self, user_id: str) -> User:
@@ -22,5 +23,6 @@ class UserRepository:
     def get_users(self, skip: int, limit: int) -> list[User]:
         return self.db.query(User).offset(skip).limit(limit).all()
 
+    # TODO: remove, duplicate of find_by_id()
     def get_user(self, user_id: int) -> User:
         return self.db.query(User).filter_by(id=user_id).first()

@@ -1,5 +1,6 @@
 from fastapi.security import OAuth2PasswordRequestForm
 
+from typing import List
 from jose import jwt
 from datetime import datetime, timedelta
 
@@ -30,7 +31,7 @@ class LoginUserUseCase:
         if not self.bcrypt_hasher.check(user.password, form_data.password):
             raise InvalidCredentials("Invalid Credentials provided")
 
-        access_token = self.create_access_token(user.email_address)
+        access_token = self.create_access_token(user.email_address, user.roles)
         refresh_token = self.create_refresh_token(user.email_address)
 
         user_details = UserDetails(
@@ -43,10 +44,13 @@ class LoginUserUseCase:
 
         return user_details
 
-    def create_access_token(self, subject: str):
+    def create_access_token(self, subject: str, roles: List[str]):
         expire = datetime.utcnow() + timedelta(minutes=self.config.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
-        to_encode = ({"exp": expire, "sub": str(subject)})
+        is_admin = any(role.title == "admin" for role in roles)
+        is_lecturer = any(role.title == "lecturer" for role in roles)
+
+        to_encode = ({"exp": expire, "sub": str(subject), "is_admin": is_admin, "is_lecturer": is_lecturer})
         encoded_jwt = jwt.encode(to_encode, self.config.JWT_SECRET_KEY, algorithm=self.config.JWT_ALGORITHM)
 
         return encoded_jwt
