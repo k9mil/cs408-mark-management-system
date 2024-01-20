@@ -84,6 +84,10 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+class UserLogin(BaseModel):
+    email_address: str
+    password: str
+
 class User(UserBase):
     id: int
     
@@ -149,6 +153,10 @@ class RoleUsers(RoleUsersData):
 
     class Config:
         from_attributes = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 User.model_rebuild()
 Class.model_rebuild()
