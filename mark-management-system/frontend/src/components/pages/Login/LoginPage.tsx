@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import { Label } from "@/components/common/Label";
@@ -36,7 +37,7 @@ const LoginPage = () => {
     try {
       await userService.authenticateUser(userDetails);
       toast.success("You have successfully been authenticated!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when logging in.");
@@ -58,9 +59,7 @@ const LoginPage = () => {
       <div className="w-1/2 flex justify-center items-center">
         <div className="flex flex-col space-y-12">
           <div className="flex flex-col items-center space-y-2">
-            <h1 className="font-semibold text-xl">
-              Welcome Back! Please Log In
-            </h1>
+            <h1 className="font-bold text-2xl">Welcome Back! Please Log In</h1>
             <h2 className="text-gray-400 text-sm font-light">
               Enter your details below to access your account.
             </h2>

@@ -20,6 +20,11 @@ export const userService = {
 
     return await axios
       .post(`${API_BASE_URL}/users/login`, stringifiedData, headers)
+      .then((response) => {
+        if (response.data) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+      })
       .catch((error) => {
         console.error(
           "Error: There has been an issue when authenticating.",
@@ -40,5 +45,9 @@ export const userService = {
         );
         throw error;
       });
+  },
+
+  logout: async () => {
+    localStorage.removeItem("user");
   },
 };
