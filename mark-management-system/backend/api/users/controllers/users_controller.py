@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from api.system.schemas import schemas
@@ -20,7 +20,8 @@ from api.users.dependencies import create_user_use_case
 from api.users.dependencies import login_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
-from api.users.dependencies import get_current_user
+
+from api.middleware.dependencies import get_current_user
 
 from api.users.validators import EmailAddressValidator
 from api.users.validators import PasswordValidator
@@ -78,8 +79,8 @@ def get_users(
 ):
     if current_user is None:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated or invalid token",
+            status_code=401,
+            detail="Invalid JWT provided",
         )
 
     try:
@@ -92,8 +93,15 @@ def get_users(
 @users.get("/users/{user_id}", response_model=schemas.User)
 def get_user(
     user_id: int,
+    current_user: str = Depends(get_current_user),
     get_user_use_case: GetUserUseCase = Depends(get_user_use_case),
 ):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+    
     try:
         return get_user_use_case.execute(user_id)
     except UserNotFound as e:

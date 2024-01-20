@@ -20,6 +20,8 @@ from api.classes.dependencies import get_classes_for_lecturer_use_case
 from api.classes.dependencies import edit_class_use_case
 from api.classes.dependencies import delete_class_use_case
 
+from api.middleware.dependencies import get_current_user
+
 
 classes = APIRouter()
 
@@ -27,8 +29,15 @@ classes = APIRouter()
 @classes.post("/classes/", response_model=schemas.Class)
 def create_class(
     request: schemas.ClassCreate,
+    current_user: str = Depends(get_current_user),
     create_class_use_case: CreateClassUseCase = Depends(create_class_use_case),
 ):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
     try:
         return create_class_use_case.execute(
             request,
@@ -44,8 +53,15 @@ def create_class(
 def get_classes(
     skip: int = 0,
     limit: int = 100,
+    current_user: str = Depends(get_current_user),
     get_classes_use_case: GetClassesUseCase = Depends(get_classes_use_case),
 ):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
     try:
         return get_classes_use_case.execute(skip, limit)
     except ClassesNotFound as e:
@@ -58,8 +74,15 @@ def get_classes_for_lecturer(
     lecturer_id: int,
     skip: int = 0,
     limit: int = 100,
+    current_user: str = Depends(get_current_user),
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
 ):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
     try:
         return get_classes_for_lecturer_use_case.execute(lecturer_id, skip, limit)
     except UserNotFound as e:
@@ -72,8 +95,15 @@ def get_classes_for_lecturer(
 @classes.post("/classes/{class_id}", response_model=schemas.Class)
 def edit_class(
     request: schemas.ClassEdit,
+    current_user: str = Depends(get_current_user),
     edit_class_use_case: EditClassUseCase = Depends(edit_class_use_case),
 ):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
     try:
         return edit_class_use_case.execute(request)
     except UserNotFound as e:
@@ -86,8 +116,15 @@ def edit_class(
 @classes.delete("/classes/{class_id}", response_model=None)
 def delete_class(
     class_id: int,
+    current_user: str = Depends(get_current_user),
     delete_class_use_case: DeleteClassUseCase = Depends(delete_class_use_case),
 ):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
     try:
         return delete_class_use_case.execute(class_id)
     except ClassNotFound as e:
