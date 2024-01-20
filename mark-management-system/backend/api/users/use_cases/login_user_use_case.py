@@ -1,7 +1,11 @@
-from api.system.models.models import User
+from fastapi.security import OAuth2PasswordRequestForm
+
+from typing import Optional, Union, Any
+from jose import jwt
+from datetime import datetime, timedelta
 
 from api.system.schemas.schemas import UserLogin
-from api.system.schemas.schemas import User as UserSchema
+from api.system.schemas.schemas import Token
 
 from api.users.repositories.user_repository import UserRepository
 
@@ -10,19 +14,51 @@ from api.users.errors.invalid_credentials import InvalidCredentials
 
 from api.users.hashers.bcrypt_hasher import BCryptHasher
 
+from api.config import Config
+
 
 class LoginUserUseCase:
-    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher):
+    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher, config: Config):
         self.user_repository = user_repository
         self.bcrypt_hasher = bcrypt_hasher
+        self.config = config
     
-    def execute(self, request: UserLogin) -> UserSchema:
-        user = self.user_repository.find_by_email(request.email_address)
+    def execute(self, form_data: OAuth2PasswordRequestForm) -> Token:
+        user = self.user_repository.find_by_email(form_data.username)
 
         if user is None:
             raise UserNotFound("User not found")
         
-        if not self.bcrypt_hasher.check(user.password, request.password):
+        if not self.bcrypt_hasher.check(user.password, form_data.password):
             raise InvalidCredentials("Invalid Credentials provided")
+
+        access_token = self.create_access_token(user.email_address)
+        refresh_token = self.create_refresh_token(user.email_address)
+
+        return Token(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            email_address=user.email_address,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
+
+    def create_access_token(self, subject: Union[str, Any], expires_delta: Optional[timedelta] = None):
+        if expires_delta:
+            expire = datetime.utcnow() + expires_delta
+        else: expire = datetime.utcnow() + timedelta(minutes=15)
+
+        to_encode = ({"exp": expire, "sub": str(subject)})
+        encoded_jwt = jwt.encode(to_encode, self.config.JWT_SECRET_KEY, algorithm=self.config.JWT_ALGORITHM)
+
+        return encoded_jwt
+    
+    def create_refresh_token(self, subject: Union[str, Any], expires_delta: int = None) -> str:
+        if expires_delta is not None:
+            expires_delta = datetime.utcnow() + expires_delta
+        else: expires_delta = datetime.utcnow() + timedelta(minutes=self.config.JWT_REFRESH_TOKEN_EXPIRE_MINUTES)
         
-        return user
+        to_encode = {"exp": expires_delta, "sub": str(subject)}
+        encoded_jwt = jwt.encode(to_encode, self.config.JWT_REFRESH_SECRET_KEY, self.config.JWT_ALGORITHM)
+        
+        return encoded_jwt

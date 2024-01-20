@@ -1,4 +1,9 @@
-from fastapi import Depends
+from fastapi import Depends, Request
+from fastapi.security import OAuth2PasswordBearer
+
+from typing import Optional
+
+from jose import jwt, JWTError
 
 from sqlalchemy.orm import Session
 
@@ -15,6 +20,14 @@ from api.users.use_cases.get_user_use_case import GetUserUseCase
 
 from api.users.validators import EmailAddressValidator
 from api.users.validators import PasswordValidator
+
+from api.config import Config
+
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/users/login",
+    scheme_name="JWT"
+)
 
 
 def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
@@ -40,11 +53,13 @@ def create_user_use_case(
 
 def login_user_use_case(
         user_repository: UserRepository = Depends(get_user_repository),
-        bcrypt_hasher: BCryptHasher = Depends(get_bcrypt_hasher)
+        bcrypt_hasher: BCryptHasher = Depends(get_bcrypt_hasher),
+        config: Config = Depends(Config)
     ) -> LoginUserUseCase:
     return LoginUserUseCase(
         user_repository, 
-        bcrypt_hasher
+        bcrypt_hasher,
+        config
     )
 
 def get_user_use_case(user_repository: UserRepository = Depends(get_user_repository)) -> GetUserUseCase:
@@ -52,3 +67,15 @@ def get_user_use_case(user_repository: UserRepository = Depends(get_user_reposit
 
 def get_users_use_case(user_repository: UserRepository = Depends(get_user_repository)) -> GetUsersUseCase:
     return GetUsersUseCase(user_repository)
+
+def get_current_user(request: Request, token: str = Depends(oauth2_scheme)) -> Optional[str]:
+    secret_key = Config.JWT_SECRET_KEY
+
+    if not token:
+        return None
+
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=[Config.JWT_ALGORITHM])
+        return payload.get("sub")
+    except JWTError:
+        return None
