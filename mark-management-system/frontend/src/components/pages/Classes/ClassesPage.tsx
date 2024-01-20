@@ -39,7 +39,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 
 const ClassesPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -59,10 +59,14 @@ const ClassesPage = () => {
   const [credits, setCredits] = useState(0);
   const [creditLevel, setCreditLevel] = useState(0);
 
+  const accessToken = getAccessToken();
+
   const classData = async () => {
     try {
-      const result = await classService.getClasses();
-      setClasses(result);
+      if (accessToken) {
+        const result = await classService.getClasses(accessToken);
+        setClasses(result);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -70,8 +74,10 @@ const ClassesPage = () => {
 
   const lecturerData = async () => {
     try {
-      const result = await userService.getUsers();
-      setLecturers(result);
+      if (accessToken) {
+        const result = await userService.getUsers(accessToken);
+        setLecturers(result);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -84,8 +90,10 @@ const ClassesPage = () => {
 
   const createClass = async (classDetails: IClassWithLecturerId) => {
     try {
-      await classService.createClass(classDetails);
-      toast.success("Class was created successfully!");
+      if (accessToken) {
+        await classService.createClass(classDetails, accessToken);
+        toast.success("Class was created successfully!");
+      }
 
       classData();
       setOpenDialogRow(false);
@@ -218,6 +226,7 @@ const ClassesPage = () => {
             lecturers={lecturers}
             classData={classData}
             lecturerData={lecturerData}
+            accessToken={accessToken}
           />
         </div>
       </div>

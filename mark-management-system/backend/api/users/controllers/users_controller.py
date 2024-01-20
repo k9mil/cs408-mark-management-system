@@ -56,7 +56,7 @@ def create_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@users.post("/users/login", response_model=schemas.Token)
+@users.post("/users/login", response_model=schemas.UserDetails)
 def authenticate_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     login_user_use_case: LoginUserUseCase = Depends(login_user_use_case),

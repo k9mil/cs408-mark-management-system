@@ -34,9 +34,13 @@ export const userService = {
       });
   },
 
-  getUsers: async () => {
+  getUsers: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/users`)
+      .get(`${API_BASE_URL}/users`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error(

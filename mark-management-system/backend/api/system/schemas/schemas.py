@@ -6,6 +6,7 @@ from typing import List, ForwardRef
 Class = ForwardRef('Class')
 Student = ForwardRef('Student')
 Marks = ForwardRef('Marks')
+User = ForwardRef('User')
 
 
 class RoleBase(BaseModel):
@@ -97,10 +98,6 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
-class Token(UserBase):
-    access_token: str
-    refresh_token: str
-
 class ClassBase(BaseModel):
     name: str
     code: str
@@ -158,6 +155,17 @@ class RoleUsers(RoleUsersData):
     class Config:
         from_attributes = True
 
+class UserDetails(UserBase):
+    access_token: str
+    refresh_token: str
+    
+    roles: List[RoleInUser] = []
+    classes: List["Class"] = [] # type: ignore
+
+    class Config:
+        from_attributes = True
+
 User.model_rebuild()
 Class.model_rebuild()
 Student.model_rebuild()
+Marks.model_rebuild()

@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   lecturers: IUser[];
   classData: () => Promise<void>;
   lecturerData: () => Promise<void>;
+  accessToken: string | null;
 }
 
 export function ClassesDataTable<TData, TValue>({
@@ -43,6 +44,7 @@ export function ClassesDataTable<TData, TValue>({
   lecturers,
   classData,
   lecturerData,
+  accessToken,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
@@ -132,6 +134,7 @@ export function ClassesDataTable<TData, TValue>({
               lecturers={lecturers}
               classData={classData}
               lecturerData={lecturerData}
+              accessToken={accessToken}
             />
           )}
         </Table>

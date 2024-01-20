@@ -31,6 +31,7 @@ export const ClassesModal = ({
   lecturers,
   classData,
   lecturerData,
+  accessToken,
 }: {
   row: any;
   openDialogRowId: string | null;
@@ -38,6 +39,7 @@ export const ClassesModal = ({
   lecturers: IUser[];
   classData: () => Promise<void>;
   lecturerData: () => Promise<void>;
+  accessToken: string | null;
 }) => {
   const [name, setName] = useState(row.original.name);
   const [code, setCode] = useState(row.original.code);
@@ -72,8 +74,10 @@ export const ClassesModal = ({
 
   const deleteClass = async (classId: number) => {
     try {
-      await classService.deleteClass(classId);
-      toast.success("Class was deleted successfully!");
+      if (accessToken) {
+        await classService.deleteClass(classId, accessToken);
+        toast.success("Class was deleted successfully!");
+      }
 
       lecturerData();
       classData();
@@ -86,9 +90,10 @@ export const ClassesModal = ({
 
   const editClass = async (classDetails: IClassWithId) => {
     try {
-      await classService.editClass(classDetails);
-      toast.success("Class was edited successfully!");
-
+      if (accessToken) {
+        await classService.editClass(classDetails, accessToken);
+        toast.success("Class was edited successfully!");
+      }
       lecturerData();
       classData();
       setOpenDialogRowId(null);

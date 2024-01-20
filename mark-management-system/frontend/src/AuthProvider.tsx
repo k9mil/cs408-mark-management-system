@@ -5,6 +5,7 @@ import { IAuthContext, IAuthProvider } from "./models/IAuth";
 const defaultAuthContext: IAuthContext = {
   isAuthenticated: false,
   updateAuthentication: () => {},
+  getAccessToken: () => null,
 };
 
 export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
@@ -16,12 +17,26 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     return !!token;
   });
 
+  const [localData, _] = useState(() => {
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      return JSON.parse(userData);
+    }
+  });
+
   const updateAuthentication = (status: boolean) => {
     setIsAuthenticated(status);
   };
 
+  const getAccessToken = () => {
+    return localData.access_token;
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, updateAuthentication }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, updateAuthentication, getAccessToken }}
+    >
       {children}
     </AuthContext.Provider>
   );

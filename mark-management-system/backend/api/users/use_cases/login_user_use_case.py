@@ -1,11 +1,9 @@
 from fastapi.security import OAuth2PasswordRequestForm
 
-from typing import Optional, Union, Any
 from jose import jwt
 from datetime import datetime, timedelta
 
-from api.system.schemas.schemas import UserLogin
-from api.system.schemas.schemas import Token
+from api.system.schemas.schemas import UserDetails
 
 from api.users.repositories.user_repository import UserRepository
 
@@ -23,7 +21,7 @@ class LoginUserUseCase:
         self.bcrypt_hasher = bcrypt_hasher
         self.config = config
     
-    def execute(self, form_data: OAuth2PasswordRequestForm) -> Token:
+    def execute(self, form_data: OAuth2PasswordRequestForm) -> UserDetails:
         user = self.user_repository.find_by_email(form_data.username)
 
         if user is None:
@@ -35,12 +33,14 @@ class LoginUserUseCase:
         access_token = self.create_access_token(user.email_address)
         refresh_token = self.create_refresh_token(user.email_address)
 
-        return Token(
+        return UserDetails(
             access_token=access_token,
             refresh_token=refresh_token,
             email_address=user.email_address,
             first_name=user.first_name,
-            last_name=user.last_name
+            last_name=user.last_name,
+            roles=user.roles,
+            classes=user.classes,
         )
 
     def create_access_token(self, subject: str):
