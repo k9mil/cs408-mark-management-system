@@ -30,7 +30,11 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   };
 
   const getAccessToken = () => {
-    return localData.access_token;
+    try {
+      if (localData.access_token) return localData.access_token;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

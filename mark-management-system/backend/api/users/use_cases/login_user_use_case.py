@@ -33,15 +33,17 @@ class LoginUserUseCase:
         access_token = self.create_access_token(user.email_address)
         refresh_token = self.create_refresh_token(user.email_address)
 
-        return UserDetails(
+        user_details = UserDetails(
             access_token=access_token,
             refresh_token=refresh_token,
             email_address=user.email_address,
             first_name=user.first_name,
             last_name=user.last_name,
-            roles=user.roles,
-            classes=user.classes,
+            # roles=user.roles,
+            # classes=user.classes,
         )
+
+        return user_details
 
     def create_access_token(self, subject: str):
         expire = datetime.utcnow() + timedelta(minutes=self.config.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)

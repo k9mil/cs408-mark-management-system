@@ -10,8 +10,6 @@ class GetClassesUseCase:
         self.class_repository = class_repository
     
     def execute(self, skip: int, limit: int) -> list[ClassSchema]:
-        print("test")
-        
         classes = self.class_repository.get_classes(skip, limit)
 
         if classes is None:
