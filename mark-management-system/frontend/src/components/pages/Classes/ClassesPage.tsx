@@ -124,105 +124,107 @@ const ClassesPage = () => {
               <h2 className="text-gray-400">
                 View a list of classes in the system
               </h2>
-              <Dialog
-                open={openDialogRow === true}
-                onOpenChange={(open) => {
-                  if (!open) setOpenDialogRow(false);
-                }}
-              >
-                <DialogTrigger asChild>
-                  <PlusIcon
-                    className="h-6 w-6 text-black cursor-pointer"
-                    onClick={() => {
-                      setOpenDialogRow(true);
-                    }}
-                  />
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader className="space-y-4">
-                    <DialogTitle className="text-xl">
-                      Create a Class
-                    </DialogTitle>
-                    <DialogDescription>
-                      Enter then details of the new class. Click done when
-                      you're finished.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex flex-row justify-between">
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="name" className="text-right">
-                          Name
-                        </Label>
-                        <Input
-                          id="name"
-                          className="col-span-3"
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="code" className="text-right">
-                          Code
-                        </Label>
-                        <Input
-                          id="code"
-                          className="col-span-3"
-                          onChange={(e) => setCode(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="credits" className="text-right">
-                          Credits
-                        </Label>
-                        <Input
-                          id="credits"
-                          className="col-span-3"
-                          onChange={(e) => setCredits(+e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="creditLevel" className="text-right">
-                          Credit Level
-                        </Label>
-                        <Input
-                          id="creditLevel"
-                          className="col-span-3"
-                          onChange={(e) => setCreditLevel(+e.target.value)}
-                        />
-                      </div>
-                      <ClassesLecturerDropdown
-                        lecturer={lecturer}
-                        lecturerOpen={lecturerOpen}
-                        setLecturer={setLecturer}
-                        setLecturerOpen={setLecturerOpen}
-                        lecturerList={lecturerList}
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      type="submit"
+              {isAdmin === true ? (
+                <Dialog
+                  open={openDialogRow === true}
+                  onOpenChange={(open) => {
+                    if (!open) setOpenDialogRow(false);
+                  }}
+                >
+                  <DialogTrigger asChild>
+                    <PlusIcon
+                      className="h-6 w-6 text-black cursor-pointer"
                       onClick={() => {
-                        const classDetails: IClassWithLecturerId = {
-                          name: name,
-                          code: code,
-                          credit: +credits,
-                          credit_level: +creditLevel,
-                          lecturer_id: +lecturer,
-                        };
-
-                        if (validateClassDetails(classDetails)) {
-                          createClass(classDetails);
-                        }
+                        setOpenDialogRow(true);
                       }}
-                    >
-                      Done
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader className="space-y-4">
+                      <DialogTitle className="text-xl">
+                        Create a Class
+                      </DialogTitle>
+                      <DialogDescription>
+                        Enter then details of the new class. Click done when
+                        you're finished.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex flex-row justify-between">
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="name" className="text-right">
+                            Name
+                          </Label>
+                          <Input
+                            id="name"
+                            className="col-span-3"
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="code" className="text-right">
+                            Code
+                          </Label>
+                          <Input
+                            id="code"
+                            className="col-span-3"
+                            onChange={(e) => setCode(e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="credits" className="text-right">
+                            Credits
+                          </Label>
+                          <Input
+                            id="credits"
+                            className="col-span-3"
+                            onChange={(e) => setCredits(+e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="creditLevel" className="text-right">
+                            Credit Level
+                          </Label>
+                          <Input
+                            id="creditLevel"
+                            className="col-span-3"
+                            onChange={(e) => setCreditLevel(+e.target.value)}
+                          />
+                        </div>
+                        <ClassesLecturerDropdown
+                          lecturer={lecturer}
+                          lecturerOpen={lecturerOpen}
+                          setLecturer={setLecturer}
+                          setLecturerOpen={setLecturerOpen}
+                          lecturerList={lecturerList}
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        type="submit"
+                        onClick={() => {
+                          const classDetails: IClassWithLecturerId = {
+                            name: name,
+                            code: code,
+                            credit: +credits,
+                            credit_level: +creditLevel,
+                            lecturer_id: +lecturer,
+                          };
+
+                          if (validateClassDetails(classDetails)) {
+                            createClass(classDetails);
+                          }
+                        }}
+                      >
+                        Done
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : null}
             </div>
           </div>
           <ClassesDataTable

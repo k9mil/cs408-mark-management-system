@@ -6,6 +6,7 @@ import { IRole } from "./models/IRole";
 const defaultAuthContext: IAuthContext = {
   isAuthenticated: false,
   isAdmin: false,
+  isLecturer: false,
   updateAuthentication: () => {},
   getAccessToken: () => null,
 };
@@ -32,7 +33,18 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     return false;
   };
 
+  const isLecturerCheck = (): boolean => {
+    if (localData) {
+      const rolesAsAnArray: IRole[] = Object.values(localData.roles);
+
+      return rolesAsAnArray.some((role) => role.title === "lecturer");
+    }
+
+    return false;
+  };
+
   const [isAdmin, setIsAdmin] = useState<boolean>(isAdminCheck());
+  const [isLecturer, setIsLecturer] = useState<boolean>(isLecturerCheck());
 
   const updateAuthentication = (status: boolean) => {
     setIsAuthenticated(status);
@@ -44,7 +56,9 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       setLocalData(parsedUserData);
 
       const rolesAsAnArray: IRole[] = Object.values(parsedUserData.roles);
+
       setIsAdmin(rolesAsAnArray.some((role) => role.title === "admin"));
+      setIsLecturer(rolesAsAnArray.some((role) => role.title === "lecturer"));
     }
   };
 
@@ -58,7 +72,13 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, isAdmin, updateAuthentication, getAccessToken }}
+      value={{
+        isAuthenticated,
+        isAdmin,
+        isLecturer,
+        updateAuthentication,
+        getAccessToken,
+      }}
     >
       {children}
     </AuthContext.Provider>

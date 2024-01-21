@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/common/Button";
 
-import { ClassesModal } from "./ClassesModal";
+import { ClassesModalAdminView } from "./ClassesModalAdminView";
+import { ClassesModalLecturerView } from "./ClassModalLecturerView";
+
+import { useAuth } from "../../../AuthProvider";
+
 import {
   formatLecturerName,
   getNumOfStudents,
@@ -49,6 +53,8 @@ export function ClassesDataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState(null);
+
+  const { isAdmin, isLecturer } = useAuth();
 
   const handleRowClick = (row: any) => {
     setOpenDialogRowId(row.id);
@@ -126,8 +132,8 @@ export function ClassesDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {openDialogRowId !== null && (
-            <ClassesModal
+          {openDialogRowId !== null && isAdmin === true ? (
+            <ClassesModalAdminView
               row={selectedRow}
               openDialogRowId={openDialogRowId}
               setOpenDialogRowId={setOpenDialogRowId}
@@ -136,7 +142,16 @@ export function ClassesDataTable<TData, TValue>({
               lecturerData={lecturerData}
               accessToken={accessToken}
             />
-          )}
+          ) : null}
+          {openDialogRowId !== null &&
+          isLecturer === true &&
+          isAdmin === false ? (
+            <ClassesModalLecturerView
+              row={selectedRow}
+              openDialogRowId={openDialogRowId}
+              setOpenDialogRowId={setOpenDialogRowId}
+            />
+          ) : null}
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">

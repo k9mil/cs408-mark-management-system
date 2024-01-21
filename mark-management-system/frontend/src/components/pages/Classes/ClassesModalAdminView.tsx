@@ -24,7 +24,7 @@ import { classService } from "../../../services/ClassService";
 
 import { validateClassDetails } from "../../../utils/ClassUtils";
 
-export const ClassesModal = ({
+export const ClassesModalAdminView = ({
   row,
   openDialogRowId,
   setOpenDialogRowId,
@@ -220,4 +220,4 @@ export const ClassesModal = ({
   );
 };
 
-export default ClassesModal;
+export default ClassesModalAdminView;

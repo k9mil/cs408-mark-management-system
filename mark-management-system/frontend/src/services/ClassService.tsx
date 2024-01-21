@@ -9,6 +9,7 @@ export const classService = {
     classDetails: IClassWithLecturerId,
     accessToken: string
   ) => {
+    console.log(classDetails);
     return await axios
       .post(
         `${API_BASE_URL}/classes`,
