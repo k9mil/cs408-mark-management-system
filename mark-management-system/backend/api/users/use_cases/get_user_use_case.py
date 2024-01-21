@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from api.system.schemas.schemas import User as UserSchema
 
 from api.users.repositories.user_repository import UserRepository
@@ -9,7 +11,12 @@ class GetUserUseCase:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
     
-    def execute(self, user_id: int) -> UserSchema:
+    def execute(self, user_id: int, current_user: Tuple[str, bool]) -> UserSchema:
+        _, is_admin = current_user
+
+        if is_admin is False:
+            raise PermissionError("Permission denied to access this resource")
+        
         user = self.user_repository.get_user(user_id)
 
         if user is None:

@@ -22,10 +22,8 @@ from api.classes.dependencies import get_classes_use_case
 from api.classes.dependencies import get_classes_for_lecturer_use_case
 from api.classes.dependencies import edit_class_use_case
 from api.classes.dependencies import delete_class_use_case
-from api.classes.dependencies import check_user_identity_use_case
 
 from api.middleware.dependencies import get_current_user
-from api.middleware.dependencies import get_current_user_with_roles
 
 
 classes = APIRouter()
@@ -34,7 +32,7 @@ classes = APIRouter()
 @classes.post("/classes/", response_model=schemas.Class)
 def create_class(
     request: schemas.ClassCreate,
-    current_user: str = Depends(get_current_user),
+    current_user: Tuple[str, bool] = Depends(get_current_user),
     create_class_use_case: CreateClassUseCase = Depends(create_class_use_case),
 ):
     if current_user is None:
@@ -45,11 +43,13 @@ def create_class(
 
     try:
         return create_class_use_case.execute(
-            request,
+            request, current_user
         )
     except ClassAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except UserNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -58,7 +58,7 @@ def create_class(
 def get_classes(
     skip: int = 0,
     limit: int = 100,
-    current_user: Tuple[str, bool] = Depends(get_current_user_with_roles),
+    current_user: Tuple[str, bool] = Depends(get_current_user),
     get_classes_use_case: GetClassesUseCase = Depends(get_classes_use_case),
 ):
     if current_user is None:
@@ -69,9 +69,9 @@ def get_classes(
 
     try:
         return get_classes_use_case.execute(skip, limit, current_user)
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
     except ClassesNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -93,9 +93,9 @@ def get_classes_for_lecturer(
         return get_classes_for_lecturer_use_case.execute(current_user, skip, limit)
     except UserNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
     except ClassesNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -103,7 +103,7 @@ def get_classes_for_lecturer(
 @classes.post("/classes/{class_id}", response_model=schemas.Class)
 def edit_class(
     request: schemas.ClassEdit,
-    current_user: str = Depends(get_current_user),
+    current_user: Tuple[str, bool] = Depends(get_current_user),
     edit_class_use_case: EditClassUseCase = Depends(edit_class_use_case),
 ):
     if current_user is None:
@@ -113,10 +113,12 @@ def edit_class(
         )
 
     try:
-        return edit_class_use_case.execute(request)
+        return edit_class_use_case.execute(request, current_user)
     except UserNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except ClassNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -124,7 +126,7 @@ def edit_class(
 @classes.delete("/classes/{class_id}", response_model=None)
 def delete_class(
     class_id: int,
-    current_user: str = Depends(get_current_user),
+    current_user: Tuple[str, bool] = Depends(get_current_user),
     delete_class_use_case: DeleteClassUseCase = Depends(delete_class_use_case),
 ):
     if current_user is None:
@@ -134,8 +136,10 @@ def delete_class(
         )    
 
     try:
-        return delete_class_use_case.execute(class_id)
+        return delete_class_use_case.execute(class_id, current_user)
     except ClassNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

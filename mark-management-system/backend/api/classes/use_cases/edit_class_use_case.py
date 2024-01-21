@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from api.system.schemas.schemas import Class as ClassSchema
 
 from api.system.schemas.schemas import ClassEdit
@@ -15,7 +17,12 @@ class EditClassUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
     
-    def execute(self, request: ClassEdit) -> ClassSchema:
+    def execute(self, request: ClassEdit, current_user: Tuple[str, bool]) -> ClassSchema:
+        _, is_admin = current_user
+
+        if is_admin is False:
+            raise PermissionError("Permission denied to access this resource")
+        
         class_ = self.class_repository.get_class(request.id)
 
         if class_ is None:

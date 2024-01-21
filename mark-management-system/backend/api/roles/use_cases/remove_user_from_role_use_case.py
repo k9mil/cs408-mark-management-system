@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from api.system.models.models import RoleUsers
 
 from api.system.schemas.schemas import RoleUsersData
@@ -17,7 +19,12 @@ class RemoveUserFromRoleUseCase:
         self.roles_repository = roles_repository
         self.user_repository = user_repository
 
-    def execute(self, request: RoleUsersData) -> RoleUsersData:
+    def execute(self, request: RoleUsersData, current_user: Tuple[str, bool]) -> RoleUsersData:
+        _, is_admin = current_user
+
+        if is_admin is False:
+            raise PermissionError("Permission denied to access this resource")
+        
         user = self.user_repository.find_by_id(request.user_id)
 
         if user is None:
