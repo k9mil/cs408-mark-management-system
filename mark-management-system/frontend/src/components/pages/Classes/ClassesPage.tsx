@@ -80,8 +80,10 @@ const ClassesPage = () => {
   const lecturerData = async () => {
     try {
       if (accessToken) {
-        const result = await userService.getUsers(accessToken);
-        setLecturers(result);
+        if (isAdmin) {
+          const result = await userService.getUsers(accessToken);
+          setLecturers(result);
+        }
       }
     } catch (error) {
       console.error(error);

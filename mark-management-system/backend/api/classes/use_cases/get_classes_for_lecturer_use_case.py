@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from api.system.schemas.schemas import Class as ClassSchema
 
 from api.classes.repositories.class_repository import ClassRepository
@@ -13,8 +15,10 @@ class GetClassesForLecturerUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
     
-    def execute(self, current_user: str, skip: int, limit: int) -> list[ClassSchema]:
-        lecturer = self.user_repository.find_by_email(current_user)
+    def execute(self, current_user: Tuple[str, bool], skip: int, limit: int) -> list[ClassSchema]:
+        user_email, _ = current_user
+
+        lecturer = self.user_repository.find_by_email(user_email)
 
         if lecturer is None:
             raise UserNotFound("Lecturer not found")

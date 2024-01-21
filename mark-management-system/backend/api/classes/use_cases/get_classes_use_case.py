@@ -13,7 +13,7 @@ class GetClassesUseCase:
     
     def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> list[ClassSchema]:
         _, is_admin = current_user
-
+        
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")
         
