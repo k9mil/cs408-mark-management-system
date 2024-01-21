@@ -30,7 +30,7 @@ class CreateClassUseCase:
 
         if lecturer is None:
             raise UserNotFound("Lecturer not found")
-        
+
         class_ = Class(
             name=request.name,
             code=request.code,
