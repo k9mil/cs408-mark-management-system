@@ -3,10 +3,7 @@ from api.system.models.models import User
 
 from api.system.schemas.schemas import ClassEdit
 
-from api.utils.singleton import singleton
 
-
-@singleton
 class ClassRepository:
     def __init__(self, db):
         self.db = db

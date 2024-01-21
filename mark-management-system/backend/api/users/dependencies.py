@@ -1,10 +1,6 @@
 from fastapi import Depends
 
-from sqlalchemy.orm import Session
-
-from api.database import get_db
-
-from api.users.repositories.user_repository import UserRepository
+from api.middleware.dependencies import UserRepository
 
 from api.users.hashers.bcrypt_hasher import BCryptHasher
 
@@ -18,10 +14,8 @@ from api.users.validators import PasswordValidator
 
 from api.config import Config
 
+from api.middleware.dependencies import get_user_repository
 
-
-def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
-    return UserRepository(db)
 
 def get_bcrypt_hasher() -> BCryptHasher:
     return BCryptHasher()

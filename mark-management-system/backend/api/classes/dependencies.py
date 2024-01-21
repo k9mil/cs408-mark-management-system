@@ -1,11 +1,7 @@
 from fastapi import Depends
 
-from sqlalchemy.orm import Session
-
-from api.database import get_db
-
-from api.classes.repositories.class_repository import ClassRepository
-from api.users.repositories.user_repository import UserRepository
+from api.middleware.dependencies import ClassRepository
+from api.middleware.dependencies import UserRepository
 
 from api.classes.use_cases.create_class_use_case import CreateClassUseCase
 from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
@@ -14,12 +10,9 @@ from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 from api.classes.use_cases.check_user_identity_use_case import CheckUserIdentityUseCase
 
+from api.middleware.dependencies import get_class_repository
+from api.middleware.dependencies import get_user_repository
 
-def get_class_repository(db: Session = Depends(get_db)) -> ClassRepository:
-    return ClassRepository(db)
-
-def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
-    return UserRepository(db)
 
 def create_class_use_case(
         class_repository: ClassRepository = Depends(get_class_repository),
