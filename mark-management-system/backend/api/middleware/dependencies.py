@@ -23,15 +23,12 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 
 def get_roles_repository(db: Session = Depends(get_db)) -> RolesRepository:
-    print(f"Session ID in endpoint (roles): {hash(db)}")
     return RolesRepository(db)
 
 def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
-    print(f"Session ID in endpoint (user): {hash(db)}")
     return UserRepository(db)
 
 def get_class_repository(db: Session = Depends(get_db)) -> ClassRepository:
-    print(f"Session ID in endpoint (class): {hash(db)}")
     return ClassRepository(db)
 
 
