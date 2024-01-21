@@ -9,6 +9,8 @@ import StudentsPage from "./components/pages/Students/StudentsPage";
 import HelpPage from "./components/pages/Help/HelpPage";
 import SettingsPage from "./components/pages/Settings/SettingsPage";
 
+import ErrorPage from "./components/pages/Error/ErrorPage_404";
+
 const Routes = () => {
   const router = createBrowserRouter([
     {
@@ -38,6 +40,10 @@ const Routes = () => {
     {
       path: "/settings",
       element: <SettingsPage />,
+    },
+    {
+      path: "*",
+      element: <ErrorPage />,
     },
   ]);
 
