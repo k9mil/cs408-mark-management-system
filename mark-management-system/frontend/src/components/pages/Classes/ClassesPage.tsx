@@ -64,7 +64,7 @@ const ClassesPage = () => {
   const classData = async () => {
     try {
       if (accessToken) {
-        if (isAdmin.current) {
+        if (isAdmin) {
           const result = await classService.getClasses(accessToken);
           setClasses(result);
         } else {

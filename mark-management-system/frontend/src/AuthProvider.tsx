@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 import { IAuthContext, IAuthProvider } from "./models/IAuth";
 import { IRole } from "./models/IRole";
@@ -14,14 +14,25 @@ export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
-  const isAdmin = useRef(false);
+  const retrieveLocalData = () => {
+    const userDataString = localStorage.getItem("user");
+    return userDataString ? JSON.parse(userDataString) : null;
+  };
 
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const token = localStorage.getItem("user");
-    return !!token;
-  });
+  const [localData, setLocalData] = useState(retrieveLocalData());
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localData);
 
-  const [localData, setLocalData] = useState();
+  const isAdminCheck = (): boolean => {
+    if (localData) {
+      const rolesAsAnArray: IRole[] = Object.values(localData.roles);
+
+      return rolesAsAnArray.some((role) => role.title === "admin");
+    }
+
+    return false;
+  };
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(isAdminCheck());
 
   const updateAuthentication = (status: boolean) => {
     setIsAuthenticated(status);
@@ -33,14 +44,13 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       setLocalData(parsedUserData);
 
       const rolesAsAnArray: IRole[] = Object.values(parsedUserData.roles);
-      isAdmin.current = rolesAsAnArray.some((role) => role.title === "admin");
+      setIsAdmin(rolesAsAnArray.some((role) => role.title === "admin"));
     }
   };
 
   const getAccessToken = () => {
     try {
-      if (localData.access_token && isAuthenticated)
-        return localData.access_token;
+      if (localData && isAuthenticated) return localData.access_token;
     } catch (error) {
       console.error(error);
     }
