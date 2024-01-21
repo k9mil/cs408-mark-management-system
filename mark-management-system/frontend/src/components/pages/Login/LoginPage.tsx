@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -17,11 +17,17 @@ import { toast } from "sonner";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { updateAuthentication } = useAuth();
+  const { isAuthenticated, updateAuthentication } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [navigate, isAuthenticated]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
