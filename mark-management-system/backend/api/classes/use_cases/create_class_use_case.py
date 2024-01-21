@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from api.system.models.models import Class
 
 from api.system.schemas.schemas import ClassCreate
@@ -15,7 +17,12 @@ class CreateClassUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
 
-    def execute(self, request: ClassCreate) -> ClassSchema:
+    def execute(self, request: ClassCreate, current_user: Tuple[str, bool]) -> ClassSchema:
+        _, is_admin = current_user
+
+        if is_admin is False:
+            raise PermissionError("Permission denied to access this resource")
+        
         if self.class_repository.find_by_code(request.code):
             raise ClassAlreadyExists("Class already exists")
         

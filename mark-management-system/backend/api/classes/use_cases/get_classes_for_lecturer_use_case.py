@@ -13,13 +13,13 @@ class GetClassesForLecturerUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
     
-    def execute(self, lecturer_id: int, skip: int, limit: int) -> list[ClassSchema]:
-        lecturer = self.user_repository.get_user(lecturer_id)
+    def execute(self, current_user: str, skip: int, limit: int) -> list[ClassSchema]:
+        lecturer = self.user_repository.find_by_email(current_user)
 
         if lecturer is None:
             raise UserNotFound("Lecturer not found")
 
-        classes = self.class_repository.get_classes_by_lecturer_id(lecturer_id, skip, limit)
+        classes = self.class_repository.get_classes_by_lecturer_id(lecturer.id, skip, limit)
 
         if classes is None:
             raise ClassesNotFound("Classes not found")

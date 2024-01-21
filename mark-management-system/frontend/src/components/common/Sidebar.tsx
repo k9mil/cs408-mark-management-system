@@ -1,6 +1,13 @@
 import * as React from "react";
 
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+
+import { useAuth } from "../../AuthProvider";
+
+import { userService } from "../../services/UserService";
+
+import { toast } from "sonner";
 
 import {
   HomeIcon,
@@ -13,6 +20,21 @@ import {
 } from "@heroicons/react/24/outline";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const { updateAuthentication } = useAuth();
+
+  const logout = async () => {
+    try {
+      await userService.logout();
+      toast.success("You have successfully been logged out!");
+      updateAuthentication(false);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when logging out.");
+    }
+  };
+
   return (
     <>
       <nav className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-2 border-black">
@@ -23,7 +45,7 @@ const Sidebar = () => {
           <ul>
             <li>
               <Link
-                to="/"
+                to="/dashboard"
                 className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
               >
                 <HomeIcon className="h-6 w-6 text-white" />
@@ -79,7 +101,14 @@ const Sidebar = () => {
         </div>
         <div className="flex justify-between mx-6 my-4">
           <InformationCircleIcon className="h-6 w-6 text-white cursor-pointer" />
-          <h2 className="text-gray-400 cursor-pointer">Log Out</h2>
+          <h2
+            className="text-gray-400 cursor-pointer"
+            onClick={() => {
+              logout();
+            }}
+          >
+            Log Out
+          </h2>
         </div>
       </nav>
     </>
