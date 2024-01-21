@@ -1,9 +1,6 @@
 from api.system.models.models import User
 
-from api.utils.singleton import singleton
 
-
-@singleton
 class UserRepository:
     def __init__(self, db):
         self.db = db
