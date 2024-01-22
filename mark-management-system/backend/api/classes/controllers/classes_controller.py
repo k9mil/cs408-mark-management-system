@@ -9,7 +9,6 @@ from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
 from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesForLecturerUseCase
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
-from api.classes.use_cases.check_user_identity_use_case import CheckUserIdentityUseCase
 
 from api.classes.errors.class_already_exists import ClassAlreadyExists
 from api.classes.errors.classes_not_found import ClassesNotFound

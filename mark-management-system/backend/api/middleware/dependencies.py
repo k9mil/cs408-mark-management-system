@@ -12,6 +12,7 @@ from api.database import get_db
 from api.users.repositories.user_repository import UserRepository
 from api.roles.repositories.roles_repository import RolesRepository
 from api.classes.repositories.class_repository import ClassRepository
+from api.students.repositories.student_repository import StudentRepository
 
 from api.config import Config
 
@@ -30,6 +31,9 @@ def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
 
 def get_class_repository(db: Session = Depends(get_db)) -> ClassRepository:
     return ClassRepository(db)
+
+def get_student_repository(db: Session = Depends(get_db)) -> StudentRepository:
+    return StudentRepository(db)
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[str]:

@@ -9,8 +9,6 @@ class ClassRepository:
         self.db = db
     
     def add(self, class_: Class) -> None:
-        class_.lecturer = self.db.merge(class_.lecturer)
-
         self.db.add(class_)
         self.db.commit()
         self.db.refresh(class_)
