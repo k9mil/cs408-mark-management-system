@@ -14,7 +14,13 @@ import {
 
 import { Button } from "@/components/common/Button";
 
-const MarksInfoBox = ({ file }: { file: File }) => {
+const MarksInfoBox = ({
+  file,
+  setFile,
+}: {
+  file: File;
+  setFile: (file: File | null) => void;
+}) => {
   return (
     <div className="flex flex-row mx-6 justify-between items-center">
       <Dialog>
@@ -52,7 +58,13 @@ const MarksInfoBox = ({ file }: { file: File }) => {
         <Button variant="secondary" className="w-20">
           Cancel
         </Button>
-        <Button disabled={!file} className="w-20">
+        <Button
+          disabled={!file}
+          className="w-20"
+          onClick={() => {
+            setFile(null);
+          }}
+        >
           Next
         </Button>
       </div>

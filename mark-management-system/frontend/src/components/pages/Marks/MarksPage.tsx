@@ -69,6 +69,7 @@ const MarksPage = () => {
   };
 
   const handleClick = () => {
+    console.log(filePickedLocal);
     if (filePickedLocal && filePickedLocal.current !== null) {
       filePickedLocal.current.click();
     }
@@ -84,19 +85,26 @@ const MarksPage = () => {
           </CardHeader>
           <div
             className={
-              "mx-6 rounded-md border-2 border-dashed border-gray-300 p-28 flex flex-col justify-center items-center space-y-8 h-1/2" +
-              (isDragging ? "border-primary-blue bg-slate-50" : "")
+              isDragging
+                ? "border-primary-blue bg-slate-50 mx-6 rounded-md border-2 border-dashed flex flex-col justify-center items-center space-y-8 h-3/4"
+                : file
+                ? "border-primary-blue bg-gray-100 mx-6 rounded-md border-2 flex flex-col justify-center items-center space-y-8 h-3/4 opacity-50"
+                : "mx-6 rounded-md border-2 border-dashed border-gray-300 flex flex-col justify-center items-center space-y-8 h-3/4"
             }
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
+            onDragOver={file === null ? handleDragOver : undefined}
+            onDragLeave={file === null ? handleDragLeave : undefined}
+            onDrop={file === null ? handleDrop : undefined}
           >
-            <DocumentArrowUpIcon className="h-16 w-16 text-card-foreground" />
+            <DocumentArrowUpIcon className="h-12 w-12 text-card-foreground" />
             <h2 className="text-card-foreground font-semibold">
               Drag and Drop a file here or{" "}
               <span
-                onClick={handleClick}
-                className="underline font-bold underline-offset-4 cursor-pointer"
+                onClick={file === null ? handleClick : undefined}
+                className={
+                  file
+                    ? "underline font-bold underline-offset-4"
+                    : "underline font-bold underline-offset-4 cursor-pointer"
+                }
               >
                 Choose File
                 <input
@@ -109,12 +117,12 @@ const MarksPage = () => {
             </h2>
           </div>
           {file ? <MarksUploadedFile file={file} setFile={setFile} /> : null}
-          <div className="h-1/2 flex flex-col justify-end space-y-2">
+          <div className="h-1/4 flex flex-col justify-end space-y-2">
             <div className="flex flex-row justify-between mx-6">
               <h2 className="text-sm text-gray-400">Supported formats: CSV</h2>
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
-            <MarksInfoBox file={file} />
+            <MarksInfoBox file={file} setFile={setFile} />
           </div>
         </Card>
       </div>
