@@ -23,11 +23,19 @@ class CreateStudentUseCase:
         if self.student_repository.find_by_reg_no(request.reg_no):
             raise StudentAlreadyExists("Student already exists")
 
-        student = Student(
-            reg_no=request.reg_no,
-            student_name=request.student_name,
-            personal_circumstances=request.personal_circumstances,
-        )
+        if request.personal_circumstances:
+            student = Student(
+                reg_no=request.reg_no,
+                student_name=request.student_name,
+                personal_circumstances=request.personal_circumstances,
+                degree_id=request.degree_id,
+            )
+        else:
+           student = Student(
+                reg_no=request.reg_no,
+                student_name=request.student_name,
+                degree_id=request.degree_id,
+            )
 
         self.student_repository.add(student)
 

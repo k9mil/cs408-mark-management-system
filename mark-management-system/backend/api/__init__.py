@@ -7,6 +7,7 @@ from api.users.controllers.users_controller import users
 from api.classes.controllers.classes_controller import classes
 from api.roles.controllers.roles_controller import roles
 from api.students.controllers.students_controller import students
+from api.degrees.controllers.degrees_controller import degrees
 
 from api.database import engine
 
@@ -36,5 +37,6 @@ def create_app(config_class=DevelopmentConfig):
     app.include_router(classes, tags=["classes"])
     app.include_router(roles, tags=["roles"])
     app.include_router(students, tags=["students"])
+    app.include_router(degrees, tags=["degrees"])
 
     return app
