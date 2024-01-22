@@ -14,61 +14,39 @@ import {
 
 import { Button } from "@/components/common/Button";
 
-const MarksInfoBox = ({
-  file,
-  setFile,
-}: {
-  file: File;
-  setFile: (file: File | null) => void;
-}) => {
+const MarksInfoBox = () => {
   return (
-    <div className="flex flex-row mx-6 justify-between items-center">
-      <Dialog>
-        <DialogTrigger asChild>
-          <InformationCircleIcon className="h-6 w-6 text-card-foreground cursor-pointer" />
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader className="space-y-4">
-            <DialogTitle className="text-xl">Uploading Marks</DialogTitle>
-            <DialogDescription>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              cursus at dui eget accumsan. In magna mauris, laoreet non blandit
-              rutrum, consectetur vitae erat. Nulla euismod, augue id varius
-              malesuada, nunc metus fermentum enim, vel vehicula quam turpis
-              eget magna.
-            </DialogDescription>
-            <DialogDescription>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              cursus at dui eget accumsan. In magna mauris, laoreet non blandit
-              rutrum, consectetur vitae erat. Nulla euismod, augue id varius
-              malesuada, nunc metus fermentum enim, vel vehicula quam turpis
-              eget magna.
-            </DialogDescription>
-            <DialogDescription>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              cursus at dui eget accumsan.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button type="submit">Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      <div className="flex flex-row space-x-4">
-        <Button variant="secondary" className="w-20">
-          Cancel
-        </Button>
-        <Button
-          disabled={!file}
-          className="w-20"
-          onClick={() => {
-            setFile(null);
-          }}
-        >
-          Next
-        </Button>
-      </div>
-    </div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <InformationCircleIcon className="h-6 w-6 text-card-foreground cursor-pointer" />
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader className="space-y-4">
+          <DialogTitle className="text-xl">Uploading Marks</DialogTitle>
+          <DialogDescription>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            cursus at dui eget accumsan. In magna mauris, laoreet non blandit
+            rutrum, consectetur vitae erat. Nulla euismod, augue id varius
+            malesuada, nunc metus fermentum enim, vel vehicula quam turpis eget
+            magna.
+          </DialogDescription>
+          <DialogDescription>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            cursus at dui eget accumsan. In magna mauris, laoreet non blandit
+            rutrum, consectetur vitae erat. Nulla euismod, augue id varius
+            malesuada, nunc metus fermentum enim, vel vehicula quam turpis eget
+            magna.
+          </DialogDescription>
+          <DialogDescription>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            cursus at dui eget accumsan.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button type="submit">Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

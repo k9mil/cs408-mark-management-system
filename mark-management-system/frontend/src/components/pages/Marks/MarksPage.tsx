@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
 
+import { Button } from "@/components/common/Button";
+
 import Sidebar from "../../common/Sidebar";
 
 import MarksInfoBox from "./MarksInfoBox";
@@ -11,11 +13,7 @@ import MarksUploadedFile from "./MarksUploadedFile";
 
 import { toast } from "sonner";
 
-import {
-  DocumentArrowUpIcon,
-  DocumentIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
@@ -122,7 +120,23 @@ const MarksPage = () => {
               <h2 className="text-sm text-gray-400">Supported formats: CSV</h2>
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
-            <MarksInfoBox file={file} setFile={setFile} />
+            <div className="flex flex-row mx-6 justify-between items-center">
+              <MarksInfoBox file={file} setFile={setFile} />
+              <div className="flex flex-row space-x-4">
+                <Button variant="secondary" className="w-20">
+                  Cancel
+                </Button>
+                <Button
+                  disabled={!file}
+                  className="w-20"
+                  onClick={() => {
+                    setFile(null);
+                  }}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
           </div>
         </Card>
       </div>
