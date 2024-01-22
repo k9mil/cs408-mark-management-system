@@ -41,9 +41,6 @@ class MarksCreate(MarksBase):
 class Marks(MarksBase):
     id: int
 
-    # TODO: fix circular dependency via ForwardRef
-    classes: List["Class"] = []
-
     class Config:
         from_attributes = True
 

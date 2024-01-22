@@ -14,6 +14,7 @@ from api.roles.repositories.roles_repository import RolesRepository
 from api.classes.repositories.class_repository import ClassRepository
 from api.students.repositories.student_repository import StudentRepository
 from api.degrees.repositories.degree_repository import DegreeRepository
+from api.marks.repositories.mark_repository import MarkRepository
 
 from api.config import Config
 
@@ -38,6 +39,9 @@ def get_student_repository(db: Session = Depends(get_db)) -> StudentRepository:
 
 def get_degree_repository(db: Session = Depends(get_db)) -> DegreeRepository:
     return DegreeRepository(db)
+
+def get_mark_repository(db: Session = Depends(get_db)) -> MarkRepository:
+    return MarkRepository(db)
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[str]:
