@@ -1,137 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
 
 import Sidebar from "../../common/Sidebar";
-import { StudentsDataTable } from "./StudentsDataTable";
-import { Student, StudentColumns } from "./StudentsColumns";
 
-const studentData: Student[] = [
-  {
-    class_code: "CS408",
-    registration_number: "hea92741",
-    mark: 70,
-    student_name: "Joanna Thompson",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "hea92741",
-    mark: 70,
-    student_name: "Joanna Thompson",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "hea92741",
-    mark: 70,
-    student_name: "Joanna Thompson",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "hea92741",
-    mark: 70,
-    student_name: "Joanna Thompson",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "hea92741",
-    mark: 70,
-    student_name: "Joanna Thompson",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "hea92741",
-    mark: 70,
-    student_name: "Joanna Thompson",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-  {
-    class_code: "CS408",
-    registration_number: "szi88904",
-    mark: 64,
-    student_name: "Bryan Lopez",
-    degree_level: "BSc",
-    degree: "Computer Science",
-  },
-];
+import { StudentsDataTable } from "./StudentsDataTable";
+import { StudentColumns } from "./StudentsColumns";
+
+import { markService } from "../../../services/MarkService";
+
+import { IMarkRow } from "../../../models/IMark";
 
 const StudentsPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isLecturer, isAuthenticated, getAccessToken } = useAuth();
+
+  const [details, setDetails] = useState<IMarkRow[]>([]);
+
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
     }
   }, [navigate, isAuthenticated]);
+
+  const marksData = async () => {
+    try {
+      if (accessToken) {
+        if (isLecturer) {
+          const result = await markService.getStudentMarks(accessToken);
+          setDetails(result);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    marksData();
+  }, []);
 
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
@@ -144,7 +55,7 @@ const StudentsPage = () => {
               View the students that you have uploaded marks for
             </h2>
           </div>
-          <StudentsDataTable columns={StudentColumns} data={studentData} />
+          <StudentsDataTable columns={StudentColumns} data={details} />
         </div>
       </div>
     </div>

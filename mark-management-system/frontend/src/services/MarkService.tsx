@@ -51,4 +51,21 @@ export const markService = {
         }
       });
   },
+
+  getStudentMarks: async (accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/marks`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving student marks.",
+          error
+        );
+        throw error;
+      });
+  },
 };

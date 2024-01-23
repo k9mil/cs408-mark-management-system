@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException
 
-from typing import Tuple
+from typing import Tuple, List
 
 from api.system.schemas import schemas
 
@@ -12,6 +12,7 @@ from api.marks.errors.mark_not_found import MarkNotFound
 
 from api.marks.dependencies import create_mark_use_case
 from api.marks.dependencies import get_mark_use_case
+from api.marks.dependencies import get_student_marks_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -56,6 +57,26 @@ def get_mark(
 
     try:
         return get_mark_use_case.execute(mark_unique_code, current_user)
+    except MarkNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@marks.get("/marks/", response_model=List[schemas.MarksRow])
+def get_student_marks(
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_student_marks_use_case: GetMarkUseCase = Depends(get_student_marks_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
+    try:
+        return get_student_marks_use_case.execute(current_user)
     except MarkNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
