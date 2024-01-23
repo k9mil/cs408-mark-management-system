@@ -13,7 +13,10 @@ import Sidebar from "../../common/Sidebar";
 import MarksInfoBox from "./MarksInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
-import { IMarkRow } from "../../../models/IMark";
+import { IMark, IMarkRow } from "../../../models/IMark";
+import { IClassWithId } from "../../../models/IClass";
+import { IStudent, IStudentWithId } from "../../../models/IStudent";
+import { IDegreeWithId } from "../../../models/IDegree";
 
 import { classService } from "../../../services/ClassService";
 import { studentService } from "../../../services/StudentService";
@@ -49,13 +52,16 @@ const MarksPage = () => {
         const parsedFile = await parseFileContents();
 
         if (parsedFile) {
-          parsedFile.splice(-1, 1);
-
-          parsedFile.forEach((row: IMarkRow) => {
+          parsedFile.slice(0, -1).forEach((row: IMarkRow) => {
             checkDegreeExists(row.DEGREE_NAME);
             checkClassExists(row.CLASS_CODE);
-            checkStudentExists(row.REG_NO);
-            checkMarkExists(row.UNIQUE_CODE);
+            checkStudentExists(row.REG_NO, row.STUDENT_NAME, row.DEGREE_NAME);
+            checkMarkExists(
+              row.MARK,
+              row.UNIQUE_CODE,
+              row.CLASS_CODE,
+              row.REG_NO
+            );
           });
         }
       }
@@ -123,7 +129,11 @@ const MarksPage = () => {
     }
   };
 
-  const checkStudentExists = async (studentRegNo: string) => {
+  const checkStudentExists = async (
+    studentRegNo: string,
+    studentName: string,
+    degreeName: string
+  ) => {
     try {
       if (accessToken) {
         const studentDetails = await studentService.getStudent(
@@ -131,9 +141,43 @@ const MarksPage = () => {
           accessToken
         );
 
-        if (!studentDetails) {
+        if (studentDetails === "Student not found") {
+          const degreeId = await getDegreeDetails(degreeName);
+
+          if (degreeId) {
+            await createStudent(studentRegNo, studentName, degreeId);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const checkMarkExists = async (
+    mark: number,
+    markUniqueCode: string,
+    classCode: string,
+    regNo: string
+  ) => {
+    try {
+      if (accessToken) {
+        const markDetails = await markService.getMark(
+          markUniqueCode,
+          accessToken
+        );
+
+        if (markDetails === "Mark not found") {
+          const classId = await getClassDetails(classCode);
+          const studentId = await getStudentDetails(regNo);
+
+          if (classId && studentId) {
+            await createMark(mark, markUniqueCode, studentId, classId);
+          }
+        } else {
           toast.error(
-            "Something went wrong when uploading the marks. One of the provided students does not exist."
+            "Something went wrong when uploading the marks. One of the marks has already been uploaded."
           );
         }
       }
@@ -143,18 +187,108 @@ const MarksPage = () => {
     }
   };
 
-  const checkMarkExists = async (markUniqueCode: string) => {
+  const createStudent = async (
+    studentRegNo: string,
+    studentName: string,
+    degreeId: number
+  ) => {
+    // NOTE: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
     try {
       if (accessToken) {
-        const markDetails = await markService.getMark(
-          markUniqueCode,
+        const studentDetails: IStudent = {
+          reg_no: studentRegNo,
+          student_name: studentName,
+          personal_circumstances: null,
+          degree_id: degreeId,
+        };
+
+        await studentService.createStudent(studentDetails, accessToken);
+        toast.success("Student was created successfully! DEV.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when creating a student. DEV.");
+    }
+  };
+
+  const createMark = async (
+    mark: number,
+    markUniqueCode: string,
+    studentId: number,
+    classId: number
+  ) => {
+    try {
+      if (accessToken) {
+        const markDetails: IMark = {
+          unique_code: markUniqueCode,
+          mark: mark,
+          class_id: classId,
+          student_id: studentId,
+        };
+
+        await markService.createMark(markDetails, accessToken);
+        toast.success("Mark was created uploaded! DEV.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading a mark. DEV.");
+    }
+  };
+
+  const getDegreeDetails = async (degreeName: string) => {
+    try {
+      if (accessToken) {
+        const degreeDetails: IDegreeWithId = await degreeService.getDegree(
+          degreeName,
           accessToken
         );
 
-        if (markDetails) {
+        if (!degreeDetails) {
           toast.error(
-            "Something went wrong when uploading the marks. One of the marks has already been uploaded."
+            "Something went wrong when uploading the marks. One of the provided degrees does not exist."
           );
+        } else {
+          return degreeDetails.id;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const getStudentDetails = async (studentRegNo: string) => {
+    try {
+      if (accessToken) {
+        const studentDetails: IStudentWithId = await studentService.getStudent(
+          studentRegNo,
+          accessToken
+        );
+
+        if (!studentDetails) {
+          toast.error("Something went wrong when uploading the marks.");
+        } else {
+          return studentDetails.id;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const getClassDetails = async (classCode: string) => {
+    try {
+      if (accessToken) {
+        const classDetails: IClassWithId = await classService.getClass(
+          classCode,
+          accessToken
+        );
+
+        if (!classDetails) {
+          toast.error("Something went wrong when uploading the marks.");
+        } else {
+          return classDetails.id;
         }
       }
     } catch (error) {

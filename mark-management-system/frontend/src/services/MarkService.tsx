@@ -38,12 +38,17 @@ export const markService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
+      .then((response) => response.data)
       .catch((error) => {
-        console.error(
-          "Error: There has been an issue when retrieving a mark.",
-          error
-        );
-        throw error;
+        if (error.response.data.detail === "Mark not found") {
+          return error.response.data.detail;
+        } else {
+          console.error(
+            "Error: There has been an issue when retrieving a mark.",
+            error
+          );
+          throw error;
+        }
       });
   },
 };

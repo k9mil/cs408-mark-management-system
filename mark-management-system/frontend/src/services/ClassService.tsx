@@ -120,6 +120,7 @@ export const classService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
+      .then((response) => response.data)
       .catch((error) => {
         console.error(
           "Error: There has been an issue when retrieving a class.",

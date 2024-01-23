@@ -5,6 +5,6 @@ export interface IStudent {
   degree_id: number;
 }
 
-export interface IBaseStudentId extends IStudent {
+export interface IStudentWithId extends IStudent {
   id: number;
 }
