@@ -30,17 +30,12 @@ export const degreeService = {
 
   getDegree: async (degreeName: string, accessToken: string) => {
     return await axios
-      .post(
-        `${API_BASE_URL}/degrees/${degreeName}`,
-        {
-          degree_name: degreeName,
+      .get(`${API_BASE_URL}/degrees/${degreeName}`, {
+        data: { degree_name: degreeName },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
+      })
       .catch((error) => {
         console.error(
           "Error: There has been an issue when retrieving a degree.",

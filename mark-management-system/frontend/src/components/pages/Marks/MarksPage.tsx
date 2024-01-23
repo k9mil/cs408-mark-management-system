@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import Papa from "papaparse";
+
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
@@ -11,6 +13,13 @@ import Sidebar from "../../common/Sidebar";
 import MarksInfoBox from "./MarksInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
+import { IMarkRow } from "../../../models/IMark";
+
+import { classService } from "../../../services/ClassService";
+import { studentService } from "../../../services/StudentService";
+import { markService } from "../../../services/MarkService";
+import { degreeService } from "../../../services/DegreeService";
+
 import { toast } from "sonner";
 
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
@@ -19,7 +28,7 @@ import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
 const MarksPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -31,6 +40,128 @@ const MarksPage = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  const accessToken = getAccessToken();
+
+  const uploadMarks = async () => {
+    try {
+      if (accessToken) {
+        const parsedFile = await parseFileContents();
+
+        if (parsedFile) {
+          parsedFile.splice(-1, 1);
+
+          parsedFile.forEach((row: IMarkRow) => {
+            checkDegreeExists(row.DEGREE_NAME);
+            checkClassExists(row.CLASS_CODE);
+            checkStudentExists(row.REG_NO);
+            checkMarkExists(row.UNIQUE_CODE);
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const parseFileContents = async (): Promise<IMarkRow[] | null> => {
+    if (file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          complete: (results) => {
+            resolve(results.data as IMarkRow[]);
+          },
+          header: true,
+          error: (error) => {
+            reject(error);
+          },
+        });
+      });
+    }
+
+    return null;
+  };
+
+  const checkDegreeExists = async (degreeName: string) => {
+    try {
+      if (accessToken) {
+        const degreeDetails = await degreeService.getDegree(
+          degreeName,
+          accessToken
+        );
+
+        if (!degreeDetails) {
+          toast.error(
+            "Something went wrong when uploading the marks. One of the provided degrees does not exist."
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const checkClassExists = async (classCode: string) => {
+    try {
+      if (accessToken) {
+        const classDetails = await classService.getClass(
+          classCode,
+          accessToken
+        );
+
+        if (!classDetails) {
+          toast.error(
+            "Something went wrong when uploading the marks. One of the provided classes does not exist."
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const checkStudentExists = async (studentRegNo: string) => {
+    try {
+      if (accessToken) {
+        const studentDetails = await studentService.getStudent(
+          studentRegNo,
+          accessToken
+        );
+
+        if (!studentDetails) {
+          toast.error(
+            "Something went wrong when uploading the marks. One of the provided students does not exist."
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
+
+  const checkMarkExists = async (markUniqueCode: string) => {
+    try {
+      if (accessToken) {
+        const markDetails = await markService.getMark(
+          markUniqueCode,
+          accessToken
+        );
+
+        if (markDetails) {
+          toast.error(
+            "Something went wrong when uploading the marks. One of the marks has already been uploaded."
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when uploading the marks.");
+    }
+  };
 
   const preventEventDefaults = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -67,7 +198,6 @@ const MarksPage = () => {
   };
 
   const handleClick = () => {
-    console.log(filePickedLocal);
     if (filePickedLocal && filePickedLocal.current !== null) {
       filePickedLocal.current.click();
     }
@@ -130,6 +260,7 @@ const MarksPage = () => {
                   disabled={!file}
                   className="w-20"
                   onClick={() => {
+                    uploadMarks();
                     setFile(null);
                   }}
                 >

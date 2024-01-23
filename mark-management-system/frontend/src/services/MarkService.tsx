@@ -32,17 +32,12 @@ export const markService = {
 
   getMark: async (uniqueCode: string, accessToken: string) => {
     return await axios
-      .post(
-        `${API_BASE_URL}/marks/${uniqueCode}`,
-        {
-          unique_code: uniqueCode,
+      .get(`${API_BASE_URL}/marks/${uniqueCode}`, {
+        data: { unique_code: uniqueCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
+      })
       .catch((error) => {
         console.error(
           "Error: There has been an issue when retrieving a mark.",
