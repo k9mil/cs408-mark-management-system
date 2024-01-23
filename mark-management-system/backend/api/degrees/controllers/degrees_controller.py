@@ -42,7 +42,7 @@ def create_degree(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@degrees.get("/degrees/{degree_id}", response_model=None)
+@degrees.get("/degrees/{degree_id}", response_model=schemas.Degree)
 def get_degree(
     degree_id: int,
     current_user: Tuple[str, bool] = Depends(get_current_user),
