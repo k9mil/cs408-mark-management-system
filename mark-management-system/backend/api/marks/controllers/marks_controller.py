@@ -42,9 +42,9 @@ def create_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.get("/marks/{mark_id}", response_model=schemas.Marks)
+@marks.get("/marks/{mark_unique_code}", response_model=schemas.Marks)
 def get_mark(
-    mark_id: int,
+    mark_unique_code: str,
     current_user: Tuple[str, bool] = Depends(get_current_user),
     get_mark_use_case: GetMarkUseCase = Depends(get_mark_use_case),
 ):
@@ -55,7 +55,7 @@ def get_mark(
         )    
 
     try:
-        return get_mark_use_case.execute(mark_id, current_user)
+        return get_mark_use_case.execute(mark_unique_code, current_user)
     except MarkNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

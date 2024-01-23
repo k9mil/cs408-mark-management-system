@@ -145,9 +145,9 @@ def delete_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.get("/classes/{class_id}", response_model=schemas.Class)
+@classes.get("/classes/{class_code}", response_model=schemas.Class)
 def get_class(
-    class_id: int,
+    class_code: str,
     current_user: Tuple[str, bool] = Depends(get_current_user),
     get_class_use_case: GetClassUseCase = Depends(get_class_use_case),
 ):
@@ -158,7 +158,7 @@ def get_class(
         )    
 
     try:
-        return get_class_use_case.execute(class_id, current_user)
+        return get_class_use_case.execute(class_code, current_user)
     except ClassNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

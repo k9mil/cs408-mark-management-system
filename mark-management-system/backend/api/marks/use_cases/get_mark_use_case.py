@@ -13,7 +13,7 @@ class GetMarkUseCase:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
     
-    def execute(self, mark_id: int, current_user: Tuple[str, bool]) -> MarkSchema:
+    def execute(self, mark_unique_code: str, current_user: Tuple[str, bool]) -> MarkSchema:
         user_email, is_admin = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
@@ -21,7 +21,7 @@ class GetMarkUseCase:
         if is_admin is False or lecturer is None:
             raise PermissionError("Permission denied to access this resource")
         
-        mark = self.mark_repository.find_by_unique_id(mark_id)
+        mark = self.mark_repository.find_by_unique_code(mark_unique_code)
 
         if mark is None:
             raise MarkNotFound("Mark not found")

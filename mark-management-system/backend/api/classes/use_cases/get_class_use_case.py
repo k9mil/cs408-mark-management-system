@@ -13,7 +13,7 @@ class GetClassUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
     
-    def execute(self, class_id: int, current_user: Tuple[str, bool]) -> ClassSchema:
+    def execute(self, class_code: str, current_user: Tuple[str, bool]) -> ClassSchema:
         user_email, is_admin = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
@@ -21,7 +21,7 @@ class GetClassUseCase:
         if is_admin is False or lecturer is None:
             raise PermissionError("Permission denied to access this resource")
         
-        class_ = self.class_repository.get_class(class_id)
+        class_ = self.class_repository.find_by_code(class_code)
 
         if class_ is None:
             raise ClassNotFound("Class not found")

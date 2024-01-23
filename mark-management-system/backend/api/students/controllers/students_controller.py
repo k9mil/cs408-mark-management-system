@@ -42,9 +42,9 @@ def create_student(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@students.get("/students/{student_id}", response_model=schemas.Student)
+@students.get("/students/{reg_no}", response_model=schemas.Student)
 def get_student(
-    student_id: int,
+    reg_no: str,
     current_user: Tuple[str, bool] = Depends(get_current_user),
     get_student_use_case: GetStudentUseCase = Depends(get_student_use_case),
 ):
@@ -55,7 +55,7 @@ def get_student(
         )    
 
     try:
-        return get_student_use_case.execute(student_id, current_user)
+        return get_student_use_case.execute(reg_no, current_user)
     except StudentNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

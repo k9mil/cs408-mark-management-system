@@ -13,7 +13,7 @@ class GetDegreeUseCase:
         self.degree_repository = degree_repository
         self.user_repository = user_repository
     
-    def execute(self, degree_id: int, current_user: Tuple[str, bool]) -> DegreeSchema:
+    def execute(self, degree_name: str, current_user: Tuple[str, bool]) -> DegreeSchema:
         user_email, is_admin = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
@@ -21,7 +21,7 @@ class GetDegreeUseCase:
         if is_admin is False or lecturer is None:
             raise PermissionError("Permission denied to access this resource")
         
-        degree = self.degree_repository.find_by_id(degree_id)
+        degree = self.degree_repository.find_by_name(degree_name)
 
         if degree is None:
             raise DegreeNotFound("Degree not found")

@@ -42,9 +42,9 @@ def create_degree(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@degrees.get("/degrees/{degree_id}", response_model=schemas.Degree)
+@degrees.get("/degrees/{degree_name}", response_model=schemas.Degree)
 def get_degree(
-    degree_id: int,
+    degree_name: str,
     current_user: Tuple[str, bool] = Depends(get_current_user),
     get_degree_use_case: GetDegreeUseCase = Depends(get_degree_use_case),
 ):
@@ -55,7 +55,7 @@ def get_degree(
         )    
 
     try:
-        return get_degree_use_case.execute(degree_id, current_user)
+        return get_degree_use_case.execute(degree_name, current_user)
     except DegreeNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
