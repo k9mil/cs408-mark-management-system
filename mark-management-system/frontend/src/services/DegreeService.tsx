@@ -1,19 +1,17 @@
 import axios from "axios";
 
-import { IMark } from "../models/IMark";
+import { IDegree } from "../models/IDegree";
 
 import { API_BASE_URL } from "../utils/Constants";
 
-export const markService = {
-  createMark: async (markDetails: IMark, accessToken: string) => {
+export const degreeService = {
+  createDegree: async (degreeDetails: IDegree, accessToken: string) => {
     return await axios
       .post(
-        `${API_BASE_URL}/marks`,
+        `${API_BASE_URL}/classes`,
         {
-          unique_code: markDetails.unique_code,
-          mark: markDetails.mark,
-          class_id: markDetails.class_id,
-          student_id: markDetails.student_id,
+          name: degreeDetails.name,
+          level: degreeDetails.level,
         },
         {
           headers: {
@@ -23,19 +21,19 @@ export const markService = {
       )
       .catch((error) => {
         console.error(
-          "Error: There has been an issue when creating a mark.",
+          "Error: There has been an issue when creating a degree.",
           error
         );
         throw error;
       });
   },
 
-  getMark: async (uniqueCode: string, accessToken: string) => {
+  getDegree: async (degreeName: string, accessToken: string) => {
     return await axios
       .post(
-        `${API_BASE_URL}/marks/${uniqueCode}`,
+        `${API_BASE_URL}/degrees/${degreeName}`,
         {
-          unique_code: uniqueCode,
+          degree_name: degreeName,
         },
         {
           headers: {
@@ -45,7 +43,7 @@ export const markService = {
       )
       .catch((error) => {
         console.error(
-          "Error: There has been an issue when retrieving a mark.",
+          "Error: There has been an issue when retrieving a degree.",
           error
         );
         throw error;

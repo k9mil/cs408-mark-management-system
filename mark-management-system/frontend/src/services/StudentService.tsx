@@ -29,4 +29,26 @@ export const studentService = {
         throw error;
       });
   },
+
+  getStudent: async (studentRegNo: string, accessToken: string) => {
+    return await axios
+      .post(
+        `${API_BASE_URL}/students/${studentRegNo}`,
+        {
+          reg_no: studentRegNo,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving a student.",
+          error
+        );
+        throw error;
+      });
+  },
 };

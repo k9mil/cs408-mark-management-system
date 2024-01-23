@@ -111,4 +111,26 @@ export const classService = {
         throw error;
       });
   },
+
+  getClass: async (classCode: string, accessToken: string) => {
+    return await axios
+      .post(
+        `${API_BASE_URL}/classes/${classCode}`,
+        {
+          class_code: classCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving a class.",
+          error
+        );
+        throw error;
+      });
+  },
 };
