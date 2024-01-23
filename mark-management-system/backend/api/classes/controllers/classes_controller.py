@@ -145,7 +145,7 @@ def delete_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.get("/classes/{class_id}", response_model=None)
+@classes.get("/classes/{class_id}", response_model=schemas.Class)
 def get_class(
     class_id: int,
     current_user: Tuple[str, bool] = Depends(get_current_user),

@@ -13,7 +13,7 @@ class GetClassUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
     
-    def execute(self, class_id: int, current_user: Tuple[str, bool]) -> list[ClassSchema]:
+    def execute(self, class_id: int, current_user: Tuple[str, bool]) -> ClassSchema:
         user_email, is_admin = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
