@@ -9,7 +9,6 @@ export const classService = {
     classDetails: IClassWithLecturerId,
     accessToken: string
   ) => {
-    console.log(classDetails);
     return await axios
       .post(
         `${API_BASE_URL}/classes`,
@@ -107,6 +106,24 @@ export const classService = {
       .catch((error) => {
         console.error(
           "Error: There has been an issue when deleting a class.",
+          error
+        );
+        throw error;
+      });
+  },
+
+  getClass: async (classCode: string, accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/classes/${classCode}`, {
+        data: { class_code: classCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving a class.",
           error
         );
         throw error;

@@ -8,6 +8,7 @@ from api.classes.use_cases.get_classes_use_case import GetClassesUseCase
 from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesForLecturerUseCase
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
+from api.classes.use_cases.get_class_use_case import GetClassUseCase
 from api.classes.use_cases.check_user_identity_use_case import CheckUserIdentityUseCase
 
 from api.middleware.dependencies import get_class_repository
@@ -53,6 +54,15 @@ def delete_class_use_case(
     ) -> DeleteClassUseCase:
     return DeleteClassUseCase(
         class_repository, 
+    )
+
+def get_class_use_case(
+        class_repository: ClassRepository = Depends(get_class_repository),
+        user_repository: UserRepository = Depends(get_user_repository)
+    ) -> GetClassUseCase:
+    return GetClassUseCase(
+        class_repository, 
+        user_repository
     )
 
 def check_user_identity_use_case(

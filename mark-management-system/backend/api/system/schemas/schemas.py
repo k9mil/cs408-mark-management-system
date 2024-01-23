@@ -7,6 +7,7 @@ Class = ForwardRef('Class')
 Student = ForwardRef('Student')
 Marks = ForwardRef('Marks')
 User = ForwardRef('User')
+Degree = ForwardRef('Degree')
 
 
 class RoleBase(BaseModel):
@@ -39,9 +40,6 @@ class MarksCreate(MarksBase):
 
 class Marks(MarksBase):
     id: int
-
-    # TODO: fix circular dependency via ForwardRef
-    classes: List["Class"] = []
 
     class Config:
         from_attributes = True
@@ -127,16 +125,16 @@ class StudentBase(BaseModel):
     student_name: str
     personal_circumstances: str | None = None
 
+    degree_id: int
+
 class StudentCreate(StudentBase):
     pass
 
 class Student(StudentBase):
     id: int
 
-    degree_id: int
-
-    degree: Degree
-    classes: List[Class] = []
+    degree: DegreeBase
+    classes: List[ClassBase] = []
 
     class Config:
         from_attributes = True
@@ -169,3 +167,4 @@ User.model_rebuild()
 Class.model_rebuild()
 Student.model_rebuild()
 Marks.model_rebuild()
+Degree.model_rebuild()
