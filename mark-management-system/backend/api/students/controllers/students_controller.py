@@ -5,10 +5,13 @@ from typing import Tuple
 from api.system.schemas import schemas
 
 from api.students.use_cases.create_student_use_case import CreateStudentUseCase
+from api.students.use_cases.get_student_use_case import GetStudentUseCase
 
 from api.students.errors.student_already_exists import StudentAlreadyExists
+from api.students.errors.student_not_found import StudentNotFound
 
 from api.students.dependencies import create_student_use_case
+from api.students.dependencies import get_student_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -33,6 +36,27 @@ def create_student(
             request, current_user
         )
     except StudentAlreadyExists as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@students.get("/students/{student_id}", response_model=schemas.Student)
+def get_student(
+    student_id: int,
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_student_use_case: GetStudentUseCase = Depends(get_student_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
+    try:
+        return get_student_use_case.execute(student_id, current_user)
+    except StudentNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
