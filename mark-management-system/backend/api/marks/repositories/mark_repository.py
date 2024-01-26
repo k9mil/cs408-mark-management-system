@@ -28,3 +28,7 @@ class MarkRepository:
             .filter(Class.lecturer_id == lecturer_id)
             .all()
         )
+
+    def delete(self, mark: Marks) -> None:
+        self.db.delete(mark)
+        self.db.commit()
