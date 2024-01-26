@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
-export const ClassesModalLecturerView = ({
+export const StudentsModal = ({
   row,
   openDialogRowId,
   setOpenDialogRowId,
@@ -33,8 +33,8 @@ export const ClassesModalLecturerView = ({
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-xl">CS408 — View</DialogTitle>
           <DialogDescription className="max-w-md">
-            Information about the {row.original.code} class. Click done when
-            you're finished.
+            Information about the mark for {row.original.student_name}. Click
+            save when you're finished.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-row justify-between">
@@ -46,7 +46,7 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.name}
+                defaultValue={row.original.student_name}
                 disabled
               />
             </div>
@@ -57,55 +57,74 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.code}
+                defaultValue={row.original.class_code}
                 disabled
               />
             </div>
             <div>
-              <Label htmlFor="credits" className="text-right">
-                Credits
+              <Label htmlFor="code" className="text-right">
+                Registration Number
               </Label>
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.credit}
+                defaultValue={row.original.reg_no}
                 disabled
               />
             </div>
           </div>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="creditLevel" className="text-right">
-                Credit Level
+              <Label htmlFor="degreeLevel" className="text-right">
+                Degree Level
               </Label>
               <Input
-                id="name"
+                id="degreeLevel"
                 className="col-span-3"
-                defaultValue={row.original.credit_level}
+                defaultValue={row.original.degree_level}
                 disabled
               />
             </div>
             <div>
-              <Label htmlFor="numberOfStudents" className="text-right">
-                Number of Students
+              <Label htmlFor="degreeName" className="text-right">
+                Degree Name
               </Label>
               <Input
-                id="name"
+                id="degreeName"
                 className="col-span-3"
-                value={row.original.students.length}
+                defaultValue={row.original.degree_name}
                 disabled
+              />
+            </div>
+            <div>
+              <Label htmlFor="mark" className="text-right">
+                Mark
+              </Label>
+              <Input
+                id="mark"
+                className="col-span-3"
+                defaultValue={row.original.mark}
               />
             </div>
           </div>
         </div>
-        <DialogFooter className="flex sm:justify-end mt-4">
+        <DialogFooter className="flex flex-row sm:justify-between mt-8">
+          <Button
+            type="submit"
+            variant="destructive"
+            onClick={() => {
+              setOpenDialogRowId(null);
+            }}
+          >
+            Remove
+          </Button>
           <Button
             type="submit"
             onClick={() => {
               setOpenDialogRowId(null);
             }}
           >
-            Done
+            Save changes
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -113,4 +132,4 @@ export const ClassesModalLecturerView = ({
   );
 };
 
-export default ClassesModalLecturerView;
+export default StudentsModal;

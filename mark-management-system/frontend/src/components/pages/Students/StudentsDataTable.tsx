@@ -1,6 +1,10 @@
-import * as React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/common/Button";
+
+import { StudentsModal } from "./StudentsModal";
+
+import { useAuth } from "../../../AuthProvider";
 
 import {
   ColumnDef,
@@ -30,7 +34,16 @@ export function StudentsDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const { isLecturer } = useAuth();
+
+  const handleRowClick = (row: any) => {
+    setOpenDialogRowId(row.id);
+    setSelectedRow(row);
+  };
 
   const table = useReactTable({
     data,
@@ -72,6 +85,9 @@ export function StudentsDataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => {
+                    handleRowClick(row);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -94,6 +110,13 @@ export function StudentsDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {openDialogRowId !== null && isLecturer === true ? (
+            <StudentsModal
+              row={selectedRow}
+              openDialogRowId={openDialogRowId}
+              setOpenDialogRowId={setOpenDialogRowId}
+            />
+          ) : null}
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
