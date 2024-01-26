@@ -6,6 +6,7 @@ from api.middleware.dependencies import UserRepository
 from api.marks.use_cases.create_mark_use_case import CreateMarkUseCase
 from api.marks.use_cases.get_mark_use_case import GetMarkUseCase
 from api.marks.use_cases.get_student_marks_use_case import GetStudentMarksUseCase
+from api.marks.use_cases.edit_mark_use_case import EditMarkUseCase
 from api.marks.use_cases.delete_mark_use_case import DeleteMarkUseCase
 
 from api.middleware.dependencies import get_mark_repository
@@ -35,6 +36,13 @@ def get_student_marks_use_case(
     return GetStudentMarksUseCase(
         mark_repository,
         user_repository
+    )
+
+def edit_mark_use_case(
+        mark_repository: MarkRepository = Depends(get_mark_repository),
+    ) -> EditMarkUseCase:
+    return EditMarkUseCase(
+        mark_repository,
     )
 
 def delete_mark_use_case(

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -17,6 +17,8 @@ import { markService } from "@/services/MarkService";
 
 import { toast } from "sonner";
 
+import { IMarkEdit } from "@/models/IMark";
+
 export const StudentsModal = ({
   row,
   openDialogRowId,
@@ -30,6 +32,8 @@ export const StudentsModal = ({
   accessToken: string | null;
   marksData: () => Promise<void>;
 }) => {
+  const [mark, setMark] = useState(row.original.mark);
+
   const deleteMark = async (uniqueCode: string) => {
     try {
       if (accessToken) {
@@ -42,6 +46,21 @@ export const StudentsModal = ({
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when deleting the mark.");
+    }
+  };
+
+  const editMark = async (markDetails: IMarkEdit) => {
+    try {
+      if (accessToken) {
+        await markService.editMark(markDetails, accessToken);
+        toast.success("Mark was edited successfully!");
+      }
+
+      marksData();
+      setOpenDialogRowId(null);
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when editing the mark details.");
     }
   };
 
@@ -128,6 +147,7 @@ export const StudentsModal = ({
                 type="text"
                 className="col-span-3"
                 defaultValue={row.original.mark}
+                onChange={(e) => setMark(e.target.value)}
               />
             </div>
           </div>
@@ -145,7 +165,12 @@ export const StudentsModal = ({
           <Button
             type="submit"
             onClick={() => {
-              setOpenDialogRowId(null);
+              const markDetails: IMarkEdit = {
+                unique_code: row.original.unique_code,
+                mark: mark,
+              };
+
+              editMark(markDetails);
             }}
           >
             Save changes

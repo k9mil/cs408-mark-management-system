@@ -38,6 +38,10 @@ class MarksBase(BaseModel):
 class MarksCreate(MarksBase):
     pass
 
+class MarksEdit(BaseModel):
+    mark: int
+    unique_code: str
+
 class MarksRow(BaseModel):
     class_code: str;
     reg_no: str;

@@ -94,6 +94,7 @@ export const ClassesModalAdminView = ({
         await classService.editClass(classDetails, accessToken);
         toast.success("Class was edited successfully!");
       }
+      
       lecturerData();
       classData();
       setOpenDialogRowId(null);

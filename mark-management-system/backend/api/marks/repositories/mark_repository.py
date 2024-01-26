@@ -3,6 +3,7 @@ from typing import List
 from api.system.models.models import Marks, Class, Student, Degree
 
 from api.system.schemas.schemas import MarksRow
+from api.system.schemas.schemas import MarksEdit
 
 
 class MarkRepository:
@@ -28,6 +29,11 @@ class MarkRepository:
             .filter(Class.lecturer_id == lecturer_id)
             .all()
         )
+    
+    def update(self, mark: Marks, request: MarksEdit) -> None:
+        mark.mark = request.mark
+
+        self.db.commit()
 
     def delete(self, mark: Marks) -> None:
         self.db.delete(mark)
