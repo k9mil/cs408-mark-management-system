@@ -33,6 +33,8 @@ interface DataTableProps<TData, TValue> {
 export function StudentsDataTable<TData, TValue>({
   columns,
   data,
+  accessToken,
+  marksData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
@@ -115,6 +117,8 @@ export function StudentsDataTable<TData, TValue>({
               row={selectedRow}
               openDialogRowId={openDialogRowId}
               setOpenDialogRowId={setOpenDialogRowId}
+              accessToken={accessToken}
+              marksData={marksData}
             />
           ) : null}
         </Table>

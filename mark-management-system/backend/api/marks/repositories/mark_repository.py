@@ -17,7 +17,7 @@ class MarkRepository:
     def find_by_unique_id(self, marks_id: int) -> Marks:
         return self.db.query(Marks).filter_by(id=marks_id).first()
 
-    def find_by_unique_code(self, marks_unique_code: int) -> Marks:
+    def find_by_unique_code(self, marks_unique_code: str) -> Marks:
         return self.db.query(Marks).filter_by(unique_code=marks_unique_code).first()
 
     def get_student_marks_for_lecturer(self, lecturer_id: int) -> List[MarksRow]:

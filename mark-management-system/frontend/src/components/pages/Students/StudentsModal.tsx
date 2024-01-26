@@ -13,15 +13,38 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
+import { markService } from "@/services/MarkService";
+
+import { toast } from "sonner";
+
 export const StudentsModal = ({
   row,
   openDialogRowId,
   setOpenDialogRowId,
+  accessToken,
+  marksData,
 }: {
   row: any;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
+  accessToken: string | null;
+  marksData: () => Promise<void>;
 }) => {
+  const deleteMark = async (uniqueCode: string) => {
+    try {
+      if (accessToken) {
+        await markService.deleteMark(uniqueCode, accessToken);
+        toast.success("Mark was deleted successfully!");
+      }
+
+      marksData();
+      setOpenDialogRowId(null);
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when deleting the mark.");
+    }
+  };
+
   return (
     <Dialog
       open={openDialogRowId === row.id}
@@ -102,6 +125,7 @@ export const StudentsModal = ({
               </Label>
               <Input
                 id="mark"
+                type="text"
                 className="col-span-3"
                 defaultValue={row.original.mark}
               />
@@ -113,7 +137,7 @@ export const StudentsModal = ({
             type="submit"
             variant="destructive"
             onClick={() => {
-              setOpenDialogRowId(null);
+              deleteMark(row.original.unique_code);
             }}
           >
             Remove

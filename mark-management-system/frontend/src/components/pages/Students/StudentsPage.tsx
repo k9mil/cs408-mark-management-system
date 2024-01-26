@@ -55,7 +55,12 @@ const StudentsPage = () => {
               View the students that you have uploaded marks for
             </h2>
           </div>
-          <StudentsDataTable columns={StudentColumns} data={details} />
+          <StudentsDataTable
+            columns={StudentColumns}
+            data={details}
+            marksData={marksData}
+            accessToken={accessToken}
+          />
         </div>
       </div>
     </div>

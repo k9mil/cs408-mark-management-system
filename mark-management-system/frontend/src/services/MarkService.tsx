@@ -68,4 +68,26 @@ export const markService = {
         throw error;
       });
   },
+
+  deleteMark: async (uniqueCode: string, accessToken: string) => {
+    return await axios
+      .delete(`${API_BASE_URL}/marks/${uniqueCode}`, {
+        data: { unique_code: uniqueCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        if (error.response.data.detail === "Mark not found") {
+          return error.response.data.detail;
+        } else {
+          console.error(
+            "Error: There has been an issue when deleting a mark.",
+            error
+          );
+          throw error;
+        }
+      });
+  },
 };
