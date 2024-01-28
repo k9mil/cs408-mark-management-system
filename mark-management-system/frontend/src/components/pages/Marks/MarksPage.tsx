@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
+import { validateParsedFile } from "@/utils/FileUploadUtils";
 
 const MarksPage = () => {
   const navigate = useNavigate();
@@ -51,8 +52,8 @@ const MarksPage = () => {
       if (accessToken) {
         const parsedFile = await parseFileContents();
 
-        if (parsedFile) {
-          parsedFile.slice(0, -1).forEach((row: IMarkRow) => {
+        if (parsedFile && validateParsedFile(parsedFile)) {
+          parsedFile.slice(0, 3).forEach((row: IMarkRow) => {
             checkDegreeExists(row.DEGREE_NAME);
             checkClassExists(row.CLASS_CODE);
             checkStudentExists(row.REG_NO, row.STUDENT_NAME, row.DEGREE_NAME);
@@ -63,6 +64,8 @@ const MarksPage = () => {
               row.REG_NO
             );
           });
+
+          toast.success("Your file has been succesfully uploaded!");
         }
       }
     } catch (error) {
@@ -313,8 +316,6 @@ const MarksPage = () => {
 
     if (e.dataTransfer.files) {
       setFile(e.dataTransfer.files[0]);
-
-      toast.success("Your file has been succesfully uploaded!");
     }
   };
 
@@ -326,8 +327,6 @@ const MarksPage = () => {
   const handleFileLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
-
-      toast.success("Your file has been successfully uploaded!");
     }
   };
 

@@ -5,7 +5,7 @@ import { IClassWithId, IClassWithLecturerId } from "../models/IClass";
 
 import { isNumber } from "./Utils";
 
-function isValidClassCode(input: string): boolean {
+export function isValidClassCode(input: string): boolean {
   const pattern = /^[A-Z]{2}\d{3}$/;
 
   return pattern.test(input);
