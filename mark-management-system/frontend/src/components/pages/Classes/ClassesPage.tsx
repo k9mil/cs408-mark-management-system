@@ -51,7 +51,7 @@ const ClassesPage = () => {
 
   const [classes, setClasses] = useState<IClass[]>([]);
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
-  const [lecturer, setLecturer] = React.useState("");
+  const [lecturer, setLecturer] = React.useState(null);
   const [lecturers, setLecturers] = useState<IUser[]>([]);
 
   const [name, setName] = useState("");
@@ -213,7 +213,7 @@ const ClassesPage = () => {
                             code: code,
                             credit: +credits,
                             credit_level: +creditLevel,
-                            lecturer_id: +lecturer,
+                            lecturer_id: lecturer === null ? null : +lecturer,
                           };
 
                           if (validateClassDetails(classDetails)) {

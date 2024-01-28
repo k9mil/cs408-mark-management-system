@@ -120,7 +120,8 @@ class ClassCreate(ClassBase):
 
 class ClassEdit(ClassBase):
     id: int
-    
+
+    original_code: str
     lecturer_id: int
 
 class Class(ClassBase):

@@ -42,6 +42,7 @@ export const ClassesModalAdminView = ({
   accessToken: string | null;
 }) => {
   const [name, setName] = useState(row.original.name);
+  const [originalCode] = useState(row.original.code);
   const [code, setCode] = useState(row.original.code);
   const [credits, setCredits] = useState(row.original.credit);
   const [creditLevel, setCreditLevel] = useState(row.original.credit_level);
@@ -49,7 +50,9 @@ export const ClassesModalAdminView = ({
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
 
-  const [lecturerList, setLecturerList] = React.useState(Array<IUserDropdown>);
+  const [lecturerList, setLecturerList] = React.useState<
+    IUserDropdown[] | null
+  >(null);
 
   useEffect(() => {
     if (lecturers && Array.isArray(lecturers)) {
@@ -94,7 +97,7 @@ export const ClassesModalAdminView = ({
         await classService.editClass(classDetails, accessToken);
         toast.success("Class was edited successfully!");
       }
-      
+
       lecturerData();
       classData();
       setOpenDialogRowId(null);
@@ -178,13 +181,15 @@ export const ClassesModalAdminView = ({
                 disabled
               />
             </div>
-            <ClassesLecturerDropdown
-              lecturer={lecturer}
-              lecturerOpen={lecturerOpen}
-              setLecturer={setLecturer}
-              setLecturerOpen={setLecturerOpen}
-              lecturerList={lecturerList}
-            />
+            {lecturerList !== null && lecturerList.length !== 0 ? (
+              <ClassesLecturerDropdown
+                lecturer={lecturer}
+                lecturerOpen={lecturerOpen}
+                setLecturer={setLecturer}
+                setLecturerOpen={setLecturerOpen}
+                lecturerList={lecturerList}
+              />
+            ) : null}
           </div>
         </div>
         <DialogFooter className="flex flex-row sm:justify-between mt-8">
@@ -204,6 +209,7 @@ export const ClassesModalAdminView = ({
                 id: +row.original.id,
                 name: name,
                 code: code,
+                original_code: originalCode,
                 credit: +credits,
                 credit_level: +creditLevel,
                 lecturer_id: +lecturer,

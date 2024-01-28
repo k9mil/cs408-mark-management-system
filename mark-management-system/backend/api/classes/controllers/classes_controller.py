@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException
 
-from typing import Tuple
+from typing import Tuple, List
 
 from api.system.schemas import schemas
 
@@ -55,7 +55,7 @@ def create_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.get("/classes/", response_model=list[schemas.Class])
+@classes.get("/classes/", response_model=List[schemas.Class])
 def get_classes(
     skip: int = 0,
     limit: int = 100,
@@ -77,7 +77,7 @@ def get_classes(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/classes/lecturer", response_model=list[schemas.Class])
+@classes.get("/classes/lecturer", response_model=List[schemas.Class])
 def get_classes_for_lecturer(
     skip: int = 0,
     limit: int = 100,
@@ -118,6 +118,8 @@ def edit_class(
     except UserNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except ClassNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except ClassAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
