@@ -5,7 +5,7 @@ interface IBaseClass {
   code: string;
   credit: number;
   credit_level: number;
-  lecturer_id: number;
+  lecturer_id: number | null;
 }
 
 export interface IClass extends IBaseClass {
@@ -14,7 +14,7 @@ export interface IClass extends IBaseClass {
 }
 
 export interface IClassWithLecturerId extends IBaseClass {
-  lecturer_id: number;
+  lecturer_id: number | null;
 }
 
 export interface IClassWithId extends IClassWithLecturerId {
