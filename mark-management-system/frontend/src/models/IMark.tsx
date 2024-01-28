@@ -14,3 +14,8 @@ export interface IMarkRow {
   DEGREE_NAME: string;
   UNIQUE_CODE: string;
 }
+
+export interface IMarkEdit {
+  unique_code: string;
+  mark: number;
+}

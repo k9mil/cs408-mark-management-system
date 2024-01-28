@@ -38,6 +38,19 @@ class MarksBase(BaseModel):
 class MarksCreate(MarksBase):
     pass
 
+class MarksEdit(BaseModel):
+    mark: int
+    unique_code: str
+
+class MarksRow(BaseModel):
+    class_code: str;
+    reg_no: str;
+    mark: int;
+    student_name: str;
+    degree_level: str;
+    degree_name: str;
+    unique_code: str;
+
 class Marks(MarksBase):
     id: int
 

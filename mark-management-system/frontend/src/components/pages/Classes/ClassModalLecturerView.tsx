@@ -32,8 +32,9 @@ export const ClassesModalLecturerView = ({
       <DialogContent>
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-xl">CS408 — View</DialogTitle>
-          <DialogDescription className="max-w-xs">
-            Information about the CS408 class. Click done when you're finished.
+          <DialogDescription className="max-w-md">
+            Information about the {row.original.code} class. Click done when
+            you're finished.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-row justify-between">

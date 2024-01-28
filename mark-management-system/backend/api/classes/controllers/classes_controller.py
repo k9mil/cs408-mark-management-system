@@ -81,7 +81,7 @@ def get_classes(
 def get_classes_for_lecturer(
     skip: int = 0,
     limit: int = 100,
-    current_user: str = Depends(get_current_user),
+    current_user: Tuple[str, bool] = Depends(get_current_user),
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
 ):
     if current_user is None:

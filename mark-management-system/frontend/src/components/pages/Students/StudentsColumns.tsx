@@ -1,21 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-export type Student = {
-  class_code: string;
-  registration_number: string;
-  mark: number;
-  student_name: string;
-  degree_level: string;
-  degree: string;
-};
+import { IMarkRow } from "../../../models/IMark";
 
-export const StudentColumns: ColumnDef<Student>[] = [
+export const StudentColumns: ColumnDef<IMarkRow>[] = [
   {
     accessorKey: "class_code",
     header: "Class Code",
   },
   {
-    accessorKey: "registration_number",
+    accessorKey: "reg_no",
     header: "Registration Number",
   },
   {
@@ -31,7 +24,11 @@ export const StudentColumns: ColumnDef<Student>[] = [
     header: "Degree Level",
   },
   {
-    accessorKey: "degree",
-    header: "Degree",
+    accessorKey: "degree_name",
+    header: "Degree Name",
+  },
+  {
+    accessorKey: "unique_code",
+    header: "Unique Code",
   },
 ];
