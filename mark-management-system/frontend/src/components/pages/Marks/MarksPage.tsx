@@ -325,8 +325,12 @@ const MarksPage = () => {
   };
 
   const handleFileLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (e.target.files) {
       setFile(e.target.files[0]);
+      e.target.value = "";
     }
   };
 

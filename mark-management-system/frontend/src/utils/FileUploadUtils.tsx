@@ -14,15 +14,13 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    console.log(row);
-
     if (Object.keys(row).length != 7) {
       toast.error(
         `Row ${i + 1} doesn't contain all necessary information. 
         The row should have the following: 
         CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGRE_NAME, UNIQUE_CODE`
       );
-      
+
       return false;
     }
 
