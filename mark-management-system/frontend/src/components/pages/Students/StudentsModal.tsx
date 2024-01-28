@@ -19,6 +19,8 @@ import { toast } from "sonner";
 
 import { IMarkEdit } from "@/models/IMark";
 
+import { validateMarkDetailsOnEdit } from "@/utils/StudentUtils";
+
 export const StudentsModal = ({
   row,
   openDialogRowId,
@@ -32,7 +34,7 @@ export const StudentsModal = ({
   accessToken: string | null;
   marksData: () => Promise<void>;
 }) => {
-  const [mark, setMark] = useState(row.original.mark);
+  const [mark, setMark] = useState(row.mark ? +row.mark : null);
 
   const deleteMark = async (uniqueCode: string) => {
     try {
@@ -147,7 +149,9 @@ export const StudentsModal = ({
                 type="text"
                 className="col-span-3"
                 defaultValue={row.original.mark}
-                onChange={(e) => setMark(e.target.value)}
+                onChange={(e) => {
+                  setMark(e.target.value === "" ? null : +e.target.value);
+                }}
               />
             </div>
           </div>
@@ -167,10 +171,12 @@ export const StudentsModal = ({
             onClick={() => {
               const markDetails: IMarkEdit = {
                 unique_code: row.original.unique_code,
-                mark: mark,
+                mark: mark === null ? null : +mark,
               };
 
-              editMark(markDetails);
+              if (validateMarkDetailsOnEdit(markDetails)) {
+                editMark(markDetails);
+              }
             }}
           >
             Save changes

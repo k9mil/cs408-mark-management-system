@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import { IUser } from "../models/IUser";
 import { IClassWithId, IClassWithLecturerId } from "../models/IClass";
 
+import { isNumber } from "./Utils";
+
 export function formatLecturerName(lecturer: IUser) {
   return `${lecturer.first_name} ${lecturer.last_name}`;
 }
@@ -10,11 +12,6 @@ export function formatLecturerName(lecturer: IUser) {
 export function getNumOfStudents(students: Array<IUser>) {
   if (students) return students.length;
   return 0;
-}
-
-// https://stackoverflow.com/questions/23437476/in-typescript-how-to-check-if-a-string-is-numeric
-export function isNumber(value?: string | number): boolean {
-  return value != null && value !== "" && !isNaN(Number(value.toString()));
 }
 
 export function validateClassDetails(

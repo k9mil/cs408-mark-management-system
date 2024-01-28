@@ -17,5 +17,5 @@ export interface IMarkRow {
 
 export interface IMarkEdit {
   unique_code: string;
-  mark: number;
+  mark: number | null;
 }
