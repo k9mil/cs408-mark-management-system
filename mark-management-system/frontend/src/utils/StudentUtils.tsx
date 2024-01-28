@@ -10,8 +10,6 @@ export function validateMarkDetailsOnEdit(markDetails: IMarkEdit) {
     return false;
   }
 
-  console.log(markDetails);
-
   if (!("mark" in markDetails) || markDetails.mark === null) {
     toast.error("Mark is missing.");
     return false;

@@ -19,4 +19,5 @@ export interface IClassWithLecturerId extends IBaseClass {
 
 export interface IClassWithId extends IClassWithLecturerId {
   id: number;
+  original_code: number;
 }

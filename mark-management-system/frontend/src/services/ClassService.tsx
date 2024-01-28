@@ -76,6 +76,7 @@ export const classService = {
           id: classDetails.id,
           name: classDetails.name,
           code: classDetails.code,
+          original_code: classDetails.original_code,
           credit: classDetails.credit,
           credit_level: classDetails.credit_level,
           lecturer_id: classDetails.lecturer_id,
