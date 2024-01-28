@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -35,6 +35,11 @@ export const ClassesLecturerDropdown = ({
   setLecturerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   lecturerList: IUserDropdown[];
 }) => {
+  useEffect(() => {
+    console.log(lecturerList);
+    console.log(lecturer);
+  }, [lecturerList]);
+
   return (
     <div className="flex flex-col space-y-2">
       <Label htmlFor="lecturer" className="text-left">
@@ -64,9 +69,13 @@ export const ClassesLecturerDropdown = ({
               {lecturerList.map((lecturerDropdown) => (
                 <CommandItem
                   key={lecturerDropdown.value}
-                  value={lecturerDropdown.value}
-                  onSelect={(currentValue) => {
-                    setLecturer(currentValue === lecturer ? "" : currentValue);
+                  value={lecturerDropdown.label}
+                  onSelect={() => {
+                    setLecturer(
+                      lecturerDropdown.value === lecturer
+                        ? ""
+                        : lecturerDropdown.value
+                    );
                     setLecturerOpen(false);
                   }}
                 >
