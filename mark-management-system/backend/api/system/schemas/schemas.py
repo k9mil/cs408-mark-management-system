@@ -187,6 +187,8 @@ class RoleUsers(RoleUsersData):
         from_attributes = True
 
 class UserDetails(UserBase):
+    id: int
+    
     access_token: str
     refresh_token: str
     

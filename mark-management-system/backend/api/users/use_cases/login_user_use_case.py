@@ -37,6 +37,7 @@ class LoginUserUseCase:
         roles = [RoleInUser(id=role.id, title=role.title) for role in user.roles]
 
         user_details = UserDetails(
+            id=user.id,
             access_token=access_token,
             refresh_token=refresh_token,
             email_address=user.email_address,

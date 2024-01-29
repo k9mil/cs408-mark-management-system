@@ -30,3 +30,8 @@ export interface ILecturer extends IUser {
   number_of_classes_taught: number;
   classes: IClassUploaded[];
 }
+
+export interface IUserEdit extends IUser {
+  password: string | null;
+  confirm_passsword: string | null;
+}

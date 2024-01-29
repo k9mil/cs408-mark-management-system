@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -12,15 +12,41 @@ import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
 import Sidebar from "../../common/Sidebar";
 
+import { IUserEdit } from "@/models/IUser";
+
+import { userService } from "@/services/UserService";
+
+import { toast } from "sonner";
+
 const SettingsPage = () => {
   const navigate = useNavigate();
-  const { firstName, lastName, isAuthenticated } = useAuth();
+  const { id, firstName, lastName, isAuthenticated, getAccessToken } =
+    useAuth();
+
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
     }
   }, [navigate, isAuthenticated]);
+
+  const [formFirstName, setFirstName] = useState(firstName);
+  const [formLastName, setLastName] = useState(lastName);
+  const [password, setPassword] = useState<string | null>(null);
+  const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+
+  const editUser = async (userDetails: IUserEdit) => {
+    try {
+      if (accessToken) {
+        await userService.editUser(userDetails, accessToken);
+        toast.success("User was edited successfully!");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when editing the user details.");
+    }
+  };
 
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
@@ -39,8 +65,9 @@ const SettingsPage = () => {
                 <Input
                   id="firstName"
                   className="col-span-3"
-                  defaultValue={firstName}
+                  defaultValue={formFirstName}
                   placeholder="John"
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
               <div>
@@ -50,8 +77,9 @@ const SettingsPage = () => {
                 <Input
                   id="lastName"
                   className="col-span-3"
-                  defaultValue={lastName}
+                  defaultValue={formLastName}
                   placeholder="Doe"
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
             </div>
@@ -70,6 +98,7 @@ const SettingsPage = () => {
                   type="password"
                   className="col-span-3"
                   placeholder="••••••••"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div>
@@ -81,12 +110,26 @@ const SettingsPage = () => {
                   type="password"
                   className="col-span-3"
                   placeholder="••••••••"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
           </div>
-          <Button className="w-20 flex self-end" onClick={() => {}}>
-            Next
+          <Button
+            className="flex self-end"
+            onClick={() => {
+              const userDetails: IUserEdit = {
+                id: id,
+                first_name: formFirstName,
+                last_name: formLastName,
+                password: password,
+                confirm_passsword: confirmPassword,
+              };
+
+              editUser(userDetails);
+            }}
+          >
+            Save Changes
           </Button>
         </Card>
       </div>

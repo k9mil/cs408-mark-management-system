@@ -26,7 +26,7 @@ class EditUserUseCase:
             raise UserNotFound("User not found")
         
         if user.id != request.id:
-            raise Exception("You can only change details for yourself")
+            raise PermissionError("You can only change details for yourself")
         
         self.user_repository.update(user, request, self.bcrypt_hasher)
         

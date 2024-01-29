@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 export interface IAuthContext {
+  id: number;
   isAuthenticated: boolean;
   isAdmin: boolean;
   isLecturer: boolean;

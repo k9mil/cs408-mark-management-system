@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-import { IUserLoginDetails } from "../models/IUser";
+import { IUserLoginDetails, UserEdit } from "../models/IUser";
 
 import { API_BASE_URL } from "../utils/Constants";
 
@@ -62,6 +62,32 @@ export const userService = {
       .catch((error) => {
         console.error(
           "Error: There has been an issue when fetching lecturers.",
+          error
+        );
+        throw error;
+      });
+  },
+
+  editUser: async (userDetails: UserEdit, accessToken: string) => {
+    return await axios
+      .post(
+        `${API_BASE_URL}/users/${userDetails.id}`,
+        {
+          id: userDetails.id,
+          first_name: userDetails.first_name,
+          last_name: userDetails.last_name,
+          password: userDetails.password,
+          confirm_password: userDetails.confirm_passsword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when editing user details.",
           error
         );
         throw error;
