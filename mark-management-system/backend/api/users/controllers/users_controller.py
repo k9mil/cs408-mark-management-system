@@ -157,7 +157,7 @@ def edit_user(
                 status_code=400,
                 detail={
                     "password_errors": validation_password_errors,
-                    "onfirm_password_errors": validation_confirm_password_errors
+                    "confirm_password_errors": validation_confirm_password_errors
                 }
             )
 
