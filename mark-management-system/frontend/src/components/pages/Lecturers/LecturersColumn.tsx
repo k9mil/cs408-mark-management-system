@@ -1,8 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { IClass } from "../../../models/IClass";
+import { ILecturer } from "@/models/IUser";
 
-export const LecturerColumns: ColumnDef<IClass>[] = [
+export const LecturerColumns: ColumnDef<ILecturer>[] = [
   {
     accessorKey: "firstName",
     header: "First Name",
