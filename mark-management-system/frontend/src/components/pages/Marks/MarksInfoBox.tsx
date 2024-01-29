@@ -24,27 +24,29 @@ const MarksInfoBox = () => {
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-xl">Uploading Marks</DialogTitle>
           <DialogDescription>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            cursus at dui eget accumsan. In magna mauris, laoreet non blandit
-            rutrum, consectetur vitae erat. Nulla euismod, augue id varius
-            malesuada, nunc metus fermentum enim, vel vehicula quam turpis eget
-            magna.
+            To ensure a smooth and error-free experience, please adhere to the
+            following guidelines:
           </DialogDescription>
           <DialogDescription>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            cursus at dui eget accumsan. In magna mauris, laoreet non blandit
-            rutrum, consectetur vitae erat. Nulla euismod, augue id varius
-            malesuada, nunc metus fermentum enim, vel vehicula quam turpis eget
-            magna.
+            You can only upload one file at a time, however, if a mistake is
+            made then don't worry! Simply click the "X" icon to remove the file
+            you have uploaded and proceed to upload the correct one.
           </DialogDescription>
           <DialogDescription>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            cursus at dui eget accumsan.
+            Files should also not exceed 5MB, and should only be in a CSV
+            format.
+          </DialogDescription>
+          <DialogDescription>
+            If anything goes wrong during the upload process, you will get a
+            detailed description of what needs to be altered in order for the
+            data to be correctly processed.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button type="submit">Close</Button>
-        </DialogFooter>
+        <DialogTrigger asChild>
+          <DialogFooter>
+            <Button type="submit">Close</Button>
+          </DialogFooter>
+        </DialogTrigger>
       </DialogContent>
     </Dialog>
   );
