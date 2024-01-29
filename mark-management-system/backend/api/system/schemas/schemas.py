@@ -109,6 +109,13 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+class Lecturer(BaseModel):
+    first_name: str
+    last_name: str
+    number_of_classes_taught: int
+    
+    classes: List["LecturerClass"] = []
+
 class ClassBase(BaseModel):
     name: str
     code: str
@@ -133,6 +140,9 @@ class Class(ClassBase):
 
     class Config:
         from_attributes = True
+
+class LecturerClass(ClassBase):
+    is_uploaded: bool
 
 class StudentBase(BaseModel):
     reg_no: str

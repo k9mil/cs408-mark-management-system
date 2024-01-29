@@ -94,6 +94,28 @@ def get_users(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@users.get("/users/lecturers/", response_model=list[schemas.User])
+def get_lecturers(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_lecturers_use_case: GetLecturersUseCase = Depends(get_lecturers_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
+    try:
+        return get_lecturers_use_case.execute(skip, limit, current_user)
+    except UsersNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @users.get("/users/{user_id}", response_model=schemas.User)
 def get_user(
     user_id: int,
