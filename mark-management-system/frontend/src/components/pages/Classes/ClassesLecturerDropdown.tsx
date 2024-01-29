@@ -35,11 +35,6 @@ export const ClassesLecturerDropdown = ({
   setLecturerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   lecturerList: IUserDropdown[];
 }) => {
-  useEffect(() => {
-    console.log(lecturerList);
-    console.log(lecturer);
-  }, [lecturerList]);
-
   return (
     <div className="flex flex-col space-y-2">
       <Label htmlFor="lecturer" className="text-left">
