@@ -12,6 +12,8 @@ import { ILecturer } from "@/models/IUser";
 
 import { LecturerColumns } from "./LecturersColumn";
 
+import LecturersDataTable from "./LecturersDataTable";
+
 const LecturersPage = () => {
   const navigate = useNavigate();
   const { isAdmin, isAuthenticated, getAccessToken } = useAuth();
@@ -54,11 +56,11 @@ const LecturersPage = () => {
               View a list of lecturers in the system
             </h2>
           </div>
-          {/* <LecturersDataTable
+          <LecturersDataTable
             columns={LecturerColumns}
             data={lecturers}
             accessToken={accessToken}
-          /> */}
+          />
         </div>
       </div>
     </div>

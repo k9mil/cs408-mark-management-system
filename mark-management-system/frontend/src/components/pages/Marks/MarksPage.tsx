@@ -53,7 +53,7 @@ const MarksPage = () => {
         const parsedFile = await parseFileContents();
 
         if (parsedFile && validateParsedFile(parsedFile)) {
-          parsedFile.slice(0, 3).forEach((row: IMarkRow) => {
+          parsedFile.slice(0, -1).forEach((row: IMarkRow) => {
             checkDegreeExists(row.DEGREE_NAME);
             checkClassExists(row.CLASS_CODE);
             checkStudentExists(row.REG_NO, row.STUDENT_NAME, row.DEGREE_NAME);
