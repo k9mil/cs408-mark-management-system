@@ -99,7 +99,9 @@ export function LecturersDataTable<TData, TValue>({
                             const textColorClass =
                               isUploadedForAllClasses === "Yes"
                                 ? "text-green-500 font-bold"
-                                : "text-red-500 font-bold";
+                                : isUploadedForAllClasses === "No"
+                                ? "text-red-500 font-bold"
+                                : "font-base";
                             return (
                               <span className={textColorClass}>
                                 {isUploadedForAllClasses}
