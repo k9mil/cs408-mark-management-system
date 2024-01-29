@@ -33,7 +33,7 @@ import { Button } from "@/components/common/Button";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const { isLecturer, isAdmin, updateAuthentication } = useAuth();
+  const { isAdmin, updateAuthentication } = useAuth();
 
   const logout = async () => {
     try {
