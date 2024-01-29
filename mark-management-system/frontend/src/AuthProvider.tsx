@@ -7,6 +7,8 @@ const defaultAuthContext: IAuthContext = {
   isAuthenticated: false,
   isAdmin: false,
   isLecturer: false,
+  firstName: "",
+  lastName: "",
   updateAuthentication: () => {},
   getAccessToken: () => null,
 };
@@ -62,6 +64,25 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     }
   };
 
+  const retrieveFirstName = () => {
+    if (localData) {
+      return localData.first_name;
+    }
+
+    return "";
+  };
+
+  const retrieveLastName = () => {
+    if (localData) {
+      return localData.last_name;
+    }
+
+    return "";
+  };
+
+  const [firstName] = useState(retrieveFirstName());
+  const [lastName] = useState(retrieveLastName());
+
   const getAccessToken = () => {
     try {
       if (localData && isAuthenticated) return localData.access_token;
@@ -76,6 +97,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         isAuthenticated,
         isAdmin,
         isLecturer,
+        firstName,
+        lastName,
         updateAuthentication,
         getAccessToken,
       }}
