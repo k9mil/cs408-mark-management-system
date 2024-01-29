@@ -24,6 +24,7 @@ import {
 } from "@/components/common/Table";
 import { uploadedForAllClasses } from "@/utils/LecturerUtils";
 import { ILecturer } from "@/models/IUser";
+import LecturersModalView from "./LecturersModalView";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -124,6 +125,13 @@ export function LecturersDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+          {openDialogRowId !== null ? (
+            <LecturersModalView
+              row={selectedRow}
+              openDialogRowId={openDialogRowId}
+              setOpenDialogRowId={setOpenDialogRowId}
+            />
+          ) : null}
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
