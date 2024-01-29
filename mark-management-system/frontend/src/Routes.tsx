@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import DashboardPage from "./components/pages/Dashboard/DashboardPage";
@@ -6,6 +7,7 @@ import MarksPage from "./components/pages/Marks/MarksPage";
 import LoginPage from "./components/pages/Login/LoginPage";
 import ClassesPage from "./components/pages/Classes/ClassesPage";
 import StudentsPage from "./components/pages/Students/StudentsPage";
+import LecturersPage from "./components/pages/Lecturers/LecturersPage";
 import HelpPage from "./components/pages/Help/HelpPage";
 import SettingsPage from "./components/pages/Settings/SettingsPage";
 
@@ -32,6 +34,10 @@ const Routes = () => {
     {
       path: "/students",
       element: <StudentsPage />,
+    },
+    {
+      path: "/lecturers",
+      element: <LecturersPage />,
     },
     {
       path: "/help",
