@@ -6,14 +6,21 @@ from api.system.schemas.schemas import LecturerClass
 
 from api.users.repositories.user_repository import UserRepository
 from api.classes.repositories.class_repository import ClassRepository
+from api.marks.repositories.mark_repository import MarkRepository
 
 from api.users.errors.lecturers_not_found import LecturersNotFound
 
 
 class GetLecturersUseCase:
-    def __init__(self, user_repository: UserRepository, class_repository: ClassRepository):
+    def __init__(
+            self, 
+            user_repository: UserRepository,
+            class_repository: ClassRepository,
+            mark_repository: MarkRepository
+        ):
         self.user_repository = user_repository
         self.class_repository = class_repository
+        self.mark_repository = mark_repository
     
     def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> List[Lecturer]:
         _, is_admin = current_user
@@ -49,10 +56,12 @@ class GetLecturersUseCase:
         return lecturers_with_classes
 
     def create_lecturer_class(self, class_: Class) -> LecturerClass:
+        marks = self.mark_repository.get_student_marks_for_class(class_.id)
+
         return LecturerClass(
             name=class_.name,
             code=class_.code,
             credit=class_.credit,
             credit_level=class_.credit_level,
-            is_uploaded=False,
+            is_uploaded=len(marks) > 0,
         )

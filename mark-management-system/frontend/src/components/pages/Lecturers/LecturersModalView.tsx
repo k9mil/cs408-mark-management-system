@@ -38,8 +38,8 @@ export const LecturersModalView = ({
           {row.original.classes && row.original.classes.length !== 0 ? (
             <DialogDescription className="max-w-md">
               Information about {row.original.first_name}{" "}
-              {row.original.last_name} and their classes . Click done when
-              you're finished.
+              {row.original.last_name} and their classes. Click done when you're
+              finished.
             </DialogDescription>
           ) : null}
         </DialogHeader>
@@ -48,7 +48,7 @@ export const LecturersModalView = ({
             {row.original.classes.map((class_: IClass) => (
               <div key={class_.code} className="flex flex-row space-x-2">
                 <Label className="font-bold">{class_.code}</Label>
-                {class_.is_uploaded === "true" ? (
+                {class_.is_uploaded === true ? (
                   <Label className="text-green-500 font-bold">Uploaded</Label>
                 ) : (
                   <Label className="text-red-500 font-bold">Due</Label>

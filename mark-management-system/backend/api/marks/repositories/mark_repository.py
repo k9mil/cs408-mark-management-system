@@ -30,6 +30,9 @@ class MarkRepository:
             .all()
         )
     
+    def get_student_marks_for_class(self, class_id: int) -> List[Marks]:
+        return self.db.query(Marks).filter_by(class_id=class_id).all()
+    
     def update(self, mark: Marks, request: MarksEdit) -> None:
         mark.mark = request.mark
 

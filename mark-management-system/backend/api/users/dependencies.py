@@ -2,6 +2,7 @@ from fastapi import Depends
 
 from api.middleware.dependencies import UserRepository
 from api.middleware.dependencies import ClassRepository
+from api.middleware.dependencies import MarkRepository
 
 from api.users.hashers.bcrypt_hasher import BCryptHasher
 
@@ -18,6 +19,7 @@ from api.config import Config
 
 from api.middleware.dependencies import get_user_repository
 from api.middleware.dependencies import get_class_repository
+from api.middleware.dependencies import get_mark_repository
 
 
 def get_bcrypt_hasher() -> BCryptHasher:
@@ -58,8 +60,10 @@ def get_users_use_case(user_repository: UserRepository = Depends(get_user_reposi
 def get_lecturers_use_case(
         user_repository: UserRepository = Depends(get_user_repository),
         class_repository: ClassRepository = Depends(get_class_repository),
+        mark_repository: MarkRepository = Depends(get_mark_repository),
     ) -> GetLecturersUseCase:
     return GetLecturersUseCase(
         user_repository, 
-        class_repository
+        class_repository,
+        mark_repository,
     )
