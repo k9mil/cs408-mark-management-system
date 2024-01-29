@@ -9,6 +9,7 @@ from api.users.use_cases.create_user_use_case import CreateUserUseCase
 from api.users.use_cases.login_user_use_case import LoginUserUseCase
 from api.users.use_cases.get_users_use_case import GetUsersUseCase
 from api.users.use_cases.get_user_use_case import GetUserUseCase
+from api.users.use_cases.get_lecturers_use_case import GetLecturersUseCase
 
 from api.users.errors.user_already_exists import UserAlreadyExists
 from api.users.errors.users_not_found import UsersNotFound
@@ -22,6 +23,7 @@ from api.users.dependencies import create_user_use_case
 from api.users.dependencies import login_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
+from api.users.dependencies import get_lecturers_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -94,7 +96,7 @@ def get_users(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/users/lecturers/", response_model=list[schemas.User])
+@users.get("/users/lecturers/", response_model=list[schemas.Lecturer])
 def get_lecturers(
     skip: int = 0,
     limit: int = 100,

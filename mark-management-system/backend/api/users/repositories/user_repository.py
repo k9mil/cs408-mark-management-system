@@ -1,6 +1,6 @@
 from typing import List
 
-from api.system.models.models import User, Role
+from api.system.models.models import User, RoleUsers
 
 
 class UserRepository:
@@ -23,7 +23,7 @@ class UserRepository:
         return self.db.query(User).offset(skip).limit(limit).all()
 
     def get_lecturers(self, skip: int, limit: int) -> List[User]:
-        return self.db.query(User).join(Role, User.user_id == Role.user_id).filter(Role.role_id == 2).offset(skip).limit(limit).all()
+        return self.db.query(User).join(RoleUsers, User.id == RoleUsers.user_id).filter(RoleUsers.role_id == 2).offset(skip).limit(limit).all()
 
     # TODO: remove, duplicate of find_by_id()
     def get_user(self, user_id: int) -> User:
