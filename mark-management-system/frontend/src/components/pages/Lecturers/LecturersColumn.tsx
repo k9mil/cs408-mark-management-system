@@ -4,19 +4,19 @@ import { ILecturer } from "@/models/IUser";
 
 export const LecturerColumns: ColumnDef<ILecturer>[] = [
   {
-    accessorKey: "firstName",
+    accessorKey: "first_name",
     header: "First Name",
   },
   {
-    accessorKey: "lastName",
+    accessorKey: "last_name",
     header: "Last Name",
   },
   {
-    accessorKey: "numberOfClasses",
-    header: "Number of Classes Taught",
+    accessorKey: "number_of_classes_taught",
+    header: "Number of Classes taught",
   },
   {
-    accessorKey: "uploadedForAllClasses",
+    accessorKey: "uploaded_for_all_classes",
     header: "Uploaded for all Classes",
   },
 ];

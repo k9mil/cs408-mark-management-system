@@ -31,8 +31,6 @@ class GetLecturersUseCase:
         for lecturer in lecturers:
             classes = self.class_repository.get_classes_by_lecturer_id(lecturer.id, skip, limit)
 
-            print("test2")
-
             class_list: List = []
 
             for class_ in classes:

@@ -22,6 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/common/Table";
+import { uploadedForAllClasses } from "@/utils/LecturerUtils";
+import { ILecturer } from "@/models/IUser";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,15 +33,10 @@ interface DataTableProps<TData, TValue> {
 export function LecturersDataTable<TData, TValue>({
   columns,
   data,
-  accessToken,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState(null);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const handleRowClick = (row: any) => {
     setOpenDialogRowId(row.id);
@@ -92,10 +89,26 @@ export function LecturersDataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {cell.column.id === "uploaded_for_all_classes"
+                        ? (() => {
+                            const isUploadedForAllClasses =
+                              uploadedForAllClasses(
+                                cell.row.original as ILecturer
+                              );
+                            const textColorClass =
+                              isUploadedForAllClasses === "Yes"
+                                ? "text-green-500 font-bold"
+                                : "text-red-500 font-bold";
+                            return (
+                              <span className={textColorClass}>
+                                {isUploadedForAllClasses}
+                              </span>
+                            );
+                          })()
+                        : flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
                     </TableCell>
                   ))}
                 </TableRow>

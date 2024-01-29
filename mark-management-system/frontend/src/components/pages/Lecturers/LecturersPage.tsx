@@ -32,7 +32,7 @@ const LecturersPage = () => {
     try {
       if (accessToken) {
         if (isAdmin) {
-          const result = await userService.getUsers(accessToken);
+          const result = await userService.getLecturers(accessToken);
           setLecturers(result);
         }
       }

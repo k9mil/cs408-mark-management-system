@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
-from typing import Tuple
+from typing import Tuple, List
 
 from api.system.schemas import schemas
 
@@ -74,7 +74,7 @@ def authenticate_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/users/", response_model=list[schemas.User])
+@users.get("/users/", response_model=List[schemas.User])
 def get_users(
     skip: int = 0,
     limit: int = 100,
@@ -96,7 +96,7 @@ def get_users(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/users/lecturers/", response_model=list[schemas.Lecturer])
+@users.get("/users/lecturers/", response_model=List[schemas.Lecturer])
 def get_lecturers(
     skip: int = 0,
     limit: int = 100,

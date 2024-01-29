@@ -44,6 +44,23 @@ export const userService = {
       .then((response) => response.data)
       .catch((error) => {
         console.error(
+          "Error: There has been an issue when fetching users.",
+          error
+        );
+        throw error;
+      });
+  },
+
+  getLecturers: async (accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/users/lecturers/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
           "Error: There has been an issue when fetching lecturers.",
           error
         );
