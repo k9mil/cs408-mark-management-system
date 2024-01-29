@@ -21,3 +21,8 @@ export interface IClassWithId extends IClassWithLecturerId {
   id: number;
   original_code: number;
 }
+
+export interface IClassUploaded {
+  classDetails: IClass;
+  is_uploaded: boolean;
+}
