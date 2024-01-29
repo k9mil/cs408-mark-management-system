@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
-from typing import Tuple
+from typing import Tuple, List
 
 from api.system.schemas import schemas
 
@@ -9,6 +9,7 @@ from api.users.use_cases.create_user_use_case import CreateUserUseCase
 from api.users.use_cases.login_user_use_case import LoginUserUseCase
 from api.users.use_cases.get_users_use_case import GetUsersUseCase
 from api.users.use_cases.get_user_use_case import GetUserUseCase
+from api.users.use_cases.get_lecturers_use_case import GetLecturersUseCase
 
 from api.users.errors.user_already_exists import UserAlreadyExists
 from api.users.errors.users_not_found import UsersNotFound
@@ -22,6 +23,7 @@ from api.users.dependencies import create_user_use_case
 from api.users.dependencies import login_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
+from api.users.dependencies import get_lecturers_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -72,7 +74,7 @@ def authenticate_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/users/", response_model=list[schemas.User])
+@users.get("/users/", response_model=List[schemas.User])
 def get_users(
     skip: int = 0,
     limit: int = 100,
@@ -87,6 +89,28 @@ def get_users(
 
     try:
         return get_users_use_case.execute(skip, limit, current_user)
+    except UsersNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@users.get("/users/lecturers/", response_model=List[schemas.Lecturer])
+def get_lecturers(
+    skip: int = 0,
+    limit: int = 100,
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_lecturers_use_case: GetLecturersUseCase = Depends(get_lecturers_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
+    try:
+        return get_lecturers_use_case.execute(skip, limit, current_user)
     except UsersNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

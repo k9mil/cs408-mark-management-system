@@ -22,11 +22,12 @@ import { toast } from "sonner";
 import {
   HomeIcon,
   PencilIcon,
-  UserGroupIcon,
+  BuildingLibraryIcon,
   UserIcon,
   MagnifyingGlassCircleIcon,
   Cog8ToothIcon,
   InformationCircleIcon,
+  AcademicCapIcon,
 } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/common/Button";
@@ -78,7 +79,7 @@ const Sidebar = () => {
                 to="/classes"
                 className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
               >
-                <UserGroupIcon className="h-6 w-6 text-white" />
+                <BuildingLibraryIcon className="h-6 w-6 text-white" />
                 <h2 className="text-white">Classes</h2>
               </Link>
             </li>
@@ -87,10 +88,21 @@ const Sidebar = () => {
                 to="/students"
                 className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
               >
-                <UserIcon className="h-6 w-6 text-white" />
+                <AcademicCapIcon className="h-6 w-6 text-white" />
                 <h2 className="text-white">Students</h2>
               </Link>
             </li>
+            {isAdmin === true ? (
+              <li>
+                <Link
+                  to="/lecturers"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <UserIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Lecturers</h2>
+                </Link>
+              </li>
+            ) : null}
             <li>
               <Link
                 to="/help"

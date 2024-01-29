@@ -1,3 +1,5 @@
+import { IClassUploaded } from "./IClass";
+
 export interface IUser {
   id: number;
   first_name: string;
@@ -22,4 +24,9 @@ export interface IUserDTO {
   refresh_token: string;
   roles: string[];
   classses: string[];
+}
+
+export interface ILecturer extends IUser {
+  number_of_classes_taught: number;
+  classes: IClassUploaded[];
 }
