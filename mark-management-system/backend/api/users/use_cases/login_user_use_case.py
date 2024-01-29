@@ -4,10 +4,7 @@ from typing import List
 from jose import jwt
 from datetime import datetime, timedelta
 
-from api.system.models.models import Role, Class
-
-from api.system.schemas.schemas import UserDetails, RoleInUser, UserBase
-from api.system.schemas.schemas import Class as ClassSchema
+from api.system.schemas.schemas import UserDetails, RoleInUser
 
 from api.users.repositories.user_repository import UserRepository
 

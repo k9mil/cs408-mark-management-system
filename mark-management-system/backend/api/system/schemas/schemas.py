@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from typing import List, ForwardRef
+from typing import List, Optional, ForwardRef
 
 
 Class = ForwardRef('Class')
@@ -99,6 +99,15 @@ class UserCreate(UserBase):
 class UserLogin(BaseModel):
     email_address: str
     password: str
+
+class UserEdit(BaseModel):
+    id: int
+    
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+
+    password: Optional[str] = None
+    confirm_password: Optional[str] = None
 
 class User(UserBase):
     id: int
