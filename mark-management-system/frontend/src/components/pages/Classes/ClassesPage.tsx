@@ -83,7 +83,6 @@ const ClassesPage = () => {
         if (isAdmin) {
           const result = await userService.getLecturers(accessToken);
           setLecturers(result);
-          console.log(result);
         }
       }
     } catch (error) {

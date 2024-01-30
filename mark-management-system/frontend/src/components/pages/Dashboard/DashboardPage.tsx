@@ -51,7 +51,6 @@ const DashboardPage = () => {
       if (accessToken) {
         const result = await userService.getLecturer(id, accessToken);
         setLecturer(result);
-        console.log(result);
       }
     } catch (error) {
       console.error(error);
