@@ -18,6 +18,8 @@ import { userService } from "@/services/UserService";
 
 import { toast } from "sonner";
 
+import { validateUserEditDetails } from "@/utils/UserUtils";
+
 const SettingsPage = () => {
   const navigate = useNavigate();
   const { id, firstName, lastName, isAuthenticated, getAccessToken } =
@@ -126,7 +128,9 @@ const SettingsPage = () => {
                 confirm_passsword: confirmPassword,
               };
 
-              editUser(userDetails);
+              if (validateUserEditDetails(userDetails)) {
+                editUser(userDetails);
+              }
             }}
           >
             Save Changes
