@@ -70,7 +70,7 @@ const DashboardPage = () => {
               <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle className="text-lg">Upcoming Dates</CardTitle>
               </CardHeader>
-              <div className="flex flex-col pl-7 space-y-4">
+              <div className="flex flex-col pl-7 space-y-12">
                 <div className="flex flex-row space-x-2">
                   <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
                   <div className="flex flex-col">
@@ -103,7 +103,7 @@ const DashboardPage = () => {
                     CS408 |{" "}
                     <span className="font-normal">Individual Project</span>
                   </h1>
-                  <h2 className="text-red-500 font-sm font-normal">
+                  <h2 className="text-red-500 font-sm font-normal italic">
                     Upload Due
                   </h2>
                 </div>
@@ -113,7 +113,7 @@ const DashboardPage = () => {
                     CS426 |{" "}
                     <span className="font-normal">Human-Centred Security</span>
                   </h1>
-                  <h2 className="text-red-500 font-sm font-normal">
+                  <h2 className="text-red-500 font-sm font-normal italic">
                     Upload Due
                   </h2>
                 </div>
@@ -125,13 +125,13 @@ const DashboardPage = () => {
                       Information Access and Mining
                     </span>
                   </h1>
-                  <h2 className="text-green-500 font-sm font-normal">
+                  <h2 className="text-green-500 font-sm font-normal italic">
                     Uploaded
                   </h2>
                 </div>
               </div>
             </div>
-            <h2 className="text-sm text-black font-semibold flex self-end mr-8">
+            <h2 className="text-sm text-black font-semibold flex self-end mr-8 pt-4">
               “The place of useful learning.”
             </h2>
           </Card>

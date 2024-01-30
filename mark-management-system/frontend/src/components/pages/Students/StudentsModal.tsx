@@ -75,7 +75,9 @@ export const StudentsModal = ({
     >
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-xl">CS408 — View</DialogTitle>
+          <DialogTitle className="text-xl">
+            {row.original.student_name} — View
+          </DialogTitle>
           <DialogDescription className="max-w-md">
             Information about the mark for {row.original.student_name}. Click
             save when you're finished.

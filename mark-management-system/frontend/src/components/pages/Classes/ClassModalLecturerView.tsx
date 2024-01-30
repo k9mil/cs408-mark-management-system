@@ -31,7 +31,9 @@ export const ClassesModalLecturerView = ({
     >
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-xl">CS408 — View</DialogTitle>
+          <DialogTitle className="text-xl">
+            {row.original.code} — View
+          </DialogTitle>
           <DialogDescription className="max-w-md">
             Information about the {row.original.code} class. Click done when
             you're finished.
