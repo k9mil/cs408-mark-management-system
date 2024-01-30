@@ -33,11 +33,59 @@ const DashboardPage = () => {
               <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle className="text-lg">Student Performance</CardTitle>
               </CardHeader>
+              <div className="flex flex-col justify-center items-center space-y-8">
+                <CardDescription className="flex flex-row justify-around space-x-12">
+                  <div className="flex flex-col pl-12 justify-center items-center">
+                    <h1 className="font-bold text-3xl text-primary-blue">
+                      72%
+                    </h1>
+                    <h1 className="text-xs">Average</h1>
+                  </div>
+                  <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                  <div className="flex flex-col pr-12 justify-center items-center">
+                    <h1 className="font-bold text-3xl text-primary-blue">
+                      44%
+                    </h1>
+                    <h1 className="text-xs">Mean</h1>
+                  </div>
+                </CardDescription>
+                <CardDescription className="flex flex-row justify-around space-x-12">
+                  <div className="flex flex-col pl-12 justify-center items-center">
+                    <h1 className="font-bold text-3xl text-primary-blue">
+                      17%
+                    </h1>
+                    <h1 className="text-xs">Median</h1>
+                  </div>
+                  <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                  <div className="flex flex-col pr-12 justify-center items-center">
+                    <h1 className="font-bold text-3xl text-primary-blue">
+                      62%
+                    </h1>
+                    <h1 className="text-xs">Mode</h1>
+                  </div>
+                </CardDescription>
+              </div>
             </Card>
             <Card className="w-1/2 h-full space-y-2 flex flex-col shadow-xl">
               <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle className="text-lg">Upcoming Dates</CardTitle>
               </CardHeader>
+              <div className="flex flex-col pl-7 space-y-4">
+                <div className="flex flex-row space-x-2">
+                  <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
+                  <div className="flex flex-col">
+                    <h2 className="text-md font-semibold">CS408 Examination</h2>
+                    <h2 className="text-sm font-light">in 3 days</h2>
+                  </div>
+                </div>
+                <div className="flex flex-row space-x-2">
+                  <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
+                  <div className="flex flex-col">
+                    <h2 className="text-md font-semibold">CS217 Examination</h2>
+                    <h2 className="text-sm font-light">in 3 days</h2>
+                  </div>
+                </div>
+              </div>
             </Card>
           </div>
           <Card className="w-full h-full space-y-2 flex flex-col shadow-xl">
