@@ -10,6 +10,7 @@ from api.users.use_cases.login_user_use_case import LoginUserUseCase
 from api.users.use_cases.get_users_use_case import GetUsersUseCase
 from api.users.use_cases.get_user_use_case import GetUserUseCase
 from api.users.use_cases.get_lecturers_use_case import GetLecturersUseCase
+from api.users.use_cases.edit_user_use_case import EditUserUseCase
 
 from api.users.errors.user_already_exists import UserAlreadyExists
 from api.users.errors.users_not_found import UsersNotFound
@@ -24,6 +25,7 @@ from api.users.dependencies import login_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
 from api.users.dependencies import get_lecturers_use_case
+from api.users.dependencies import edit_user_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -132,6 +134,41 @@ def get_user(
     
     try:
         return get_user_use_case.execute(user_id, current_user)
+    except UserNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@users.post("/users/{user_id}", response_model=schemas.User)
+def edit_user(
+    request: schemas.UserEdit,
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    edit_user_use_case: EditUserUseCase = Depends(edit_user_use_case),
+    password_validator: PasswordValidator = Depends(get_password_validator)
+):
+    if request.password and request.confirm_password:
+        validation_password_errors = password_validator.validate_user_password(request.password)
+        validation_confirm_password_errors = password_validator.validate_user_password(request.confirm_password)
+
+        if validation_password_errors or validation_confirm_password_errors:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "password_errors": validation_password_errors,
+                    "confirm_password_errors": validation_confirm_password_errors
+                }
+            )
+
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+    
+    try:
+        return edit_user_use_case.execute(request, current_user)
     except UserNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

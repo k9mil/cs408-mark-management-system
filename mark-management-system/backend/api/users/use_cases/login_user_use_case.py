@@ -4,10 +4,7 @@ from typing import List
 from jose import jwt
 from datetime import datetime, timedelta
 
-from api.system.models.models import Role, Class
-
-from api.system.schemas.schemas import UserDetails, RoleInUser, UserBase
-from api.system.schemas.schemas import Class as ClassSchema
+from api.system.schemas.schemas import UserDetails, RoleInUser
 
 from api.users.repositories.user_repository import UserRepository
 
@@ -40,6 +37,7 @@ class LoginUserUseCase:
         roles = [RoleInUser(id=role.id, title=role.title) for role in user.roles]
 
         user_details = UserDetails(
+            id=user.id,
             access_token=access_token,
             refresh_token=refresh_token,
             email_address=user.email_address,

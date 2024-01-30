@@ -1,6 +1,11 @@
 from typing import List
 
-from api.system.models.models import User, RoleUsers
+from api.system.models.models import User
+from api.system.models.models import RoleUsers
+
+from api.system.schemas.schemas import UserEdit
+
+from api.users.hashers.bcrypt_hasher import BCryptHasher
 
 
 class UserRepository:
@@ -28,3 +33,15 @@ class UserRepository:
     # TODO: remove, duplicate of find_by_id()
     def get_user(self, user_id: int) -> User:
         return self.db.query(User).filter_by(id=user_id).first()
+
+    def update(self, user: User, request: UserEdit, hasher: BCryptHasher) -> None:
+        if request.first_name and (len(request.first_name) > 1):
+            user.first_name = request.first_name
+  
+        if request.last_name and (len(request.last_name) > 1):
+            user.last_name = request.last_name
+
+        if (request.password and request.confirm_password) and (request.password == request.confirm_password):
+            user.password = hasher.hash(request.password)
+
+        self.db.commit()

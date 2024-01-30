@@ -4,9 +4,12 @@ import { IAuthContext, IAuthProvider } from "./models/IAuth";
 import { IRole } from "./models/IRole";
 
 const defaultAuthContext: IAuthContext = {
+  id: 0,
   isAuthenticated: false,
   isAdmin: false,
   isLecturer: false,
+  firstName: "",
+  lastName: "",
   updateAuthentication: () => {},
   getAccessToken: () => null,
 };
@@ -62,6 +65,35 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     }
   };
 
+  const retrieveFirstName = () => {
+    if (localData) {
+      return localData.first_name;
+    }
+
+    return "";
+  };
+
+  const retrieveLastName = () => {
+    if (localData) {
+      return localData.last_name;
+    }
+
+    return "";
+  };
+
+  const [firstName] = useState(retrieveFirstName());
+  const [lastName] = useState(retrieveLastName());
+
+  const retrieveId = () => {
+    if (localData) {
+      return localData.id;
+    }
+
+    return 0;
+  };
+
+  const [id] = useState(retrieveId());
+
   const getAccessToken = () => {
     try {
       if (localData && isAuthenticated) return localData.access_token;
@@ -73,9 +105,12 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   return (
     <AuthContext.Provider
       value={{
+        id,
         isAuthenticated,
         isAdmin,
         isLecturer,
+        firstName,
+        lastName,
         updateAuthentication,
         getAccessToken,
       }}
