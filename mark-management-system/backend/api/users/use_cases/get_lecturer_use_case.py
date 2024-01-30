@@ -44,8 +44,6 @@ class GetLecturerUseCase:
             classes=class_list
         )
 
-        print(vars(lecturer_data))
-
         return lecturer_data
 
     def create_lecturer_class(self, class_: Class) -> LecturerClass:

@@ -56,7 +56,6 @@ def get_mark(
     current_user: Tuple[str, bool] = Depends(get_current_user),
     get_mark_use_case: GetMarkUseCase = Depends(get_mark_use_case),
 ):
-    print("test")
     if current_user is None:
         raise HTTPException(
             status_code=401,

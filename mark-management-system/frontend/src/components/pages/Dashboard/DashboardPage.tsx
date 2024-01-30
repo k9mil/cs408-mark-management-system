@@ -14,13 +14,18 @@ import {
 import Sidebar from "../../common/Sidebar";
 
 import { markService } from "@/services/MarkService";
+import { userService } from "@/services/UserService";
+
 import { IStatistics } from "@/models/IMark";
+import { ILecturer } from "@/models/IUser";
+import { IClass, IClassUploaded } from "@/models/IClass";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, getAccessToken } = useAuth();
+  const { id, isAuthenticated, getAccessToken } = useAuth();
 
   const [statistics, setStatistics] = useState<IStatistics>();
+  const [lecturer, setLecturer] = useState<ILecturer>();
 
   const accessToken = getAccessToken();
 
@@ -41,15 +46,28 @@ const DashboardPage = () => {
     }
   };
 
+  const lecturerData = async () => {
+    try {
+      if (accessToken) {
+        const result = await userService.getLecturer(id, accessToken);
+        setLecturer(result);
+        console.log(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     statisticsData();
+    lecturerData();
   }, []);
 
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="w-1/2 h-3/5 space-y-4 p-4 flex flex-col">
+        <Card className="w-1/2 h-4/6 space-y-4 p-8 flex flex-col">
           <div className="flex flex-row space-x-8 h-full">
             <Card className="w-1/2 h-full space-y-2 flex flex-col shadow-xl">
               <CardHeader className="flex flex-row justify-between items-center">
@@ -126,37 +144,35 @@ const DashboardPage = () => {
             </CardHeader>
             <div className="flex flex-col px-7">
               <div className="flex flex-row space-x-4">
-                <div className="flex flex-col">
-                  <h1 className="font-semibold text-base">
-                    CS408 |{" "}
-                    <span className="font-normal">Individual Project</span>
-                  </h1>
-                  <h2 className="text-red-500 font-sm font-normal italic">
-                    Upload Due
-                  </h2>
-                </div>
-                <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                <div className="flex flex-col">
-                  <h1 className="font-semibold text-base">
-                    CS426 |{" "}
-                    <span className="font-normal">Human-Centred Security</span>
-                  </h1>
-                  <h2 className="text-red-500 font-sm font-normal italic">
-                    Upload Due
-                  </h2>
-                </div>
-                <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                <div className="flex flex-col">
-                  <h1 className="font-semibold text-base">
-                    CS412 |{" "}
-                    <span className="font-normal">
-                      Information Access and Mining
-                    </span>
-                  </h1>
-                  <h2 className="text-green-500 font-sm font-normal italic">
-                    Uploaded
-                  </h2>
-                </div>
+                {lecturer
+                  ? lecturer.classes.map(
+                      (class_: IClassUploaded, index: number) => (
+                        <>
+                          <div className="flex flex-col w-1/3">
+                            <h1 className="font-semibold text-base">
+                              {class_.code} |
+                              <span className="font-normal">
+                                {" "}
+                                {class_.name}
+                              </span>
+                            </h1>
+                            {class_.is_uploaded === true ? (
+                              <h2 className="text-green-500 font-sm font-normal italic">
+                                Uploaded
+                              </h2>
+                            ) : (
+                              <h2 className="text-red-500 font-sm font-normal italic">
+                                Upload Due
+                              </h2>
+                            )}
+                          </div>
+                          {index !== lecturer.classes.length - 1 && (
+                            <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                          )}
+                        </>
+                      )
+                    )
+                  : null}
               </div>
             </div>
             <h2 className="text-sm text-black font-semibold flex self-end mr-8 pt-4">
