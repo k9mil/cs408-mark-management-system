@@ -144,40 +144,43 @@ const DashboardPage = () => {
             </CardHeader>
             <div className="flex flex-col px-7">
               <div className="flex flex-row space-x-4">
-                {lecturer
-                  ? lecturer.classes.map(
-                      (class_: IClassUploaded, index: number) => (
-                        <>
-                          <div className="flex flex-col w-1/3">
-                            <h1 className="font-semibold text-base">
-                              {class_.code} |
-                              <span className="font-normal">
-                                {" "}
-                                {class_.name}
-                              </span>
-                            </h1>
-                            {class_.is_uploaded === true ? (
-                              <h2 className="text-green-500 font-sm font-normal italic">
-                                Uploaded
-                              </h2>
-                            ) : (
-                              <h2 className="text-red-500 font-sm font-normal italic">
-                                Upload Due
-                              </h2>
-                            )}
-                          </div>
-                          {index !== lecturer.classes.length - 1 && (
-                            <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                {lecturer && lecturer.classes.length > 0 ? (
+                  lecturer.classes.map(
+                    (class_: IClassUploaded, index: number) => (
+                      <>
+                        <div className="flex flex-col w-1/3">
+                          <h1 className="font-semibold text-base">
+                            {class_.code} |
+                            <span className="font-normal"> {class_.name}</span>
+                          </h1>
+                          {class_.is_uploaded === true ? (
+                            <h2 className="text-green-500 font-sm font-normal italic">
+                              Uploaded
+                            </h2>
+                          ) : (
+                            <h2 className="text-red-500 font-sm font-normal italic">
+                              Upload Due
+                            </h2>
                           )}
-                        </>
-                      )
+                        </div>
+                        {index !== lecturer.classes.length - 1 && (
+                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                        )}
+                      </>
                     )
-                  : null}
+                  )
+                ) : (
+                  <h2 className="font-normal text-sm">
+                    You are not assigned to any classes.
+                  </h2>
+                )}
               </div>
             </div>
-            <h2 className="text-sm text-black font-semibold flex self-end mr-8 pt-4">
-              “The place of useful learning.”
-            </h2>
+            {lecturer && lecturer.classes.length > 0 ? (
+              <h2 className="text-sm text-black font-semibold flex self-end mr-8 relative -bottom-8">
+                “The place of useful learning.”
+              </h2>
+            ) : null}
           </Card>
         </Card>
       </div>
