@@ -24,6 +24,8 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   useEffect(() => {
+    document.title = "Mark Management System | Login";
+
     if (isAuthenticated) {
       navigate("/dashboard");
     }

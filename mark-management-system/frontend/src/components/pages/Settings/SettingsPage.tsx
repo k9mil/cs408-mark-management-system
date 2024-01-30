@@ -28,6 +28,8 @@ const SettingsPage = () => {
   const accessToken = getAccessToken();
 
   useEffect(() => {
+    document.title = "Mark Management System | Settings";
+
     if (!isAuthenticated) {
       navigate("/");
     }

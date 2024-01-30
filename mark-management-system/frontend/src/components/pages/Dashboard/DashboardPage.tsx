@@ -59,6 +59,8 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
+    document.title = "Mark Management System | Dashboard";
+
     statisticsData();
     lecturerData();
   }, []);

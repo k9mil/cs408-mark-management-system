@@ -18,6 +18,8 @@ const HelpPage = () => {
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
+    document.title = "Mark Management System | Help & Support";
+
     if (!isAuthenticated) {
       navigate("/");
     }

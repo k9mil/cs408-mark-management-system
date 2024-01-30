@@ -22,6 +22,8 @@ const StudentsPage = () => {
   const accessToken = getAccessToken();
 
   useEffect(() => {
+    document.title = "Mark Management System | Students";
+
     if (!isAuthenticated) {
       navigate("/");
     }
