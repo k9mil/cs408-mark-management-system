@@ -75,23 +75,65 @@ const DashboardPage = () => {
                   <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
                   <div className="flex flex-col">
                     <h2 className="text-md font-semibold">CS408 Examination</h2>
-                    <h2 className="text-sm font-light">in 3 days</h2>
+                    <h2 className="text-sm font-light">
+                      in 3 days, at: John Anderson Room 325
+                    </h2>
                   </div>
                 </div>
                 <div className="flex flex-row space-x-2">
                   <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
                   <div className="flex flex-col">
                     <h2 className="text-md font-semibold">CS217 Examination</h2>
-                    <h2 className="text-sm font-light">in 3 days</h2>
+                    <h2 className="text-sm font-light">
+                      in 5 days, at: Royal College Room 557
+                    </h2>
                   </div>
                 </div>
               </div>
             </Card>
           </div>
-          <Card className="w-full h-full space-y-2 flex flex-col shadow-xl">
+          <Card className="w-full h-full space-y-6 flex flex-col shadow-xl">
             <CardHeader className="flex flex-row justify-between items-center">
               <CardTitle className="text-lg">Class Overview</CardTitle>
             </CardHeader>
+            <div className="flex flex-col px-7">
+              <div className="flex flex-row space-x-4">
+                <div className="flex flex-col">
+                  <h1 className="font-semibold text-base">
+                    CS408 |{" "}
+                    <span className="font-normal">Individual Project</span>
+                  </h1>
+                  <h2 className="text-red-500 font-sm font-normal">
+                    Upload Due
+                  </h2>
+                </div>
+                <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                <div className="flex flex-col">
+                  <h1 className="font-semibold text-base">
+                    CS426 |{" "}
+                    <span className="font-normal">Human-Centred Security</span>
+                  </h1>
+                  <h2 className="text-red-500 font-sm font-normal">
+                    Upload Due
+                  </h2>
+                </div>
+                <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                <div className="flex flex-col">
+                  <h1 className="font-semibold text-base">
+                    CS412 |{" "}
+                    <span className="font-normal">
+                      Information Access and Mining
+                    </span>
+                  </h1>
+                  <h2 className="text-green-500 font-sm font-normal">
+                    Uploaded
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <h2 className="text-sm text-black font-semibold flex self-end mr-8">
+              “The place of useful learning.”
+            </h2>
           </Card>
         </Card>
       </div>
