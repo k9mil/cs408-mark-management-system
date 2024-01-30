@@ -13,7 +13,7 @@ export function validateUserEditDetails(userDetails: IUserEdit) {
   }
 
   if (userDetails.last_name === null || userDetails.last_name === "") {
-    toast.error("First Name cannot be empty.");
+    toast.error("Last Name cannot be empty.");
     return false;
   }
 

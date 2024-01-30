@@ -41,8 +41,16 @@ const SettingsPage = () => {
   const editUser = async (userDetails: IUserEdit) => {
     try {
       if (accessToken) {
-        await userService.editUser(userDetails, accessToken);
-        toast.success("User was edited successfully!");
+        if (
+          formFirstName !== firstName ||
+          formLastName !== lastName ||
+          password !== null
+        ) {
+          await userService.editUser(userDetails, accessToken);
+          toast.success("User was edited successfully!");
+        } else {
+          toast.info("Nothing was changed as no fields were edited.");
+        }
       }
     } catch (error) {
       console.error(error);
