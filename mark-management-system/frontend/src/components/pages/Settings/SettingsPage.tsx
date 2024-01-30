@@ -44,7 +44,7 @@ const SettingsPage = () => {
         if (
           formFirstName !== firstName ||
           formLastName !== lastName ||
-          password !== null
+          password !== ""
         ) {
           await userService.editUser(userDetails, accessToken);
           toast.success("User was edited successfully!");
