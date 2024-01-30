@@ -10,6 +10,7 @@ from api.users.use_cases.login_user_use_case import LoginUserUseCase
 from api.users.use_cases.get_users_use_case import GetUsersUseCase
 from api.users.use_cases.get_user_use_case import GetUserUseCase
 from api.users.use_cases.get_lecturers_use_case import GetLecturersUseCase
+from api.users.use_cases.get_lecturer_use_case import GetLecturerUseCase
 from api.users.use_cases.edit_user_use_case import EditUserUseCase
 
 from api.users.errors.user_already_exists import UserAlreadyExists
@@ -25,6 +26,7 @@ from api.users.dependencies import login_user_use_case
 from api.users.dependencies import get_users_use_case
 from api.users.dependencies import get_user_use_case
 from api.users.dependencies import get_lecturers_use_case
+from api.users.dependencies import get_lecturer_use_case
 from api.users.dependencies import edit_user_use_case
 
 from api.middleware.dependencies import get_current_user
@@ -113,6 +115,27 @@ def get_lecturers(
 
     try:
         return get_lecturers_use_case.execute(skip, limit, current_user)
+    except UsersNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@users.get("/users/lecturer/{user_id}", response_model=schemas.Lecturer)
+def get_lecturer(
+    user_id: int,
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_lecturer_use_case: GetLecturerUseCase = Depends(get_lecturer_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
+    try:
+        return get_lecturer_use_case.execute(user_id, current_user)
     except UsersNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

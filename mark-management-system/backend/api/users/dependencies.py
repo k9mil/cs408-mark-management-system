@@ -11,6 +11,7 @@ from api.users.use_cases.login_user_use_case import LoginUserUseCase
 from api.users.use_cases.get_users_use_case import GetUsersUseCase
 from api.users.use_cases.get_user_use_case import GetUserUseCase
 from api.users.use_cases.get_lecturers_use_case import GetLecturersUseCase
+from api.users.use_cases.get_lecturer_use_case import GetLecturerUseCase
 from api.users.use_cases.edit_user_use_case import EditUserUseCase
 
 from api.users.validators import EmailAddressValidator
@@ -64,6 +65,17 @@ def get_lecturers_use_case(
         mark_repository: MarkRepository = Depends(get_mark_repository),
     ) -> GetLecturersUseCase:
     return GetLecturersUseCase(
+        user_repository, 
+        class_repository,
+        mark_repository,
+    )
+
+def get_lecturer_use_case(
+        user_repository: UserRepository = Depends(get_user_repository),
+        class_repository: ClassRepository = Depends(get_class_repository),
+        mark_repository: MarkRepository = Depends(get_mark_repository),
+    ) -> GetLecturerUseCase:
+    return GetLecturerUseCase(
         user_repository, 
         class_repository,
         mark_repository,

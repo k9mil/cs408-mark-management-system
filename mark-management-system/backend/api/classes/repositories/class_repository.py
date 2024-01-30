@@ -24,7 +24,7 @@ class ClassRepository:
     def get_classes(self, skip: int, limit: int) -> List[Class]:
         return self.db.query(Class).offset(skip).limit(limit).all()
     
-    def get_classes_by_lecturer_id(self, lecturer_id: int, skip: int, limit: int) -> List[Class]:
+    def get_classes_by_lecturer_id(self, lecturer_id: int, skip: int = 0, limit: int = 100) -> List[Class]:
         return self.db.query(Class).filter_by(lecturer_id=lecturer_id).offset(skip).limit(limit).all()
     
     def check_class_code_exists(self, request: ClassEdit):
