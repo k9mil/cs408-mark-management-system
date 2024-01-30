@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -13,15 +13,37 @@ import {
 
 import Sidebar from "../../common/Sidebar";
 
+import { markService } from "@/services/MarkService";
+import { IStatistics } from "@/models/IMark";
+
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, getAccessToken } = useAuth();
+
+  const [statistics, setStatistics] = useState<IStatistics>();
+
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
     }
   }, [navigate, isAuthenticated]);
+
+  const statisticsData = async () => {
+    try {
+      if (accessToken) {
+        const result = await markService.getStatistics(accessToken);
+        setStatistics(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    statisticsData();
+  }, []);
 
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
@@ -33,38 +55,44 @@ const DashboardPage = () => {
               <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle className="text-lg">Student Performance</CardTitle>
               </CardHeader>
-              <div className="flex flex-col justify-center items-center space-y-8">
-                <CardDescription className="flex flex-row justify-around space-x-12">
-                  <div className="flex flex-col pl-12 justify-center items-center">
-                    <h1 className="font-bold text-3xl text-primary-blue">
-                      72%
-                    </h1>
-                    <h1 className="text-xs">Pass Rate</h1>
-                  </div>
-                  <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                  <div className="flex flex-col pr-12 justify-center items-center">
-                    <h1 className="font-bold text-3xl text-primary-blue">
-                      44%
-                    </h1>
-                    <h1 className="text-xs">Mean</h1>
-                  </div>
-                </CardDescription>
-                <CardDescription className="flex flex-row justify-around space-x-12">
-                  <div className="flex flex-col pl-12 justify-center items-center">
-                    <h1 className="font-bold text-3xl text-primary-blue">
-                      17%
-                    </h1>
-                    <h1 className="text-xs">Median</h1>
-                  </div>
-                  <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                  <div className="flex flex-col pr-12 justify-center items-center">
-                    <h1 className="font-bold text-3xl text-primary-blue">
-                      62%
-                    </h1>
-                    <h1 className="text-xs">Mode</h1>
-                  </div>
-                </CardDescription>
-              </div>
+              {statistics ? (
+                <div className="flex flex-col justify-center items-center space-y-8">
+                  <CardDescription className="flex flex-row justify-around space-x-12">
+                    <div className="flex flex-col pl-12 justify-center items-center">
+                      <h1 className="font-bold text-3xl text-primary-blue">
+                        {statistics ? statistics.pass_rate + "%" : null}
+                      </h1>
+                      <h1 className="text-xs">Pass Rate</h1>
+                    </div>
+                    <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                    <div className="flex flex-col pr-12 justify-center items-center">
+                      <h1 className="font-bold text-3xl text-primary-blue">
+                        {statistics ? statistics.mean + "%" : null}
+                      </h1>
+                      <h1 className="text-xs">Mean</h1>
+                    </div>
+                  </CardDescription>
+                  <CardDescription className="flex flex-row justify-around space-x-12">
+                    <div className="flex flex-col pl-12 justify-center items-center">
+                      <h1 className="font-bold text-3xl text-primary-blue">
+                        {statistics ? statistics.median + "%" : null}
+                      </h1>
+                      <h1 className="text-xs">Median</h1>
+                    </div>
+                    <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                    <div className="flex flex-col pr-12 justify-center items-center">
+                      <h1 className="font-bold text-3xl text-primary-blue">
+                        {statistics ? statistics.mode + "%" : null}
+                      </h1>
+                      <h1 className="text-xs">Mode</h1>
+                    </div>
+                  </CardDescription>
+                </div>
+              ) : (
+                <h2 className="pl-7 font-normal text-sm">
+                  You haven't uploaded any marks yet.
+                </h2>
+              )}
             </Card>
             <Card className="w-1/2 h-full space-y-2 flex flex-col shadow-xl">
               <CardHeader className="flex flex-row justify-between items-center">
