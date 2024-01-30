@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 
 import { Button } from "@/components/common/Button";
 
@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 const ErrorPage = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Mark Management System | 404";
+  }, []);
 
   return (
     <div className="flex flex-row h-screen w-screen">

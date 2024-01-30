@@ -91,6 +91,8 @@ const ClassesPage = () => {
   };
 
   useEffect(() => {
+    document.title = "Mark Management System | Classes";
+
     classData();
     lecturerData();
   }, []);

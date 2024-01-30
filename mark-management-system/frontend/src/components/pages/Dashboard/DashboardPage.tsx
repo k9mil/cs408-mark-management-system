@@ -59,6 +59,8 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
+    document.title = "Mark Management System | Dashboard";
+
     statisticsData();
     lecturerData();
   }, []);
@@ -145,8 +147,9 @@ const DashboardPage = () => {
             <div className="flex flex-col px-7">
               <div className="flex flex-row space-x-4">
                 {lecturer && lecturer.classes.length > 0 ? (
-                  lecturer.classes.map(
-                    (class_: IClassUploaded, index: number) => (
+                  lecturer.classes
+                    .slice(0, 3)
+                    .map((class_: IClassUploaded, index: number) => (
                       <>
                         <div className="flex flex-col w-1/3">
                           <h1 className="font-semibold text-base">
@@ -163,12 +166,11 @@ const DashboardPage = () => {
                             </h2>
                           )}
                         </div>
-                        {index !== lecturer.classes.length - 1 && (
+                        {index !== lecturer.classes.slice(0, 3).length - 1 && (
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                         )}
                       </>
-                    )
-                  )
+                    ))
                 ) : (
                   <h2 className="font-normal text-sm">
                     You are not assigned to any classes.

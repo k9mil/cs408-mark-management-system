@@ -35,6 +35,8 @@ const MarksPage = () => {
   const { isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
+    document.title = "Mark Management System | Marks";
+
     if (!isAuthenticated) {
       navigate("/");
     }

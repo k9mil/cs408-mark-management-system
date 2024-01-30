@@ -42,6 +42,8 @@ const LecturersPage = () => {
   };
 
   useEffect(() => {
+    document.title = "Mark Management System | Lecturers";
+
     lecturersData();
   }, []);
 
