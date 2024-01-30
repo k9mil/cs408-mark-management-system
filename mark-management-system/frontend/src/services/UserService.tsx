@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-import { IUserLoginDetails, UserEdit } from "../models/IUser";
+import { IUserLoginDetails, IUserEdit } from "../models/IUser";
 
 import { API_BASE_URL } from "../utils/Constants";
 
@@ -68,7 +68,7 @@ export const userService = {
       });
   },
 
-  editUser: async (userDetails: UserEdit, accessToken: string) => {
+  editUser: async (userDetails: IUserEdit, accessToken: string) => {
     return await axios
       .post(
         `${API_BASE_URL}/users/${userDetails.id}`,
