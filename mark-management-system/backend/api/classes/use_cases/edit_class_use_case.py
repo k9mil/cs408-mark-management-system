@@ -1,7 +1,6 @@
 from typing import Tuple
 
 from api.system.schemas.schemas import Class as ClassSchema
-
 from api.system.schemas.schemas import ClassEdit
 
 from api.classes.repositories.class_repository import ClassRepository
@@ -35,7 +34,7 @@ class EditClassUseCase:
         if class_ is None:
             raise ClassNotFound("Class not found")
         
-        lecturer = self.user_repository.get_user(request.lecturer_id)
+        lecturer = self.user_repository.find_by_id(request.lecturer_id)
 
         if lecturer is None:
             raise UserNotFound("Lecturer not found")

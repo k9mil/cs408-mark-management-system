@@ -23,6 +23,8 @@ const LecturersPage = () => {
   const accessToken = getAccessToken();
 
   useEffect(() => {
+    document.title = "Mark Management System | Lecturers";
+
     if (!isAuthenticated || !isAdmin) {
       navigate("/");
     }
@@ -42,8 +44,6 @@ const LecturersPage = () => {
   };
 
   useEffect(() => {
-    document.title = "Mark Management System | Lecturers";
-
     lecturersData();
   }, []);
 

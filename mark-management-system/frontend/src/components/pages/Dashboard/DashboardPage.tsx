@@ -118,12 +118,12 @@ const DashboardPage = () => {
               <CardHeader className="flex flex-row justify-between items-center">
                 <CardTitle className="text-lg">Upcoming Dates</CardTitle>
               </CardHeader>
-              <div className="flex flex-col pl-7 space-y-12">
+              <div className="flex flex-col pl-7 space-y-6">
                 <div className="flex flex-row space-x-2">
                   <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
                   <div className="flex flex-col">
                     <h2 className="text-md font-semibold">CS408 Examination</h2>
-                    <h2 className="text-sm font-light">
+                    <h2 className="text-sm font-light w-3/4">
                       in 3 days, at: John Anderson Room 325
                     </h2>
                   </div>
@@ -132,7 +132,7 @@ const DashboardPage = () => {
                   <span className="flex h-2 w-2 translate-y-2 rounded-full bg-primary-blue" />
                   <div className="flex flex-col">
                     <h2 className="text-md font-semibold">CS217 Examination</h2>
-                    <h2 className="text-sm font-light">
+                    <h2 className="text-sm font-light w-3/4">
                       in 5 days, at: Royal College Room 557
                     </h2>
                   </div>

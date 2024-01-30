@@ -53,12 +53,6 @@ def login_user_use_case(
         config
     )
 
-def get_user_use_case(user_repository: UserRepository = Depends(get_user_repository)) -> GetUserUseCase:
-    return GetUserUseCase(user_repository)
-
-def get_users_use_case(user_repository: UserRepository = Depends(get_user_repository)) -> GetUsersUseCase:
-    return GetUsersUseCase(user_repository)
-
 def get_lecturers_use_case(
         user_repository: UserRepository = Depends(get_user_repository),
         class_repository: ClassRepository = Depends(get_class_repository),
@@ -89,3 +83,9 @@ def edit_user_use_case(
         user_repository, 
         bcrypt_hasher,
     )
+
+def get_user_use_case(user_repository: UserRepository = Depends(get_user_repository)) -> GetUserUseCase:
+    return GetUserUseCase(user_repository)
+
+def get_users_use_case(user_repository: UserRepository = Depends(get_user_repository)) -> GetUsersUseCase:
+    return GetUsersUseCase(user_repository)

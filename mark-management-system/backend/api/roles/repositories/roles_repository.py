@@ -1,3 +1,7 @@
+from typing import Optional
+
+from sqlalchemy.orm import Session
+
 from api.system.models.models import Role
 from api.system.models.models import RoleUsers
 from api.system.models.models import User
@@ -5,13 +9,13 @@ from api.system.models.models import User
 from api.system.schemas.schemas import RoleUsersData
 
 class RolesRepository:
-    def __init__(self, db):
+    def __init__(self, db: Session):
         self.db = db
 
-    def find_by_id(self, role_id: int) -> Role:
+    def find_by_id(self, role_id: int) -> Optional[Role]:
         return self.db.query(Role).filter_by(id=role_id).first()
 
-    def find_role_association(self, request: RoleUsersData) -> RoleUsers:
+    def find_role_association(self, request: RoleUsersData) -> Optional[RoleUsers]:
         return self.db.query(RoleUsers).filter_by(
             role_id=request.role_id,
             user_id=request.user_id

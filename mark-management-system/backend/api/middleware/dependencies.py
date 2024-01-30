@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from sqlalchemy.orm import Session
 
-from typing import Optional
+from typing import Optional, Tuple
 
 from jose import jwt, JWTError
 
@@ -44,12 +44,19 @@ def get_mark_repository(db: Session = Depends(get_db)) -> MarkRepository:
     return MarkRepository(db)
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[str]:
+def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[Tuple[str, bool]]:
     if not token:
         return None
 
     try:
-        payload = jwt.decode(token, Config.JWT_SECRET_KEY, algorithms=[Config.JWT_ALGORITHM])
-        return (payload.get("sub"), payload.get("is_admin"))
+        if Config.JWT_SECRET_KEY:
+            payload = jwt.decode(token, Config.JWT_SECRET_KEY, algorithms=[Config.JWT_ALGORITHM])
+
+            if payload is not None:
+                user_email = payload.get("sub")
+                is_admin = payload.get("is_admin")
+
+                return (str(user_email), bool(is_admin))
+        return None
     except JWTError:
         return None

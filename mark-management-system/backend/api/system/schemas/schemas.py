@@ -152,6 +152,8 @@ class LecturerClass(ClassBase):
     is_uploaded: bool
 
 class Lecturer(BaseModel):
+    id: int
+    
     first_name: str
     last_name: str
     number_of_classes_taught: int

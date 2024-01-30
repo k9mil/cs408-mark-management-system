@@ -44,6 +44,7 @@ class GetLecturersUseCase:
                 class_list.append(self.create_lecturer_class(class_))
 
             lecturer_data = Lecturer(
+                id=lecturer.id,
                 first_name=lecturer.first_name,
                 last_name=lecturer.last_name,
                 number_of_classes_taught=len(classes),

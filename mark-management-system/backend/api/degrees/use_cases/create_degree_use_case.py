@@ -2,8 +2,8 @@ from typing import Tuple
 
 from api.system.models.models import Degree
 
-from api.system.schemas.schemas import DegreeCreate
 from api.system.schemas.schemas import Degree as DegreeSchema
+from api.system.schemas.schemas import DegreeCreate
 
 from api.degrees.repositories.degree_repository import DegreeRepository
 

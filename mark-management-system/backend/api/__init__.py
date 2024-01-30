@@ -1,5 +1,3 @@
-import os
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,17 +10,14 @@ from api.marks.controllers.marks_controller import marks
 
 from api.database import engine
 
-from api.config import DevelopmentConfig
-
 from api.system.models.models import Base
 
 from api.utils.singleton import singleton
 
 
 @singleton
-def create_app(config_class=DevelopmentConfig):
+def create_app():
     app = FastAPI()
-    app.config = config_class
 
     app.add_middleware(
         CORSMiddleware,

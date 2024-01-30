@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 from api.system.schemas.schemas import Class as ClassSchema
 
@@ -11,7 +11,7 @@ class GetClassesUseCase:
     def __init__(self, class_repository: ClassRepository):
         self.class_repository = class_repository
     
-    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> list[ClassSchema]:
+    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> List[ClassSchema]:
         _, is_admin = current_user
         
         if is_admin is False:
