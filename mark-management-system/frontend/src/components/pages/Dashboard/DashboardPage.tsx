@@ -39,7 +39,7 @@ const DashboardPage = () => {
                     <h1 className="font-bold text-3xl text-primary-blue">
                       72%
                     </h1>
-                    <h1 className="text-xs">Average</h1>
+                    <h1 className="text-xs">Pass Rate</h1>
                   </div>
                   <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                   <div className="flex flex-col pr-12 justify-center items-center">

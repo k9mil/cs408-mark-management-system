@@ -7,6 +7,7 @@ from api.system.schemas import schemas
 from api.marks.use_cases.create_mark_use_case import CreateMarkUseCase
 from api.marks.use_cases.get_mark_use_case import GetMarkUseCase
 from api.marks.use_cases.get_student_marks_use_case import GetStudentMarksUseCase
+from api.marks.use_cases.get_student_statistics_use_case import GetStudentStatisticsUseCase
 from api.marks.use_cases.edit_mark_use_case import EditMarkUseCase
 from api.marks.use_cases.delete_mark_use_case import DeleteMarkUseCase
 
@@ -16,6 +17,7 @@ from api.marks.errors.mark_not_found import MarkNotFound
 from api.marks.dependencies import create_mark_use_case
 from api.marks.dependencies import get_mark_use_case
 from api.marks.dependencies import get_student_marks_use_case
+from api.marks.dependencies import get_student_statistics_use_case
 from api.marks.dependencies import edit_mark_use_case
 from api.marks.dependencies import delete_mark_use_case
 
@@ -54,6 +56,7 @@ def get_mark(
     current_user: Tuple[str, bool] = Depends(get_current_user),
     get_mark_use_case: GetMarkUseCase = Depends(get_mark_use_case),
 ):
+    print("test")
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -82,6 +85,26 @@ def get_student_marks(
 
     try:
         return get_student_marks_use_case.execute(current_user)
+    except MarkNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@marks.get("/statistics", response_model=schemas.MarksStatistics)
+def get_student_statistics(
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
+    try:
+        return get_student_statistics_use_case.execute(current_user)
     except MarkNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

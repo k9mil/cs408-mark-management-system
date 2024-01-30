@@ -43,13 +43,13 @@ class MarksEdit(BaseModel):
     unique_code: str
 
 class MarksRow(BaseModel):
-    class_code: str;
-    reg_no: str;
-    mark: int;
-    student_name: str;
-    degree_level: str;
-    degree_name: str;
-    unique_code: str;
+    class_code: str
+    reg_no: str
+    mark: int
+    student_name: str
+    degree_level: str
+    degree_name: str
+    unique_code: str
 
 class Marks(MarksBase):
     id: int
@@ -57,6 +57,11 @@ class Marks(MarksBase):
     class Config:
         from_attributes = True
 
+class MarksStatistics(BaseModel):
+    mean: int
+    median: int
+    mode: int
+    pass_rate: int
 
 class DegreeBase(BaseModel):
     level: str
