@@ -85,6 +85,16 @@ export const userService = {
           },
         }
       )
+      .then((response) => {
+        if (response.data) {
+          const currentUserLocalStorage = JSON.parse(localStorage["user"]);
+
+          currentUserLocalStorage.first_name = userDetails.first_name;
+          currentUserLocalStorage.last_name = userDetails.last_name;
+
+          localStorage.setItem("user", JSON.stringify(currentUserLocalStorage));
+        }
+      })
       .catch((error) => {
         console.error(
           "Error: There has been an issue when editing user details.",
