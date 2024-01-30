@@ -136,6 +136,8 @@ const SettingsPage = () => {
                 setLastName(lastName);
                 setPassword("");
                 setConfirmPassword("");
+
+                toast.info("Your fields have been reset.");
               }}
             >
               Reset
