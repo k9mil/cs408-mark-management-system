@@ -83,6 +83,7 @@ export function LecturersDataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className="cursor-pointer hover:bg-gray-200"
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => {
                     handleRowClick(row);

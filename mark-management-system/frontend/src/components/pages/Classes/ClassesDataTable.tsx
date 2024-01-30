@@ -101,6 +101,7 @@ export function ClassesDataTable<TData, TValue>({
                 <React.Fragment key={row.id}>
                   <TableRow
                     key={row.id}
+                    className="cursor-pointer hover:bg-gray-200"
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => {
                       handleRowClick(row);
