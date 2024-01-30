@@ -2,8 +2,8 @@ from typing import Tuple
 
 from api.system.models.models import Class
 
-from api.system.schemas.schemas import ClassCreate
 from api.system.schemas.schemas import Class as ClassSchema
+from api.system.schemas.schemas import ClassCreate
 
 from api.classes.repositories.class_repository import ClassRepository
 from api.users.repositories.user_repository import UserRepository
@@ -26,7 +26,7 @@ class CreateClassUseCase:
         if self.class_repository.find_by_code(request.code):
             raise ClassAlreadyExists("Class already exists")
         
-        lecturer = self.user_repository.get_user(request.lecturer_id)
+        lecturer = self.user_repository.find_by_id(request.lecturer_id)
 
         if lecturer is None:
             raise UserNotFound("Lecturer not found")

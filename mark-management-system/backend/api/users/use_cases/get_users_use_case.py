@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 from api.system.schemas.schemas import User as UserSchema
 
@@ -11,7 +11,7 @@ class GetUsersUseCase:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
     
-    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> list[UserSchema]:
+    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> List[UserSchema]:
         _, is_admin = current_user
 
         if is_admin is False:

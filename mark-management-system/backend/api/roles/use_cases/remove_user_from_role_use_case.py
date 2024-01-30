@@ -1,11 +1,8 @@
 from typing import Tuple
 
-from api.system.models.models import RoleUsers
-
 from api.system.schemas.schemas import RoleUsersData
 
 from api.roles.repositories.roles_repository import RolesRepository
-
 from api.users.repositories.user_repository import UserRepository
 
 from api.roles.errors.role_not_found import RoleNotFound

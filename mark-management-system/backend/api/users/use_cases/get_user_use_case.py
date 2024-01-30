@@ -17,7 +17,7 @@ class GetUserUseCase:
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")
         
-        user = self.user_repository.get_user(user_id)
+        user = self.user_repository.find_by_id(user_id)
 
         if user is None:
             raise UserNotFound("User not found")
