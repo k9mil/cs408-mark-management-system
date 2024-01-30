@@ -35,8 +35,8 @@ const SettingsPage = () => {
 
   const [formFirstName, setFirstName] = useState(firstName);
   const [formLastName, setLastName] = useState(lastName);
-  const [password, setPassword] = useState<string | null>(null);
-  const [confirmPassword, setConfirmPassword] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const editUser = async (userDetails: IUserEdit) => {
     try {
@@ -75,7 +75,7 @@ const SettingsPage = () => {
                 <Input
                   id="firstName"
                   className="col-span-3"
-                  defaultValue={formFirstName}
+                  value={formFirstName}
                   placeholder="John"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
@@ -87,7 +87,7 @@ const SettingsPage = () => {
                 <Input
                   id="lastName"
                   className="col-span-3"
-                  defaultValue={formLastName}
+                  value={formLastName}
                   placeholder="Doe"
                   onChange={(e) => setLastName(e.target.value)}
                 />
@@ -107,6 +107,7 @@ const SettingsPage = () => {
                   id="password"
                   type="password"
                   className="col-span-3"
+                  value={password}
                   placeholder="••••••••"
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -119,30 +120,45 @@ const SettingsPage = () => {
                   id="confirmPassword"
                   type="password"
                   className="col-span-3"
+                  value={confirmPassword}
                   placeholder="••••••••"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
           </div>
-          <Button
-            className="flex self-end"
-            onClick={() => {
-              const userDetails: IUserEdit = {
-                id: id,
-                first_name: formFirstName,
-                last_name: formLastName,
-                password: password,
-                confirm_passsword: confirmPassword,
-              };
+          <div className="flex self-end space-x-4">
+            <Button
+              className="flex self-end"
+              variant="destructive"
+              onClick={() => {
+                setFirstName(firstName);
+                setLastName(lastName);
+                setPassword("");
+                setConfirmPassword("");
+              }}
+            >
+              Reset
+            </Button>
+            <Button
+              className="flex self-end"
+              onClick={() => {
+                const userDetails: IUserEdit = {
+                  id: id,
+                  first_name: formFirstName,
+                  last_name: formLastName,
+                  password: password,
+                  confirm_passsword: confirmPassword,
+                };
 
-              if (validateUserEditDetails(userDetails)) {
-                editUser(userDetails);
-              }
-            }}
-          >
-            Save Changes
-          </Button>
+                if (validateUserEditDetails(userDetails)) {
+                  editUser(userDetails);
+                }
+              }}
+            >
+              Save Changes
+            </Button>
+          </div>
         </Card>
       </div>
     </div>
