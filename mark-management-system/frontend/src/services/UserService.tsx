@@ -88,7 +88,7 @@ export const userService = {
 
   editUser: async (userDetails: IUserEdit, accessToken: string) => {
     return await axios
-      .post(
+      .put(
         `${API_BASE_URL}/users/${userDetails.id}`,
         {
           id: userDetails.id,

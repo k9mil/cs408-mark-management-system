@@ -71,7 +71,7 @@ export const markService = {
 
   getStatistics: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/statistics`, {
+      .get(`${API_BASE_URL}/marks/statistics`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -88,7 +88,7 @@ export const markService = {
 
   editMark: async (markDetails: IMarkEdit, accessToken: string) => {
     return await axios
-      .post(
+      .put(
         `${API_BASE_URL}/marks/${markDetails.unique_code}`,
         {
           unique_code: markDetails.unique_code,

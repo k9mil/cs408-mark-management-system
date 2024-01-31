@@ -90,28 +90,8 @@ def get_student_marks(
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-@marks.get("/statistics", response_model=schemas.MarksStatistics)
-def get_student_statistics(
-    current_user: Tuple[str, bool] = Depends(get_current_user),
-    get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
-):
-    if current_user is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid JWT provided",
-        )    
 
-    try:
-        return get_student_statistics_use_case.execute(current_user)
-    except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@marks.post("/marks/{mark_unique_code}", response_model=schemas.Marks)
+@marks.put("/marks/{mark_unique_code}", response_model=schemas.Marks)
 def edit_mark(
     request: schemas.MarksEdit,
     current_user: Tuple[str, bool] = Depends(get_current_user),
@@ -155,3 +135,22 @@ def delete_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@marks.get("/marks/statistics", response_model=schemas.MarksStatistics)
+def get_student_statistics(
+    current_user: Tuple[str, bool] = Depends(get_current_user),
+    get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
+    try:
+        return get_student_statistics_use_case.execute(current_user)
+    except MarkNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

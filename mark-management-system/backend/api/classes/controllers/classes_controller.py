@@ -101,7 +101,7 @@ def get_classes_for_lecturer(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.post("/classes/{class_id}", response_model=schemas.Class)
+@classes.put("/classes/{class_id}", response_model=schemas.Class)
 def edit_class(
     request: schemas.ClassEdit,
     current_user: Tuple[str, bool] = Depends(get_current_user),
