@@ -11,8 +11,8 @@ class GetUsersUseCase:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
     
-    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> List[UserSchema]:
-        _, is_admin = current_user
+    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool, bool]) -> List[UserSchema]:
+        _, is_admin, _ = current_user
 
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")

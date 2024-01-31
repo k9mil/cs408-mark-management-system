@@ -22,7 +22,7 @@ students = APIRouter()
 @students.post("/students/", response_model=schemas.Student)
 def create_student(
     request: schemas.StudentCreate,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     create_student_use_case: CreateStudentUseCase = Depends(create_student_use_case),
 ):
     if current_user is None:
@@ -45,7 +45,7 @@ def create_student(
 @students.get("/students/{reg_no}", response_model=schemas.Student)
 def get_student(
     reg_no: str,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_student_use_case: GetStudentUseCase = Depends(get_student_use_case),
 ):
     if current_user is None:

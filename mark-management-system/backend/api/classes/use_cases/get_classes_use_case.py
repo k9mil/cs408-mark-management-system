@@ -11,8 +11,8 @@ class GetClassesUseCase:
     def __init__(self, class_repository: ClassRepository):
         self.class_repository = class_repository
     
-    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> List[ClassSchema]:
-        _, is_admin = current_user
+    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool, bool]) -> List[ClassSchema]:
+        _, is_admin, _ = current_user
         
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")

@@ -13,8 +13,8 @@ class GetStudentMarksUseCase:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
     
-    def execute(self, current_user: Tuple[str, bool]) -> List[MarksRow]:
-        user_email, is_admin = current_user
+    def execute(self, current_user: Tuple[str, bool, bool]) -> List[MarksRow]:
+        user_email, is_admin, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
         

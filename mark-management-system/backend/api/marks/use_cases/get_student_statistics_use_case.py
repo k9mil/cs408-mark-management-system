@@ -17,8 +17,8 @@ class GetStudentStatisticsUseCase:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
     
-    def execute(self, current_user: Tuple[str, bool]) -> MarksStatistics:
-        user_email, _ = current_user
+    def execute(self, current_user: Tuple[str, bool, bool]) -> MarksStatistics:
+        user_email, _, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
 

@@ -17,8 +17,8 @@ class CreateClassUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
 
-    def execute(self, request: ClassCreate, current_user: Tuple[str, bool]) -> ClassSchema:
-        _, is_admin = current_user
+    def execute(self, request: ClassCreate, current_user: Tuple[str, bool, bool]) -> ClassSchema:
+        _, is_admin, _ = current_user
 
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")

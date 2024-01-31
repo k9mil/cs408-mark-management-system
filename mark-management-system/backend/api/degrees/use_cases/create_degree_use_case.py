@@ -14,8 +14,8 @@ class CreateDegreeUseCase:
     def __init__(self, degree_repository: DegreeRepository):
         self.degree_repository = degree_repository
 
-    def execute(self, request: DegreeCreate, current_user: Tuple[str, bool]) -> DegreeSchema:
-        _, is_admin = current_user
+    def execute(self, request: DegreeCreate, current_user: Tuple[str, bool, bool]) -> DegreeSchema:
+        _, is_admin, _ = current_user
 
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")

@@ -22,8 +22,8 @@ class GetLecturerUseCase:
         self.class_repository = class_repository
         self.mark_repository = mark_repository
     
-    def execute(self, current_user: Tuple[str, bool]) -> Lecturer:
-        user_email, _ = current_user
+    def execute(self, current_user: Tuple[str, bool, bool]) -> Lecturer:
+        user_email, _, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
 

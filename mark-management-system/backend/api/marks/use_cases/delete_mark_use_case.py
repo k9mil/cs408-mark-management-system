@@ -9,7 +9,7 @@ class DeleteMarkUseCase:
     def __init__(self, mark_repository: MarkRepository):
         self.mark_repository = mark_repository
     
-    def execute(self, mark_unique_code: str, current_user: Tuple[str, bool]) -> None:
+    def execute(self, mark_unique_code: str, current_user: Tuple[str, bool, bool]) -> None:
         # _, is_admin = current_user
 
         # if is_admin is False:

@@ -18,9 +18,9 @@ class EditUserUseCase:
     def execute(
             self,
             request: UserEdit,
-            current_user: Tuple[str, bool],
+            current_user: Tuple[str, bool, bool],
         ) -> User:
-        user_email, is_admin = current_user
+        user_email, is_admin, _ = current_user
 
         user = self.user_repository.find_by_email(user_email)
 

@@ -13,7 +13,7 @@ class EditMarkUseCase:
     def __init__(self, mark_repository: MarkRepository):
         self.mark_repository = mark_repository
     
-    def execute(self, request: MarksEdit, current_user: Tuple[str, bool]) -> MarksSchema:
+    def execute(self, request: MarksEdit, current_user: Tuple[str, bool, bool]) -> MarksSchema:
         # _, is_admin = current_user
 
         # if is_admin is False:

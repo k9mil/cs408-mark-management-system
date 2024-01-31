@@ -13,8 +13,8 @@ class GetMarkUseCase:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
     
-    def execute(self, mark_unique_code: str, current_user: Tuple[str, bool]) -> MarkSchema:
-        user_email, is_admin = current_user
+    def execute(self, mark_unique_code: str, current_user: Tuple[str, bool, bool]) -> MarkSchema:
+        user_email, is_admin, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
         

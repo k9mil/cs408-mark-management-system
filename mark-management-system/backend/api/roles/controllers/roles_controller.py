@@ -25,7 +25,7 @@ roles = APIRouter()
 @roles.post("/roles/{role_id}/user/{user_id}", response_model=schemas.RoleUsers)
 def add_user_to_role(
     request: schemas.RoleUsersData,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     add_user_to_role_use_case: AddUserToRoleUseCase = Depends(add_user_to_role_use_case),
 ):
     if current_user is None:
@@ -52,7 +52,7 @@ def add_user_to_role(
 @roles.delete("/roles/{role_id}/user/{user_id}", response_model=schemas.RoleUsers)
 def remove_user_from_role(
     request: schemas.RoleUsersData,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     remove_user_from_role_use_case: RemoveUserFromRoleUseCase = Depends(remove_user_from_role_use_case),
 ):
     if current_user is None:

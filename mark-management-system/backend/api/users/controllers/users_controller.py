@@ -82,7 +82,7 @@ def authenticate_user(
 def get_users(
     skip: int = 0,
     limit: int = 100,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_users_use_case: GetUsersUseCase = Depends(get_users_use_case),
 ):
     if current_user is None:
@@ -103,7 +103,7 @@ def get_users(
 @users.get("/users/{user_id}", response_model=schemas.User)
 def get_user(
     user_id: int,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_user_use_case: GetUserUseCase = Depends(get_user_use_case),
 ):
     if current_user is None:
@@ -124,7 +124,7 @@ def get_user(
 @users.put("/users/{user_id}", response_model=schemas.User)
 def edit_user(
     request: schemas.UserEdit,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     edit_user_use_case: EditUserUseCase = Depends(edit_user_use_case),
     password_validator: PasswordValidator = Depends(get_password_validator)
 ):
@@ -160,7 +160,7 @@ def edit_user(
 def get_lecturers(
     skip: int = 0,
     limit: int = 100,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_lecturers_use_case: GetLecturersUseCase = Depends(get_lecturers_use_case),
 ):
     if current_user is None:
@@ -181,7 +181,7 @@ def get_lecturers(
 @users.get("/lecturer/{user_id}", response_model=schemas.Lecturer)
 def get_lecturer(
     user_id: int,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_lecturer_use_case: GetLecturerUseCase = Depends(get_lecturer_use_case),
 ):
     if current_user is None:

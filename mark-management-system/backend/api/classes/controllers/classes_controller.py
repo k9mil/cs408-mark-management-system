@@ -33,7 +33,7 @@ classes = APIRouter()
 @classes.post("/classes/", response_model=schemas.Class)
 def create_class(
     request: schemas.ClassCreate,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     create_class_use_case: CreateClassUseCase = Depends(create_class_use_case),
 ):
     if current_user is None:
@@ -59,7 +59,7 @@ def create_class(
 def get_classes(
     skip: int = 0,
     limit: int = 100,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_classes_use_case: GetClassesUseCase = Depends(get_classes_use_case),
 ):
     if current_user is None:
@@ -81,7 +81,7 @@ def get_classes(
 def get_classes_for_lecturer(
     skip: int = 0,
     limit: int = 100,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
 ):
     if current_user is None:
@@ -104,7 +104,7 @@ def get_classes_for_lecturer(
 @classes.put("/classes/{class_id}", response_model=schemas.Class)
 def edit_class(
     request: schemas.ClassEdit,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     edit_class_use_case: EditClassUseCase = Depends(edit_class_use_case),
 ):
     if current_user is None:
@@ -129,7 +129,7 @@ def edit_class(
 @classes.delete("/classes/{class_id}", response_model=None)
 def delete_class(
     class_id: int,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     delete_class_use_case: DeleteClassUseCase = Depends(delete_class_use_case),
 ):
     if current_user is None:
@@ -150,7 +150,7 @@ def delete_class(
 @classes.get("/classes/{class_code}", response_model=schemas.Class)
 def get_class(
     class_code: str,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_class_use_case: GetClassUseCase = Depends(get_class_use_case),
 ):
     if current_user is None:

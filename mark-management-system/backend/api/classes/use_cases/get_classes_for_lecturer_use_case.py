@@ -15,8 +15,8 @@ class GetClassesForLecturerUseCase:
         self.class_repository = class_repository
         self.user_repository = user_repository
     
-    def execute(self, current_user: Tuple[str, bool], skip: int, limit: int) -> List[ClassSchema]:
-        user_email, _ = current_user
+    def execute(self, current_user: Tuple[str, bool, bool], skip: int, limit: int) -> List[ClassSchema]:
+        user_email, _, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
 
