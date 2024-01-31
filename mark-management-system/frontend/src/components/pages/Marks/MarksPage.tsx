@@ -54,32 +54,34 @@ const MarksPage = () => {
     try {
       if (accessToken) {
         const parsedFile = await parseFileContents();
+        console.log(parsedFile);
         let parsedFileToLower;
 
         if (parsedFile) {
           parsedFileToLower = toLowerCase(parsedFile);
         }
 
-        if (parsedFileToLower && validateParsedFile(parsedFileToLower)) {
-          parsedFileToLower
-            .slice(0, -1)
-            .forEach((row: IMarkRow, index: number) => {
-              checkDegreeExists(row.degree_name, index);
-              checkClassExists(row.class_code, index);
-              checkStudentExists(
-                row.reg_no,
-                row.student_name,
-                row.degree_name,
-                index
-              );
-              checkMarkExists(
-                row.mark,
-                row.unique_code,
-                row.class_code,
-                row.reg_no,
-                index
-              );
-            });
+        if (
+          parsedFileToLower &&
+          validateParsedFile(parsedFileToLower.slice(0))
+        ) {
+          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+            await checkDegreeExists(row.degree_name, index);
+            await checkClassExists(row.class_code, index);
+            await checkStudentExists(
+              row.reg_no,
+              row.student_name,
+              row.degree_name,
+              index
+            );
+            await checkMarkExists(
+              row.mark,
+              row.unique_code,
+              row.class_code,
+              row.reg_no,
+              index
+            );
+          }
 
           toast.success("Your file has been succesfully uploaded!");
         }
@@ -119,7 +121,7 @@ const MarksPage = () => {
         if (!degreeDetails) {
           toast.error(
             `Something went wrong when uploading the marks for Row ${
-              index + 1
+              index + 2
             }. The degree does not exist.`
           );
         }
@@ -127,7 +129,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
@@ -143,7 +145,7 @@ const MarksPage = () => {
         if (!classDetails) {
           toast.error(
             `Something went wrong when uploading the marks for Row ${
-              index + 1
+              index + 2
             }. The class does not exist.`
           );
         }
@@ -151,7 +153,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
@@ -180,7 +182,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
@@ -209,7 +211,7 @@ const MarksPage = () => {
         } else {
           toast.error(
             `Something went wrong when uploading the marks for Row ${
-              index + 1
+              index + 2
             }. The mark has already been uploaded.`
           );
         }
@@ -217,7 +219,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
@@ -245,7 +247,7 @@ const MarksPage = () => {
       console.error(error);
       toast.error(
         `Something went wrong when creating a student for Row ${
-          index + 1
+          index + 2
         }. DEV.`
       );
     }
@@ -273,7 +275,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading a mark for Row ${index + 1}. DEV.`
+        `Something went wrong when uploading a mark for Row ${index + 2}. DEV.`
       );
     }
   };
@@ -297,7 +299,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
@@ -313,7 +315,7 @@ const MarksPage = () => {
         if (!studentDetails) {
           toast.error(
             `Something went wrong when uploading the marks for Row ${
-              index + 1
+              index + 2
             }.`
           );
         } else {
@@ -323,7 +325,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
@@ -339,7 +341,7 @@ const MarksPage = () => {
         if (!classDetails) {
           toast.error(
             `Something went wrong when uploading the marks for Row ${
-              index + 1
+              index + 2
             }.`
           );
         } else {
@@ -349,7 +351,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 1}.`
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };
