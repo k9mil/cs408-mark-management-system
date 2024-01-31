@@ -17,9 +17,9 @@ import { markService } from "@/services/MarkService";
 
 import { toast } from "sonner";
 
-import { IMarkEdit } from "@/models/IMark";
-
 import { validateMarkDetailsOnEdit } from "@/utils/StudentUtils";
+
+import { IMarkEdit, IMarkRow } from "@/models/IMark";
 
 export const StudentsModal = ({
   row,
@@ -28,7 +28,7 @@ export const StudentsModal = ({
   accessToken,
   marksData,
 }: {
-  row: any;
+  row: IMarkRow;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
   accessToken: string | null;
@@ -68,7 +68,7 @@ export const StudentsModal = ({
 
   return (
     <Dialog
-      open={openDialogRowId === row.id}
+      open={openDialogRowId === row.id.toString()}
       onOpenChange={(open) => {
         if (!open) setOpenDialogRowId(null);
       }}
@@ -76,11 +76,11 @@ export const StudentsModal = ({
       <DialogContent>
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-xl">
-            {row.original.student_name} — View
+            {row.student_name} — View
           </DialogTitle>
           <DialogDescription className="max-w-md">
-            Information about the mark for {row.original.student_name}. Click
-            save when you're finished.
+            Information about the mark for {row.student_name}. Click save when
+            you're finished.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-row justify-between">
@@ -92,7 +92,7 @@ export const StudentsModal = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.student_name}
+                defaultValue={row.student_name}
                 disabled
               />
             </div>
@@ -103,7 +103,7 @@ export const StudentsModal = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.class_code}
+                defaultValue={row.class_code}
                 disabled
               />
             </div>
@@ -114,7 +114,7 @@ export const StudentsModal = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.reg_no}
+                defaultValue={row.reg_no}
                 disabled
               />
             </div>
@@ -127,7 +127,7 @@ export const StudentsModal = ({
               <Input
                 id="degreeLevel"
                 className="col-span-3"
-                defaultValue={row.original.degree_level}
+                defaultValue={row.degree_level}
                 disabled
               />
             </div>
@@ -138,7 +138,7 @@ export const StudentsModal = ({
               <Input
                 id="degreeName"
                 className="col-span-3"
-                defaultValue={row.original.degree_name}
+                defaultValue={row.degree_name}
                 disabled
               />
             </div>
@@ -150,7 +150,7 @@ export const StudentsModal = ({
                 id="mark"
                 type="text"
                 className="col-span-3"
-                defaultValue={row.original.mark}
+                defaultValue={row.mark}
                 onChange={(e) => {
                   setMark(e.target.value === "" ? null : +e.target.value);
                 }}
@@ -163,7 +163,7 @@ export const StudentsModal = ({
             type="submit"
             variant="destructive"
             onClick={() => {
-              deleteMark(row.original.unique_code);
+              deleteMark(row.unique_code);
             }}
           >
             Remove
@@ -172,7 +172,7 @@ export const StudentsModal = ({
             type="submit"
             onClick={() => {
               const markDetails: IMarkEdit = {
-                unique_code: row.original.unique_code,
+                unique_code: row.unique_code,
                 mark: mark === null ? null : +mark,
               };
 

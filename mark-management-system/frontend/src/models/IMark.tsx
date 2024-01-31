@@ -6,13 +6,14 @@ export interface IMark {
 }
 
 export interface IMarkRow {
-  CLASS_CODE: string;
-  REG_NO: string;
-  MARK: number;
-  STUDENT_NAME: string;
-  DEGREE_LEVEL: string;
-  DEGREE_NAME: string;
-  UNIQUE_CODE: string;
+  id: number;
+  class_code: string;
+  reg_no: string;
+  mark: number;
+  student_name: string;
+  degree_level: string;
+  degree_name: string;
+  unique_code: string;
 }
 
 export interface IMarkEdit {
