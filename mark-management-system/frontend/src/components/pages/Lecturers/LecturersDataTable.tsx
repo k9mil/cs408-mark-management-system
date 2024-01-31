@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/common/Button";
 
-import { useAuth } from "../../../AuthProvider";
-
 import {
   ColumnDef,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -37,11 +36,13 @@ export function LecturersDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<ILecturer | null>(null);
 
-  const handleRowClick = (row: any) => {
-    setOpenDialogRowId(row.id);
-    setSelectedRow(row);
+  const handleRowClick = (row: Row<TData>) => {
+    const id = (row.original as ILecturer).id.toString();
+
+    setOpenDialogRowId(id);
+    setSelectedRow(row.original as ILecturer);
   };
 
   const table = useReactTable({
@@ -128,7 +129,7 @@ export function LecturersDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {openDialogRowId !== null ? (
+          {openDialogRowId !== null && selectedRow ? (
             <LecturersModalView
               row={selectedRow}
               openDialogRowId={openDialogRowId}

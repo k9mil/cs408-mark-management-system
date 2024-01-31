@@ -4,10 +4,11 @@ import { Button } from "@/components/common/Button";
 
 import { StudentsModal } from "./StudentsModal";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
 import {
   ColumnDef,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -25,9 +26,13 @@ import {
   TableRow,
 } from "@/components/common/Table";
 
+import { IMarkRow } from "@/models/IMark";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  accessToken: string | null;
+  marksData: () => Promise<void>;
 }
 
 export function StudentsDataTable<TData, TValue>({
@@ -38,13 +43,15 @@ export function StudentsDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<IMarkRow | null>(null);
 
   const { isLecturer } = useAuth();
 
-  const handleRowClick = (row: any) => {
-    setOpenDialogRowId(row.id);
-    setSelectedRow(row);
+  const handleRowClick = (row: Row<TData>) => {
+    const id = (row.original as IMarkRow).id.toString();
+
+    setOpenDialogRowId(id);
+    setSelectedRow(row.original as IMarkRow);
   };
 
   const table = useReactTable({
@@ -113,7 +120,7 @@ export function StudentsDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {openDialogRowId !== null && isLecturer === true ? (
+          {openDialogRowId !== null && selectedRow && isLecturer === true ? (
             <StudentsModal
               row={selectedRow}
               openDialogRowId={openDialogRowId}

@@ -4,24 +4,24 @@ import Papa from "papaparse";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
 import { Button } from "@/components/common/Button";
 
-import Sidebar from "../../common/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 
 import MarksInfoBox from "./MarksInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
-import { IMark, IMarkRow } from "../../../models/IMark";
-import { IClassWithId } from "../../../models/IClass";
-import { IStudent, IStudentWithId } from "../../../models/IStudent";
-import { IDegreeWithId } from "../../../models/IDegree";
+import { IMark, IMarkRow } from "@/models/IMark";
+import { IClassWithId } from "@/models/IClass";
+import { IStudentCreate, IStudentWithId } from "@/models/IStudent";
+import { IDegreeWithId } from "@/models/IDegree";
 
-import { classService } from "../../../services/ClassService";
-import { studentService } from "../../../services/StudentService";
-import { markService } from "../../../services/MarkService";
-import { degreeService } from "../../../services/DegreeService";
+import { classService } from "@/services/ClassService";
+import { studentService } from "@/services/StudentService";
+import { markService } from "@/services/MarkService";
+import { degreeService } from "@/services/DegreeService";
 
 import { toast } from "sonner";
 
@@ -29,6 +29,7 @@ import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 import { validateParsedFile } from "@/utils/FileUploadUtils";
+import { toLowerCase } from "@/utils/Utils";
 
 const MarksPage = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const MarksPage = () => {
     }
   }, [navigate, isAuthenticated]);
 
-  const filePickedLocal = useRef(null);
+  const filePickedLocal = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -53,19 +54,32 @@ const MarksPage = () => {
     try {
       if (accessToken) {
         const parsedFile = await parseFileContents();
+        let parsedFileToLower;
 
-        if (parsedFile && validateParsedFile(parsedFile)) {
-          parsedFile.slice(0, -1).forEach((row: IMarkRow) => {
-            checkDegreeExists(row.DEGREE_NAME);
-            checkClassExists(row.CLASS_CODE);
-            checkStudentExists(row.REG_NO, row.STUDENT_NAME, row.DEGREE_NAME);
-            checkMarkExists(
-              row.MARK,
-              row.UNIQUE_CODE,
-              row.CLASS_CODE,
-              row.REG_NO
-            );
-          });
+        if (parsedFile) {
+          parsedFileToLower = toLowerCase(parsedFile);
+        }
+
+        if (parsedFileToLower && validateParsedFile(parsedFileToLower)) {
+          parsedFileToLower
+            .slice(0, -1)
+            .forEach((row: IMarkRow, index: number) => {
+              checkDegreeExists(row.degree_name, index);
+              checkClassExists(row.class_code, index);
+              checkStudentExists(
+                row.reg_no,
+                row.student_name,
+                row.degree_name,
+                index
+              );
+              checkMarkExists(
+                row.mark,
+                row.unique_code,
+                row.class_code,
+                row.reg_no,
+                index
+              );
+            });
 
           toast.success("Your file has been succesfully uploaded!");
         }
@@ -94,7 +108,7 @@ const MarksPage = () => {
     return null;
   };
 
-  const checkDegreeExists = async (degreeName: string) => {
+  const checkDegreeExists = async (degreeName: string, index: number) => {
     try {
       if (accessToken) {
         const degreeDetails = await degreeService.getDegree(
@@ -104,17 +118,21 @@ const MarksPage = () => {
 
         if (!degreeDetails) {
           toast.error(
-            "Something went wrong when uploading the marks. One of the provided degrees does not exist."
+            `Something went wrong when uploading the marks for Row ${
+              index + 1
+            }. The degree does not exist.`
           );
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
-  const checkClassExists = async (classCode: string) => {
+  const checkClassExists = async (classCode: string, index: number) => {
     try {
       if (accessToken) {
         const classDetails = await classService.getClass(
@@ -124,20 +142,25 @@ const MarksPage = () => {
 
         if (!classDetails) {
           toast.error(
-            "Something went wrong when uploading the marks. One of the provided classes does not exist."
+            `Something went wrong when uploading the marks for Row ${
+              index + 1
+            }. The class does not exist.`
           );
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
   const checkStudentExists = async (
     studentRegNo: string,
     studentName: string,
-    degreeName: string
+    degreeName: string,
+    index: number
   ) => {
     try {
       if (accessToken) {
@@ -147,16 +170,18 @@ const MarksPage = () => {
         );
 
         if (studentDetails === "Student not found") {
-          const degreeId = await getDegreeDetails(degreeName);
+          const degreeId = await getDegreeDetails(degreeName, index);
 
           if (degreeId) {
-            await createStudent(studentRegNo, studentName, degreeId);
+            await createStudent(studentRegNo, studentName, degreeId, index);
           }
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
@@ -164,7 +189,8 @@ const MarksPage = () => {
     mark: number,
     markUniqueCode: string,
     classCode: string,
-    regNo: string
+    regNo: string,
+    index: number
   ) => {
     try {
       if (accessToken) {
@@ -174,33 +200,38 @@ const MarksPage = () => {
         );
 
         if (markDetails === "Mark not found") {
-          const classId = await getClassDetails(classCode);
-          const studentId = await getStudentDetails(regNo);
+          const classId = await getClassDetails(classCode, index);
+          const studentId = await getStudentDetails(regNo, index);
 
           if (classId && studentId) {
-            await createMark(mark, markUniqueCode, studentId, classId);
+            await createMark(mark, markUniqueCode, studentId, classId, index);
           }
         } else {
           toast.error(
-            "Something went wrong when uploading the marks. One of the marks has already been uploaded."
+            `Something went wrong when uploading the marks for Row ${
+              index + 1
+            }. The mark has already been uploaded.`
           );
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
   const createStudent = async (
     studentRegNo: string,
     studentName: string,
-    degreeId: number
+    degreeId: number,
+    index: number
   ) => {
     // NOTE: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
     try {
       if (accessToken) {
-        const studentDetails: IStudent = {
+        const studentDetails: IStudentCreate = {
           reg_no: studentRegNo,
           student_name: studentName,
           personal_circumstances: null,
@@ -212,7 +243,11 @@ const MarksPage = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when creating a student. DEV.");
+      toast.error(
+        `Something went wrong when creating a student for Row ${
+          index + 1
+        }. DEV.`
+      );
     }
   };
 
@@ -220,7 +255,8 @@ const MarksPage = () => {
     mark: number,
     markUniqueCode: string,
     studentId: number,
-    classId: number
+    classId: number,
+    index: number
   ) => {
     try {
       if (accessToken) {
@@ -236,11 +272,13 @@ const MarksPage = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading a mark. DEV.");
+      toast.error(
+        `Something went wrong when uploading a mark for Row ${index + 1}. DEV.`
+      );
     }
   };
 
-  const getDegreeDetails = async (degreeName: string) => {
+  const getDegreeDetails = async (degreeName: string, index: number) => {
     try {
       if (accessToken) {
         const degreeDetails: IDegreeWithId = await degreeService.getDegree(
@@ -250,7 +288,7 @@ const MarksPage = () => {
 
         if (!degreeDetails) {
           toast.error(
-            "Something went wrong when uploading the marks. One of the provided degrees does not exist."
+            "Something went wrong when uploading the marks. The degree does not exist."
           );
         } else {
           return degreeDetails.id;
@@ -258,11 +296,13 @@ const MarksPage = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
-  const getStudentDetails = async (studentRegNo: string) => {
+  const getStudentDetails = async (studentRegNo: string, index: number) => {
     try {
       if (accessToken) {
         const studentDetails: IStudentWithId = await studentService.getStudent(
@@ -271,18 +311,24 @@ const MarksPage = () => {
         );
 
         if (!studentDetails) {
-          toast.error("Something went wrong when uploading the marks.");
+          toast.error(
+            `Something went wrong when uploading the marks for Row ${
+              index + 1
+            }.`
+          );
         } else {
           return studentDetails.id;
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
-  const getClassDetails = async (classCode: string) => {
+  const getClassDetails = async (classCode: string, index: number) => {
     try {
       if (accessToken) {
         const classDetails: IClassWithId = await classService.getClass(
@@ -291,14 +337,20 @@ const MarksPage = () => {
         );
 
         if (!classDetails) {
-          toast.error("Something went wrong when uploading the marks.");
+          toast.error(
+            `Something went wrong when uploading the marks for Row ${
+              index + 1
+            }.`
+          );
         } else {
           return classDetails.id;
         }
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 1}.`
+      );
     }
   };
 
@@ -390,7 +442,7 @@ const MarksPage = () => {
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
             <div className="flex flex-row mx-6 justify-between items-center">
-              <MarksInfoBox file={file} setFile={setFile} />
+              <MarksInfoBox />
               <div className="flex flex-row space-x-4">
                 <Button variant="secondary" className="w-20">
                   Cancel

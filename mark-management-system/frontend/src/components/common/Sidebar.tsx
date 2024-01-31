@@ -39,7 +39,9 @@ const Sidebar = () => {
   const logout = async () => {
     try {
       await userService.logout();
+
       toast.success("You have successfully been logged out!");
+
       updateAuthentication(false);
       navigate("/");
     } catch (error) {

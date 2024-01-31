@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
-import Sidebar from "../../common/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 
 import {
   Dialog,
@@ -25,13 +25,13 @@ import { ClassesLecturerDropdown } from "./ClassesLecturerDropdown";
 import { ClassesDataTable } from "./ClassesDataTable";
 import { ClassColumns } from "./ClassesColumns";
 
-import { classService } from "../../../services/ClassService";
-import { userService } from "../../../services/UserService";
+import { classService } from "@/services/ClassService";
+import { userService } from "@/services/UserService";
 
-import { IClass, IClassWithLecturerId } from "../../../models/IClass";
-import { IUser } from "../../../models/IUser";
+import { IClass, IClassWithLecturerId } from "@/models/IClass";
+import { IUser } from "@/models/IUser";
 
-import { validateClassDetails } from "../../../utils/ClassUtils";
+import { validateClassDetails } from "@/utils/ClassUtils";
 
 import { toast } from "sonner";
 
@@ -50,14 +50,14 @@ const ClassesPage = () => {
   const [openDialogRow, setOpenDialogRow] = useState<boolean>(false);
 
   const [classes, setClasses] = useState<IClass[]>([]);
-  const [lecturerOpen, setLecturerOpen] = React.useState(false);
-  const [lecturer, setLecturer] = React.useState(null);
+  const [lecturerOpen, setLecturerOpen] = React.useState<boolean>(false);
+  const [lecturer, setLecturer] = React.useState<string>("");
   const [lecturers, setLecturers] = useState<IUser[]>([]);
 
-  const [name, setName] = useState("");
-  const [code, setCode] = useState("");
-  const [credits, setCredits] = useState(0);
-  const [creditLevel, setCreditLevel] = useState(0);
+  const [name, setName] = useState<string>("");
+  const [code, setCode] = useState<string>("");
+  const [credits, setCredits] = useState<number>(0);
+  const [creditLevel, setCreditLevel] = useState<number>(0);
 
   const accessToken = getAccessToken();
 
@@ -83,7 +83,6 @@ const ClassesPage = () => {
         if (isAdmin) {
           const result = await userService.getLecturers(accessToken);
           setLecturers(result);
-          console.log(result);
         }
       }
     } catch (error) {
@@ -96,6 +95,7 @@ const ClassesPage = () => {
 
     classData();
     lecturerData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createClass = async (classDetails: IClassWithLecturerId) => {
@@ -216,7 +216,7 @@ const ClassesPage = () => {
                             code: code,
                             credit: +credits,
                             credit_level: +creditLevel,
-                            lecturer_id: lecturer === null ? null : +lecturer,
+                            lecturer_id: lecturer === "" ? null : +lecturer,
                           };
 
                           if (validateClassDetails(classDetails)) {

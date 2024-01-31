@@ -43,6 +43,8 @@ class MarksEdit(BaseModel):
     unique_code: str
 
 class MarksRow(BaseModel):
+    id: int
+
     class_code: str
     reg_no: str
     mark: int

@@ -1,11 +1,14 @@
 import axios from "axios";
 
-import { IStudent } from "../models/IStudent";
+import { IStudentCreate } from "../models/IStudent";
 
 import { API_BASE_URL } from "../utils/Constants";
 
 export const studentService = {
-  createStudent: async (studentDetails: IStudent, accessToken: string) => {
+  createStudent: async (
+    studentDetails: IStudentCreate,
+    accessToken: string
+  ) => {
     return await axios
       .post(
         `${API_BASE_URL}/students`,

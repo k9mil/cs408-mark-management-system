@@ -17,12 +17,12 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
-import { IClassWithId } from "../../../models/IClass";
-import { IUser, IUserDropdown } from "../../../models/IUser";
+import { IClass, IClassWithId } from "@/models/IClass";
+import { IUser, IUserDropdown } from "@/models/IUser";
 
-import { classService } from "../../../services/ClassService";
+import { classService } from "@/services/ClassService";
 
-import { validateClassDetails } from "../../../utils/ClassUtils";
+import { validateClassDetails } from "@/utils/ClassUtils";
 
 export const ClassesModalAdminView = ({
   row,
@@ -33,7 +33,7 @@ export const ClassesModalAdminView = ({
   lecturerData,
   accessToken,
 }: {
-  row: any;
+  row: IClass;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
   lecturers: IUser[];
@@ -41,11 +41,11 @@ export const ClassesModalAdminView = ({
   lecturerData: () => Promise<void>;
   accessToken: string | null;
 }) => {
-  const [name, setName] = useState(row.original.name);
-  const [originalCode] = useState(row.original.code);
-  const [code, setCode] = useState(row.original.code);
-  const [credits, setCredits] = useState(row.original.credit);
-  const [creditLevel, setCreditLevel] = useState(row.original.credit_level);
+  const [name, setName] = useState(row.name);
+  const [originalCode] = useState(row.code);
+  const [code, setCode] = useState(row.code);
+  const [credits, setCredits] = useState(row.credit);
+  const [creditLevel, setCreditLevel] = useState(row.credit_level);
 
   const [lecturerOpen, setLecturerOpen] = React.useState(false);
   const [lecturer, setLecturer] = React.useState("");
@@ -65,15 +65,15 @@ export const ClassesModalAdminView = ({
 
       const defaultLecturer = lecturers.find(
         (lecturer) =>
-          lecturer.first_name === row.original.lecturer.first_name &&
-          lecturer.last_name === row.original.lecturer.last_name
+          lecturer.first_name === row.lecturer.first_name &&
+          lecturer.last_name === row.lecturer.last_name
       );
 
       if (defaultLecturer) {
         setLecturer(defaultLecturer.id.toString());
       }
     }
-  }, [lecturers, row.original]);
+  }, [lecturers, row]);
 
   const deleteClass = async (classId: number) => {
     try {
@@ -109,7 +109,7 @@ export const ClassesModalAdminView = ({
 
   return (
     <Dialog
-      open={openDialogRowId === row.id}
+      open={openDialogRowId === row.id.toString()}
       onOpenChange={(open) => {
         if (!open) setOpenDialogRowId(null);
       }}
@@ -118,8 +118,8 @@ export const ClassesModalAdminView = ({
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-xl">CS408 — View</DialogTitle>
           <DialogDescription className="max-w-md">
-            Information about the {row.original.code} class. Click done when
-            you're finished.
+            Information about the {row.code} class. Click done when you're
+            finished.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-row justify-between">
@@ -131,7 +131,7 @@ export const ClassesModalAdminView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.name}
+                defaultValue={row.name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
@@ -142,7 +142,7 @@ export const ClassesModalAdminView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.code}
+                defaultValue={row.code}
                 onChange={(e) => setCode(e.target.value)}
               />
             </div>
@@ -153,7 +153,7 @@ export const ClassesModalAdminView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.credit}
+                defaultValue={row.credit}
                 onChange={(e) => setCredits(+e.target.value)}
               />
             </div>
@@ -166,7 +166,7 @@ export const ClassesModalAdminView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.credit_level}
+                defaultValue={row.credit_level}
                 onChange={(e) => setCreditLevel(+e.target.value)}
               />
             </div>
@@ -177,7 +177,11 @@ export const ClassesModalAdminView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                value={row.original.students.length}
+                value={
+                  row.students.length > 0
+                    ? row.students.length + 1
+                    : row.students.length
+                }
                 disabled
               />
             </div>
@@ -197,7 +201,7 @@ export const ClassesModalAdminView = ({
             type="submit"
             variant="destructive"
             onClick={() => {
-              deleteClass(row.original.id);
+              deleteClass(row.id);
             }}
           >
             Remove
@@ -206,7 +210,7 @@ export const ClassesModalAdminView = ({
             type="submit"
             onClick={() => {
               const classDetails: IClassWithId = {
-                id: +row.original.id,
+                id: +row.id,
                 name: name,
                 code: code,
                 original_code: originalCode,

@@ -30,13 +30,14 @@ class GetStudentMarksUseCase:
 
         for current_mark in marks:
             mark_row = MarksRow(
-                class_code=current_mark[0],
-                reg_no=current_mark[1],
-                mark=current_mark[2],
-                student_name=current_mark[3],
-                degree_level=current_mark[4],
-                degree_name=current_mark[5],
-                unique_code=current_mark[6],
+                id=current_mark[0],
+                class_code=current_mark[1],
+                reg_no=current_mark[2],
+                mark=current_mark[3],
+                student_name=current_mark[4],
+                degree_level=current_mark[5],
+                degree_name=current_mark[6],
+                unique_code=current_mark[7],
             )
             
             marks_row.append(mark_row)

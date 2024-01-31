@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
-import Sidebar from "../../common/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 
 import { StudentsDataTable } from "./StudentsDataTable";
 import { StudentColumns } from "./StudentsColumns";
 
-import { markService } from "../../../services/MarkService";
+import { markService } from "@/services/MarkService";
 
-import { IMarkRow } from "../../../models/IMark";
+import { IMarkRow } from "@/models/IMark";
 
 const StudentsPage = () => {
   const navigate = useNavigate();
@@ -44,6 +44,7 @@ const StudentsPage = () => {
 
   useEffect(() => {
     marksData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -60,8 +61,8 @@ const StudentsPage = () => {
           <StudentsDataTable
             columns={StudentColumns}
             data={details}
-            marksData={marksData}
             accessToken={accessToken}
+            marksData={marksData}
           />
         </div>
       </div>

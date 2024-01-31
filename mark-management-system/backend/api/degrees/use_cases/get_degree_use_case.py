@@ -17,8 +17,8 @@ class GetDegreeUseCase:
         user_email, is_admin = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
-        
-        if is_admin is False or lecturer is None:
+
+        if lecturer is None and is_admin is False:
             raise PermissionError("Permission denied to access this resource")
         
         degree = self.degree_repository.find_by_name(degree_name)

@@ -18,7 +18,7 @@ import { userService } from "@/services/UserService";
 
 import { IStatistics } from "@/models/IMark";
 import { ILecturer } from "@/models/IUser";
-import { IClass, IClassUploaded } from "@/models/IClass";
+import { IClassUploaded } from "@/models/IClass";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -51,7 +51,6 @@ const DashboardPage = () => {
       if (accessToken) {
         const result = await userService.getLecturer(id, accessToken);
         setLecturer(result);
-        console.log(result);
       }
     } catch (error) {
       console.error(error);
@@ -63,6 +62,7 @@ const DashboardPage = () => {
 
     statisticsData();
     lecturerData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -150,7 +150,7 @@ const DashboardPage = () => {
                   lecturer.classes
                     .slice(0, 3)
                     .map((class_: IClassUploaded, index: number) => (
-                      <>
+                      <React.Fragment key={class_.code}>
                         <div className="flex flex-col w-1/3">
                           <h1 className="font-semibold text-base">
                             {class_.code} |
@@ -169,7 +169,7 @@ const DashboardPage = () => {
                         {index !== lecturer.classes.slice(0, 3).length - 1 && (
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                         )}
-                      </>
+                      </React.Fragment>
                     ))
                 ) : (
                   <h2 className="font-normal text-sm">

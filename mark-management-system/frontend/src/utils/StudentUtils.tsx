@@ -4,7 +4,7 @@ import { isNumber } from "./Utils";
 
 import { toast } from "sonner";
 
-export function validateMarkDetailsOnEdit(markDetails: IMarkEdit) {
+export function validateMarkDetailsOnEdit(markDetails: IMarkEdit): boolean {
   if (!markDetails || typeof markDetails !== "object") {
     toast.error("Something went wrong. Please try again later.");
     return false;
