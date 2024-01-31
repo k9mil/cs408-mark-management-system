@@ -1,9 +1,10 @@
 import { toast } from "sonner";
 
-import { IUser } from "../models/IUser";
-import { IClassWithId, IClassWithLecturerId } from "../models/IClass";
-
 import { isNumber } from "./Utils";
+
+import { IClassWithId, IClassWithLecturerId } from "@/models/IClass";
+import { IUser } from "@/models/IUser";
+import { IStudent } from "@/models/IStudent";
 
 export function isValidClassCode(input: string): boolean {
   const pattern = /^[A-Z]{2}\d{3}$/;
@@ -15,7 +16,7 @@ export function formatLecturerName(lecturer: IUser) {
   return `${lecturer.first_name} ${lecturer.last_name}`;
 }
 
-export function getNumOfStudents(students: Array<IUser>) {
+export function getNumOfStudents(students: IStudent[]) {
   if (students) return students.length;
   return 0;
 }

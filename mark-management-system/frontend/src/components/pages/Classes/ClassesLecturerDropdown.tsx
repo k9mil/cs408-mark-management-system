@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import * as React from "react";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -45,7 +45,6 @@ export const ClassesLecturerDropdown = ({
           <Button
             variant="outline"
             role="combobox"
-            aria-expanded={open}
             className="w-[200px] justify-between"
           >
             {lecturer

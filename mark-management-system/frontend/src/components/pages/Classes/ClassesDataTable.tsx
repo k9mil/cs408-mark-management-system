@@ -5,15 +5,13 @@ import { Button } from "@/components/common/Button";
 import { ClassesModalAdminView } from "./ClassesModalAdminView";
 import { ClassesModalLecturerView } from "./ClassModalLecturerView";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
-import {
-  formatLecturerName,
-  getNumOfStudents,
-} from "../../../utils/ClassUtils";
+import { formatLecturerName, getNumOfStudents } from "@/utils/ClassUtils";
 
 import {
   ColumnDef,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -31,7 +29,8 @@ import {
   TableRow,
 } from "@/components/common/Table";
 
-import { IUser } from "../../../models/IUser";
+import { IUser } from "@/models/IUser";
+import { IClass } from "@/models/IClass";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -52,11 +51,11 @@ export function ClassesDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<Row<TData> | null>(null);
 
   const { isAdmin, isLecturer } = useAuth();
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: Row<TData>) => {
     setOpenDialogRowId(row.id);
     setSelectedRow(row);
   };
@@ -110,9 +109,13 @@ export function ClassesDataTable<TData, TValue>({
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {cell.column.id === "lecturer"
-                          ? formatLecturerName(cell.row.original.lecturer)
+                          ? formatLecturerName(
+                              (cell.row.original as IClass).lecturer
+                            )
                           : cell.column.id === "number_of_students"
-                          ? getNumOfStudents(cell.row.original.students)
+                          ? getNumOfStudents(
+                              (cell.row.original as IClass).students
+                            )
                           : flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()

@@ -1,3 +1,4 @@
+import { IStudent } from "./IStudent";
 import { IUser } from "./IUser";
 
 interface IBaseClass {
@@ -11,6 +12,7 @@ interface IBaseClass {
 export interface IClass extends IBaseClass {
   number_of_students: number;
   lecturer: IUser;
+  students: IStudent[];
 }
 
 export interface IClassWithLecturerId extends IBaseClass {
@@ -23,6 +25,9 @@ export interface IClassWithId extends IClassWithLecturerId {
 }
 
 export interface IClassUploaded {
-  classDetails: IClass;
+  name: string;
+  code: string;
+  credit: number;
+  credit_level: number;
   is_uploaded: boolean;
 }
