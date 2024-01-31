@@ -38,10 +38,7 @@ class GetLecturersUseCase:
         for lecturer in lecturers:
             classes = self.class_repository.get_classes_by_lecturer_id(lecturer.id, skip, limit)
 
-            class_list: List = []
-
-            for class_ in classes:
-                class_list.append(self.create_lecturer_class(class_))
+            class_list: List = [self.create_lecturer_class(class_) for class_ in classes]
 
             lecturer_data = Lecturer(
                 id=lecturer.id,

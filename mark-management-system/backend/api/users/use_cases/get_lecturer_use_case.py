@@ -22,7 +22,7 @@ class GetLecturerUseCase:
         self.class_repository = class_repository
         self.mark_repository = mark_repository
     
-    def execute(self, user_id: int, current_user: Tuple[str, bool]) -> Lecturer:
+    def execute(self, current_user: Tuple[str, bool]) -> Lecturer:
         user_email, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
@@ -32,10 +32,7 @@ class GetLecturerUseCase:
         
         classes = self.class_repository.get_classes_by_lecturer_id(lecturer.id)
 
-        class_list: List = []
-
-        for class_ in classes:
-            class_list.append(self.create_lecturer_class(class_))
+        class_list: List = [self.create_lecturer_class(class_) for class_ in classes]
 
         lecturer_data = Lecturer(
             id=lecturer.id,
