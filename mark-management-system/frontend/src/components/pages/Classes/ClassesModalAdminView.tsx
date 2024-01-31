@@ -177,7 +177,7 @@ export const ClassesModalAdminView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                value={row.original.students.length}
+                value={row.original.students.length + 1}
                 disabled
               />
             </div>

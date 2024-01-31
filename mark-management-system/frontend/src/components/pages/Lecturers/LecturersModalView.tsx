@@ -12,14 +12,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/common/Dialog";
-import { IClass } from "@/models/IClass";
+import { IClassUploaded } from "@/models/IClass";
 
 export const LecturersModalView = ({
   row,
   openDialogRowId,
   setOpenDialogRowId,
 }: {
-  row: any;
+  row: Row<TData>;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
 }) => {
@@ -45,7 +45,7 @@ export const LecturersModalView = ({
         </DialogHeader>
         {row.original.classes && row.original.classes.length !== 0 ? (
           <div className="grid grid-cols-2 gap-x-32 gap-y-8 mt-6">
-            {row.original.classes.map((class_: IClass) => (
+            {row.original.classes.map((class_: IClassUploaded) => (
               <div key={class_.code} className="flex flex-row space-x-2">
                 <Label className="font-bold">{class_.code}</Label>
                 {class_.is_uploaded === true ? (

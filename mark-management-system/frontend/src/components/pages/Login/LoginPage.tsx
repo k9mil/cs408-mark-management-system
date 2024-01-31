@@ -7,11 +7,11 @@ import { Input } from "@/components/common/Input";
 import { Button } from "@/components/common/Button";
 import { Spinner } from "@/components/common/Spinner";
 
-import { userService } from "../../../services/UserService";
+import { userService } from "@/services/UserService";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
-import { IUserLoginDetails } from "../../../models/IUser";
+import { IUserLoginDetails } from "@/models/IUser";
 
 import { toast } from "sonner";
 
@@ -19,8 +19,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, updateAuthentication } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   useEffect(() => {

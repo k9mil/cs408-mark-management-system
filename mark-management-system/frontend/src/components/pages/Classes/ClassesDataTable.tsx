@@ -36,9 +36,9 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   lecturers: IUser[];
+  accessToken: string | null;
   classData: () => Promise<void>;
   lecturerData: () => Promise<void>;
-  accessToken: string | null;
 }
 
 export function ClassesDataTable<TData, TValue>({
@@ -148,6 +148,7 @@ export function ClassesDataTable<TData, TValue>({
             />
           ) : null}
           {openDialogRowId !== null &&
+          selectedRow &&
           isLecturer === true &&
           isAdmin === false ? (
             <ClassesModalLecturerView

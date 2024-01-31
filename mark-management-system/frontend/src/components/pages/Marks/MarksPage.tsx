@@ -4,24 +4,24 @@ import Papa from "papaparse";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
 import { Button } from "@/components/common/Button";
 
-import Sidebar from "../../common/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 
 import MarksInfoBox from "./MarksInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
-import { IMark, IMarkRow } from "../../../models/IMark";
-import { IClassWithId } from "../../../models/IClass";
-import { IStudent, IStudentWithId } from "../../../models/IStudent";
-import { IDegreeWithId } from "../../../models/IDegree";
+import { IMark, IMarkRow } from "@/models/IMark";
+import { IClassWithId } from "@/models/IClass";
+import { IStudentCreate, IStudentWithId } from "@/models/IStudent";
+import { IDegreeWithId } from "@/models/IDegree";
 
-import { classService } from "../../../services/ClassService";
-import { studentService } from "../../../services/StudentService";
-import { markService } from "../../../services/MarkService";
-import { degreeService } from "../../../services/DegreeService";
+import { classService } from "@/services/ClassService";
+import { studentService } from "@/services/StudentService";
+import { markService } from "@/services/MarkService";
+import { degreeService } from "@/services/DegreeService";
 
 import { toast } from "sonner";
 
@@ -42,7 +42,7 @@ const MarksPage = () => {
     }
   }, [navigate, isAuthenticated]);
 
-  const filePickedLocal = useRef(null);
+  const filePickedLocal = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -200,7 +200,7 @@ const MarksPage = () => {
     // NOTE: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
     try {
       if (accessToken) {
-        const studentDetails: IStudent = {
+        const studentDetails: IStudentCreate = {
           reg_no: studentRegNo,
           student_name: studentName,
           personal_circumstances: null,
@@ -390,7 +390,7 @@ const MarksPage = () => {
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
             <div className="flex flex-row mx-6 justify-between items-center">
-              <MarksInfoBox file={file} setFile={setFile} />
+              <MarksInfoBox />
               <div className="flex flex-row space-x-4">
                 <Button variant="secondary" className="w-20">
                   Cancel

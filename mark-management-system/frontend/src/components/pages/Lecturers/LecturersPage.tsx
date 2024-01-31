@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
-import Sidebar from "../../common/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 
 import { userService } from "@/services/UserService";
 
@@ -45,6 +45,8 @@ const LecturersPage = () => {
 
   useEffect(() => {
     lecturersData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -58,11 +60,7 @@ const LecturersPage = () => {
               View a list of lecturers in the system
             </h2>
           </div>
-          <LecturersDataTable
-            columns={LecturerColumns}
-            data={lecturers}
-            accessToken={accessToken}
-          />
+          <LecturersDataTable columns={LecturerColumns} data={lecturers} />
         </div>
       </div>
     </div>

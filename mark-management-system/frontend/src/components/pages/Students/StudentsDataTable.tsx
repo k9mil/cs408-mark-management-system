@@ -4,10 +4,11 @@ import { Button } from "@/components/common/Button";
 
 import { StudentsModal } from "./StudentsModal";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
 import {
   ColumnDef,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -28,6 +29,8 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  accessToken: string | null;
+  marksData: () => Promise<void>;
 }
 
 export function StudentsDataTable<TData, TValue>({
@@ -38,11 +41,11 @@ export function StudentsDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<Row<TData> | null>(null);
 
   const { isLecturer } = useAuth();
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: Row<TData>) => {
     setOpenDialogRowId(row.id);
     setSelectedRow(row);
   };

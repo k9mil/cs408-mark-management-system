@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../AuthProvider";
+import { useAuth } from "@/AuthProvider";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -10,7 +10,7 @@ import { Input } from "@/components/common/Input";
 
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
-import Sidebar from "../../common/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 
 import { IUserEdit } from "@/models/IUser";
 

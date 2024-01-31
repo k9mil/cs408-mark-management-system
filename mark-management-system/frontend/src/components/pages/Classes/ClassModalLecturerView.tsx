@@ -18,7 +18,7 @@ export const ClassesModalLecturerView = ({
   openDialogRowId,
   setOpenDialogRowId,
 }: {
-  row: any;
+  row: Row<TData>;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
 }) => {
