@@ -3,26 +3,22 @@ import { IMarkRow } from "@/models/IMark";
 import { toast } from "sonner";
 
 import { isValidClassCode } from "./ClassUtils";
-import { isNumber, toLowerCase } from "./Utils";
+import { isNumber } from "./Utils";
 
 export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
-  let fileContentsToLower;
-
-  if (fileContents) fileContentsToLower = toLowerCase(fileContents);
-
-  if (!fileContentsToLower || !Array.isArray(fileContentsToLower)) {
+  if (!fileContents || !Array.isArray(fileContents)) {
     toast.error("The file provided is empty or corrupt.");
     return false;
   }
 
-  for (let i = 0; i < fileContentsToLower.length; i++) {
-    const row = fileContentsToLower[i];
+  for (let i = 0; i < fileContents.length; i++) {
+    const row = fileContents[i];
 
     if (Object.keys(row).length != 7) {
       toast.error(
         `Row ${i + 1} doesn't contain all necessary information. 
         The row should have the following: 
-        CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGRE_NAME, UNIQUE_CODE`
+        CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME, UNIQUE_CODE`
       );
 
       return false;
