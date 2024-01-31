@@ -13,30 +13,30 @@ import {
   DialogTitle,
 } from "@/components/common/Dialog";
 
+import { IClass } from "@/models/IClass";
+
 export const ClassesModalLecturerView = ({
   row,
   openDialogRowId,
   setOpenDialogRowId,
 }: {
-  row: Row<TData>;
+  row: IClass;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
 }) => {
   return (
     <Dialog
-      open={openDialogRowId === row.id}
+      open={openDialogRowId === row.id.toString()}
       onOpenChange={(open) => {
         if (!open) setOpenDialogRowId(null);
       }}
     >
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-xl">
-            {row.original.code} — View
-          </DialogTitle>
+          <DialogTitle className="text-xl">{row.code} — View</DialogTitle>
           <DialogDescription className="max-w-md">
-            Information about the {row.original.code} class. Click done when
-            you're finished.
+            Information about the {row.code} class. Click done when you're
+            finished.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-row justify-between">
@@ -48,7 +48,7 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.name}
+                defaultValue={row.name}
                 disabled
               />
             </div>
@@ -59,7 +59,7 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.code}
+                defaultValue={row.code}
                 disabled
               />
             </div>
@@ -70,7 +70,7 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.credit}
+                defaultValue={row.credit}
                 disabled
               />
             </div>
@@ -83,7 +83,7 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                defaultValue={row.original.credit_level}
+                defaultValue={row.credit_level}
                 disabled
               />
             </div>
@@ -94,7 +94,11 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                value={row.original.students.length}
+                value={
+                  row.students.length > 0
+                    ? row.students.length + 1
+                    : row.students.length
+                }
                 disabled
               />
             </div>

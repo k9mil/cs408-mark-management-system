@@ -10,6 +10,7 @@ interface IBaseClass {
 }
 
 export interface IClass extends IBaseClass {
+  id: number;
   number_of_students: number;
   lecturer: IUser;
   students: IStudent[];
@@ -21,7 +22,7 @@ export interface IClassWithLecturerId extends IBaseClass {
 
 export interface IClassWithId extends IClassWithLecturerId {
   id: number;
-  original_code: number;
+  original_code: string;
 }
 
 export interface IClassUploaded {

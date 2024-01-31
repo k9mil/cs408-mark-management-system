@@ -51,13 +51,15 @@ export function ClassesDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState<Row<TData> | null>(null);
+  const [selectedRow, setSelectedRow] = useState<IClass | null>(null);
 
   const { isAdmin, isLecturer } = useAuth();
 
   const handleRowClick = (row: Row<TData>) => {
-    setOpenDialogRowId(row.id);
-    setSelectedRow(row);
+    const id = (row.original as IClass).id.toString();
+
+    setOpenDialogRowId(id);
+    setSelectedRow(row.original as IClass);
   };
 
   const table = useReactTable({
@@ -136,7 +138,7 @@ export function ClassesDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {openDialogRowId !== null && isAdmin === true ? (
+          {openDialogRowId !== null && selectedRow && isAdmin === true ? (
             <ClassesModalAdminView
               row={selectedRow}
               openDialogRowId={openDialogRowId}
