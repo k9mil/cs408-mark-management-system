@@ -16,7 +16,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
 
     if (Object.keys(row).length != 7) {
       toast.error(
-        `Row ${i + 1} doesn't contain all necessary information. 
+        `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
         CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME, UNIQUE_CODE`
       );
@@ -27,7 +27,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("class_code" in row) || row.class_code === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a class code. Please fix the file and try again.`
       );
       return false;
@@ -35,7 +35,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
 
     if (!isValidClassCode(row.class_code)) {
       toast.error(
-        `Row ${i + 1} should have a Class code in the format of: "AB123"`
+        `Row ${i + 2} should have a Class code in the format of: "AB123"`
       );
 
       return false;
@@ -44,7 +44,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("reg_no" in row) || row.reg_no === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a registration number. Please fix the file and try again.`
       );
       return false;
@@ -53,19 +53,19 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("mark" in row) || row.mark === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a mark. Please fix the file and try again.`
       );
       return false;
     }
 
     if (!isNumber(row.mark)) {
-      toast.error(`Row ${i + 1} should have a mark which is an integer.`);
+      toast.error(`Row ${i + 2} should have a mark which is an integer.`);
       return false;
     }
 
     if (row.mark < 0 || row.mark > 100) {
-      toast.error(`Row ${i + 1} should have a mark between 0 and 100.`);
+      toast.error(`Row ${i + 2} should have a mark between 0 and 100.`);
 
       return false;
     }
@@ -73,7 +73,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("student_name" in row) || row.student_name === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a student name. Please fix the file and try again.`
       );
       return false;
@@ -82,7 +82,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("degree_level" in row) || row.degree_level === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a degree level. Please fix the file and try again.`
       );
       return false;
@@ -93,7 +93,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("degree_name" in row) || row.degree_name === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a degree name. Please fix the file and try again.`
       );
       return false;
@@ -102,7 +102,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     if (!("unique_code" in row) || row.unique_code === null) {
       toast.error(
         `Row ${
-          i + 1
+          i + 2
         } doesn't contain a unique code. Please fix the file and try again.`
       );
       return false;
