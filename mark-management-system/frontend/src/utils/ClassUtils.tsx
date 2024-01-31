@@ -12,11 +12,11 @@ export function isValidClassCode(input: string): boolean {
   return pattern.test(input);
 }
 
-export function formatLecturerName(lecturer: IUser) {
+export function formatLecturerName(lecturer: IUser): string {
   return `${lecturer.first_name} ${lecturer.last_name}`;
 }
 
-export function getNumOfStudents(students: IStudent[]) {
+export function getNumOfStudents(students: IStudent[]): number {
   if (students.length !== 0) return students.length + 1;
   return 0;
 }

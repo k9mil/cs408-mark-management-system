@@ -1,7 +1,8 @@
 import { IUserEdit } from "@/models/IUser";
+
 import { toast } from "sonner";
 
-export function validateUserEditDetails(userDetails: IUserEdit) {
+export function validateUserEditDetails(userDetails: IUserEdit): boolean {
   if (!userDetails || typeof userDetails !== "object") {
     toast.error("Something went wrong. Please try again later.");
     return false;

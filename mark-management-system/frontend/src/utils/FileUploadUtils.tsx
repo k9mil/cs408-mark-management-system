@@ -3,16 +3,20 @@ import { IMarkRow } from "@/models/IMark";
 import { toast } from "sonner";
 
 import { isValidClassCode } from "./ClassUtils";
-import { isNumber } from "./Utils";
+import { isNumber, toLowerCase } from "./Utils";
 
-export function validateParsedFile(fileContents: IMarkRow[] | null) {
-  if (!fileContents || !Array.isArray(fileContents)) {
+export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
+  let fileContentsToLower;
+
+  if (fileContents) fileContentsToLower = toLowerCase(fileContents);
+
+  if (!fileContentsToLower || !Array.isArray(fileContentsToLower)) {
     toast.error("The file provided is empty or corrupt.");
     return false;
   }
 
-  for (let i = 0; i < fileContents.length; i++) {
-    const row = fileContents[i];
+  for (let i = 0; i < fileContentsToLower.length; i++) {
+    const row = fileContentsToLower[i];
 
     if (Object.keys(row).length != 7) {
       toast.error(
@@ -24,7 +28,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!("CLASS_CODE" in row) || row.CLASS_CODE === null) {
+    if (!("class_code" in row) || row.class_code === null) {
       toast.error(
         `Row ${
           i + 1
@@ -33,7 +37,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!isValidClassCode(row.CLASS_CODE)) {
+    if (!isValidClassCode(row.class_code)) {
       toast.error(
         `Row ${i + 1} should have a Class code in the format of: "AB123"`
       );
@@ -41,7 +45,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!("REG_NO" in row) || row.REG_NO === null) {
+    if (!("reg_no" in row) || row.reg_no === null) {
       toast.error(
         `Row ${
           i + 1
@@ -50,7 +54,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!("MARK" in row) || row.MARK === null) {
+    if (!("mark" in row) || row.mark === null) {
       toast.error(
         `Row ${
           i + 1
@@ -59,18 +63,18 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!isNumber(row.MARK)) {
+    if (!isNumber(row.mark)) {
       toast.error(`Row ${i + 1} should have a mark which is an integer.`);
       return false;
     }
 
-    if (row.MARK < 0 || row.MARK > 100) {
+    if (row.mark < 0 || row.mark > 100) {
       toast.error(`Row ${i + 1} should have a mark between 0 and 100.`);
 
       return false;
     }
 
-    if (!("STUDENT_NAME" in row) || row.STUDENT_NAME === null) {
+    if (!("student_name" in row) || row.student_name === null) {
       toast.error(
         `Row ${
           i + 1
@@ -79,7 +83,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!("DEGREE_LEVEL" in row) || row.DEGREE_LEVEL === null) {
+    if (!("degree_level" in row) || row.degree_level === null) {
       toast.error(
         `Row ${
           i + 1
@@ -90,7 +94,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
 
     // TODO: Add validation for the "Undergradute Board", i.e. titles like BSc
 
-    if (!("DEGREE_NAME" in row) || row.DEGREE_NAME === null) {
+    if (!("degree_name" in row) || row.degree_name === null) {
       toast.error(
         `Row ${
           i + 1
@@ -99,7 +103,7 @@ export function validateParsedFile(fileContents: IMarkRow[] | null) {
       return false;
     }
 
-    if (!("UNIQUE_CODE" in row) || row.UNIQUE_CODE === null) {
+    if (!("unique_code" in row) || row.unique_code === null) {
       toast.error(
         `Row ${
           i + 1

@@ -29,7 +29,6 @@ class GetStudentMarksUseCase:
         marks_row = []
 
         for current_mark in marks:
-            print(current_mark)
             mark_row = MarksRow(
                 id=current_mark[0],
                 class_code=current_mark[1],
