@@ -32,6 +32,9 @@ class ClassRepository:
     def check_class_code_exists(self, request: ClassEdit) -> bool:
         return self.db.query(Class).filter_by(code=request.code).first() is not None
 
+    def is_lecturer_of_class(self, lecturer_id: int, class_id: int) -> bool:
+        return self.db.query(Class).filter_by(id=class_id, lecturer_id=lecturer_id).first() is not None
+
     def update(self, class_: Class, lecturer: User, request: ClassEdit) -> None:
         class_.name = request.name
         class_.code = request.code

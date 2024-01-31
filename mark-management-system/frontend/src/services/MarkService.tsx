@@ -71,7 +71,7 @@ export const markService = {
 
   getStatistics: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/marks/statistics`, {
+      .get(`${API_BASE_URL}/marks/statistics/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

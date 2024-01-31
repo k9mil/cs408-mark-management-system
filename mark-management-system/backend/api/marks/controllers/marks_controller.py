@@ -135,7 +135,7 @@ def delete_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@marks.get("/marks/statistics", response_model=schemas.MarksStatistics)
+@marks.get("/marks/statistics/", response_model=schemas.MarksStatistics)
 def get_student_statistics(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
@@ -144,13 +144,11 @@ def get_student_statistics(
         raise HTTPException(
             status_code=401,
             detail="Invalid JWT provided",
-        )    
+        )
 
     try:
         return get_student_statistics_use_case.execute(current_user)
     except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

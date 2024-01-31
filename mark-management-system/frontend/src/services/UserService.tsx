@@ -53,8 +53,7 @@ export const userService = {
 
   getLecturer: async (userId: number, accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/users/lecturer/${userId}`, {
-        data: { user_id: userId },
+      .get(`${API_BASE_URL}/lecturers/${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -71,7 +70,7 @@ export const userService = {
 
   getLecturers: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/users/lecturers/`, {
+      .get(`${API_BASE_URL}/lecturers/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

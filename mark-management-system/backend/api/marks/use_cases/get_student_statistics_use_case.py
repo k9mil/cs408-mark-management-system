@@ -20,12 +20,12 @@ class GetStudentStatisticsUseCase:
     def execute(self, current_user: Tuple[str, bool, bool]) -> MarksStatistics:
         user_email, _, _ = current_user
 
-        lecturer = self.user_repository.find_by_email(user_email)
+        user = self.user_repository.find_by_email(user_email)
 
-        if lecturer is None:
+        if user is None:
             raise UserNotFound("User not found")
         
-        marks = self.mark_repository.get_student_marks_for_lecturer(lecturer.id)
+        marks = self.mark_repository.get_student_marks_for_lecturer(user.id)
 
         if marks is None:
             raise MarkNotFound("No results found for the lecturer")
@@ -33,7 +33,7 @@ class GetStudentStatisticsUseCase:
         mark_data = []
 
         for current_mark in marks:
-            mark_data.append(current_mark[3])
+            mark_data.append(current_mark[7])
 
         marks_statistics = MarksStatistics(
             mean=round(mean(mark_data)),

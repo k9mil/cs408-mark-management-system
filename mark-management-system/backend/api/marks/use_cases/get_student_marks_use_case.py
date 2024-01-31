@@ -7,6 +7,8 @@ from api.users.repositories.user_repository import UserRepository
 
 from api.marks.errors.mark_not_found import MarkNotFound
 
+from api.users.errors.user_not_found import UserNotFound
+
 
 class GetStudentMarksUseCase:
     def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository):
@@ -14,14 +16,17 @@ class GetStudentMarksUseCase:
         self.user_repository = user_repository
     
     def execute(self, current_user: Tuple[str, bool, bool]) -> List[MarksRow]:
-        user_email, is_admin, _ = current_user
+        user_email, is_admin, is_lecturer = current_user
 
-        lecturer = self.user_repository.find_by_email(user_email)
+        user = self.user_repository.find_by_email(user_email)
+
+        if user is None:
+            raise UserNotFound("User not found")
         
-        # if is_admin is False or lecturer is None:
-        #     raise PermissionError("Permission denied to access this resource")
+        if not ((user and is_lecturer) or is_admin):
+            raise PermissionError("Permission denied to access this resource")
         
-        marks = self.mark_repository.get_student_marks_for_lecturer(lecturer.id)
+        marks = self.mark_repository.get_student_marks_for_lecturer(user.id)
 
         if marks is None:
             raise MarkNotFound("No results found for the lecturer")
@@ -31,13 +36,13 @@ class GetStudentMarksUseCase:
         for current_mark in marks:
             mark_row = MarksRow(
                 id=current_mark[0],
-                class_code=current_mark[1],
+                student_name=current_mark[1],
                 reg_no=current_mark[2],
-                mark=current_mark[3],
-                student_name=current_mark[4],
-                degree_level=current_mark[5],
-                degree_name=current_mark[6],
-                unique_code=current_mark[7],
+                class_code=current_mark[3],
+                degree_level=current_mark[4],
+                degree_name=current_mark[5],
+                unique_code=current_mark[6],
+                mark=current_mark[7],
             )
             
             marks_row.append(mark_row)

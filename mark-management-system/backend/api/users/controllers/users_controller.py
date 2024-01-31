@@ -178,9 +178,8 @@ def get_lecturers(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@users.get("/lecturer/{user_id}", response_model=schemas.Lecturer)
+@users.get("/lecturers/{user_id}", response_model=schemas.Lecturer)
 def get_lecturer(
-    user_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_lecturer_use_case: GetLecturerUseCase = Depends(get_lecturer_use_case),
 ):
@@ -191,7 +190,7 @@ def get_lecturer(
         )
 
     try:
-        return get_lecturer_use_case.execute(user_id, current_user)
+        return get_lecturer_use_case.execute(current_user)
     except UsersNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
