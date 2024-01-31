@@ -18,15 +18,17 @@ class EditUserUseCase:
     def execute(
             self,
             request: UserEdit,
-            current_user: Tuple[str, bool],
+            current_user: Tuple[str, bool, bool],
         ) -> User:
-        user = self.user_repository.find_by_email(current_user[0])
+        user_email, is_admin, _ = current_user
+
+        user = self.user_repository.find_by_email(user_email)
 
         if user is None:
             raise UserNotFound("User not found")
         
-        if user.id != request.id:
-            raise PermissionError("You can only change details for yourself")
+        if not (is_admin or user.id == request.id):
+            raise PermissionError("You do not have permission to change these details")
         
         self.user_repository.update(user, request, self.bcrypt_hasher)
         

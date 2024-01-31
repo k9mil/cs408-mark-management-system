@@ -70,7 +70,7 @@ export const classService = {
 
   editClass: async (classDetails: IClassWithId, accessToken: string) => {
     return await axios
-      .post(
+      .put(
         `${API_BASE_URL}/classes/${classDetails.id}`,
         {
           id: classDetails.id,

@@ -12,9 +12,11 @@ from api.middleware.dependencies import get_user_repository
 
 def create_student_use_case(
         student_repository: StudentRepository = Depends(get_student_repository),
+        user_repository: UserRepository = Depends(get_user_repository)
     ) -> CreateStudentUseCase:
     return CreateStudentUseCase(
-        student_repository, 
+        student_repository,
+        user_repository
     )
 
 def get_student_use_case(

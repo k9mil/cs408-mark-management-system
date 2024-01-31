@@ -22,8 +22,8 @@ class GetLecturersUseCase:
         self.class_repository = class_repository
         self.mark_repository = mark_repository
     
-    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool]) -> List[Lecturer]:
-        _, is_admin = current_user
+    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool, bool]) -> List[Lecturer]:
+        _, is_admin, _ = current_user
 
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")
@@ -38,10 +38,7 @@ class GetLecturersUseCase:
         for lecturer in lecturers:
             classes = self.class_repository.get_classes_by_lecturer_id(lecturer.id, skip, limit)
 
-            class_list: List = []
-
-            for class_ in classes:
-                class_list.append(self.create_lecturer_class(class_))
+            class_list: List = [self.create_lecturer_class(class_) for class_ in classes]
 
             lecturer_data = Lecturer(
                 id=lecturer.id,

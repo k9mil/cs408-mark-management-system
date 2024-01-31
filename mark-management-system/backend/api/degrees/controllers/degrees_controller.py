@@ -22,7 +22,7 @@ degrees = APIRouter()
 @degrees.post("/degrees/", response_model=schemas.Degree)
 def create_degree(
     request: schemas.DegreeCreate,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     create_degree_use_case: CreateDegreeUseCase = Depends(create_degree_use_case),
 ):
     if current_user is None:
@@ -45,7 +45,7 @@ def create_degree(
 @degrees.get("/degrees/{degree_name}", response_model=schemas.Degree)
 def get_degree(
     degree_name: str,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_degree_use_case: GetDegreeUseCase = Depends(get_degree_use_case),
 ):
     if current_user is None:

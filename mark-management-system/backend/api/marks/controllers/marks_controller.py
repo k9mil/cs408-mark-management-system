@@ -30,7 +30,7 @@ marks = APIRouter()
 @marks.post("/marks/", response_model=schemas.Marks)
 def create_mark(
     request: schemas.MarksCreate,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     create_mark_use_case: CreateMarkUseCase = Depends(create_mark_use_case),
 ):
     if current_user is None:
@@ -53,7 +53,7 @@ def create_mark(
 @marks.get("/marks/{mark_unique_code}", response_model=schemas.Marks)
 def get_mark(
     mark_unique_code: str,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_mark_use_case: GetMarkUseCase = Depends(get_mark_use_case),
 ):
     if current_user is None:
@@ -73,7 +73,7 @@ def get_mark(
 
 @marks.get("/marks/", response_model=List[schemas.MarksRow])
 def get_student_marks(
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_student_marks_use_case: GetStudentMarksUseCase = Depends(get_student_marks_use_case),
 ):
     if current_user is None:
@@ -90,31 +90,11 @@ def get_student_marks(
         raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-@marks.get("/statistics", response_model=schemas.MarksStatistics)
-def get_student_statistics(
-    current_user: Tuple[str, bool] = Depends(get_current_user),
-    get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
-):
-    if current_user is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid JWT provided",
-        )    
 
-    try:
-        return get_student_statistics_use_case.execute(current_user)
-    except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@marks.post("/marks/{mark_unique_code}", response_model=schemas.Marks)
+@marks.put("/marks/{mark_unique_code}", response_model=schemas.Marks)
 def edit_mark(
     request: schemas.MarksEdit,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     edit_mark_use_case: EditMarkUseCase = Depends(edit_mark_use_case),
 ):
     if current_user is None:
@@ -135,7 +115,7 @@ def edit_mark(
 @marks.delete("/marks/{mark_unique_code}", response_model=None)
 def delete_mark(
     mark_unique_code: str,
-    current_user: Tuple[str, bool] = Depends(get_current_user),
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     delete_mark_use_case: DeleteMarkUseCase = Depends(delete_mark_use_case),
 ):
     if current_user is None:
@@ -155,3 +135,20 @@ def delete_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@marks.get("/marks/statistics/", response_model=schemas.MarksStatistics)
+def get_student_statistics(
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
+    get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
+    try:
+        return get_student_statistics_use_case.execute(current_user)
+    except MarkNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

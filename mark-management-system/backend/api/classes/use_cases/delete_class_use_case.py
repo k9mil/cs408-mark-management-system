@@ -9,8 +9,8 @@ class DeleteClassUseCase:
     def __init__(self, class_repository: ClassRepository):
         self.class_repository = class_repository
     
-    def execute(self, class_id: int, current_user: Tuple[str, bool]) -> None:
-        _, is_admin = current_user
+    def execute(self, class_id: int, current_user: Tuple[str, bool, bool]) -> None:
+        _, is_admin, _ = current_user
 
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")

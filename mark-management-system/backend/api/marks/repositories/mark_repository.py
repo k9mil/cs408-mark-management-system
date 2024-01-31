@@ -22,7 +22,7 @@ class MarkRepository:
         return self.db.query(Marks).filter_by(unique_code=marks_unique_code).first()
 
     def get_student_marks_for_lecturer(self, lecturer_id: int) -> List[MarksRow]:
-        return (self.db.query(Student.id, Class.code, Student.reg_no, Marks.mark, Student.student_name, Degree.level, Degree.name,Marks.unique_code)
+        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.unique_code, Marks.mark)
             .join(Marks, Marks.class_id == Class.id)
             .join(Student, Student.id == Marks.student_id)
             .join(Degree, Degree.id == Student.degree_id)
