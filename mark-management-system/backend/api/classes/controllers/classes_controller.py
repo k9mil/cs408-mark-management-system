@@ -10,6 +10,7 @@ from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesFo
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 from api.classes.use_cases.get_class_use_case import GetClassUseCase
+from api.classes.use_cases.get_associated_degrees_for_class_use_case import GetAssociatedDegreesForClassUseCase
 
 from api.classes.errors.class_already_exists import ClassAlreadyExists
 from api.classes.errors.classes_not_found import ClassesNotFound
@@ -23,6 +24,7 @@ from api.classes.dependencies import get_classes_for_lecturer_use_case
 from api.classes.dependencies import edit_class_use_case
 from api.classes.dependencies import delete_class_use_case
 from api.classes.dependencies import get_class_use_case
+from api.classes.dependencies import get_associated_degrees_for_class_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -161,6 +163,27 @@ def get_class(
 
     try:
         return get_class_use_case.execute(class_code, current_user)
+    except ClassNotFound as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@classes.get("/classes/{class_code}/degrees", response_model=List[schemas.DegreeBase])
+def get_associated_degrees_for_class(
+    class_code: str,
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
+    get_associated_degrees_for_class_use_case: GetAssociatedDegreesForClassUseCase = Depends(get_associated_degrees_for_class_use_case),
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
+    try:
+        return get_associated_degrees_for_class_use_case.execute(class_code, current_user)
     except ClassNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

@@ -9,9 +9,11 @@ from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesFo
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 from api.classes.use_cases.get_class_use_case import GetClassUseCase
+from api.classes.use_cases.get_associated_degrees_for_class_use_case import GetAssociatedDegreesForClassUseCase
 
 from api.middleware.dependencies import get_class_repository
 from api.middleware.dependencies import get_user_repository
+from api.middleware.dependencies import get_degree_repository
 
 
 def create_class_use_case(
@@ -62,4 +64,15 @@ def get_class_use_case(
     return GetClassUseCase(
         class_repository, 
         user_repository
+    )
+
+def get_associated_degrees_for_class_use_case(
+        class_repository: ClassRepository = Depends(get_class_repository),
+        user_repository: UserRepository = Depends(get_user_repository),
+        degree_repository: UserRepository = Depends(get_degree_repository),
+    ) -> GetAssociatedDegreesForClassUseCase:
+    return GetAssociatedDegreesForClassUseCase(
+        class_repository, 
+        user_repository,
+        degree_repository
     )
