@@ -370,7 +370,10 @@ const MarksPage = () => {
     preventEventDefaults(e);
     setIsDragging(false);
 
-    if (e.dataTransfer.files) {
+    if (
+      e.dataTransfer.files &&
+      validateFileSizeAndExtension(e.dataTransfer.files[0])
+    ) {
       setFile(e.dataTransfer.files[0]);
     }
   };
@@ -384,7 +387,7 @@ const MarksPage = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (e.target.files) {
+    if (e.target.files && validateFileSizeAndExtension(e.target.files[0])) {
       setFile(e.target.files[0]);
       e.target.value = "";
     }
@@ -394,6 +397,21 @@ const MarksPage = () => {
     if (filePickedLocal && filePickedLocal.current !== null) {
       filePickedLocal.current.click();
     }
+  };
+
+  const validateFileSizeAndExtension = (file: File): boolean => {
+    if (file.size > 5242880) {
+      toast.error("The file size should not exceeed 5MB.");
+
+      return false;
+    }
+
+    if (file.type !== "text/csv") {
+      toast.error("The file should be in a CSV format.");
+      return false;
+    }
+
+    return true;
   };
 
   return (
