@@ -131,13 +131,13 @@ const MarksPage = () => {
           accessToken
         );
 
-        if (degreeDetails === "Degree not found") {
+        if (degreeDetails.statusCode !== 200) {
           toast.error(
-            `Something went wrong when uploading the marks. One of the provided degrees does not exist.`
+            `Something went wrong when uploading the marks. ${degreeDetails.data}.`
           );
-
           return false;
         }
+
         return true;
       }
 
@@ -145,6 +145,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(`Something went wrong when uploading the marks.`);
+
       return false;
     }
   };
@@ -157,13 +158,13 @@ const MarksPage = () => {
           accessToken
         );
 
-        if (!classDetails) {
+        if (classDetails.statusCode !== 200) {
           toast.error(
-            `Something went wrong when uploading the marks. The provided class for the marks does not exist.`
+            `Something went wrong when uploading the marks. ${classDetails.data}.`
           );
-
           return false;
         }
+
         return true;
       }
 
@@ -171,6 +172,7 @@ const MarksPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(`Something went wrong when uploading the marks.`);
+
       return false;
     }
   };
@@ -188,13 +190,19 @@ const MarksPage = () => {
           accessToken
         );
 
-        if (studentDetails === "Student not found") {
-          const degreeId = await getDegreeDetails(degreeName, index);
+        if (studentDetails.statusCode !== 200) {
+          if (studentDetails.statusCode === 404) {
+            const degreeId = await getDegreeDetails(degreeName, index);
 
-          if (degreeId) {
-            await createStudent(studentRegNo, studentName, degreeId, index);
+            if (degreeId) {
+              await createStudent(studentRegNo, studentName, degreeId, index);
+            }
           }
         }
+
+        toast.error(
+          `Something went wrong when checking if the student exists. ${studentDetails.data}.`
+        );
       }
     } catch (error) {
       console.error(error);
@@ -218,19 +226,21 @@ const MarksPage = () => {
           accessToken
         );
 
-        if (markDetails === "Mark not found") {
-          const classId = await getClassDetails(classCode, index);
-          const studentId = await getStudentDetails(regNo, index);
+        if (markDetails.statusCode !== 200) {
+          if (markDetails.statusCode === 404) {
+            const classId = await getClassDetails(classCode, index);
+            const studentId = await getStudentDetails(regNo, index);
 
-          if (classId && studentId) {
-            await createMark(mark, markUniqueCode, studentId, classId, index);
+            if (classId && studentId) {
+              await createMark(mark, markUniqueCode, studentId, classId, index);
+            }
+          } else {
+            toast.error(
+              `Something went wrong when uploading the marks for Row ${
+                index + 2
+              }. The mark has already been uploaded.`
+            );
           }
-        } else {
-          toast.error(
-            `Something went wrong when uploading the marks for Row ${
-              index + 2
-            }. The mark has already been uploaded.`
-          );
         }
       }
     } catch (error) {
@@ -305,16 +315,13 @@ const MarksPage = () => {
           accessToken
         );
 
-        if (!degreeDetails) {
-          toast.error(
-            "Something went wrong when uploading the marks. The degree does not exist."
-          );
-        } else {
+        if (degreeDetails.statusCode === 200) {
           return degreeDetails.id;
         }
       }
     } catch (error) {
       console.error(error);
+      
       toast.error(
         `Something went wrong when uploading the marks for Row ${index + 2}.`
       );

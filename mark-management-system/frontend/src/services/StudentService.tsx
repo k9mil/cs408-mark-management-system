@@ -41,17 +41,14 @@ export const studentService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => response.data)
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        if (error.response.data.detail === "Student not found") {
-          return error.response.data.detail;
-        } else {
-          console.error(
-            "Error: There has been an issue when retrieving a student.",
-            error
-          );
-          throw error;
-        }
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 };

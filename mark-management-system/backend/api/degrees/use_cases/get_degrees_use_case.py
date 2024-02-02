@@ -28,11 +28,10 @@ class GetDegreesUseCase:
         degrees: List = []
 
         for degree_name in degree_names:
-            print(degree_name)
             degree = self.degree_repository.find_by_name(degree_name)
 
             if degree is None:
-                raise DegreeNotFound("Degree not found")
+                raise DegreeNotFound(f"The degree {degree_name} has not been found")
             
             degrees.append(degree)
 

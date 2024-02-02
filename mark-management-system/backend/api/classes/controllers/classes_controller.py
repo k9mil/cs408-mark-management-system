@@ -163,7 +163,5 @@ def get_class(
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

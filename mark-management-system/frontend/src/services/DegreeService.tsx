@@ -20,12 +20,14 @@ export const degreeService = {
           },
         }
       )
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        console.error(
-          "Error: There has been an issue when creating a degree.",
-          error
-        );
-        throw error;
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 
@@ -37,17 +39,14 @@ export const degreeService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => response.data)
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        if (error.response.data.detail === "Degree not found") {
-          return error.response.data.detail;
-        } else {
-          console.error(
-            "Error: There has been an issue when retrieving a degree.",
-            error
-          );
-          throw error;
-        }
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 
@@ -64,17 +63,14 @@ export const degreeService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => response.data)
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        if (error.response.data.detail === "Degree not found") {
-          return error.response.data.detail;
-        } else {
-          console.error(
-            "Error: There has been an issue when retrieving degrees.",
-            error
-          );
-          throw error;
-        }
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 };
