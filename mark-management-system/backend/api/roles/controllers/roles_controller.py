@@ -39,13 +39,13 @@ def add_user_to_role(
             request, current_user
         )
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except RoleNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except RoleAssociationAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -66,13 +66,13 @@ def remove_user_from_role(
             request, current_user
         )
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except RoleNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except RoleAssociationNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     

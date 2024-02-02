@@ -17,7 +17,7 @@ export function formatLecturerName(lecturer: IUser): string {
 }
 
 export function getNumOfStudents(students: IStudent[]): number {
-  if (students.length !== 0) return students.length + 1;
+  if (students.length !== 0) return students.length;
   return 0;
 }
 

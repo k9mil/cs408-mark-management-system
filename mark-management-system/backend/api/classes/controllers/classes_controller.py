@@ -49,9 +49,9 @@ def create_class(
     except ClassAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -73,7 +73,7 @@ def get_classes(
     except ClassesNotFound as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -93,11 +93,9 @@ def get_classes_for_lecturer(
     try:
         return get_classes_for_lecturer_use_case.execute(current_user, skip, limit)
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except ClassesNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -116,13 +114,13 @@ def edit_class(
     try:
         return edit_class_use_case.execute(request, current_user)
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except ClassNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except ClassAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -141,9 +139,9 @@ def delete_class(
     try:
         return delete_class_use_case.execute(class_id, current_user)
     except ClassNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -162,8 +160,8 @@ def get_class(
     try:
         return get_class_use_case.execute(class_code, current_user)
     except ClassNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

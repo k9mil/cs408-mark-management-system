@@ -21,12 +21,14 @@ export const markService = {
           },
         }
       )
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        console.error(
-          "Error: There has been an issue when creating a mark.",
-          error
-        );
-        throw error;
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 
@@ -38,17 +40,14 @@ export const markService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => response.data)
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        if (error.response.data.detail === "Mark not found") {
-          return error.response.data.detail;
-        } else {
-          console.error(
-            "Error: There has been an issue when retrieving a mark.",
-            error
-          );
-          throw error;
-        }
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 
@@ -102,15 +101,11 @@ export const markService = {
       )
       .then((response) => response.data)
       .catch((error) => {
-        if (error.response.data.detail === "Mark not found") {
-          return error.response.data.detail;
-        } else {
-          console.error(
-            "Error: There has been an issue when editing a mark.",
-            error
-          );
-          throw error;
-        }
+        console.error(
+          "Error: There has been an issue when retrieving student statistics.",
+          error
+        );
+        throw error;
       });
   },
 
@@ -124,15 +119,11 @@ export const markService = {
       })
       .then((response) => response.data)
       .catch((error) => {
-        if (error.response.data.detail === "Mark not found") {
-          return error.response.data.detail;
-        } else {
-          console.error(
-            "Error: There has been an issue when deleting a mark.",
-            error
-          );
-          throw error;
-        }
+        console.error(
+          "Error: There has been an issue when retrieving student statistics.",
+          error
+        );
+        throw error;
       });
   },
 };

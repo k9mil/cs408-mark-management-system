@@ -10,6 +10,8 @@ from api.students.use_cases.get_student_use_case import GetStudentUseCase
 from api.students.errors.student_already_exists import StudentAlreadyExists
 from api.students.errors.student_not_found import StudentNotFound
 
+from api.users.errors.user_not_found import UserNotFound
+
 from api.students.dependencies import create_student_use_case
 from api.students.dependencies import get_student_use_case
 
@@ -37,8 +39,10 @@ def create_student(
         )
     except StudentAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -57,8 +61,10 @@ def get_student(
     try:
         return get_student_use_case.execute(reg_no, current_user)
     except StudentNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

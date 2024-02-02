@@ -11,6 +11,8 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
     return false;
   }
 
+  const firstClassCode = fileContents[0].class_code;
+
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
@@ -21,6 +23,15 @@ export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
         CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME, UNIQUE_CODE`
       );
 
+      return false;
+    }
+
+    if (row.class_code !== firstClassCode) {
+      toast.error(
+        `Row ${
+          i + 2
+        } has a different class code to previous rows. Please fix the file and try again.`
+      );
       return false;
     }
 
