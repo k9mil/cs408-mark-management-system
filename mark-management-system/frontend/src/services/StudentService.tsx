@@ -24,12 +24,14 @@ export const studentService = {
           },
         }
       )
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        console.error(
-          "Error: There has been an issue when creating a student.",
-          error
-        );
-        throw error;
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 
