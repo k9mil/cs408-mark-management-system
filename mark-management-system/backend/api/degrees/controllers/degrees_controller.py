@@ -11,6 +11,8 @@ from api.degrees.use_cases.get_degrees_use_case import GetDegreesUseCase
 from api.degrees.errors.degree_already_exists import DegreeAlreadyExists
 from api.degrees.errors.degree_not_found import DegreeNotFound
 
+from api.users.errors.user_not_found import UserNotFound
+
 from api.degrees.dependencies import create_degree_use_case
 from api.degrees.dependencies import get_degree_use_case
 from api.degrees.dependencies import get_degrees_use_case
@@ -40,7 +42,7 @@ def create_degree(
     except DegreeAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -59,9 +61,11 @@ def get_degree(
     try:
         return get_degree_use_case.execute(degree_name, current_user)
     except DegreeNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -86,8 +90,10 @@ def get_degrees(
     try:
         return get_degrees_use_case.execute(degree_names, current_user)
     except DegreeNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
