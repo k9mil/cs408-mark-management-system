@@ -94,11 +94,7 @@ export const ClassesModalLecturerView = ({
               <Input
                 id="name"
                 className="col-span-3"
-                value={
-                  row.students.length > 0
-                    ? row.students.length + 1
-                    : row.students.length
-                }
+                value={row.students.length}
                 disabled
               />
             </div>

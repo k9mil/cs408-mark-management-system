@@ -14,7 +14,6 @@ import MarksInfoBox from "./MarksInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
 import { IMark, IMarkRow } from "@/models/IMark";
-import { IStudentCreate } from "@/models/IStudent";
 
 import { classService } from "@/services/ClassService";
 import { studentService } from "@/services/StudentService";
