@@ -71,11 +71,11 @@ const MarksPage = () => {
           });
 
           const degreesExist = await checkDegreesExist(uniqueDegrees);
-          const classesExist = await checkClassExists(
+          const classExist = await checkClassExists(
             parsedFileToLower.slice(0)[0].class_code
           );
 
-          if (degreesExist && classesExist) {
+          if (degreesExist && classExist) {
             for (const [index, row] of parsedFileToLower.slice(0).entries()) {
               await checkStudentExists(
                 row.reg_no,
@@ -83,6 +83,7 @@ const MarksPage = () => {
                 row.degree_name,
                 index
               );
+
               await checkMarkExists(
                 row.mark,
                 row.unique_code,
@@ -120,7 +121,9 @@ const MarksPage = () => {
     return null;
   };
 
-  const checkDegreesExist = async (uniqueDegrees: Set<string>): boolean => {
+  const checkDegreesExist = async (
+    uniqueDegrees: Set<string>
+  ): Promise<boolean> => {
     try {
       if (accessToken) {
         const degreeDetails = await degreeService.getDegrees(
@@ -135,16 +138,18 @@ const MarksPage = () => {
 
           return false;
         }
+        return true;
       }
 
-      return true;
+      return false;
     } catch (error) {
       console.error(error);
       toast.error(`Something went wrong when uploading the marks.`);
+      return false;
     }
   };
 
-  const checkClassExists = async (classCode: string): boolean => {
+  const checkClassExists = async (classCode: string): Promise<boolean> => {
     try {
       if (accessToken) {
         const classDetails = await classService.getClass(
@@ -159,12 +164,14 @@ const MarksPage = () => {
 
           return false;
         }
+        return true;
       }
 
-      return true;
+      return false;
     } catch (error) {
       console.error(error);
       toast.error(`Something went wrong when uploading the marks.`);
+      return false;
     }
   };
 
@@ -280,12 +287,12 @@ const MarksPage = () => {
         };
 
         await markService.createMark(markDetails, accessToken);
-        toast.success("Mark was created uploaded! DEV.");
+        toast.success("Mark was uploaded!");
       }
     } catch (error) {
       console.error(error);
       toast.error(
-        `Something went wrong when uploading a mark for Row ${index + 2}. DEV.`
+        `Something went wrong when uploading a mark for Row ${index + 2}.`
       );
     }
   };
