@@ -51,10 +51,11 @@ const MarksPage = () => {
   const accessToken = getAccessToken();
 
   const uploadMarks = async () => {
+    const uniqueDegrees: Set<string> = new Set();
+
     try {
       if (accessToken) {
         const parsedFile = await parseFileContents();
-        console.log(parsedFile);
         let parsedFileToLower;
 
         if (parsedFile) {
@@ -65,25 +66,34 @@ const MarksPage = () => {
           parsedFileToLower &&
           validateParsedFile(parsedFileToLower.slice(0))
         ) {
-          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
-            await checkDegreeExists(row.degree_name, index);
-            await checkClassExists(row.class_code, index);
-            await checkStudentExists(
-              row.reg_no,
-              row.student_name,
-              row.degree_name,
-              index
-            );
-            await checkMarkExists(
-              row.mark,
-              row.unique_code,
-              row.class_code,
-              row.reg_no,
-              index
-            );
-          }
+          parsedFileToLower.forEach((row) => {
+            uniqueDegrees.add(row.degree_name);
+          });
 
-          toast.success("Your file has been succesfully uploaded!");
+          const degreesExist = await checkDegreesExist(uniqueDegrees);
+          const classesExist = await checkClassExists(
+            parsedFileToLower.slice(0)[0].class_code
+          );
+
+          if (degreesExist && classesExist) {
+            for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+              await checkStudentExists(
+                row.reg_no,
+                row.student_name,
+                row.degree_name,
+                index
+              );
+              await checkMarkExists(
+                row.mark,
+                row.unique_code,
+                row.class_code,
+                row.reg_no,
+                index
+              );
+            }
+
+            toast.success("Your file has been succesfully uploaded!");
+          }
         }
       }
     } catch (error) {
@@ -110,31 +120,31 @@ const MarksPage = () => {
     return null;
   };
 
-  const checkDegreeExists = async (degreeName: string, index: number) => {
+  const checkDegreesExist = async (uniqueDegrees: Set<string>): boolean => {
     try {
       if (accessToken) {
-        const degreeDetails = await degreeService.getDegree(
-          degreeName,
+        const degreeDetails = await degreeService.getDegrees(
+          uniqueDegrees,
           accessToken
         );
 
-        if (!degreeDetails) {
+        if (degreeDetails === "Degree not found") {
           toast.error(
-            `Something went wrong when uploading the marks for Row ${
-              index + 2
-            }. The degree does not exist.`
+            `Something went wrong when uploading the marks. One of the provided degrees does not exist.`
           );
+
+          return false;
         }
       }
+
+      return true;
     } catch (error) {
       console.error(error);
-      toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 2}.`
-      );
+      toast.error(`Something went wrong when uploading the marks.`);
     }
   };
 
-  const checkClassExists = async (classCode: string, index: number) => {
+  const checkClassExists = async (classCode: string): boolean => {
     try {
       if (accessToken) {
         const classDetails = await classService.getClass(
@@ -144,17 +154,17 @@ const MarksPage = () => {
 
         if (!classDetails) {
           toast.error(
-            `Something went wrong when uploading the marks for Row ${
-              index + 2
-            }. The class does not exist.`
+            `Something went wrong when uploading the marks. The provided class for the marks does not exist.`
           );
+
+          return false;
         }
       }
+
+      return true;
     } catch (error) {
       console.error(error);
-      toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 2}.`
-      );
+      toast.error(`Something went wrong when uploading the marks.`);
     }
   };
 

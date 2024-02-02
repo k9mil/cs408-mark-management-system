@@ -1,4 +1,5 @@
 import axios from "axios";
+import qs from "qs";
 
 import { IDegree } from "../models/IDegree";
 
@@ -43,6 +44,33 @@ export const degreeService = {
         } else {
           console.error(
             "Error: There has been an issue when retrieving a degree.",
+            error
+          );
+          throw error;
+        }
+      });
+  },
+
+  getDegrees: async (degreeNames: Set<string>, accessToken: string) => {
+    const queryString = qs.stringify(
+      { degree_names: Array.from(degreeNames) },
+      { arrayFormat: "repeat" }
+    );
+
+    return await axios
+      .get(`${API_BASE_URL}/degrees/?${queryString}`, {
+        data: { degree_names: degreeNames },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        if (error.response.data.detail === "Degree not found") {
+          return error.response.data.detail;
+        } else {
+          console.error(
+            "Error: There has been an issue when retrieving degrees.",
             error
           );
           throw error;
