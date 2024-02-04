@@ -157,6 +157,7 @@ export function ClassesDataTable<TData, TValue>({
               row={selectedRow}
               openDialogRowId={openDialogRowId}
               setOpenDialogRowId={setOpenDialogRowId}
+              accessToken={accessToken}
             />
           ) : null}
         </Table>

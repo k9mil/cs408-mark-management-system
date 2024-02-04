@@ -131,4 +131,56 @@ export const classService = {
         };
       });
   },
+
+  getAssociatedDegreesForClass: async (
+    classCode: string,
+    accessToken: string
+  ) => {
+    return await axios
+      .get(`${API_BASE_URL}/classes/${classCode}/degrees`, {
+        data: { class_code: classCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving associated degrees for the class.",
+          error
+        );
+        throw error;
+      });
+  },
+
+  checkIfClassIsAssociatedWithADegree: async (
+    classCode: string,
+    degreeLevel: string,
+    degreeName: string,
+    accessToken: string
+  ) => {
+    return await axios
+      .get(
+        `${API_BASE_URL}/classes/${classCode}/degree/${degreeLevel}/${degreeName}`,
+        {
+          data: {
+            class_code: classCode,
+            degree_level: degreeLevel,
+            degree_name: degreeName,
+          },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
+      .catch((error) => {
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
+      });
+  },
 };

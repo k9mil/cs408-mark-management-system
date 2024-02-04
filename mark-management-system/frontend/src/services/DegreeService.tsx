@@ -1,5 +1,4 @@
 import axios from "axios";
-import qs from "qs";
 
 import { IDegree } from "../models/IDegree";
 
@@ -50,15 +49,11 @@ export const degreeService = {
       });
   },
 
-  getDegrees: async (degreeNames: Set<string>, accessToken: string) => {
-    const queryString = qs.stringify(
-      { degree_names: Array.from(degreeNames) },
-      { arrayFormat: "repeat" }
-    );
+  getDegrees: async (degreeSet: Set<string>, accessToken: string) => {
+    const degrees = Array.from(degreeSet).map((degree) => JSON.parse(degree));
 
     return await axios
-      .get(`${API_BASE_URL}/degrees/?${queryString}`, {
-        data: { degree_names: degreeNames },
+      .post(`${API_BASE_URL}/degrees/search/`, degrees, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

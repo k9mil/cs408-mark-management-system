@@ -66,15 +66,39 @@ const MarksPage = () => {
 
       if (parsedFileToLower && validateParsedFile(parsedFileToLower.slice(0))) {
         parsedFileToLower.forEach((row) => {
-          uniqueDegrees.add(row.degree_name);
+          const degreeDetails = JSON.stringify({
+            level: row.degree_level,
+            name: row.degree_name,
+          });
+
+          if (!uniqueDegrees.has(degreeDetails)) {
+            uniqueDegrees.add(degreeDetails);
+          }
         });
 
-        const degreesExist = await checkDegreesExist(uniqueDegrees);
-        const classExist = await checkClassExists(
-          parsedFileToLower.slice(0)[0].class_code
-        );
+        const classCode = parsedFileToLower.slice(0)[0].class_code;
 
-        if (degreesExist && classExist) {
+        const degreesExist = await checkDegreesExist(uniqueDegrees);
+        const classExist = await checkClassExists(classCode);
+
+        let areClassesAssociatedWithDegrees = true;
+
+        for (const row of uniqueDegrees) {
+          const degree = JSON.parse(row);
+
+          const isClassAssociatedWithDegree = await classAssociatedWithDegree(
+            classCode,
+            degree.level,
+            degree.name
+          );
+
+          if (!isClassAssociatedWithDegree) {
+            areClassesAssociatedWithDegrees = false;
+            break;
+          }
+        }
+
+        if (degreesExist && classExist && areClassesAssociatedWithDegrees) {
           for (const [index, row] of parsedFileToLower.slice(0).entries()) {
             await checkStudentExists(
               row.reg_no,
@@ -132,6 +156,41 @@ const MarksPage = () => {
         if (degreeDetails.statusCode !== 200) {
           toast.error(
             `Something went wrong when uploading the marks. ${degreeDetails.data}.`
+          );
+
+          return false;
+        }
+
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error(error);
+      toast.error(`Something went wrong when uploading the marks.`);
+
+      return false;
+    }
+  };
+
+  const classAssociatedWithDegree = async (
+    classCode: string,
+    degreeLevel: string,
+    degreeName: string
+  ): Promise<boolean> => {
+    try {
+      if (accessToken) {
+        const classDetails =
+          await classService.checkIfClassIsAssociatedWithADegree(
+            classCode,
+            degreeLevel,
+            degreeName,
+            accessToken
+          );
+
+        if (classDetails.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when uploading the marks. ${classDetails.data}.`
           );
 
           return false;
