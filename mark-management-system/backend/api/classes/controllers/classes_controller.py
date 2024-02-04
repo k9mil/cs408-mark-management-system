@@ -10,13 +10,16 @@ from api.classes.use_cases.get_classes_for_lecturer_use_case import GetClassesFo
 from api.classes.use_cases.edit_class_use_case import EditClassUseCase
 from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 from api.classes.use_cases.get_class_use_case import GetClassUseCase
-from api.classes.use_cases.get_associated_degrees_for_class_use_case import GetAssociatedDegreesForClassUseCase
+from api.classes.use_cases.check_if_class_is_associated_with_a_degree_use_case import CheckIfClassIsAssociatedWithADegreeUseCase
 
 from api.classes.errors.class_already_exists import ClassAlreadyExists
 from api.classes.errors.classes_not_found import ClassesNotFound
 from api.classes.errors.class_not_found import ClassNotFound
+from api.classes.errors.class_not_associated_with_degree import ClassNotAssociatedWithDegree
 
 from api.users.errors.user_not_found import UserNotFound
+
+from api.degrees.errors.degree_not_found import DegreeNotFound
 
 from api.classes.dependencies import create_class_use_case
 from api.classes.dependencies import get_classes_use_case
@@ -24,7 +27,7 @@ from api.classes.dependencies import get_classes_for_lecturer_use_case
 from api.classes.dependencies import edit_class_use_case
 from api.classes.dependencies import delete_class_use_case
 from api.classes.dependencies import get_class_use_case
-from api.classes.dependencies import get_associated_degrees_for_class_use_case
+from api.classes.dependencies import check_if_class_is_associated_with_a_degree_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -170,11 +173,13 @@ def get_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/classes/{class_code}/degrees", response_model=List[schemas.DegreeBase])
-def get_associated_degrees_for_class(
+@classes.get("/classes/{class_code}/degree/{degree_level}/{degree_name}", response_model=schemas.ClassBase)
+def check_if_class_is_associated_with_a_degree_use_case(
     class_code: str,
+    degree_name: str,
+    degree_level: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
-    get_associated_degrees_for_class_use_case: GetAssociatedDegreesForClassUseCase = Depends(get_associated_degrees_for_class_use_case),
+    check_if_class_is_associated_with_a_degree_use_case: CheckIfClassIsAssociatedWithADegreeUseCase = Depends(check_if_class_is_associated_with_a_degree_use_case),
 ):
     if current_user is None:
         raise HTTPException(
@@ -183,8 +188,17 @@ def get_associated_degrees_for_class(
         )    
 
     try:
-        return get_associated_degrees_for_class_use_case.execute(class_code, current_user)
+        return check_if_class_is_associated_with_a_degree_use_case.execute(
+            class_code,
+            degree_name,
+            degree_level,
+            current_user
+        )
     except ClassNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except DegreeNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except ClassNotAssociatedWithDegree as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=409, detail=str(e))
