@@ -131,4 +131,35 @@ export const classService = {
         };
       });
   },
+
+  checkIfClassIsAssociatedWithADegree: async (
+    classCode: string,
+    degreeLevel: string,
+    degreeName: string,
+    accessToken: string
+  ) => {
+    return await axios
+      .get(
+        `${API_BASE_URL}/classes/${classCode}/degree/${degreeLevel}/${degreeName}`,
+        {
+          data: {
+            class_code: classCode,
+            degree_level: degreeLevel,
+            degree_name: degreeName,
+          },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
+      .catch((error) => {
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
+      });
+  },
 };

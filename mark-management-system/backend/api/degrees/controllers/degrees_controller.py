@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException, Query
+from fastapi import Depends, APIRouter, HTTPException, Body
 
 from typing import Tuple, List, Annotated
 
@@ -69,9 +69,9 @@ def get_degree(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@degrees.get("/degrees/", response_model=List[schemas.Degree])
+@degrees.post("/degrees/search", response_model=List[schemas.Degree])
 def get_degrees(
-    degree_names: Annotated[List[str], Query()] = [],
+    degrees: List[schemas.DegreeBase] = Body(...), 
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_degrees_use_case: GetDegreesUseCase = Depends(get_degrees_use_case),
 ):
@@ -81,14 +81,14 @@ def get_degrees(
             detail="Invalid JWT provided",
         )   
 
-    if len(degree_names) == 0:
+    if len(degrees) == 0:
         raise HTTPException(
             status_code=400,
             detail="Degree names are required"
         ) 
 
     try:
-        return get_degrees_use_case.execute(degree_names, current_user)
+        return get_degrees_use_case.execute(degrees, current_user)
     except DegreeNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:

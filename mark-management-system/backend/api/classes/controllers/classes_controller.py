@@ -174,8 +174,8 @@ def get_class(
 @classes.get("/classes/{class_code}/degree/{degree_level}/{degree_name}", response_model=schemas.ClassBase)
 def check_if_class_is_associated_with_a_degree_use_case(
     class_code: str,
-    degree_name: str,
     degree_level: str,
+    degree_name: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     check_if_class_is_associated_with_a_degree_use_case: CheckIfClassIsAssociatedWithADegreeUseCase = Depends(check_if_class_is_associated_with_a_degree_use_case),
 ):
@@ -188,8 +188,8 @@ def check_if_class_is_associated_with_a_degree_use_case(
     try:
         return check_if_class_is_associated_with_a_degree_use_case.execute(
             class_code,
-            degree_name,
             degree_level,
+            degree_name,
             current_user
         )
     except ClassNotFound as e:

@@ -23,8 +23,8 @@ class CheckIfClassIsAssociatedWithADegreeUseCase:
     def execute(
             self,
             class_code: str,
-            degree_name: str,
             degree_level: str,
+            degree_name: str,
             current_user: Tuple[str, bool, bool]
         ) -> ClassBase:
         user_email, _, _ = current_user
@@ -50,6 +50,6 @@ class CheckIfClassIsAssociatedWithADegreeUseCase:
         )
 
         if class_associated_with_degree is None:
-            raise ClassNotAssociatedWithDegree("Class does not belong to the provided degree")
+            raise ClassNotAssociatedWithDegree(f"Class {class_code} does not belong to the {degree_level} {degree_name} degree")
         
         return class_
