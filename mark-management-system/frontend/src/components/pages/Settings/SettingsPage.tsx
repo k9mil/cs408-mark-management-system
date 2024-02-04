@@ -64,7 +64,7 @@ const SettingsPage = () => {
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="w-1/2 h-3/5 space-y-2 p-6 flex flex-col">
+        <Card className="w-1/2 2xl:h-3/5 xl:h-4/5 space-y-2 p-6 flex flex-col">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Account Settings</CardTitle>
           </CardHeader>

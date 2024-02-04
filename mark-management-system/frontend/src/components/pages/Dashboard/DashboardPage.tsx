@@ -69,7 +69,7 @@ const DashboardPage = () => {
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="w-1/2 h-4/6 space-y-4 p-8 flex flex-col">
+        <Card className="2xl:w-1/2 xl:w-2/3 2xl:h-4/6 xl:h-5/6 space-y-4 p-8 flex flex-col">
           <div className="flex flex-row space-x-8 h-full">
             <Card className="w-1/2 h-full space-y-2 flex flex-col shadow-xl">
               <CardHeader className="flex flex-row justify-between items-center">
