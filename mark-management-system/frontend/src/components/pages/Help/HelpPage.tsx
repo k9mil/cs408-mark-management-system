@@ -29,7 +29,7 @@ const HelpPage = () => {
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="w-1/2 h-1/2 space-y-2 p-8 flex flex-col">
+        <Card className="2xl:w-1/2 xl:w-3/4 2xl:h-1/2 x:h-3/4 space-y-2 p-8 flex flex-col">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Help & Support</CardTitle>
           </CardHeader>
