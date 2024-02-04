@@ -14,6 +14,8 @@ from api.marks.use_cases.delete_mark_use_case import DeleteMarkUseCase
 from api.marks.errors.mark_already_exists import MarkAlreadyExists
 from api.marks.errors.mark_not_found import MarkNotFound
 
+from api.users.errors.user_not_found import UserNotFound
+
 from api.marks.dependencies import create_mark_use_case
 from api.marks.dependencies import get_mark_use_case
 from api.marks.dependencies import get_student_marks_use_case
@@ -46,7 +48,7 @@ def create_mark(
     except MarkAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -65,9 +67,11 @@ def get_mark(
     try:
         return get_mark_use_case.execute(mark_unique_code, current_user)
     except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -85,9 +89,11 @@ def get_student_marks(
     try:
         return get_student_marks_use_case.execute(current_user)
     except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -106,9 +112,11 @@ def edit_mark(
     try:
         return edit_mark_use_case.execute(request, current_user)
     except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -129,9 +137,11 @@ def delete_mark(
             mark_unique_code, current_user
         )
     except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -149,6 +159,8 @@ def get_student_statistics(
     try:
         return get_student_statistics_use_case.execute(current_user)
     except MarkNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -121,13 +121,14 @@ export const classService = {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => response.data)
+      .then((response) => {
+        return { data: response.data, statusCode: response.status };
+      })
       .catch((error) => {
-        console.error(
-          "Error: There has been an issue when retrieving a class.",
-          error
-        );
-        throw error;
+        return {
+          data: error.response.data.detail,
+          statusCode: error.response.status,
+        };
       });
   },
 };

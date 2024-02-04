@@ -17,6 +17,7 @@ from api.users.errors.user_already_exists import UserAlreadyExists
 from api.users.errors.users_not_found import UsersNotFound
 from api.users.errors.user_not_found import UserNotFound
 from api.users.errors.invalid_credentials import InvalidCredentials
+from api.users.errors.lecturers_not_found import LecturersNotFound
 
 from api.users.dependencies import get_email_address_validator
 from api.users.dependencies import get_password_validator
@@ -72,9 +73,9 @@ def authenticate_user(
     try:
         return login_user_use_case.execute(form_data)
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except InvalidCredentials as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=401, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -94,9 +95,9 @@ def get_users(
     try:
         return get_users_use_case.execute(skip, limit, current_user)
     except UsersNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -115,9 +116,9 @@ def get_user(
     try:
         return get_user_use_case.execute(user_id, current_user)
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -150,9 +151,9 @@ def edit_user(
     try:
         return edit_user_use_case.execute(request, current_user)
     except UserNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -172,9 +173,11 @@ def get_lecturers(
     try:
         return get_lecturers_use_case.execute(skip, limit, current_user)
     except UsersNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except LecturersNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -191,9 +194,9 @@ def get_lecturer(
 
     try:
         return get_lecturer_use_case.execute(current_user)
-    except UsersNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
