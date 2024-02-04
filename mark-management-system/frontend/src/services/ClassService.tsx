@@ -132,6 +132,27 @@ export const classService = {
       });
   },
 
+  getAssociatedDegreesForClass: async (
+    classCode: string,
+    accessToken: string
+  ) => {
+    return await axios
+      .get(`${API_BASE_URL}/classes/${classCode}/degrees`, {
+        data: { class_code: classCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving associated degrees for the class.",
+          error
+        );
+        throw error;
+      });
+  },
+
   checkIfClassIsAssociatedWithADegree: async (
     classCode: string,
     degreeLevel: string,

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -14,16 +14,44 @@ import {
 } from "@/components/common/Dialog";
 
 import { IClass } from "@/models/IClass";
+import { IDegree } from "@/models/IDegree";
+
+import { classService } from "@/services/ClassService";
 
 export const ClassesModalLecturerView = ({
   row,
   openDialogRowId,
   setOpenDialogRowId,
+  accessToken,
 }: {
   row: IClass;
   openDialogRowId: string | null;
   setOpenDialogRowId: (id: string | null) => void;
+  accessToken: string | null;
 }) => {
+  const [degrees, setDegrees] = useState<IDegree[]>([]);
+
+  const associatedDegrees = async (classCode: string) => {
+    try {
+      if (accessToken) {
+        const result = await classService.getAssociatedDegreesForClass(
+          classCode,
+          accessToken
+        );
+
+        console.log(result);
+        setDegrees(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    associatedDegrees(row.code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Dialog
       open={openDialogRowId === row.id.toString()}
@@ -31,7 +59,7 @@ export const ClassesModalLecturerView = ({
         if (!open) setOpenDialogRowId(null);
       }}
     >
-      <DialogContent>
+      <DialogContent className="max-w-2xl">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-xl">{row.code} — View</DialogTitle>
           <DialogDescription className="max-w-md">
@@ -39,7 +67,7 @@ export const ClassesModalLecturerView = ({
             finished.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between space-x-6">
           <div className="space-y-4">
             <div>
               <Label htmlFor="name" className="text-right">
@@ -98,6 +126,22 @@ export const ClassesModalLecturerView = ({
                 disabled
               />
             </div>
+          </div>
+          <div className="space-y-4">
+            <h2 className="font-bold text-sm">
+              Degrees the class is associated with:
+            </h2>
+            {degrees && degrees.length > 0 ? (
+              degrees.map((degree: IDegree) => (
+                <h3 className="font-normal text-sm">
+                  {degree.level} {degree.name}
+                </h3>
+              ))
+            ) : (
+              <h3 className="font-normal text-sm">
+                This class is not associated with any degrees.
+              </h3>
+            )}
           </div>
         </div>
         <DialogFooter className="flex sm:justify-end mt-4">
