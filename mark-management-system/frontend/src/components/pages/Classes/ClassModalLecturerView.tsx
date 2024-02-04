@@ -68,7 +68,7 @@ export const ClassesModalLecturerView = ({
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-row justify-between space-x-6">
-          <div className="space-y-4">
+          <div className="space-y-4 w-1/3">
             <div>
               <Label htmlFor="name" className="text-right">
                 Name
@@ -103,7 +103,7 @@ export const ClassesModalLecturerView = ({
               />
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 w-1/3">
             <div>
               <Label htmlFor="creditLevel" className="text-right">
                 Credit Level
@@ -127,13 +127,13 @@ export const ClassesModalLecturerView = ({
               />
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 w-1/4">
             <h2 className="font-bold text-sm">
               Degrees the class is associated with:
             </h2>
             {degrees && degrees.length > 0 ? (
               degrees.map((degree: IDegree) => (
-                <h3 className="font-normal text-sm">
+                <h3 className="font-normal text-sm space-y-2">
                   {degree.level} {degree.name}
                 </h3>
               ))

@@ -116,7 +116,7 @@ export const ClassesModalAdminView = ({
     >
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-xl">CS408 — View</DialogTitle>
+          <DialogTitle className="text-xl">{row.code} — View</DialogTitle>
           <DialogDescription className="max-w-md">
             Information about the {row.code} class. Click done when you're
             finished.
