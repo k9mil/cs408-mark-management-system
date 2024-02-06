@@ -49,7 +49,8 @@ def create_class(
 
     Args:
         request: A `schemas.classCreate` object is required which contains the necessary class details for class creation.
-        current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
         create_class_use_case: The class which handles the business logic for class creation. 
 
     Raises:

@@ -35,7 +35,7 @@ class GetDegreesUseCase:
             )
 
             if degree is None:
-                raise DegreeNotFound(f"The class degree {degree_level[1]} {degree_name[1]} has not been found")
+                raise DegreeNotFound(f"The degree {degree_level[1]} {degree_name[1]} has not been found")
             
             degree_list.append(degree)
 
