@@ -11,11 +11,30 @@ from api.degrees.errors.degree_not_found import DegreeNotFound
 from api.users.errors.user_not_found import UserNotFound
 
 class GetDegreesUseCase:
-    def __init__(self, degree_repository: DegreeRepository, user_repository: UserRepository):
+    """
+    The Use Case containing business logic for checking in bulk whether degrees exist.
+    """
+    def __init__(self, degree_repository: DegreeRepository, user_repository: UserRepository) -> None:
         self.degree_repository = degree_repository
         self.user_repository = user_repository
     
     def execute(self, degrees: List[DegreeBase], current_user: Tuple[str, bool, bool]) -> List[DegreeSchema]:
+        """
+        Executes the Use Case to check (search) in bulk whether degrees exist. It's done by querying the repositories
+        find_by_name_and_level() function with the level & name for each item in the degrees list.
+
+        Args:
+            degrees: A list of objects following the `DegreeBase` schema.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            UserNotFound: If the user (from the JWT) is not found.
+            PermissionError: If the requestor is not either a user & a lecturer, or an administrator.
+            DegreeNotFound: If any of the provided degrees are not found.
+        
+        Returns:
+            List[DegreeSchema]: A list of DegreeSchema schema objects containing information about the degrees.
+        """
         user_email, is_admin, is_lecturer = current_user
 
         user = self.user_repository.find_by_email(user_email)
