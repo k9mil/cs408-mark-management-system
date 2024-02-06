@@ -21,6 +21,7 @@ from api.classes.errors.class_not_associated_with_degree import ClassNotAssociat
 from api.users.errors.user_not_found import UserNotFound
 
 from api.degrees.errors.degree_not_found import DegreeNotFound
+from api.degrees.errors.degrees_not_found import DegreesNotFound
 
 from api.classes.dependencies import create_class_use_case
 from api.classes.dependencies import get_classes_use_case
@@ -43,6 +44,25 @@ def create_class(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     create_class_use_case: CreateClassUseCase = Depends(create_class_use_case),
 ):
+    """
+    Create a new class in the system.
+
+    Args:
+        request: A `schemas.classCreate` object is required which contains the necessary class details for class creation.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        create_class_use_case: The class which handles the business logic for class creation. 
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
+        HTTPException, 404: If the user (lecturer) in the request has not been found.
+        HTTPException, 409: If the class already exists in the system.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.Class` schema, which contains the details of the created class.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -69,6 +89,25 @@ def get_classes(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_classes_use_case: GetClassesUseCase = Depends(get_classes_use_case),
 ):
+    """
+    Retrieves a list of classes in the system.
+
+    Args:
+        skip (default: 0): A parameter which determines how many objects to skip.
+        limit (default: 100): A parameter which determines the maximum amount of classes to return.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_classes_use_case: The class which handles the business logic for class retrieval. 
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
+        HTTPException, 404: If no classes have been found and returned.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `List[schemas.Class]` schema, which returns a list of Classes.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -78,7 +117,7 @@ def get_classes(
     try:
         return get_classes_use_case.execute(skip, limit, current_user)
     except ClassesNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
@@ -91,6 +130,24 @@ def get_classes_for_lecturer(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
 ):
+    """
+    Retrieves a list of classes in the system for a particular lecturer, i.e. for the user making the request.
+
+    Args:
+        skip (default: 0): A parameter which determines how many objects to skip.
+        limit (default: 100): A parameter which determines the maximum amount of classes to return.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_classes_for_lecturer_use_case: The class which handles the business logic for class retrieval for the lecturer. 
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 404: If the user has not been found (from the JWT), or if no classes have been found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `List[schemas.Class]` schema, which returns a list of Classes.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -112,6 +169,25 @@ def edit_class(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     edit_class_use_case: EditClassUseCase = Depends(edit_class_use_case),
 ):
+    """
+    Allows for editing an already existing class.
+
+    Args:
+        request: A `schemas.ClassEdit` object is which contains all of the new fields, as well as the original code & lecturer_id.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        edit_class_use_case: The class which handles the business logic for editing the class details.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
+        HTTPException, 404: If the user has not been found (from the request), or if the class has not been found.
+        HTTPException, 409: If the class already exists, i.e. a new code was passed in which already exists in the system.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.Class` schema, which returns the details of the newly edited class.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -137,6 +213,24 @@ def delete_class(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     delete_class_use_case: DeleteClassUseCase = Depends(delete_class_use_case),
 ):
+    """
+    Deletes an existing class.
+
+    Args:
+        class_id: The `class_id` of the class which is to be deleted.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        delete_class_use_case: The class which handles the business logic for deleting the class.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
+        HTTPException, 404: If the class has not been found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is None.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -158,6 +252,24 @@ def get_class(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_class_use_case: GetClassUseCase = Depends(get_class_use_case),
 ):
+    """
+    Retrieves a particular class.
+
+    Args:
+        class_code: The `class_code` of the class which is to be retrieved.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_class_use_case: The class which handles the business logic for retrieving a class.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the user making the request is not a user & a lecturer (and teaching the class) or an administrator.
+        HTTPException, 404: If the user or the class have not been found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.Class` schema, which returns the queried class.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -170,6 +282,8 @@ def get_class(
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -181,6 +295,26 @@ def check_if_class_is_associated_with_a_degree_use_case(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     check_if_class_is_associated_with_a_degree_use_case: CheckIfClassIsAssociatedWithADegreeUseCase = Depends(check_if_class_is_associated_with_a_degree_use_case),
 ):
+    """
+    Checks if a class is associated with a particular degree, as a class can be associated with many degrees.
+
+    Args:
+        class_code: The `class_code` of the class which is to be checked.
+        degree_level: The `degree_level` of the degree which is to be checked against.
+        degree_name: The `degree_name` of the degree which is to be checked against.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        check_if_class_is_associated_with_a_degree_use_case: The class which handles the business logic for the check.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 404: If the class or the degree have not been found.
+        HTTPException, 409: If the class is not associated with the given degree.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.ClassBase` schema, which returns bare minimum information about a class.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -200,8 +334,6 @@ def check_if_class_is_associated_with_a_degree_use_case(
         raise HTTPException(status_code=404, detail=str(e))
     except ClassNotAssociatedWithDegree as e:
         raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -211,6 +343,24 @@ def get_associated_degrees_for_class(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_associated_degrees_for_class_use_case: GetAssociatedDegreesForClassUseCase = Depends(get_associated_degrees_for_class_use_case),
 ):
+    """
+    Retrieves a list of associated degrees for a particular class.
+
+    Args:
+        class_code: The `class_code` of the class.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_associated_degrees_for_class_use_case: The class which handles the business logic for the retrieval.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 404: If the class, user or degrees have not been found.
+        HTTPException, 409: If the class is not associated with the given degree.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `List[schemas.DegreeBase]` schema, which returns a list of the bare minimum degree information, containing the level and name.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -220,8 +370,10 @@ def get_associated_degrees_for_class(
     try:
         return get_associated_degrees_for_class_use_case.execute(class_code, current_user)
     except ClassNotFound as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=409, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
+    except DegreesNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
