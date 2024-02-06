@@ -6,10 +6,24 @@ from api.classes.errors.class_not_found import ClassNotFound
 
 
 class DeleteClassUseCase:
-    def __init__(self, class_repository: ClassRepository):
+    """
+    The Use Case containing business logic for deleting an existing class.
+    """
+    def __init__(self, class_repository: ClassRepository) -> None:
         self.class_repository = class_repository
     
     def execute(self, class_id: int, current_user: Tuple[str, bool, bool]) -> None:
+        """
+        Executes the Use Case to create a new class in the system.
+
+        Args:
+            class_id: The identifier of the class to be deleted.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            PermissionError: If the user is not an administrator.
+            ClassNotFound: If the class cannot be found.
+        """
         _, is_admin, _ = current_user
 
         if is_admin is False:

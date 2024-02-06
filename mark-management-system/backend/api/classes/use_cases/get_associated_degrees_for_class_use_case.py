@@ -14,12 +14,30 @@ from api.degrees.errors.degrees_not_found import DegreesNotFound
 
 
 class GetAssociatedDegreesForClassUseCase:
-    def __init__(self, class_repository: ClassRepository, user_repository: UserRepository, degree_repository: DegreeRepository):
+    """
+    The Use Case containing business logic for retrieving associated degrees for a particular class.
+    """
+    def __init__(self, class_repository: ClassRepository, user_repository: UserRepository, degree_repository: DegreeRepository) -> None:
         self.class_repository = class_repository
         self.user_repository = user_repository
         self.degree_repository = degree_repository
 
     def execute(self, class_code: str, current_user: Tuple[str, bool, bool]) -> List[DegreeBase]:
+        """
+        Executes the Use Case to retrieve associated degrees for a particular class.
+
+        Args:
+            class_code: The `class_code` of the class.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            UserNotFound: If the lecturer from the JWT cannot be found.
+            ClassNotFound: If the class cannot be found via the class_code.
+            DegreesNotFound: If a class code is found, but it has no associated degrees.
+
+        Returns:
+            List[DegreeBase]: A list of DegreeBase objects, containing a level & a name, i.e. all associated degrees with the class_code provided.
+        """
         user_email, _, _ = current_user
 
         lecturer = self.user_repository.find_by_email(user_email)
