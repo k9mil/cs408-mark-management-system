@@ -3,6 +3,7 @@
 Mark Management System is a platform that streamlines data aggregation and presentation, aiding exam boards in efficient decision-making. See below for a non-exhaustive list of features that the system contains.
 
 ## Features
+
 - **User Login/Registration System**: A secure authentication system enabling administrators to set up accounts and users to log in with their credentials.
 - **Personalised Dashboard**: Each user is provided with a tailored dashboard, with custom cards including information such as student performance metrics which contain data such as the mean, median, mode and pass rate, a list of taught classes, and an overview of classes.
 - **Marks Upload**: Allows the ability to upload student marks for the classes you teach with robust validation to ensure accuracy and integrity of data.
@@ -14,16 +15,23 @@ Mark Management System is a platform that streamlines data aggregation and prese
 
 and much more!
 
+## Data
+
+To generate some sample data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts/data_generation) which contains a useful, customisable Data Generation Script written in Python alongside documentation.
+
 ## Installation
 
 If you wish to run this web application locally, [Python](https://www.python.org/) will be **necessary** for you to be able to run this system.
 
 1. Clone the repository.
+
    ```
    $ git clone https://github.com/k9mil/cs408-mark-management-system.git
    $ cd cs408-mark-management-system
    ```
+
 2. Initialize a virtual environment for packages (ensure that you are in the /backend directory!).
+
    ```
    [PowerShell]
    > python -m venv venv
@@ -33,18 +41,22 @@ If you wish to run this web application locally, [Python](https://www.python.org
    $ python -m venv venv
    $ source venv/bin/activate
    ```
+
 3. Install the dependencies.
+
    ```
    $ pip install -r requirements.txt
    ```
-5. Run the FastAPI backend.
+
+4. Run the FastAPI backend.
    ```
    $ python asgi.py
    ```
-   
+
 To run the frontend, you'll need to ensure that you have [Node](https://nodejs.org/en) on your local machine. Assuming the repository has already been cloned, follow the following steps:
 
 1. Install the necessary packages.
+
    ```
    $ npm i
    ```
@@ -59,6 +71,7 @@ To run the frontend, you'll need to ensure that you have [Node](https://nodejs.o
 As of right now, a registration system does not exist on the frontend. To be able to use the system, you will have to create the account via an endpoint, which is an unprotected route.
 
 For more information on the API usage, head over to:
+
 - OpenAPI: `/docs`
 - ReDoc: `/redoc`
 
