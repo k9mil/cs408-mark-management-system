@@ -16,6 +16,7 @@ class GetStudentStatisticsUseCase:
     def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository):
         self.mark_repository = mark_repository
         self.user_repository = user_repository
+        self.pass_rate = 40
     
     def execute(self, current_user: Tuple[str, bool, bool]) -> MarksStatistics:
         user_email, _, _ = current_user
@@ -39,7 +40,7 @@ class GetStudentStatisticsUseCase:
             mean=round(mean(mark_data)),
             median=round(median(mark_data)),
             mode=round(mode(mark_data)),
-            pass_rate=round(sum(mark >= 40 for mark in mark_data) / len(marks) * 100),
+            pass_rate=round(sum(mark >= self.pass_rate for mark in mark_data) / len(marks) * 100),
         )
 
         return marks_statistics

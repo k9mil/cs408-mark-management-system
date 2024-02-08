@@ -15,12 +15,30 @@ from api.users.errors.user_not_found import UserNotFound
 
 
 class CreateMarkUseCase:
-    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository, class_repository: ClassRepository):
+    """
+    The Use Case containing business logic for creating a new mark.
+    """
+    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository, class_repository: ClassRepository) -> None:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
         self.class_repository = class_repository
 
     def execute(self, request: MarksCreate, current_user: Tuple[str, bool, bool]) -> MarksSchema:
+        """
+        Executes the Use Case to create a new mark in the system.
+
+        Args:
+            request: A `MarksCreate` object is required which contains the necessary mark details for mark creation.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            PermissionError: If the user is not an a user & lecturer, or an administrator, and if the requestor is not the lecturer of the class.
+            MarkAlreadyExists: If the mark already exists.
+            UserNotFound: If the user (from the JWT) cannot be found.
+        
+        Returns:
+            MarksSchema: A MarksSchema schema object containing all information about the newly created mark.
+        """
         user_email, is_admin, is_lecturer = current_user
 
         user = self.user_repository.find_by_email(user_email)
