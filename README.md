@@ -78,6 +78,12 @@ For more information on the API usage, head over to:
 
 After the account is created, you can login on the frontend and use the system!
 
+## Documentation
+
+In the backend, a mixture of OpenAPI + ReDoc endpoint documentation and loose [Google Style Comments](https://google.github.io/styleguide/pyguide.html) are used. As mentioned before, OpenAPI can be conveniently accessed by /docs, and ReDoc can be accessed by /redoc, giving you, the user the choice!
+
+For the frontend, a good chunk of the components are from [shadcn/UI](https://ui.shadcn.com/), therefore no component documentation takes place. However, some functions are commented based on the [TSDoc](https://tsdoc.org/) standard for additional clarity.
+
 ## Contact
 
 For any questions, feel free reach out to: `kamil.zak.2021@uni.strath.ac.uk`.
