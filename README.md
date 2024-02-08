@@ -49,6 +49,7 @@ If you wish to run this web application locally, [Python](https://www.python.org
    ```
 
 4. Run the FastAPI backend.
+
    ```
    $ python asgi.py
    ```
@@ -79,4 +80,4 @@ After the account is created, you can login on the frontend and use the system!
 
 ## Contact
 
-If you have any questions, feel free reach out to: `kamil.zak.2021@uni.strath.ac.uk`.
+For any questions, feel free reach out to: `kamil.zak.2021@uni.strath.ac.uk`.

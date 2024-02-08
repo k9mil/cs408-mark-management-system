@@ -9,19 +9,31 @@ CLASS_CODE,REG_NO,MARK,STUDENT_FIRSTNAME,STUDENT_LASTNAME,DEGREE_LEVEL,DEGREE,UN
 CS408,gjr95787,62,Grant,Brown,BSc,Computer Science,CS2020KE
 ```
 
-## How to run
+## Usage
 
-To run the script, you'll need to first install the dependencies that are present in the `requirements.txt` folder, which you can do by running the following command (after creating a virtualenv, ideally!):
+1. Initialize a virtual environment for packages (yes, a different one to the primary system!).
 
-```
-pip install -r requirements.txt
-```
+   ```
+   [PowerShell]
+   > python -m venv venv
+   > venv/Scripts/activate
 
-Following that, you can run the application by simply running:
+   [Bash]
+   $ python -m venv venv
+   $ source venv/bin/activate
+   ```
 
-```
-python data_generation.py
-```
+2. Install the dependencies.
+
+   ```
+   $ pip install -r requirements.txt
+   ```
+
+3. Following that, you can run the application by simply running:
+
+   ```
+   python data_generation.py
+   ```
 
 By running the data generation script as outlined above, a CSV file will be generated which includes 100 sample rows for the class `CS408`, however, this can be customised by running something in the format of `python data_generation.py CLASS_CODE NUM_STUDENTS`, such as :
 
@@ -29,4 +41,19 @@ By running the data generation script as outlined above, a CSV file will be gene
 python data_generation.py CS409 101
 ```
 
-Which would generate 101 rows, for the class `CS409`. For more information, you can run `python data_generation.py --help`
+Which would generate 101 rows, for the class `CS409`. For more information, you can run `python data_generation.py --help` which contains a list of arguments that can be passed in:
+
+```
+Usage: data_generation.py [OPTIONS] [CLASS_CODE] [NUM_STUDENTS]
+
+Arguments:
+class_code        [CLASS_CODE]    [default: CS408]
+num_students      [NUM_STUDENTS]  [default: 100]
+
+Options:
+--help          Show this message and exit.
+```
+
+## Contact
+
+For any questions, feel free reach out to: `kamil.zak.2021@uni.strath.ac.uk`.
