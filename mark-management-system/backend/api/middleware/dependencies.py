@@ -45,6 +45,18 @@ def get_mark_repository(db: Session = Depends(get_db)) -> MarkRepository:
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[Tuple[str, bool, bool]]:
+    """
+    Serves as the primary middleware of the application. Retrieves a user's information given a JWT token.
+
+    Args:
+        token: The JWT token which the information is extracted from.
+
+    Raises:
+        JWTError: If the decoding fails, a JWTError is "raised", i.e. returns None.
+
+    Returns:
+        Optional[Tuple[str, bool, bool]]: Returns a Tuple containing user_email, an is_admin boolean flag and a is_lecturer boolean flag.
+    """
     if not token:
         return None
 
