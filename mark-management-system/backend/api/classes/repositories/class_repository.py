@@ -39,7 +39,7 @@ class ClassRepository:
             code: The class code.
         
         Returns:
-            Optional[Class]: A `Class` from the database, however can also return `None` if not found.
+            Optional[Class]: A `Class` object from the database, however can also return `None` if not found.
         """
         return self.db.query(Class).filter_by(code=code).first()
 
@@ -51,7 +51,7 @@ class ClassRepository:
             class_id: The class identifier.
         
         Returns:
-            Optional[Class]: A `Class` from the database, however can also return `None` if not found.
+            Optional[Class]: A `Class` object from the database, however can also return `None` if not found.
         """
         return self.db.query(Class).filter_by(id=class_id).first()
 

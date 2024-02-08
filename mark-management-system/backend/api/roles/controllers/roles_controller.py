@@ -28,6 +28,25 @@ def add_user_to_role(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     add_user_to_role_use_case: AddUserToRoleUseCase = Depends(add_user_to_role_use_case),
 ):
+    """
+    Adds a user to a role, given a role_id and user_id.
+
+    Args:
+        request: A `schemas.RoleUsersData` object which contains the role_id of the role, and the user_id of the user.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        add_user_to_role_use_case: The class which handles the business logic for adding a user to a role. 
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a assign roles to users.
+        HTTPException, 404: If the user (lecturer) in the request has not been found, or is the role has not been found.
+        HTTPException, 409: If the role association already exists, i.e. if the given user already has the given role.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.RoleUsers` schema, which contains the user_id, role_id and an integer of the object.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -49,12 +68,27 @@ def add_user_to_role(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@roles.delete("/roles/{role_id}/user/{user_id}", response_model=schemas.RoleUsers)
+@roles.delete("/roles/{role_id}/user/{user_id}", response_model=None)
 def remove_user_from_role(
     request: schemas.RoleUsersData,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     remove_user_from_role_use_case: RemoveUserFromRoleUseCase = Depends(remove_user_from_role_use_case),
 ):
+    """
+    Removes a user to a role, given a role_id and user_id.
+
+    Args:
+        request: A `schemas.RoleUsersData` object which contains the role_id of the role, and the user_id of the user.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        remove_user_from_role_use_case: The class which handles the business logic for removing a user from a role.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can remove an assigned role from users.
+        HTTPException, 404: If the user (lecturer) in the request has not been found, if is the role has not been found, or if the role association between the user and role is not found.
+        HTTPException, 500: If any other system exception occurs.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,

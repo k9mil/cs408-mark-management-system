@@ -55,7 +55,8 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[Tuple[str,
         JWTError: If the decoding fails, a JWTError is "raised", i.e. returns None.
 
     Returns:
-        Optional[Tuple[str, bool, bool]]: Returns a Tuple containing user_email, an is_admin boolean flag and a is_lecturer boolean flag.
+        Optional[Tuple[str, bool, bool]]: Returns a Tuple containing user_email, an is_admin boolean flag and a is_lecturer boolean flag. 
+                                          If a token isn't found, or if no secret key is found, or if decoding fails "None" is returned.
     """
     if not token:
         return None
