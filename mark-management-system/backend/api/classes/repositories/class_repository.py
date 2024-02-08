@@ -64,7 +64,7 @@ class ClassRepository:
             limit: The maximum number of items to be retrieved.
         
         Returns:
-            [List]Class: A list of `Class`(es) from the database, however can also return `[]` if none are found.
+            List[Class]: A list of `Class`(es) from the database, however can also return `[]` if none are found.
         """
         return self.db.query(Class).offset(skip).limit(limit).all()
     
@@ -78,7 +78,7 @@ class ClassRepository:
             limit (default: 100): The maximum number of items to be retrieved.
         
         Returns:
-            [List]Class: A list of `Class`(es) from the database, however can also return `[]` if none are found.
+            List[Class]: A list of `Class`(es) from the database, however can also return `[]` if none are found.
         """
         return self.db.query(Class).filter_by(lecturer_id=lecturer_id).offset(skip).limit(limit).all()
     
