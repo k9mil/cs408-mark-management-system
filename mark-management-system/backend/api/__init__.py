@@ -16,7 +16,7 @@ from api.utils.singleton import singleton
 
 
 @singleton
-def create_app():
+def create_app() -> FastAPI:
     app = FastAPI()
 
     app.add_middleware(

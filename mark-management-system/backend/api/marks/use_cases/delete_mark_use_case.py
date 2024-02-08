@@ -10,12 +10,27 @@ from api.users.errors.user_not_found import UserNotFound
 
 
 class DeleteMarkUseCase:
-    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository, class_repository: ClassRepository):
+    """
+    The Use Case containing business logic for deleting an existing mark.
+    """
+    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository, class_repository: ClassRepository) -> None:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
         self.class_repository = class_repository
     
     def execute(self, mark_unique_code: str, current_user: Tuple[str, bool, bool]) -> None:
+        """
+        Executes the Use Case to delete an existing mark in the system.
+
+        Args:
+            mark_unique_code: The unique identifier of the mark to be deleted.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            PermissionError: If the user is not an a user & lecturer, and if the requestor is not the lecturer of the class.
+            MarkNotFound: If the mark cannot be found, given the unique code.
+            UserNotFound: If the user (from the JWT) cannot be found.
+        """
         user_email, _, is_lecturer = current_user
 
         user = self.user_repository.find_by_email(user_email)

@@ -11,11 +11,26 @@ from api.users.hashers.bcrypt_hasher import BCryptHasher
 
 
 class CreateUserUseCase:
-    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher):
+    """
+    The Use Case containing business logic for creating a user.
+    """
+    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher) -> None:
         self.user_repository = user_repository
         self.bcrypt_hasher = bcrypt_hasher
     
     def execute(self, request: UserCreate) -> UserSchema:
+        """
+        Executes the Use Case to create a user given a request.
+
+        Args:
+            request: A `UserCreate` object is required which contains the necessary user details for user creation.
+
+        Raises:
+            UserAlreadyExists: If the user already exists (if the e-mail address is a duplicate).
+
+        Returns:
+            UserSchema: A UserSchema schema object containing the email_address, first_name and last_name.
+        """
         if self.user_repository.find_by_email(request.email_address):
             raise UserAlreadyExists("User already exists")
         

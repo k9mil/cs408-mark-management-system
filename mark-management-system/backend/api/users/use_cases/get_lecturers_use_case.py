@@ -12,17 +12,38 @@ from api.users.errors.lecturers_not_found import LecturersNotFound
 
 
 class GetLecturersUseCase:
+    """
+    The Use Case containing business logic for retrieving a list of lecturers.
+    """
     def __init__(
             self, 
             user_repository: UserRepository,
             class_repository: ClassRepository,
             mark_repository: MarkRepository
-        ):
+        ) -> None:
         self.user_repository = user_repository
         self.class_repository = class_repository
         self.mark_repository = mark_repository
     
     def execute(self, skip: int, limit: int, current_user: Tuple[str, bool, bool]) -> List[Lecturer]:
+        """
+        Executes the Use Case to retrieve a list of lecturers.
+
+        Since a Lecturer schema contains also various other details, such as number of classes taught & classes they teach, that data
+        is calculated in this use case.
+
+        Args:
+            skip: The amount to skip.
+            limit: The maximum number of items to be retrieved.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            LecturersNotFound: If no lecturers have been found.
+            PermissionError: If the requestor is not an administrator.
+
+        Returns:
+            List[Lecturer]: A list of Lecturer schema objects containing the lecturer details.
+        """
         _, is_admin, _ = current_user
 
         if is_admin is False:

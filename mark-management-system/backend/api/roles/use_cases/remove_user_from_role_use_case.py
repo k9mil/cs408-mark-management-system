@@ -12,11 +12,26 @@ from api.users.errors.user_not_found import UserNotFound
 
 
 class RemoveUserFromRoleUseCase:
-    def __init__(self, roles_repository: RolesRepository, user_repository: UserRepository):
+    """
+    The Use Case containing business logic for removing a user from a particular role.
+    """
+    def __init__(self, roles_repository: RolesRepository, user_repository: UserRepository) -> None:
         self.roles_repository = roles_repository
         self.user_repository = user_repository
 
-    def execute(self, request: RoleUsersData, current_user: Tuple[str, bool, bool]) -> RoleUsersData:
+    def execute(self, request: RoleUsersData, current_user: Tuple[str, bool, bool]) -> None:
+        """
+        Executes the Use Case to remove a user from a role.
+
+        Args:
+            request: A `RoleUsersData` object which contains the role_id of the role, and the user_id of the user.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            UserNotFound: If the user (from the request) cannot be found.
+            RoleNotFound: If the role (from the request) cannot be found.
+            RoleAssociationNotFound: If the given user does not have the given role.
+        """
         _, is_admin, _ = current_user
 
         if is_admin is False:
@@ -38,5 +53,3 @@ class RemoveUserFromRoleUseCase:
             raise RoleAssociationNotFound("Role association not found.")
 
         self.roles_repository.remove_user(user_role, user)
-
-        return user_role
