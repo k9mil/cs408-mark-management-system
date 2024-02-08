@@ -46,6 +46,23 @@ def create_user(
     email_address_validator: EmailAddressValidator = Depends(get_email_address_validator),
     password_validator: PasswordValidator = Depends(get_password_validator)
 ):
+    """
+    Create a new user in the system. Note: This feature is endpoint-only for now, no frontend exists for it.
+
+    Args:
+        request: A `schemas.UserCreate` object is required which contains the necessary user details for user creation.
+        create_user_use_case: The class which handles the business logic for user creation. 
+        email_address_validator: A validator class which ensures that the e-mail addrses is valid.
+        password_validator: A validator class which ensures that the password is valid.
+
+    Raises:
+        HTTPException, 400: If the e-mail, or password validation fails.
+        HTTPException, 409: If the user already exists in the system.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.User` schema, which contains the details of the created user.
+    """
     validation_email_errors = email_address_validator.validate_user_email_address(request.email_address)
     validation_password_errors = password_validator.validate_user_password(request.password)
 
@@ -70,6 +87,21 @@ def authenticate_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     login_user_use_case: LoginUserUseCase = Depends(login_user_use_case),
 ):
+    """
+    Authenticates the user in order to create & provide a JWT.
+
+    Args:
+        form_data: The data from the form which will be authenticated against the database.
+        login_user_use_case: The class which handles the business logic for authentication. 
+
+    Raises:
+        HTTPException, 401: If the credentials provided in the form are invalid.
+        HTTPException, 404: If the user cannot be found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.UserDetails` schema, which contains mostly data with regards to authentication, i.e. a JWT token and a refresh token.
+    """
     try:
         return login_user_use_case.execute(form_data)
     except UserNotFound as e:
@@ -86,6 +118,25 @@ def get_users(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_users_use_case: GetUsersUseCase = Depends(get_users_use_case),
 ):
+    """
+    Retrieves a list of users in the system.
+
+    Args:
+        skip (default: 0): A parameter which determines how many objects to skip.
+        limit (default: 100): A parameter which determines the maximum amount of users to return.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_users_use_case: The class which handles the business logic for user retrieval. 
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error.
+        HTTPException, 404: If no users have been found and returned.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `List[schemas.User]` schema, which returns a list of Users.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -107,6 +158,24 @@ def get_user(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_user_use_case: GetUserUseCase = Depends(get_user_use_case),
 ):
+    """
+    Retrieves a particular user given a user_id.
+
+    Args:
+        user_id: The `user_id` of the user which is to be retrieved.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_user_use_case: The class which handles the business logic for retrieving a user.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error.
+        HTTPException, 404: If the user has not been found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.User` schema, which returns the queried user.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -129,6 +198,28 @@ def edit_user(
     edit_user_use_case: EditUserUseCase = Depends(edit_user_use_case),
     password_validator: PasswordValidator = Depends(get_password_validator)
 ):
+    """
+    Allows for editing an already existing user.
+
+    Note: No email validator is present as the system does not fully support editing email addresses.
+
+    Args:
+        request: A `schemas.UserEdit` object is which contains all of the new fields to replace the existing details.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        edit_user_use_case: The class which handles the business logic for editing the user details.
+        password_validator: A validator class which ensures that the password is valid.
+        
+    Raises:
+        HTTPException, 400: If the e-mail, or password validation fails.
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error.
+        HTTPException, 404: If the user has not been found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.User` schema, which returns the details of the newly edited user.
+    """
     if request.password and request.confirm_password:
         validation_password_errors = password_validator.validate_user_password(request.password)
         validation_confirm_password_errors = password_validator.validate_user_password(request.confirm_password)
@@ -164,6 +255,25 @@ def get_lecturers(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_lecturers_use_case: GetLecturersUseCase = Depends(get_lecturers_use_case),
 ):
+    """
+    Retrieves a list of users with the lecturer role in the system.
+
+    Args:
+        skip (default: 0): A parameter which determines how many objects to skip.
+        limit (default: 100): A parameter which determines the maximum amount of users to return.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_lecturers_use_case: The class which handles the business logic for lecturer retrieval. 
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error.
+        HTTPException, 404: If no users have been found and returned.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `List[schemas.Lecturer]` schema, which returns a list of Lecturers.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,
@@ -172,8 +282,6 @@ def get_lecturers(
 
     try:
         return get_lecturers_use_case.execute(skip, limit, current_user)
-    except UsersNotFound as e:
-        raise HTTPException(status_code=404, detail=str(e))
     except LecturersNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
@@ -186,6 +294,26 @@ def get_lecturer(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_lecturer_use_case: GetLecturerUseCase = Depends(get_lecturer_use_case),
 ):
+    """
+    Retrieves a particular user (lecturer).
+
+    Note: No identifier is passed in, only the requestor can view the lecturer (their own) details, via JWT.
+
+    Args:
+        user_id: The `user_id` of the user. Not used, for RESTful purposes.
+        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
+        get_user_use_case: The class which handles the business logic for retrieving a user.
+
+    Raises:
+        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        HTTPException, 403: If there has been a permission error.
+        HTTPException, 404: If the user has not been found.
+        HTTPException, 500: If any other system exception occurs.
+
+    Returns:
+        response_model: The response is in the model of the `schemas.User` schema, which returns the queried user.
+    """
     if current_user is None:
         raise HTTPException(
             status_code=401,

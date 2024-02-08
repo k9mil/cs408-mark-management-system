@@ -12,6 +12,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db():
+    """A generator that provides a session database pool."""
     db = SessionLocal()
     try:
         yield db

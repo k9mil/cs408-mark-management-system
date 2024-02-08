@@ -17,12 +17,28 @@ from api.config import Config
 
 
 class LoginUserUseCase:
-    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher, config: Config):
+    """
+    The Use Case containing business logic for authenticating a user.
+    """
+    def __init__(self, user_repository: UserRepository, bcrypt_hasher: BCryptHasher, config: Config) -> None:
         self.user_repository = user_repository
         self.bcrypt_hasher = bcrypt_hasher
         self.config = config
     
     def execute(self, form_data: OAuth2PasswordRequestForm) -> UserDetails:
+        """
+        Executes the Use Case to authenticate a user.
+
+        Args:
+            form_data: The data from the form which will be authenticated against the database.
+
+        Raises:
+            UserNotFound: If the user in the form cannot be found.
+            InvalidCredentials: If the credentials (i.e. password is incorrect) provided do not match.
+
+        Returns:
+            UserDetails: A UserDetails schema object which contains mostly data with regards to authentication, i.e. a JWT token and a refresh token.
+        """
         user = self.user_repository.find_by_email(form_data.username)
 
         if user is None:
@@ -48,7 +64,8 @@ class LoginUserUseCase:
 
         return user_details
 
-    def create_access_token(self, subject: str, roles: List[str]):
+    def create_access_token(self, subject: str, roles: List[str]) -> str:
+        """Creates & returns an encoded JWT which contains the expiry date, subject (email), and two flags: is_admin & is_lecturer."""
         expire = datetime.utcnow() + timedelta(minutes=self.config.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
         is_admin = any(role.title == "admin" for role in roles)
@@ -60,6 +77,7 @@ class LoginUserUseCase:
         return encoded_jwt
     
     def create_refresh_token(self, subject: str) -> str:
+        """Creates & returns an encoded JWT whcih contains the expiry date and the subject (email)."""
         expires_delta = datetime.utcnow() + timedelta(minutes=self.config.JWT_REFRESH_TOKEN_EXPIRE_MINUTES)
         
         to_encode = {"exp": expires_delta, "sub": str(subject)}

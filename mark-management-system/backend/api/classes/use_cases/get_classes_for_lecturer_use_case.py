@@ -32,7 +32,7 @@ class GetClassesForLecturerUseCase:
             ClassesNotFound: If no classes are returned from the repository.
 
         Returns:
-            List[ClassSchema]: A list of `ClassSchema` objects, containing hte information about the classes.
+            List[ClassSchema]: A list of `ClassSchema` objects, containing the information about the classes.
         """
         user_email, _, _ = current_user
 

@@ -32,7 +32,7 @@ class EditClassUseCase:
             PermissionError: If the user is not an administrator.
             ClassAlreadyExists: If the class already exists (i.e. the user is trying to modify the code of the class to be something that already exists).
             ClassNotFound: If the class_id in the request cannot be found.
-            UserNotFound: If the lectuer in the request cannot be found.
+            UserNotFound: If the lecturer in the request cannot be found.
 
         Returns:
             ClassSchema: A ClassSchema schema object containing all information about the newly edited class.

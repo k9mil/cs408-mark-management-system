@@ -3,11 +3,11 @@ from pydantic import BaseModel
 from typing import List, Optional, ForwardRef
 
 
-Class = ForwardRef('Class')
-Student = ForwardRef('Student')
-Marks = ForwardRef('Marks')
-User = ForwardRef('User')
-Degree = ForwardRef('Degree')
+Class = ForwardRef("Class")
+Student = ForwardRef("Student")
+Marks = ForwardRef("Marks")
+User = ForwardRef("User")
+Degree = ForwardRef("Degree")
 
 
 class RoleBase(BaseModel):
@@ -19,7 +19,6 @@ class RoleCreate(RoleBase):
 class Role(RoleBase):
     id: int
 
-    # TODO: fix circular dependency via ForwardRef
     users: List["User"] = []
 
     class Config:   
@@ -75,7 +74,6 @@ class DegreeCreate(DegreeBase):
 class Degree(DegreeBase):
     id: int
 
-    # TODO: fix circular dependency via ForwardRef
     students: List["Student"] = []
     classes: List["Class"] = []
 
