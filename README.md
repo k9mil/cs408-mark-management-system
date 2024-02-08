@@ -15,7 +15,7 @@ Mark Management System is a platform that streamlines data aggregation and prese
 
 and much more!
 
-## Data
+## Sample Data Generation
 
 To generate some sample data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts/data_generation) which contains a useful, customisable Data Generation Script written in Python alongside documentation.
 
