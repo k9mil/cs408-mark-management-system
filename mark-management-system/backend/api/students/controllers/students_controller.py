@@ -28,23 +28,26 @@ def create_student(
     create_student_use_case: CreateStudentUseCase = Depends(create_student_use_case),
 ):
     """
-    Create a new student in the system.
+    Create a new student in the system.    
 
-    Args:
-        request: A `schemas.StudentCreate` object is required which contains the necessary student details for student creation.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        create_student_use_case: The class which handles the business logic for student creation. 
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error.
-        HTTPException, 404: If the user (lecturer) from the JWT has not been found.
-        HTTPException, 409: If the student already exists in the system.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `request`: A `schemas.StudentCreate` object is required which contains the necessary student details for student creation.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `create_student_use_case`: The class which handles the business logic for student creation.   
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Student` schema, which contains the details of the created student.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error.  
+        - `HTTPException`, 404: If the user (lecturer) from the JWT has not been found.  
+        - `HTTPException`, 409: If the student already exists in the system.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Student` schema, which contains the details of the created student.
     """
     if current_user is None:
         raise HTTPException(
@@ -72,22 +75,25 @@ def get_student(
     get_student_use_case: GetStudentUseCase = Depends(get_student_use_case),
 ):
     """
-    Retrieves a student from the system given a registration number.
+    Retrieves a student from the system given a registration number.    
 
-    Args:
-        reg_no: The registration number of the user to retrieve.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_student_use_case: The class which handles the business logic for student retrieval. 
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error.
-        HTTPException, 404: If the user (lecturer) from the JWT has not been found, or if the student is not found.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `reg_no`: The registration number of the user to retrieve.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_student_use_case`: The class which handles the business logic for student retrieval.   
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Student` schema, which contains the details of the retrievied student.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error.  
+        - `HTTPException`, 404: If the user (lecturer) from the JWT has not been found, or if the student is not found.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Student` schema, which contains the details of the retrievied student.
     """
     if current_user is None:
         raise HTTPException(

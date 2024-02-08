@@ -45,23 +45,26 @@ def create_class(
     create_class_use_case: CreateClassUseCase = Depends(create_class_use_case),
 ):
     """
-    Create a new class in the system.
+    Create a new class in the system.    
 
-    Args:
-        request: A `schemas.ClassCreate` object is required which contains the necessary class details for class creation.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        create_class_use_case: The class which handles the business logic for class creation. 
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
-        HTTPException, 404: If the user (lecturer) in the request has not been found.
-        HTTPException, 409: If the class already exists in the system.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `request`: A `schemas.ClassCreate` object is required which contains the necessary class details for class creation.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `create_class_use_case`: The class which handles the business logic for class creation.  
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Class` schema, which contains the details of the created class.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.  
+        - `HTTPException`, 404: If the user (lecturer) in the request has not been found.  
+        - `HTTPException`, 409: If the class already exists in the system.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Class` schema, which contains the details of the created class.  
     """
     if current_user is None:
         raise HTTPException(
@@ -90,23 +93,26 @@ def get_classes(
     get_classes_use_case: GetClassesUseCase = Depends(get_classes_use_case),
 ):
     """
-    Retrieves a list of classes in the system.
+    Retrieves a list of classes in the system.    
 
-    Args:
-        skip (default: 0): A parameter which determines how many objects to skip.
-        limit (default: 100): A parameter which determines the maximum amount of classes to return.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_classes_use_case: The class which handles the business logic for class retrieval. 
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
-        HTTPException, 404: If no classes have been found and returned.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `skip` (default: 0): A parameter which determines how many objects to skip.  
+        - `limit` (default: 100): A parameter which determines the maximum amount of classes to return.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_classes_use_case`: The class which handles the business logic for class retrieval.  
 
-    Returns:
-        response_model: The response is in the model of the `List[schemas.Class]` schema, which returns a list of Classes.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.  
+        - `HTTPException`, 404: If no classes have been found and returned.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `List[schemas.Class]` schema, which returns a list of Classes.  
     """
     if current_user is None:
         raise HTTPException(
@@ -131,22 +137,25 @@ def get_classes_for_lecturer(
     get_classes_for_lecturer_use_case: GetClassesForLecturerUseCase = Depends(get_classes_for_lecturer_use_case),
 ):
     """
-    Retrieves a list of classes in the system for a particular lecturer, i.e. for the user making the request.
+    Retrieves a list of classes in the system for a particular lecturer, i.e. for the user making the request.    
 
-    Args:
-        skip (default: 0): A parameter which determines how many objects to skip.
-        limit (default: 100): A parameter which determines the maximum amount of classes to return.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_classes_for_lecturer_use_case: The class which handles the business logic for class retrieval for the lecturer. 
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 404: If the user has not been found (from the JWT), or if no classes have been found.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `skip` (default: 0): A parameter which determines how many objects to skip.  
+        - `limit` (default: 100): A parameter which determines the maximum amount of classes to return.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_classes_for_lecturer_use_case`: The class which handles the business logic for class retrieval for the lecturer.  
 
-    Returns:
-        response_model: The response is in the model of the `List[schemas.Class]` schema, which returns a list of Classes.
+    Raises: 
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 404: If the user has not been found (from the JWT), or if no classes have been found.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `List[schemas.Class]` schema, which returns a list of Classes.  
     """
     if current_user is None:
         raise HTTPException(
@@ -170,23 +179,26 @@ def edit_class(
     edit_class_use_case: EditClassUseCase = Depends(edit_class_use_case),
 ):
     """
-    Allows for editing an already existing class.
+    Allows for editing an already existing class.    
 
-    Args:
-        request: A `schemas.ClassEdit` object is which contains all of the new fields, as well as the original code & lecturer_id.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        edit_class_use_case: The class which handles the business logic for editing the class details.
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
-        HTTPException, 404: If the user has not been found (from the request), or if the class has not been found.
-        HTTPException, 409: If the class already exists, i.e. a new code was passed in which already exists in the system.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `request`: A `schemas.ClassEdit` object is which contains all of the new fields, as well as the original code & lecturer_id.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `edit_class_use_case`: The class which handles the business logic for editing the class details.  
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Class` schema, which returns the details of the newly edited class.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
+        - `HTTPException`, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.  
+        - `HTTPException`, 404: If the user has not been found (from the request), or if the class has not been found.  
+        - `HTTPException`, 409: If the class already exists, i.e. a new code was passed in which already exists in the system.  
+        - `HTTPException`, 500: If any other system exception occurs.
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Class` schema, which returns the details of the newly edited class.  
     """
     if current_user is None:
         raise HTTPException(
@@ -214,22 +226,25 @@ def delete_class(
     delete_class_use_case: DeleteClassUseCase = Depends(delete_class_use_case),
 ):
     """
-    Deletes an existing class.
+    Deletes an existing class.    
 
-    Args:
-        class_id: The `class_id` of the class which is to be deleted.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        delete_class_use_case: The class which handles the business logic for deleting the class.
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.
-        HTTPException, 404: If the class has not been found.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `class_id`: The `class_id` of the class which is to be deleted.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `delete_class_use_case`: The class which handles the business logic for deleting the class.  
 
-    Returns:
-        response_model: The response is None.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a class.  
+        - `HTTPException`, 404: If the class has not been found.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is None.  
     """
     if current_user is None:
         raise HTTPException(
@@ -253,22 +268,26 @@ def get_class(
     get_class_use_case: GetClassUseCase = Depends(get_class_use_case),
 ):
     """
-    Retrieves a particular class.
+    Retrieves a particular class.    
 
-    Args:
-        class_code: The `class_code` of the class which is to be retrieved.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_class_use_case: The class which handles the business logic for retrieving a class.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error, in this case, if the user making the request is not a user & a lecturer (and teaching the class) or an administrator.
-        HTTPException, 404: If the user or the class have not been found.
-        HTTPException, 500: If any other system exception occurs.
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Class` schema, which returns the queried class.
+    Args:  
+        - `class_code`: The `class_code` of the class which is to be retrieved.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_class_use_case`: The class which handles the business logic for retrieving a class.  
+
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error, in this case, if the user making the request is not a user & a lecturer (and teaching the class) or an administrator.  
+        - `HTTPException`, 404: If the user or the class have not been found.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Class` schema, which returns the queried class.  
     """
     if current_user is None:
         raise HTTPException(
@@ -296,24 +315,27 @@ def check_if_class_is_associated_with_a_degree_use_case(
     check_if_class_is_associated_with_a_degree_use_case: CheckIfClassIsAssociatedWithADegreeUseCase = Depends(check_if_class_is_associated_with_a_degree_use_case),
 ):
     """
-    Checks if a class is associated with a particular degree, as a class can be associated with many degrees.
+    Checks if a class is associated with a particular degree, as a class can be associated with many degrees.    
 
-    Args:
-        class_code: The `class_code` of the class which is to be checked.
-        degree_level: The `degree_level` of the degree which is to be checked against.
-        degree_name: The `degree_name` of the degree which is to be checked against.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        check_if_class_is_associated_with_a_degree_use_case: The class which handles the business logic for the check.
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 404: If the class or the degree have not been found.
-        HTTPException, 409: If the class is not associated with the given degree.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `class_code`: The `class_code` of the class which is to be checked.  
+        - `degree_level`: The `degree_level` of the degree which is to be checked against.  
+        - `degree_name`: The `degree_name` of the degree which is to be checked against.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `check_if_class_is_associated_with_a_degree_use_case`: The class which handles the business logic for the check.  
 
-    Returns:
-        response_model: The response is in the model of the `schemas.ClassBase` schema, which returns bare minimum information about a class.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 404: If the class or the degree have not been found.  
+        - `HTTPException`, 409: If the class is not associated with the given degree.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.ClassBase` schema, which returns bare minimum information about a class.  
     """
     if current_user is None:
         raise HTTPException(
@@ -344,22 +366,25 @@ def get_associated_degrees_for_class(
     get_associated_degrees_for_class_use_case: GetAssociatedDegreesForClassUseCase = Depends(get_associated_degrees_for_class_use_case),
 ):
     """
-    Retrieves a list of associated degrees for a particular class.
+    Retrieves a list of associated degrees for a particular class.    
 
-    Args:
-        class_code: The `class_code` of the class.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_associated_degrees_for_class_use_case: The class which handles the business logic for the retrieval.
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 404: If the class, user or degrees have not been found.
-        HTTPException, 409: If the class is not associated with the given degree.
-        HTTPException, 500: If any other system exception occurs.
+    Args:  
+        - `class_code`: The `class_code` of the class.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_associated_degrees_for_class_use_case`: The class which handles the business logic for the retrieval.  
 
-    Returns:
-        response_model: The response is in the model of the `List[schemas.DegreeBase]` schema, which returns a list of the bare minimum degree information, containing the level and name.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 404: If the class, user or degrees have not been found.  
+        - `HTTPException`, 409: If the class is not associated with the given degree.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `List[schemas.DegreeBase]` schema, which returns a list of the bare minimum degree information, containing the level and name.  
     """
     if current_user is None:
         raise HTTPException(

@@ -32,20 +32,20 @@ def create_degree(
     """
     Create a new degree in the system.
 
-    Args:
-        request: A `schemas.DegreeCreate` object is required which contains the necessary degree details for degree creation.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        create_degree_use_case: The class which handles the business logic for degree creation. 
+    Args:  
+        - `request`: A `schemas.DegreeCreate` object is required which contains the necessary degree details for degree creation.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `create_degree_use_case`: The class which handles the business logic for degree creation.   
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a degree.
-        HTTPException, 409: If the degree already exists in the system.
-        HTTPException, 500: If any other system exception occurs.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error, in this case, if the `is_admin` flag is false, as only administrator can create a degree.  
+        - `HTTPException`, 409: If the degree already exists in the system.  
+        - `HTTPException`, 500: If any other system exception occurs.  
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Degree` schema, which contains the details of the created degree.
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Degree` schema, which contains the details of the created degree.  
     """
     if current_user is None:
         raise HTTPException(
@@ -73,20 +73,20 @@ def get_degree(
     """
     Retrieves a particular degree.
 
-    Args:
-        degree_name: The `degree_name` of the degree which is to be retrieved.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_degree_use_case: The class which handles the business logic for retrieving a degree.
+    Args:  
+        - `degree_name`: The `degree_name` of the degree which is to be retrieved.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_degree_use_case`: The class which handles the business logic for retrieving a degree.  
 
-    Raises:
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error and the user making the request is not authorised to make this request.
-        HTTPException, 404: If the user or the degree have not been found.
-        HTTPException, 500: If any other system exception occurs.
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error and the user making the request is not authorised to make this request.  
+        - `HTTPException`, 404: If the user or the degree have not been found.  
+        - `HTTPException`, 500: If any other system exception occurs.  
 
-    Returns:
-        response_model: The response is in the model of the `schemas.Degree` schema, which returns the queried degree.
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.Degree` schema, which returns the queried degree.  
     """
     if current_user is None:
         raise HTTPException(
@@ -114,21 +114,21 @@ def get_degrees(
     """
     Search for degrees based on a particular criteria, i.e. checks if they exist in bulk.
 
-    Args:
-        degrees: A list in the form of DegreeBase (level: str, name: str) objects to be searched.
-        current_user: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean. 
-                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.
-        get_degrees_use_case: The class which handles the business logic for searching.
+    Args:  
+        - `degrees`: A list in the form of DegreeBase (level: str, name: str) objects to be searched.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_degrees_use_case`: The class which handles the business logic for searching.  
 
-    Raises:
-        HTTPException, 400: If the body passed in is empty, i.e. no degree details are provided.
-        HTTPException, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.
-        HTTPException, 403: If there has been a permission error and the user making the request is not authorised to make this request.
-        HTTPException, 404: If the user or any of the degrees have not been found.
-        HTTPException, 500: If any other system exception occurs.
+    Raises:  
+        - `HTTPException`, 400: If the body passed in is empty, i.e. no degree details are provided.  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error and the user making the request is not authorised to make this request.  
+        - `HTTPException`, 404: If the user or any of the degrees have not been found.  
+        - `HTTPException`, 500: If any other system exception occurs.  
 
-    Returns:
-        response_model: The response is in the model of the `List[schemas.Degree]` schema, which returns a list of the degrees, but with more information than passed in.
+    Returns:  
+        - `response_model`: The response is in the model of the `List[schemas.Degree]` schema, which returns a list of the degrees, but with more information than passed in.  
     """
     if current_user is None:
         raise HTTPException(
