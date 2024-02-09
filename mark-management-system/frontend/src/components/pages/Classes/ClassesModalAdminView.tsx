@@ -54,6 +54,13 @@ export const ClassesModalAdminView = ({
     IUserDropdown[] | null
   >(null);
 
+  /**
+   * Updates (sets) the lecturer list with a new variable, mappedLecturers which maps over the existing lecturers array
+   * and modifies it in a `value` & `label` format in order to seamlessly work with the Data Table,
+   * where the value is the lecturer's id and the label is a first name followed by a last name.
+   *
+   * Also modifies the defaultLecturer if it's found by a first name & last name match.
+   */
   useEffect(() => {
     if (lecturers && Array.isArray(lecturers)) {
       const mappedLecturers = lecturers.map((user: IUser) => ({
