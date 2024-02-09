@@ -2,6 +2,11 @@ import { IUserEdit } from "@/models/IUser";
 
 import { toast } from "sonner";
 
+/**
+ * Validates the user details, and ensures data integrity.
+ * @param userDetails - The IUserEdit object containing the user details.
+ * @returns A boolean, true if passes all validation or false if it fails at least one.
+ */
 export function validateUserEditDetails(userDetails: IUserEdit): boolean {
   if (!userDetails || typeof userDetails !== "object") {
     toast.error("Something went wrong. Please try again later.");
