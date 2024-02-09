@@ -4,6 +4,11 @@ import { isNumber } from "./Utils";
 
 import { toast } from "sonner";
 
+/**
+ * Validates the mark details, and ensures data integrity.
+ * @param markDetails - The IMarkEdit object containing the mark details.
+ * @returns A boolean, true if passes all validation or false if it fails at least one.
+ */
 export function validateMarkDetailsOnEdit(markDetails: IMarkEdit): boolean {
   if (!markDetails || typeof markDetails !== "object") {
     toast.error("Something went wrong. Please try again later.");

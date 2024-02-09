@@ -15,7 +15,7 @@ Mark Management System is a platform that streamlines data aggregation and prese
 
 and much more!
 
-## Data
+## Sample Data Generation
 
 To generate some sample data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts/data_generation) which contains a useful, customisable Data Generation Script written in Python alongside documentation.
 
@@ -77,6 +77,12 @@ For more information on the API usage, head over to:
 - ReDoc: `/redoc`
 
 After the account is created, you can login on the frontend and use the system!
+
+## Documentation
+
+In the backend, a mixture of OpenAPI + ReDoc endpoint documentation and loose [Google Style Comments](https://google.github.io/styleguide/pyguide.html) are used. As mentioned before, OpenAPI can be conveniently accessed by /docs, and ReDoc can be accessed by /redoc, giving you, the user the choice!
+
+For the frontend, a good chunk of the components are from [shadcn/UI](https://ui.shadcn.com/), therefore no component documentation takes place. However, some functions are commented based on the [TSDoc](https://tsdoc.org/) standard for additional clarity.
 
 ## Contact
 

@@ -324,7 +324,7 @@ const MarksPage = () => {
     degreeId: number,
     index: number
   ) => {
-    // NOTE: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
+    // TODO: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
     try {
       if (accessToken) {
         const studentDetails = {
@@ -500,6 +500,11 @@ const MarksPage = () => {
     }
   };
 
+  /**
+   * Validates the size & type of the file uploaded. If the file is not a CSV or >= 5MB, then an error + false is returned.
+   * @param file - The file uploaded by the user.
+   * @returns A boolean, true if it passes all validation and false if it fails at least one.
+   */
   const validateFileSizeAndExtension = (file: File): boolean => {
     if (file.size > 5242880) {
       toast.error("The file size should not exceeed 5MB.");

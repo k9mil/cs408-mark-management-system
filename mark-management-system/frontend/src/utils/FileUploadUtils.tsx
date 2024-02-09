@@ -5,6 +5,11 @@ import { toast } from "sonner";
 import { isValidClassCode } from "./ClassUtils";
 import { isNumber } from "./Utils";
 
+/**
+ * Validates the parsed file (uploaded marks), and ensures data integrity.
+ * @param fileContents - A list of IMarkRow objects, or null.
+ * @returns A boolean, true if passes all validation or false if it fails at least one.
+ */
 export function validateParsedFile(fileContents: IMarkRow[] | null): boolean {
   if (!fileContents || !Array.isArray(fileContents)) {
     toast.error("The file provided is empty or corrupt.");

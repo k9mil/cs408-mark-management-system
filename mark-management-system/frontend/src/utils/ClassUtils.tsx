@@ -6,21 +6,42 @@ import { IClassWithId, IClassWithLecturerId } from "@/models/IClass";
 import { IUser } from "@/models/IUser";
 import { IStudent } from "@/models/IStudent";
 
+/**
+ * Checks if a class code is valid, i.e. if it's two upper case letters followed bythree digits.
+ * @param input - The class code which will get validated.
+ * @returns A boolean, true if valid else false.
+ */
 export function isValidClassCode(input: string): boolean {
   const pattern = /^[A-Z]{2}\d{3}$/;
 
   return pattern.test(input);
 }
 
+/**
+ * Formats the lecturer name in the format of "FirstName LastName" given an IUser object.
+ * @param lecturer - The lecturer object containing the first name & last name.
+ * @returns The formatted string.
+ */
 export function formatLecturerName(lecturer: IUser): string {
   return `${lecturer.first_name} ${lecturer.last_name}`;
 }
 
+/**
+ * Returns the number of students in a student array.
+ * @param students - The student array of IStudent objects.
+ * @returns A number, the length of the array.
+ */
 export function getNumOfStudents(students: IStudent[]): number {
   if (students.length !== 0) return students.length;
   return 0;
 }
 
+/**
+ * Validates the class details, and ensures data integrity.
+ * @param classDetails - The classDetails, which can either be in the form of a "IClassWithId"
+ *                       object when the class is being edited, or "IClassWithLecturerId" when it's being created.
+ * @returns A boolean, true if passes all validation or false if it fails at least one.
+ */
 export function validateClassDetails(
   classDetails: IClassWithId | IClassWithLecturerId
 ) {
