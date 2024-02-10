@@ -6,6 +6,11 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/common/Dialog";
 
+/**
+ * The documentation for this component can be found at:
+ * https://ui.shadcn.com/docs/components/command
+ */
+
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive>
