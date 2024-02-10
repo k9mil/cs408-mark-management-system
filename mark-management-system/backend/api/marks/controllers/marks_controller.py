@@ -320,7 +320,7 @@ def get_marks_for_student(
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
-        - `response_model`: The response is in the model of the `List[schemas.Marks]` schema, which contains the details of the retrieved marks.
+        - `response_model`: The response is in the model of the `List[schemas.MarksRow]` schema, which contains the details of the retrieved marks amongst other details.
     """
     if current_user is None:
         raise HTTPException(
