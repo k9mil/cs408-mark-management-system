@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import Papa from "papaparse";
+
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 
@@ -27,7 +29,12 @@ import {
 
 import { uploadedForAllClasses } from "@/utils/LecturerUtils";
 import { ILecturer } from "@/models/IUser";
+
 import LecturersModalView from "./LecturersModalView";
+
+import { generateCSVname } from "@/utils/Utils";
+
+import { toast } from "sonner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,6 +60,56 @@ export function LecturersDataTable<TData, TValue>({
     setSelectedRow(row.original as ILecturer);
   };
 
+  const preprocessData = () => {
+    const preprocessedData = [];
+
+    for (const lecturerItem of data) {
+      const processedLecturer = {
+        ...lecturerItem,
+        uploaded_for_all_classes: uploadedForAllClasses(
+          lecturerItem as ILecturer
+        ),
+      };
+
+      delete processedLecturer.id;
+      delete processedLecturer.classes;
+
+      preprocessedData.push(processedLecturer);
+    }
+
+    return preprocessedData;
+  };
+
+  const exportToCSV = () => {
+    try {
+      const dataToExport = preprocessData();
+      const fileName = generateCSVname("lecturers");
+
+      if (dataToExport.length < 1) {
+        toast.info("Nothing to export.");
+
+        return;
+      }
+
+      const csv = Papa.unparse(dataToExport);
+
+      const csvDataAsBlob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      const csvURL = window.URL.createObjectURL(csvDataAsBlob);
+      const csvElement = document.createElement("a");
+
+      csvElement.href = csvURL;
+      csvElement.setAttribute("download", fileName);
+      csvElement.click();
+
+      toast.success("You have successfully exported this table to CSV!");
+    } catch (error) {
+      toast.error("Something went wrong when exporting this table to CSV.");
+    }
+  };
+
   const table = useReactTable({
     data,
     columns,
@@ -70,17 +127,26 @@ export function LecturersDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Search by last name..."
-          value={
-            (table.getColumn("last_name")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("last_name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex flex-row justify-between py-2">
+        <div className="flex items-center">
+          <Input
+            placeholder="Search by last nam..."
+            value={
+              (table.getColumn("last_name")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("last_name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
+        <Button
+          onClick={() => {
+            exportToCSV();
+          }}
+        >
+          Export to CSV
+        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
