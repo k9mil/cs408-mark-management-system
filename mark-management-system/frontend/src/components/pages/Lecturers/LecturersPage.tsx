@@ -54,7 +54,7 @@ const LecturersPage = () => {
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl">
         <div className="m-8 flex flex-col space-y-4">
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-1">
             <h1 className="text-3xl font-bold">Lecturers</h1>
             <h2 className="text-gray-400">
               View a list of lecturers in the system

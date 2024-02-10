@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Button } from "@/components/common/Button";
+import { Input } from "@/components/common/Input";
 
 import { ClassesModalAdminView } from "./ClassesModalAdminView";
 import { ClassesModalLecturerView } from "./ClassModalLecturerView";
@@ -11,10 +12,12 @@ import { formatLecturerName, getNumOfStudents } from "@/utils/ClassUtils";
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   Row,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -50,6 +53,10 @@ export function ClassesDataTable<TData, TValue>({
   accessToken,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<IClass | null>(null);
 
@@ -69,13 +76,26 @@ export function ClassesDataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
     <>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Search by class name..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
