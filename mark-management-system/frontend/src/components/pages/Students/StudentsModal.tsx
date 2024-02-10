@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Label } from "@/components/common/Label";
@@ -12,6 +12,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/common/Dialog";
+
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/common/Card";
 
 import { markService } from "@/services/MarkService";
 
@@ -34,8 +41,21 @@ export const StudentsModal = ({
   accessToken: string | null;
   marksData: () => Promise<void>;
 }) => {
+  const [hasRendered, setHasRendered] = useState<boolean>(false);
+  const [studentMarks, setStudentMarks] = useState<IMarkRow[]>([]);
   const [activeTab, setActiveTab] = useState("class");
   const [mark, setMark] = useState(row.mark ? +row.mark : null);
+
+  useEffect(() => {
+    if (
+      studentMarks &&
+      studentMarks.length !== 0 &&
+      activeTab === "overall" &&
+      !hasRendered
+    ) {
+      setHasRendered(true);
+    }
+  }, [studentMarks, activeTab, hasRendered]);
 
   const deleteMark = async (uniqueCode: string) => {
     try {
@@ -67,6 +87,25 @@ export const StudentsModal = ({
     }
   };
 
+  useEffect(() => {
+    const retrieveStudentMarks = async () => {
+      try {
+        if (accessToken) {
+          const result = await markService.getMarksForStudent(
+            row.reg_no,
+            accessToken
+          );
+
+          setStudentMarks(result);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    retrieveStudentMarks();
+  }, []);
+
   return (
     <Dialog
       open={openDialogRowId === row.id.toString()}
@@ -74,12 +113,12 @@ export const StudentsModal = ({
         if (!open) setOpenDialogRowId(null);
       }}
     >
-      <DialogContent className="w-1/2 h-1/2">
+      <DialogContent className="2xl:w-1/2 2xl:h-1/2 xl:h-3/5 xl:w-3/5 m-0">
         <DialogHeader className="space-y-4">
           <DialogTitle className="flex flex-row space-x-4 justify-around">
             <h2
               className={`text-lg hover:cursor-pointer ${
-                activeTab == "class" ? "underline" : ""
+                activeTab == "class" ? "underline font-semibold" : "font-medium"
               }`}
               onClick={() => setActiveTab("class")}
             >
@@ -87,7 +126,9 @@ export const StudentsModal = ({
             </h2>
             <h2
               className={`text-lg hover:cursor-pointer ${
-                activeTab == "overall" ? "underline" : ""
+                activeTab == "overall"
+                  ? "underline font-semibold"
+                  : "font-medium"
               }`}
               onClick={() => setActiveTab("overall")}
             >
@@ -99,7 +140,12 @@ export const StudentsModal = ({
               Information about the mark for {row.student_name} for{" "}
               {row.class_code}. Click save when you're finished.
             </DialogDescription>
-          ) : null}
+          ) : (
+            <DialogDescription className="max-w-md">
+              Information about overall marks in the system for{" "}
+              {row.student_name}. Click done when you're finished.
+            </DialogDescription>
+          )}
         </DialogHeader>
         {activeTab === "class" ? (
           <div className="flex flex-row justify-between">
@@ -177,6 +223,21 @@ export const StudentsModal = ({
               </div>
             </div>
           </div>
+        ) : hasRendered ? (
+          <div className="grid grid-cols-3 gap-y-3 justify-items-center overflow-y-scroll py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {studentMarks.map((mark_row: IMarkRow) => (
+              <Card className="flex flex-col w-24 h-24 space-y-2 justify-center items-center shadow-lg">
+                <CardHeader className="flex flex-row justify-between items-center p-0">
+                  <CardTitle className="text-lg font-bold">
+                    {mark_row.class_code}
+                  </CardTitle>
+                </CardHeader>
+                <CardDescription>
+                  <h2 className="text-base">Mark: {mark_row.mark}</h2>
+                </CardDescription>
+              </Card>
+            ))}
+          </div>
         ) : null}
         {activeTab === "class" ? (
           <DialogFooter className="flex flex-row sm:justify-between mt-8">
@@ -205,7 +266,18 @@ export const StudentsModal = ({
               Save changes
             </Button>
           </DialogFooter>
-        ) : null}
+        ) : (
+          <DialogFooter className="flex sm:self-justify-end mt-8">
+            <Button
+              type="submit"
+              onClick={() => {
+                setOpenDialogRowId(null);
+              }}
+            >
+              Done
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );
