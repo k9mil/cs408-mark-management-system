@@ -130,7 +130,7 @@ export function LecturersDataTable<TData, TValue>({
       <div className="flex flex-row justify-between py-2">
         <div className="flex items-center">
           <Input
-            placeholder="Search by last nam..."
+            placeholder="Search by last name..."
             value={
               (table.getColumn("last_name")?.getFilterValue() as string) ?? ""
             }
