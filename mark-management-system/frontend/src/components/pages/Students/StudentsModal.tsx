@@ -34,6 +34,7 @@ export const StudentsModal = ({
   accessToken: string | null;
   marksData: () => Promise<void>;
 }) => {
+  const [activeTab, setActiveTab] = useState("class");
   const [mark, setMark] = useState(row.mark ? +row.mark : null);
 
   const deleteMark = async (uniqueCode: string) => {
@@ -73,117 +74,138 @@ export const StudentsModal = ({
         if (!open) setOpenDialogRowId(null);
       }}
     >
-      <DialogContent>
+      <DialogContent className="w-1/2 h-1/2">
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-xl">
-            {row.student_name} — View
+          <DialogTitle className="flex flex-row space-x-4 justify-around">
+            <h2
+              className={`text-lg hover:cursor-pointer ${
+                activeTab == "class" ? "underline" : ""
+              }`}
+              onClick={() => setActiveTab("class")}
+            >
+              Class View
+            </h2>
+            <h2
+              className={`text-lg hover:cursor-pointer ${
+                activeTab == "overall" ? "underline" : ""
+              }`}
+              onClick={() => setActiveTab("overall")}
+            >
+              Overall View
+            </h2>
           </DialogTitle>
-          <DialogDescription className="max-w-md">
-            Information about the mark for {row.student_name}. Click save when
-            you're finished.
-          </DialogDescription>
+          {activeTab === "class" ? (
+            <DialogDescription className="max-w-md">
+              Information about the mark for {row.student_name} for{" "}
+              {row.class_code}. Click save when you're finished.
+            </DialogDescription>
+          ) : null}
         </DialogHeader>
-        <div className="flex flex-row justify-between">
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                defaultValue={row.student_name}
-                disabled
-              />
+        {activeTab === "class" ? (
+          <div className="flex flex-row justify-between">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  className="col-span-3"
+                  defaultValue={row.student_name}
+                  disabled
+                />
+              </div>
+              <div>
+                <Label htmlFor="code" className="text-right">
+                  Code
+                </Label>
+                <Input
+                  id="name"
+                  className="col-span-3"
+                  defaultValue={row.class_code}
+                  disabled
+                />
+              </div>
+              <div>
+                <Label htmlFor="code" className="text-right">
+                  Registration Number
+                </Label>
+                <Input
+                  id="name"
+                  className="col-span-3"
+                  defaultValue={row.reg_no}
+                  disabled
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="code" className="text-right">
-                Code
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                defaultValue={row.class_code}
-                disabled
-              />
-            </div>
-            <div>
-              <Label htmlFor="code" className="text-right">
-                Registration Number
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                defaultValue={row.reg_no}
-                disabled
-              />
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="degreeLevel" className="text-right">
+                  Degree Level
+                </Label>
+                <Input
+                  id="degreeLevel"
+                  className="col-span-3"
+                  defaultValue={row.degree_level}
+                  disabled
+                />
+              </div>
+              <div>
+                <Label htmlFor="degreeName" className="text-right">
+                  Degree Name
+                </Label>
+                <Input
+                  id="degreeName"
+                  className="col-span-3"
+                  defaultValue={row.degree_name}
+                  disabled
+                />
+              </div>
+              <div>
+                <Label htmlFor="mark" className="text-right">
+                  Mark
+                </Label>
+                <Input
+                  id="mark"
+                  type="text"
+                  className="col-span-3"
+                  defaultValue={row.mark}
+                  onChange={(e) => {
+                    setMark(e.target.value === "" ? null : +e.target.value);
+                  }}
+                />
+              </div>
             </div>
           </div>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="degreeLevel" className="text-right">
-                Degree Level
-              </Label>
-              <Input
-                id="degreeLevel"
-                className="col-span-3"
-                defaultValue={row.degree_level}
-                disabled
-              />
-            </div>
-            <div>
-              <Label htmlFor="degreeName" className="text-right">
-                Degree Name
-              </Label>
-              <Input
-                id="degreeName"
-                className="col-span-3"
-                defaultValue={row.degree_name}
-                disabled
-              />
-            </div>
-            <div>
-              <Label htmlFor="mark" className="text-right">
-                Mark
-              </Label>
-              <Input
-                id="mark"
-                type="text"
-                className="col-span-3"
-                defaultValue={row.mark}
-                onChange={(e) => {
-                  setMark(e.target.value === "" ? null : +e.target.value);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <DialogFooter className="flex flex-row sm:justify-between mt-8">
-          <Button
-            type="submit"
-            variant="destructive"
-            onClick={() => {
-              deleteMark(row.unique_code);
-            }}
-          >
-            Remove
-          </Button>
-          <Button
-            type="submit"
-            onClick={() => {
-              const markDetails: IMarkEdit = {
-                unique_code: row.unique_code,
-                mark: mark === null ? null : +mark,
-              };
+        ) : null}
+        {activeTab === "class" ? (
+          <DialogFooter className="flex flex-row sm:justify-between mt-8">
+            <Button
+              type="submit"
+              variant="destructive"
+              onClick={() => {
+                deleteMark(row.unique_code);
+              }}
+            >
+              Remove
+            </Button>
+            <Button
+              type="submit"
+              onClick={() => {
+                const markDetails: IMarkEdit = {
+                  unique_code: row.unique_code,
+                  mark: mark === null ? null : +mark,
+                };
 
-              if (validateMarkDetailsOnEdit(markDetails)) {
-                editMark(markDetails);
-              }
-            }}
-          >
-            Save changes
-          </Button>
-        </DialogFooter>
+                if (validateMarkDetailsOnEdit(markDetails)) {
+                  editMark(markDetails);
+                }
+              }}
+            >
+              Save changes
+            </Button>
+          </DialogFooter>
+        ) : null}
       </DialogContent>
     </Dialog>
   );
