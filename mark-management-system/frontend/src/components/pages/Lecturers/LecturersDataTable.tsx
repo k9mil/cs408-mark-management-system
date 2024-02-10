@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 
 import { Button } from "@/components/common/Button";
+import { Input } from "@/components/common/Input";
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   Row,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -21,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/common/Table";
+
 import { uploadedForAllClasses } from "@/utils/LecturerUtils";
 import { ILecturer } from "@/models/IUser";
 import LecturersModalView from "./LecturersModalView";
@@ -35,6 +39,10 @@ export function LecturersDataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<ILecturer | null>(null);
 
@@ -52,13 +60,28 @@ export function LecturersDataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
     <>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Search by last name..."
+          value={
+            (table.getColumn("last_name")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("last_name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
