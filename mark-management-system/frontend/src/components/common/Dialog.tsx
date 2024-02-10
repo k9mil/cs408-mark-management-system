@@ -4,6 +4,11 @@ import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * The documentation for this component can be found at:
+ * https://ui.shadcn.com/docs/components/dialog
+ */
+
 const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;

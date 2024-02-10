@@ -3,6 +3,11 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * The documentation for this component can be found at:
+ * https://ui.shadcn.com/docs/components/popover
+ */
+
 const Popover = PopoverPrimitive.Root;
 
 const PopoverTrigger = PopoverPrimitive.Trigger;

@@ -4,6 +4,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * The documentation for this component can be found at:
+ * https://ui.shadcn.com/docs/components/label
+ */
+
 const labelVariants = cva(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 );
