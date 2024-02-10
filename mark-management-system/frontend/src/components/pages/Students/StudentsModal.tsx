@@ -226,21 +226,21 @@ export const StudentsModal = ({
         ) : hasRendered ? (
           <div className="grid grid-cols-3 gap-y-3 justify-items-center overflow-y-scroll py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {studentMarks.map((mark_row: IMarkRow) => (
-              <Card className="flex flex-col w-24 h-24 space-y-2 justify-center items-center shadow-lg">
+              <Card className="flex flex-col w-28 h-28 space-y-2 justify-center items-center shadow-lg">
                 <CardHeader className="flex flex-row justify-between items-center p-0">
-                  <CardTitle className="text-lg font-bold">
+                  <CardTitle className="text-2xl font-bold">
                     {mark_row.class_code}
                   </CardTitle>
                 </CardHeader>
                 <CardDescription>
-                  <h2 className="text-base">Mark: {mark_row.mark}</h2>
+                  <h2 className="text-sm">Mark: {mark_row.mark}</h2>
                 </CardDescription>
               </Card>
             ))}
           </div>
         ) : null}
         {activeTab === "class" ? (
-          <DialogFooter className="flex flex-row sm:justify-between mt-8">
+          <DialogFooter className="flex flex-row sm:justify-between items-end">
             <Button
               type="submit"
               variant="destructive"
@@ -267,7 +267,7 @@ export const StudentsModal = ({
             </Button>
           </DialogFooter>
         ) : (
-          <DialogFooter className="flex sm:self-justify-end mt-8">
+          <DialogFooter className="flex sm:self-justify-end">
             <Button
               type="submit"
               onClick={() => {
