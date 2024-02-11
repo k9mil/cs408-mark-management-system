@@ -14,6 +14,11 @@ import { IStudentBase } from "@/models/IStudent";
 import { IUserDropdown } from "@/models/IUser";
 
 import StudentProfileDropdown from "./StudentProfileDropdown";
+import { StudentProfileDataTable } from "./StudentProfileDataTable";
+
+import { markService } from "@/services/MarkService";
+
+import { StudentColumns } from "../Students/StudentsColumns";
 
 const StudentProfilePage = () => {
   const navigate = useNavigate();
@@ -25,8 +30,9 @@ const StudentProfilePage = () => {
   );
 
   const [searchValue, setSearchValue] = useState<string | null>(null);
-  const [studentOpen, setStudentOpen] = React.useState(false);
-  const [student, setStudent] = React.useState("");
+  const [studentOpen, setStudentOpen] = React.useState<boolean>(false);
+  const [student, setStudent] = React.useState<string>("");
+  const [studentMarks, setStudentMarks] = React.useState<string>("");
 
   const accessToken = getAccessToken();
 
@@ -56,6 +62,27 @@ const StudentProfilePage = () => {
     studentsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (student !== "") {
+      const retrieveStudentMarks = async () => {
+        try {
+          if (accessToken) {
+            const result = await markService.getMarksForStudent(
+              student,
+              accessToken
+            );
+
+            setStudentMarks(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      retrieveStudentMarks();
+    }
+  }, [student, accessToken]);
 
   useEffect(() => {
     if (students && Array.isArray(students)) {
@@ -91,8 +118,14 @@ const StudentProfilePage = () => {
                 />
               ) : null}
             </div>
-            <Button>Export to CSV</Button>
           </div>
+          {student && student !== "" ? (
+            <StudentProfileDataTable
+              columns={StudentColumns}
+              data={studentMarks}
+              accessToken={accessToken}
+            />
+          ) : null}
         </div>
       </div>
     </div>

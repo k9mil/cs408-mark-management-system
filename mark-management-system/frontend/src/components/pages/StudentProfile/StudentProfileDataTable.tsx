@@ -31,8 +31,6 @@ import {
   TableRow,
 } from "@/components/common/Table";
 
-import { IMarkRow } from "@/models/IMark";
-
 import { generateCSVname } from "@/utils/Utils";
 
 import { toast } from "sonner";
@@ -41,75 +39,62 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   accessToken: string | null;
-  marksData: () => Promise<void>;
 }
 
 export function StudentProfileDataTable<TData, TValue>({
   columns,
-  accessToken,
+  data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState<IMarkRow | null>(null);
+  const preprocessData = () => {
+    const preprocessedData = [];
 
-  const { isLecturer } = useAuth();
+    for (const studentProfileItem of data) {
+      const processedStudent = {
+        ...studentProfileItem,
+      };
 
-  const handleRowClick = (row: Row<TData>) => {
-    const id = (row.original as IMarkRow).id.toString();
+      delete processedStudent.id;
 
-    setOpenDialogRowId(id);
-    setSelectedRow(row.original as IMarkRow);
+      preprocessedData.push(processedStudent);
+    }
+
+    return preprocessedData;
   };
 
-//   const preprocessData = () => {
-//     const preprocessedData = [];
+  const exportToCSV = () => {
+    try {
+      const dataToExport = preprocessData();
+      const fileName = generateCSVname("student-profiles");
 
-//     for (const studentItem of data) {
-//       const processedStudent = {
-//         ...studentItem,
-//       };
+      if (dataToExport.length < 1) {
+        toast.info("Nothing to export.");
 
-//       delete processedStudent.id;
+        return;
+      }
 
-//       preprocessedData.push(processedStudent);
-//     }
+      const csv = Papa.unparse(dataToExport);
 
-//     return preprocessedData;
-//   };
+      const csvDataAsBlob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;",
+      });
 
-//   const exportToCSV = () => {
-//     try {
-//       const dataToExport = preprocessData();
-//       const fileName = generateCSVname("students");
+      const csvURL = window.URL.createObjectURL(csvDataAsBlob);
+      const csvElement = document.createElement("a");
 
-//       if (dataToExport.length < 1) {
-//         toast.info("Nothing to export.");
+      csvElement.href = csvURL;
+      csvElement.setAttribute("download", fileName);
+      csvElement.click();
 
-//         return;
-//       }
-
-//       const csv = Papa.unparse(dataToExport);
-
-//       const csvDataAsBlob = new Blob([csv], {
-//         type: "text/csv;charset=utf-8;",
-//       });
-
-//       const csvURL = window.URL.createObjectURL(csvDataAsBlob);
-//       const csvElement = document.createElement("a");
-
-//       csvElement.href = csvURL;
-//       csvElement.setAttribute("download", fileName);
-//       csvElement.click();
-
-//       toast.success("You have successfully exported this table to CSV!");
-//     } catch (error) {
-//       toast.error("Something went wrong when exporting this table to CSV.");
-//     }
-//   };
+      toast.success("You have successfully exported this table to CSV!");
+    } catch (error) {
+      toast.error("Something went wrong when exporting this table to CSV.");
+    }
+  };
 
   const table = useReactTable({
     data,
@@ -128,23 +113,9 @@ export function StudentProfileDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex flex-row justify-between py-2">
-        <div className="flex items-center">
-          <Input
-            placeholder="Search by name..."
-            value={
-              (table.getColumn("student_name")?.getFilterValue() as string) ??
-              ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn("student_name")
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        </div>
+      <div className="w-1/5">
         <Button
+          className="w-3/4"
           onClick={() => {
             exportToCSV();
           }}
@@ -204,15 +175,6 @@ export function StudentProfileDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {openDialogRowId !== null && selectedRow && isLecturer === true ? (
-            <StudentsModal
-              row={selectedRow}
-              openDialogRowId={openDialogRowId}
-              setOpenDialogRowId={setOpenDialogRowId}
-              accessToken={accessToken}
-              marksData={marksData}
-            />
-          ) : null}
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 2xl:py-4">
@@ -237,4 +199,4 @@ export function StudentProfileDataTable<TData, TValue>({
   );
 }
 
-export default StudentsDataTable;
+export default StudentProfileDataTable;
