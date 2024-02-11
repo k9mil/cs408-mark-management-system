@@ -1,18 +1,13 @@
-import React, { useState } from "react";
+import * as React from "react";
 
 import Papa from "papaparse";
 
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 
-// import { StudentsModal } from "./StudentsModal";
-
-import { useAuth } from "@/AuthProvider";
-
 import {
   ColumnDef,
   ColumnFiltersState,
-  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -58,6 +53,8 @@ export function StudentProfileDataTable<TData, TValue>({
         ...studentProfileItem,
       };
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       delete processedStudent.id;
 
       preprocessedData.push(processedStudent);
@@ -113,9 +110,20 @@ export function StudentProfileDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="w-1/5">
+      <div className="flex flex-row justify-between py-2">
+        <div className="flex items-center">
+          <Input
+            placeholder="Search by class code..."
+            value={
+              (table.getColumn("class_code")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("class_code")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
         <Button
-          className="w-3/4"
           onClick={() => {
             exportToCSV();
           }}
@@ -150,9 +158,6 @@ export function StudentProfileDataTable<TData, TValue>({
                   key={row.id}
                   className="cursor-pointer hover:bg-gray-200"
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    handleRowClick(row);
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/common/Button";
-
 import { useAuth } from "@/AuthProvider";
 
 import Sidebar from "@/components/common/Sidebar";
@@ -12,6 +10,7 @@ import { studentService } from "@/services/StudentService";
 
 import { IStudentBase } from "@/models/IStudent";
 import { IUserDropdown } from "@/models/IUser";
+import { IMarkRow } from "@/models/IMark";
 
 import StudentProfileDropdown from "./StudentProfileDropdown";
 import { StudentProfileDataTable } from "./StudentProfileDataTable";
@@ -29,10 +28,9 @@ const StudentProfilePage = () => {
     null
   );
 
-  const [searchValue, setSearchValue] = useState<string | null>(null);
   const [studentOpen, setStudentOpen] = React.useState<boolean>(false);
   const [student, setStudent] = React.useState<string>("");
-  const [studentMarks, setStudentMarks] = React.useState<string>("");
+  const [studentMarks, setStudentMarks] = React.useState<IMarkRow[]>([]);
 
   const accessToken = getAccessToken();
 
@@ -50,7 +48,6 @@ const StudentProfilePage = () => {
         if (isLecturer) {
           const result = await studentService.getStudents(accessToken);
           setStudents(result);
-          console.log(result);
         }
       }
     } catch (error) {
