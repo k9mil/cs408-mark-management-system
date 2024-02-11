@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 
 import Papa from "papaparse";
 
@@ -8,7 +8,6 @@ import { Input } from "@/components/common/Input";
 import {
   ColumnDef,
   ColumnFiltersState,
-  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -27,11 +26,6 @@ import {
   TableRow,
 } from "@/components/common/Table";
 
-import { uploadedForAllClasses } from "@/utils/LecturerUtils";
-import { ILecturer } from "@/models/IUser";
-
-import LecturersModalView from "./LecturersModalView";
-
 import { generateCSVname } from "@/utils/Utils";
 
 import { toast } from "sonner";
@@ -39,9 +33,10 @@ import { toast } from "sonner";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  accessToken: string | null;
 }
 
-export function LecturersDataTable<TData, TValue>({
+export function StudentProfileDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -50,31 +45,19 @@ export function LecturersDataTable<TData, TValue>({
     []
   );
 
-  const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState<ILecturer | null>(null);
-
-  const handleRowClick = (row: Row<TData>) => {
-    const id = (row.original as ILecturer).id.toString();
-
-    setOpenDialogRowId(id);
-    setSelectedRow(row.original as ILecturer);
-  };
-
   const preprocessData = () => {
     const preprocessedData = [];
 
-    for (const lecturerItem of data) {
-      const processedLecturer = {
-        ...lecturerItem,
-        uploaded_for_all_classes: uploadedForAllClasses(
-          lecturerItem as ILecturer
-        ),
+    for (const studentProfileItem of data) {
+      const processedStudent = {
+        ...studentProfileItem,
       };
 
-      delete processedLecturer.id;
-      delete processedLecturer.classes;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      delete processedStudent.id;
 
-      preprocessedData.push(processedLecturer);
+      preprocessedData.push(processedStudent);
     }
 
     return preprocessedData;
@@ -83,7 +66,7 @@ export function LecturersDataTable<TData, TValue>({
   const exportToCSV = () => {
     try {
       const dataToExport = preprocessData();
-      const fileName = generateCSVname("lecturers");
+      const fileName = generateCSVname("student-profiles");
 
       if (dataToExport.length < 1) {
         toast.info("Nothing to export.");
@@ -130,12 +113,12 @@ export function LecturersDataTable<TData, TValue>({
       <div className="flex flex-row justify-between py-2">
         <div className="flex items-center">
           <Input
-            placeholder="Search by last name..."
+            placeholder="Search by class code..."
             value={
-              (table.getColumn("last_name")?.getFilterValue() as string) ?? ""
+              (table.getColumn("class_code")?.getFilterValue() as string) ?? ""
             }
             onChange={(event) =>
-              table.getColumn("last_name")?.setFilterValue(event.target.value)
+              table.getColumn("class_code")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -175,34 +158,13 @@ export function LecturersDataTable<TData, TValue>({
                   key={row.id}
                   className="cursor-pointer hover:bg-gray-200"
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => {
-                    handleRowClick(row);
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {cell.column.id === "uploaded_for_all_classes"
-                        ? (() => {
-                            const isUploadedForAllClasses =
-                              uploadedForAllClasses(
-                                cell.row.original as ILecturer
-                              );
-                            const textColorClass =
-                              isUploadedForAllClasses === "Yes"
-                                ? "text-green-500 font-bold"
-                                : isUploadedForAllClasses === "No"
-                                ? "text-red-500 font-bold"
-                                : "font-base";
-                            return (
-                              <span className={textColorClass}>
-                                {isUploadedForAllClasses}
-                              </span>
-                            );
-                          })()
-                        : flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -218,16 +180,9 @@ export function LecturersDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          {openDialogRowId !== null && selectedRow ? (
-            <LecturersModalView
-              row={selectedRow}
-              openDialogRowId={openDialogRowId}
-              setOpenDialogRowId={setOpenDialogRowId}
-            />
-          ) : null}
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2 2xl:py-4">
         <Button
           variant="outline"
           size="sm"
@@ -249,4 +204,4 @@ export function LecturersDataTable<TData, TValue>({
   );
 }
 
-export default LecturersDataTable;
+export default StudentProfileDataTable;

@@ -1,6 +1,6 @@
-from typing import Tuple
+from typing import Tuple, List
 
-from api.system.schemas.schemas import Student as StudentSchema
+from api.system.schemas.schemas import StudentBase
 
 from api.students.repositories.student_repository import StudentRepository
 from api.users.repositories.user_repository import UserRepository
@@ -10,20 +10,19 @@ from api.students.errors.student_not_found import StudentNotFound
 from api.users.errors.user_not_found import UserNotFound
 
 
-class GetStudentUseCase:
+class GetStudentsUseCase:
     """
-    The Use Case containing business logic for retrieving a student.
+    The Use Case containing business logic for retrieving all student.
     """
     def __init__(self, student_repository: StudentRepository, user_repository: UserRepository) -> None:
         self.student_repository = student_repository
         self.user_repository = user_repository
     
-    def execute(self, reg_no: str, current_user: Tuple[str, bool, bool]) -> StudentSchema:
+    def execute(self, skip: int, limit: int, current_user: Tuple[str, bool, bool]) -> List[StudentBase]:
         """
-        Executes the Use Case to retrieve a student from the system, given a registration number.
+        Executes the Use Case to retrieve all students from the system.
 
         Args:
-            reg_no: The unique identifier for the student, the registration number.
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
@@ -32,7 +31,7 @@ class GetStudentUseCase:
             UserNotFound: If the user (from the JWT) cannot be found.
         
         Returns:
-            StudentSchema: A StudentSchema schema object containing all information about the student.
+            StudentBase: A List of StudentBase schema objects containing information about the student.
         """
         user_email, is_admin, is_lecturer = current_user
 
@@ -44,9 +43,9 @@ class GetStudentUseCase:
         if not ((user and is_lecturer) or is_admin):
             raise PermissionError("Permission denied to access this resource")
         
-        student = self.student_repository.find_by_reg_no(reg_no)
+        students = self.student_repository.get_students(skip, limit)
 
-        if student is None:
-            raise StudentNotFound("Student not found")
+        if students is None:
+            raise StudentNotFound("Students not found")
 
-        return student
+        return students

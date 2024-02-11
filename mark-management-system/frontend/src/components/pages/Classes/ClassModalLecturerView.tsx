@@ -39,7 +39,6 @@ export const ClassesModalLecturerView = ({
           accessToken
         );
 
-        console.log(result);
         setDegrees(result);
       }
     } catch (error) {

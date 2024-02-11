@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 
 from api.system.models.models import Student
 
+from api.system.schemas.schemas import StudentBase
+
 
 class StudentRepository:
     """The repository layer which performs queries and operations on the database for `Student` objects."""
@@ -52,7 +54,7 @@ class StudentRepository:
         """
         return self.db.query(Student).filter_by(id=student_id).first()
 
-    def get_students(self, skip: int, limit: int) -> List[Student]:
+    def get_students(self, skip: int, limit: int) -> List[StudentBase]:
         """
         Retrieves a list of classes, given a skip and a limit.
 

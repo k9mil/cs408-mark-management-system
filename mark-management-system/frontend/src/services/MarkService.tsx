@@ -126,4 +126,22 @@ export const markService = {
         throw error;
       });
   },
+
+  getMarksForStudent: async (regNo: string, accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/marks/${regNo}/all/`, {
+        data: { regNo: regNo },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving marks for the student.",
+          error
+        );
+        throw error;
+      });
+  },
 };
