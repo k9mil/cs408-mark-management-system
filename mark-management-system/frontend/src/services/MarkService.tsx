@@ -138,7 +138,7 @@ export const markService = {
       .then((response) => response.data)
       .catch((error) => {
         console.error(
-          "Error: There has been an issue when retrieving student marks.",
+          "Error: There has been an issue when retrieving marks for the student.",
           error
         );
         throw error;

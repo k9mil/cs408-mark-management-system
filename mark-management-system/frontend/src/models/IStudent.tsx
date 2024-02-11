@@ -10,7 +10,7 @@ export interface IStudent {
   degree: IDegree;
 }
 
-export interface IStudentCreate {
+export interface IStudentBase {
   reg_no: string;
   student_name: string;
   personal_circumstances: number | null;

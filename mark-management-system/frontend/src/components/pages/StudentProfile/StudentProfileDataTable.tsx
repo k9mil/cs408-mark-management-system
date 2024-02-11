@@ -5,7 +5,7 @@ import Papa from "papaparse";
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 
-import { StudentsModal } from "./StudentsModal";
+// import { StudentsModal } from "./StudentsModal";
 
 import { useAuth } from "@/AuthProvider";
 
@@ -44,11 +44,9 @@ interface DataTableProps<TData, TValue> {
   marksData: () => Promise<void>;
 }
 
-export function StudentsDataTable<TData, TValue>({
+export function StudentProfileDataTable<TData, TValue>({
   columns,
-  data,
   accessToken,
-  marksData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -67,51 +65,51 @@ export function StudentsDataTable<TData, TValue>({
     setSelectedRow(row.original as IMarkRow);
   };
 
-  const preprocessData = () => {
-    const preprocessedData = [];
+//   const preprocessData = () => {
+//     const preprocessedData = [];
 
-    for (const studentItem of data) {
-      const processedStudent = {
-        ...studentItem,
-      };
+//     for (const studentItem of data) {
+//       const processedStudent = {
+//         ...studentItem,
+//       };
 
-      delete processedStudent.id;
+//       delete processedStudent.id;
 
-      preprocessedData.push(processedStudent);
-    }
+//       preprocessedData.push(processedStudent);
+//     }
 
-    return preprocessedData;
-  };
+//     return preprocessedData;
+//   };
 
-  const exportToCSV = () => {
-    try {
-      const dataToExport = preprocessData();
-      const fileName = generateCSVname("students");
+//   const exportToCSV = () => {
+//     try {
+//       const dataToExport = preprocessData();
+//       const fileName = generateCSVname("students");
 
-      if (dataToExport.length < 1) {
-        toast.info("Nothing to export.");
+//       if (dataToExport.length < 1) {
+//         toast.info("Nothing to export.");
 
-        return;
-      }
+//         return;
+//       }
 
-      const csv = Papa.unparse(dataToExport);
+//       const csv = Papa.unparse(dataToExport);
 
-      const csvDataAsBlob = new Blob([csv], {
-        type: "text/csv;charset=utf-8;",
-      });
+//       const csvDataAsBlob = new Blob([csv], {
+//         type: "text/csv;charset=utf-8;",
+//       });
 
-      const csvURL = window.URL.createObjectURL(csvDataAsBlob);
-      const csvElement = document.createElement("a");
+//       const csvURL = window.URL.createObjectURL(csvDataAsBlob);
+//       const csvElement = document.createElement("a");
 
-      csvElement.href = csvURL;
-      csvElement.setAttribute("download", fileName);
-      csvElement.click();
+//       csvElement.href = csvURL;
+//       csvElement.setAttribute("download", fileName);
+//       csvElement.click();
 
-      toast.success("You have successfully exported this table to CSV!");
-    } catch (error) {
-      toast.error("Something went wrong when exporting this table to CSV.");
-    }
-  };
+//       toast.success("You have successfully exported this table to CSV!");
+//     } catch (error) {
+//       toast.error("Something went wrong when exporting this table to CSV.");
+//     }
+//   };
 
   const table = useReactTable({
     data,

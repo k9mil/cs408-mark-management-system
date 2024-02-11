@@ -28,6 +28,7 @@ import {
   Cog8ToothIcon,
   InformationCircleIcon,
   AcademicCapIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/common/Button";
@@ -87,11 +88,20 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to="/students"
+                to="/graded-students"
                 className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
               >
                 <AcademicCapIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Students</h2>
+                <h2 className="text-white">Graded Students</h2>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/student-profile"
+                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+              >
+                <UserCircleIcon className="h-6 w-6 text-white" />
+                <h2 className="text-white">Student Profile</h2>
               </Link>
             </li>
             {isAdmin === true ? (
