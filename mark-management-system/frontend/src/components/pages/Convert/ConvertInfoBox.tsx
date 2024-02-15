@@ -37,9 +37,9 @@ const ConvertInfoBox = () => {
             format.
           </DialogDescription>
           <DialogDescription>
-            If anything goes wrong during the upload process, you will get a
+            If anything goes wrong during the conversion process, you will get a
             detailed description of what needs to be altered in order for the
-            data to be correctly processed.
+            data to be correctly converted.
           </DialogDescription>
           <DialogDescription>
             You will also have the option to choose which conversion you want to
