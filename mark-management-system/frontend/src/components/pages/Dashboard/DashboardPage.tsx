@@ -6,9 +6,9 @@ import { useAuth } from "../../../AuthProvider";
 
 import {
   Card,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardContent,
 } from "@/components/common/Card";
 
 import Sidebar from "../../common/Sidebar";
@@ -77,7 +77,7 @@ const DashboardPage = () => {
               </CardHeader>
               {statistics ? (
                 <div className="flex flex-col justify-center items-center space-y-8">
-                  <CardDescription className="flex flex-row justify-around space-x-12">
+                  <CardContent className="flex flex-row justify-around space-x-12 p-0">
                     <div className="flex flex-col pl-12 justify-center items-center">
                       <h1 className="font-bold text-3xl text-primary-blue">
                         {statistics ? statistics.pass_rate + "%" : null}
@@ -91,8 +91,8 @@ const DashboardPage = () => {
                       </h1>
                       <h1 className="text-xs">Mean</h1>
                     </div>
-                  </CardDescription>
-                  <CardDescription className="flex flex-row justify-around space-x-12">
+                  </CardContent>
+                  <CardContent className="flex flex-row justify-around space-x-12 p-0">
                     <div className="flex flex-col pl-12 justify-center items-center">
                       <h1 className="font-bold text-3xl text-primary-blue">
                         {statistics ? statistics.median + "%" : null}
@@ -106,7 +106,7 @@ const DashboardPage = () => {
                       </h1>
                       <h1 className="text-xs">Mode</h1>
                     </div>
-                  </CardDescription>
+                  </CardContent>
                 </div>
               ) : (
                 <h2 className="pl-7 font-normal text-sm">
