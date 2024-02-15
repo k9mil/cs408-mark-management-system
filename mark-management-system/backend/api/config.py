@@ -5,7 +5,7 @@ class Config:
     JWT_SECRET_KEY = os.environ.get("SECRET_KEY")
     JWT_REFRESH_SECRET_KEY = os.environ.get("REFRESH_SECRET_KEY")
     JWT_ALGORITHM = "HS256"
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 120
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 43800
     JWT_REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 
 class ProductionConfig(Config):
