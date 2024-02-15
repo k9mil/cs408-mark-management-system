@@ -1,5 +1,4 @@
 export interface IMark {
-  unique_code: string;
   mark: number;
   class_id: number;
   student_id: number;
@@ -13,7 +12,6 @@ export interface IMarkRow {
   student_name: string;
   degree_level: string;
   degree_name: string;
-  unique_code: string;
 }
 
 export interface IMarkMMS {
@@ -38,7 +36,7 @@ export interface IMarkPegasus {
 }
 
 export interface IMarkEdit {
-  unique_code: string;
+  id: number;
   mark: number | null;
 }
 

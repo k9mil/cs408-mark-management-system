@@ -47,8 +47,6 @@ const MarksPage = () => {
   const accessToken = getAccessToken();
 
   const uploadMarks = async () => {
-    const uniqueDegrees: Set<string> = new Set();
-
     try {
       if (!accessToken) {
         toast.error("Access token is missing.");
@@ -64,40 +62,10 @@ const MarksPage = () => {
       }
 
       if (parsedFileToLower && validateUploadFile(parsedFileToLower.slice(0))) {
-        parsedFileToLower.forEach((row) => {
-          const degreeDetails = JSON.stringify({
-            level: row.degree_level,
-            name: row.degree_name,
-          });
-
-          if (!uniqueDegrees.has(degreeDetails)) {
-            uniqueDegrees.add(degreeDetails);
-          }
-        });
-
         const classCode = parsedFileToLower.slice(0)[0].class_code;
-
-        const degreesExist = await checkDegreesExist(uniqueDegrees);
         const classExist = await checkClassExists(classCode);
 
-        let areClassesAssociatedWithDegrees = true;
-
-        for (const row of uniqueDegrees) {
-          const degree = JSON.parse(row);
-
-          const isClassAssociatedWithDegree = await classAssociatedWithDegree(
-            classCode,
-            degree.level,
-            degree.name
-          );
-
-          if (!isClassAssociatedWithDegree) {
-            areClassesAssociatedWithDegrees = false;
-            break;
-          }
-        }
-
-        if (degreesExist && classExist && areClassesAssociatedWithDegrees) {
+        if (classExist) {
           for (const [index, row] of parsedFileToLower.slice(0).entries()) {
             await checkStudentExists(
               row.reg_no,
@@ -106,13 +74,7 @@ const MarksPage = () => {
               index
             );
 
-            await checkMarkExists(
-              row.mark,
-              row.unique_code,
-              row.class_code,
-              row.reg_no,
-              index
-            );
+            await checkMarkExists(row.mark, row.class_code, row.reg_no, index);
           }
 
           toast.success("Your file has been succesfully uploaded!");
@@ -140,71 +102,6 @@ const MarksPage = () => {
     }
 
     return null;
-  };
-
-  const checkDegreesExist = async (
-    uniqueDegrees: Set<string>
-  ): Promise<boolean> => {
-    try {
-      if (accessToken) {
-        const degreeDetails = await degreeService.getDegrees(
-          uniqueDegrees,
-          accessToken
-        );
-
-        if (degreeDetails.statusCode !== 200) {
-          toast.error(
-            `Something went wrong when uploading the marks. ${degreeDetails.data}.`
-          );
-
-          return false;
-        }
-
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      console.error(error);
-      toast.error(`Something went wrong when uploading the marks.`);
-
-      return false;
-    }
-  };
-
-  const classAssociatedWithDegree = async (
-    classCode: string,
-    degreeLevel: string,
-    degreeName: string
-  ): Promise<boolean> => {
-    try {
-      if (accessToken) {
-        const classDetails =
-          await classService.checkIfClassIsAssociatedWithADegree(
-            classCode,
-            degreeLevel,
-            degreeName,
-            accessToken
-          );
-
-        if (classDetails.statusCode !== 200) {
-          toast.error(
-            `Something went wrong when uploading the marks. ${classDetails.data}.`
-          );
-
-          return false;
-        }
-
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      console.error(error);
-      toast.error(`Something went wrong when uploading the marks.`);
-
-      return false;
-    }
   };
 
   const checkClassExists = async (classCode: string): Promise<boolean> => {
@@ -273,25 +170,25 @@ const MarksPage = () => {
 
   const checkMarkExists = async (
     mark: number,
-    markUniqueCode: string,
     classCode: string,
     regNo: string,
     index: number
   ) => {
     try {
       if (accessToken) {
+        const classId = await getClassDetails(classCode, index);
+        const studentId = await getStudentDetails(regNo, index);
+
         const markDetails = await markService.getMark(
-          markUniqueCode,
+          studentId,
+          classId,
           accessToken
         );
 
         if (markDetails.statusCode !== 200) {
           if (markDetails.statusCode === 404) {
-            const classId = await getClassDetails(classCode, index);
-            const studentId = await getStudentDetails(regNo, index);
-
             if (classId && studentId) {
-              await createMark(mark, markUniqueCode, studentId, classId, index);
+              await createMark(mark, studentId, classId, index);
             }
           } else {
             toast.error(
@@ -324,6 +221,7 @@ const MarksPage = () => {
     index: number
   ) => {
     // TODO: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
+    console.log("bA");
     try {
       if (accessToken) {
         const studentDetails = {
@@ -361,7 +259,6 @@ const MarksPage = () => {
 
   const createMark = async (
     mark: number,
-    markUniqueCode: string,
     studentId: number,
     classId: number,
     index: number
@@ -369,7 +266,6 @@ const MarksPage = () => {
     try {
       if (accessToken) {
         const markDetails: IMark = {
-          unique_code: markUniqueCode,
           mark: mark,
           class_id: classId,
           student_id: studentId,

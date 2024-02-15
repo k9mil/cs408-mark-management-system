@@ -30,10 +30,5 @@ export function validateMarkDetailsOnEdit(markDetails: IMarkEdit): boolean {
     return false;
   }
 
-  if (!("unique_code" in markDetails) || markDetails.unique_code === null) {
-    toast.error("The Unique Code is missing.");
-    return false;
-  }
-
   return true;
 }

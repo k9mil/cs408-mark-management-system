@@ -57,10 +57,10 @@ export const StudentsModal = ({
     }
   }, [studentMarks, activeTab, hasRendered]);
 
-  const deleteMark = async (uniqueCode: string) => {
+  const deleteMark = async (markId: number) => {
     try {
       if (accessToken) {
-        await markService.deleteMark(uniqueCode, accessToken);
+        await markService.deleteMark(markId, accessToken);
         toast.success("Mark was deleted successfully!");
       }
 
@@ -246,7 +246,7 @@ export const StudentsModal = ({
               type="submit"
               variant="destructive"
               onClick={() => {
-                deleteMark(row.unique_code);
+                deleteMark(row.id);
               }}
             >
               Remove
@@ -255,7 +255,7 @@ export const StudentsModal = ({
               type="submit"
               onClick={() => {
                 const markDetails: IMarkEdit = {
-                  unique_code: row.unique_code,
+                  id: row.id,
                   mark: mark === null ? null : +mark,
                 };
 

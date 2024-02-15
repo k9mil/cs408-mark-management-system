@@ -46,7 +46,6 @@ class DataGenerator:
                     "STUDENT_NAME": faker.first_name() + " " + faker.last_name(),
                     "DEGREE_LEVEL": "BSc",
                     "DEGREE_NAME": "Computer Science",
-                    "UNIQUE_CODE": f"CS2020{faker.random_uppercase_letter()}{faker.random_uppercase_letter()}"
                 }
             )
 

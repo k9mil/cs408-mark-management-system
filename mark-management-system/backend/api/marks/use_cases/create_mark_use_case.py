@@ -54,11 +54,10 @@ class CreateMarkUseCase:
         if is_lecturer_of_class is None:
             raise PermissionError("Permission denied to access this resource")
 
-        if self.mark_repository.find_by_unique_code(request.unique_code):
+        if self.mark_repository.find_by_student_id_and_class_id(request.student_id, request.class_id):
             raise MarkAlreadyExists("Mark already exists")
 
         mark = Marks(
-            unique_code=request.unique_code,
             mark=request.mark,
             class_id=request.class_id,
             student_id=request.student_id

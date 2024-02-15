@@ -10,7 +10,6 @@ export const markService = {
       .post(
         `${API_BASE_URL}/marks`,
         {
-          unique_code: markDetails.unique_code,
           mark: markDetails.mark,
           class_id: markDetails.class_id,
           student_id: markDetails.student_id,
@@ -32,10 +31,10 @@ export const markService = {
       });
   },
 
-  getMark: async (uniqueCode: string, accessToken: string) => {
+  getMark: async (studentId: number, classId: number, accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/marks/${uniqueCode}`, {
-        data: { unique_code: uniqueCode },
+      .get(`${API_BASE_URL}/marks/${studentId}/${classId}`, {
+        data: { stuent_id: studentId, class_id: classId },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -88,9 +87,9 @@ export const markService = {
   editMark: async (markDetails: IMarkEdit, accessToken: string) => {
     return await axios
       .put(
-        `${API_BASE_URL}/marks/${markDetails.unique_code}`,
+        `${API_BASE_URL}/marks/${markDetails.id}`,
         {
-          unique_code: markDetails.unique_code,
+          id: markDetails.id,
           mark: markDetails.mark,
         },
         {
@@ -109,10 +108,10 @@ export const markService = {
       });
   },
 
-  deleteMark: async (uniqueCode: string, accessToken: string) => {
+  deleteMark: async (markId: number, accessToken: string) => {
     return await axios
-      .delete(`${API_BASE_URL}/marks/${uniqueCode}`, {
-        data: { unique_code: uniqueCode },
+      .delete(`${API_BASE_URL}/marks/${markId}`, {
+        data: { mark_id: markId },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -129,7 +128,7 @@ export const markService = {
 
   getMarksForStudent: async (regNo: string, accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/marks/${regNo}/all/`, {
+      .get(`${API_BASE_URL}/marks/${regNo}/`, {
         data: { regNo: regNo },
         headers: {
           Authorization: `Bearer ${accessToken}`,

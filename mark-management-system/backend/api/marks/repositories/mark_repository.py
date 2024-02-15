@@ -31,7 +31,7 @@ class MarkRepository:
         self.db.commit()
         self.db.refresh(marks)
 
-    def find_by_unique_id(self, marks_id: int) -> Optional[Marks]:
+    def find_by_id(self, mark_id: int) -> Optional[Marks]:
         """
         Retrieves a mark by a given mark identifier.
 
@@ -41,19 +41,19 @@ class MarkRepository:
         Returns:
             Optional[Marks]: A `Marks` from the database, however can also return `None` if not found.
         """
-        return self.db.query(Marks).filter_by(id=marks_id).first()
+        return self.db.query(Marks).filter_by(id=mark_id).first()
 
-    def find_by_unique_code(self, marks_unique_code: str) -> Marks:
+    def find_by_student_id_and_class_id(self, student_id: int, class_id: int) -> Optional[Marks]:
         """
-        Retrieves a mark by a given mark identifier.
+        Retrieves a mark by a student_id and a
 
         Args:
-            marks_unique_code: The mark identifier.
+            marks_id: The mark identifier.
         
         Returns:
             Optional[Marks]: A `Marks` from the database, however can also return `None` if not found.
         """
-        return self.db.query(Marks).filter_by(unique_code=marks_unique_code).first()
+        return self.db.query(Marks).filter_by(student_id=student_id, class_id=class_id).first()
 
     def get_student_marks_for_lecturer(self, lecturer_id: int) -> List[MarksRow]:
         """
@@ -65,7 +65,7 @@ class MarkRepository:
         Returns:
             List[MarksRow]: A list of `MarksRow` schematic objects.
         """
-        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.unique_code, Marks.mark)
+        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.mark)
             .join(Marks, Marks.class_id == Class.id)
             .join(Student, Student.id == Marks.student_id)
             .join(Degree, Degree.id == Student.degree_id)
@@ -83,7 +83,7 @@ class MarkRepository:
         Returns:
             List[MarksRow]: A list of `MarksRow` schematic objects.
         """
-        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.unique_code, Marks.mark)
+        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.mark)
             .join(Marks, Marks.class_id == Class.id)
             .join(Student, Student.id == Marks.student_id)
             .join(Degree, Degree.id == Student.degree_id)

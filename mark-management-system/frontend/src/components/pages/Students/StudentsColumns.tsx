@@ -27,8 +27,4 @@ export const StudentColumns: ColumnDef<IMarkRow>[] = [
     accessorKey: "degree_name",
     header: "Degree Name",
   },
-  {
-    accessorKey: "unique_code",
-    header: "Unique Code",
-  },
 ];

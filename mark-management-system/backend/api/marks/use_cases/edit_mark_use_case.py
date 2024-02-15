@@ -32,7 +32,7 @@ class EditMarkUseCase:
 
         Raises:
             PermissionError: If the user is not an a user & lecturer, and if the requestor is not the lecturer of the class.
-            MarkNotFound: If the mark cannot be found, given the unique code.
+            MarkNotFound: If the mark cannot be found, given the unique identifier.
             UserNotFound: If the user (from the JWT) cannot be found.
         
         Returns:
@@ -48,7 +48,7 @@ class EditMarkUseCase:
         if not ((user and is_lecturer)):
             raise PermissionError("Permission denied to access this resource")
 
-        mark = self.mark_repository.find_by_unique_code(request.unique_code)
+        mark = self.mark_repository.find_by_id(request.id)
 
         if mark is None:
             raise MarkNotFound("Mark not found")

@@ -32,14 +32,14 @@ class MarksBase(BaseModel):
 
     class_id: int
     student_id: int
-    unique_code: str
 
 class MarksCreate(MarksBase):
     pass
 
 class MarksEdit(BaseModel):
+    id: int
+    
     mark: int
-    unique_code: str
 
 class MarksRow(BaseModel):
     id: int
@@ -50,7 +50,6 @@ class MarksRow(BaseModel):
     student_name: str
     degree_level: str
     degree_name: str
-    unique_code: str
 
 class Marks(MarksBase):
     id: int
