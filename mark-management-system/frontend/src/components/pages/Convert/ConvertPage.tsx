@@ -14,7 +14,6 @@ import { toast } from "sonner";
 
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
-import MarksInfoBox from "../Marks/MarksInfoBox";
 import MarksUploadedFile from "../Marks/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
@@ -31,7 +30,10 @@ import {
   validateMyPlaceFile,
   validateUploadFile,
 } from "@/utils/FileUploadUtils";
+
 import { studentService } from "@/services/StudentService";
+
+import ConvertInfoBox from "./ConvertInfoBox";
 
 const ConvertPage = () => {
   const navigate = useNavigate();
@@ -362,7 +364,7 @@ const ConvertPage = () => {
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
             <div className="flex flex-row mx-6 justify-between items-center">
-              <MarksInfoBox />
+              <ConvertInfoBox />
               <div className="flex flex-row space-x-4">
                 <Button
                   variant="secondary"
