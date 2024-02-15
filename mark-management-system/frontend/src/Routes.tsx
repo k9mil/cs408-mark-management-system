@@ -3,6 +3,7 @@ import * as React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import DashboardPage from "./components/pages/Dashboard/DashboardPage";
+import ConvertPage from "./components/pages/Convert/ConvertPage";
 import MarksPage from "./components/pages/Marks/MarksPage";
 import LoginPage from "./components/pages/Login/LoginPage";
 import ClassesPage from "./components/pages/Classes/ClassesPage";
@@ -23,6 +24,10 @@ const Routes = () => {
     {
       path: "/dashboard",
       element: <DashboardPage />,
+    },
+    {
+      path: "/convert",
+      element: <ConvertPage />,
     },
     {
       path: "/marks",

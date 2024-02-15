@@ -1,6 +1,6 @@
 export interface IDegree {
   name: string;
-  level: number;
+  level: string;
 }
 
 export interface IDegreeWithId extends IDegree {
