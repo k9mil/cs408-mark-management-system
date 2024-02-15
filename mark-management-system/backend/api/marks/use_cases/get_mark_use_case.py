@@ -20,17 +20,18 @@ class GetMarkUseCase:
         self.user_repository = user_repository
         self.class_repository = class_repository
     
-    def execute(self, mark_unique_code: str, current_user: Tuple[str, bool, bool]) -> MarkSchema:
+    def execute(self, student_id: int, class_id: int, current_user: Tuple[str, bool, bool]) -> MarkSchema:
         """
         Executes the Use Case to retrieve an existing mark.
 
         Args:
-            mark_unique_code: The marks unique identifier.
+            student_id: The student unique identifier.
+            class_id: The class unique identifier.
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
             PermissionError: If the user is not an a user & lecturer, and if the requestor is not the lecturer of the class.
-            MarkNotFound: If the mark cannot be found given the unique code.
+            MarkNotFound: If the mark cannot be found given the unique identifier.
             UserNotFound: If the user (from the JWT) cannot be found.
         
         Returns:
@@ -46,7 +47,7 @@ class GetMarkUseCase:
         if not ((user and is_lecturer)):
             raise PermissionError("Permission denied to access this resource")
         
-        mark = self.mark_repository.find_by_unique_code(mark_unique_code)
+        mark = self.mark_repository.find_by_student_id_and_class_id(student_id, class_id)
 
         if mark is None:
             raise MarkNotFound("Mark not found")

@@ -21,11 +21,11 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 7) {
+    if (Object.keys(row).length != 6) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
-        CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME, UNIQUE_CODE`
+        CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME`
       );
 
       return false;
@@ -111,15 +111,6 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
         `Row ${
           i + 2
         } doesn't contain a degree name. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("unique_code" in row) || row.unique_code === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a unique code. Please fix the file and try again.`
       );
       return false;
     }

@@ -81,7 +81,6 @@ class Marks(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
-    unique_code = Column(String(32), nullable=False)
     mark = Column(Integer, nullable=False)
 
     class_id = Column(Integer, ForeignKey("classes.id"), index=True)

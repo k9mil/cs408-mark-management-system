@@ -80,20 +80,22 @@ def create_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.get("/marks/{mark_unique_code}", response_model=schemas.Marks)
+@marks.get("/marks/{student_id}/{class_id}", response_model=schemas.Marks)
 def get_mark(
-    mark_unique_code: str,
+    student_id: int,
+    class_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_mark_use_case: GetMarkUseCase = Depends(get_mark_use_case),
 ):
     """
-    Retrieves a specific mark in the system, given a unique code.    
+    Retrieves a specific mark in the system, given a student_id and a class_id.    
 
     **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
     OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
     Args:  
-        - `mark_unique_code`: The unique identifier of the mark.  
+        - `student_id`: The unique identifier of the student to retrieve the mark from.  
+        - `class_id`: The unique identifier of the class.
         - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
                       The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
         - `get_mark_use_case`: The class which handles the business logic for mark retrieval.   
@@ -101,7 +103,7 @@ def get_mark(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, or if the mark has not been found given the unique code.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if the mark has not been found given the mark identifier.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -114,7 +116,7 @@ def get_mark(
         )    
 
     try:
-        return get_mark_use_case.execute(mark_unique_code, current_user)
+        return get_mark_use_case.execute(student_id, class_id, current_user)
     except MarkNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
@@ -166,14 +168,14 @@ def get_student_marks(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.put("/marks/{mark_unique_code}", response_model=schemas.Marks)
+@marks.put("/marks/{mark_id}", response_model=schemas.Marks)
 def edit_mark(
     request: schemas.MarksEdit,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     edit_mark_use_case: EditMarkUseCase = Depends(edit_mark_use_case),
 ):
     """
-    Modifies an existing mark given the mark's unique code.   
+    Modifies an existing mark given the mark's identifier.   
 
     **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
     OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
@@ -187,7 +189,7 @@ def edit_mark(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, or if a mark cannot be found given the unique code.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if a mark cannot be found given the identifier.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -210,9 +212,9 @@ def edit_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.delete("/marks/{mark_unique_code}", response_model=None)
+@marks.delete("/marks/{mark_id}", response_model=None)
 def delete_mark(
-    mark_unique_code: str,
+    mark_id: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     delete_mark_use_case: DeleteMarkUseCase = Depends(delete_mark_use_case),
 ):
@@ -223,7 +225,7 @@ def delete_mark(
     OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
     Args:  
-        - `mark_unique_code`: The `mark_unique_code` of the mark which is to be deleted. The unique identifier.  
+        - `mark_id`: The `mark_id` of the mark which is to be deleted. The unique identifier.  
         - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
                       The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
         - `delete_mark_use_case`: The class which handles the business logic for deleting the mark.  
@@ -231,7 +233,7 @@ def delete_mark(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
-        - `HTTPException`, 404: If the mark has not been found, given the unique code.  
+        - `HTTPException`, 404: If the mark has not been found, given the unique identifier.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -245,7 +247,7 @@ def delete_mark(
 
     try:
         return delete_mark_use_case.execute(
-            mark_unique_code, current_user
+            mark_id, current_user
         )
     except MarkNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))

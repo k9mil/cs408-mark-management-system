@@ -32,7 +32,7 @@ class GetMarksForStudentUseCase:
 
         Raises:
             PermissionError: If the user is not an a user & lecturer, and if the requestor is not the lecturer of the class.
-            MarkNotFound: If the mark cannot be found given the unique code.
+            MarkNotFound: If the mark cannot be found given the unique identifier.
             UserNotFound: If the user (from the JWT) cannot be found.
         
         Returns:
@@ -62,11 +62,10 @@ class GetMarksForStudentUseCase:
                 id=mark[0],
                 class_code=mark[3],
                 reg_no=mark[2],
-                mark=mark[7],
+                mark=mark[6],
                 student_name=mark[1],
                 degree_level=mark[4],
                 degree_name=mark[5],
-                unique_code=mark[6],
             )
 
             marks_data.append(mark_row)
