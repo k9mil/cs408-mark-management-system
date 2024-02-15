@@ -16,6 +16,15 @@ export interface IMarkRow {
   unique_code: string;
 }
 
+export interface IMarkMMS {
+  class_code: string;
+  reg_no: string;
+  mark: number;
+  student_name: string;
+  degree_level: string;
+  degree_name: string;
+}
+
 export interface IMarkEdit {
   unique_code: string;
   mark: number | null;

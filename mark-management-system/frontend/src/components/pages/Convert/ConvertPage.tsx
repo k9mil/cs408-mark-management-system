@@ -18,10 +18,10 @@ import MarksInfoBox from "../Marks/MarksInfoBox";
 import MarksUploadedFile from "../Marks/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
-import { IMarkMyPlace } from "@/models/IMark";
+import { IMarkMMS, IMarkMyPlace } from "@/models/IMark";
 import { IStudent } from "@/models/IStudent";
 
-import { toLowerCaseIMarkMyPlace } from "@/utils/Utils";
+import { generateCSVname, toLowerCaseIMarkMyPlace } from "@/utils/Utils";
 import { validateMyPlaceFile } from "@/utils/FileUploadUtils";
 import { studentService } from "@/services/StudentService";
 
@@ -81,7 +81,7 @@ const ConvertPage = () => {
             }
           }
 
-          console.log(convertedObjects);
+          exportToCSV(convertedObjects);
 
           toast.success("Your file has been succesfully converted!");
         }
@@ -95,8 +95,10 @@ const ConvertPage = () => {
     }
   };
 
-  const convertToMMS = (data: IMarkMyPlace, studentDetails: IStudent) => {
-    console.log(studentDetails);
+  const convertToMMS = (
+    data: IMarkMyPlace,
+    studentDetails: IStudent
+  ): IMarkMMS => {
     return {
       class_code: data.class_code,
       reg_no: data.reg_no,
@@ -104,8 +106,36 @@ const ConvertPage = () => {
       student_name: studentDetails.student_name,
       degree_level: studentDetails.degree.level,
       degree_name: studentDetails.degree.name,
-      unique_code: "123",
     };
+  };
+
+  const exportToCSV = (dataToExport: IMarkMMS[]) => {
+    try {
+      const fileName = generateCSVname("converted_to");
+
+      if (dataToExport.length < 1) {
+        toast.info("Nothing to export.");
+
+        return;
+      }
+
+      const csv = Papa.unparse(dataToExport);
+
+      const csvDataAsBlob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      const csvURL = window.URL.createObjectURL(csvDataAsBlob);
+      const csvElement = document.createElement("a");
+
+      csvElement.href = csvURL;
+      csvElement.setAttribute("download", fileName);
+      csvElement.click();
+
+      toast.success("The converted file has been downloaded.");
+    } catch (error) {
+      toast.error("Something went wrong when exporting this table to CSV.");
+    }
   };
 
   const parseMyPlaceFile = async (): Promise<IMarkMyPlace[] | null> => {
@@ -149,7 +179,9 @@ const ConvertPage = () => {
       console.error(error);
 
       toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 2}.`
+        `Something went wrong when retrieving student details for Row ${
+          index + 2
+        }.`
       );
     }
   };
