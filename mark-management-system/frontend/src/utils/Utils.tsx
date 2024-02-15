@@ -31,19 +31,31 @@ export const toLowerCaseIMarkMyPlace = (
   );
 };
 
-export const generateCSVname = (page: string): string => {
+/**
+ * Generates a CSV name to be used for the exported csv.
+ * @param text - The custom text which tells the user which file was downloaded.
+ * @returns A string containing the generated file name.
+ */
+export const generateCSVname = (text: string): string => {
   const date = new Date();
 
-  return `mark_management_system_${page}_${date.toISOString()}.csv`;
+  return `mark_management_system_${text}_${date.toISOString()}.csv`;
 };
 
+/**
+ * Exports & triggers a download of the CSV to the user's machine.
+ * @param dataToExport - The data to be exported, i.e contained within the downloaded CSV.
+ * @param successMessage - A custom success message if no errors happen during the exporting process.
+ * @param text - Custom text which modifies the name of the generated CSV file.
+ * @returns - N/A, an empty return if length of data < 1
+ */
 export const exportToCSV = (
   dataToExport: any,
   successMessage: string,
-  entityName: string
+  text: string
 ) => {
   try {
-    const fileName = generateCSVname(entityName);
+    const fileName = generateCSVname(text);
 
     if (dataToExport.length < 1) {
       toast.info("Nothing to export.");

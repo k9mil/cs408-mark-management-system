@@ -56,6 +56,11 @@ export function LecturersDataTable<TData, TValue>({
     setSelectedRow(row.original as ILecturer);
   };
 
+  /**
+   * Transforms the data array (TData) by adding uploaded_for_all_classes, so that the exported data
+   * matches the visual table.
+   * @returns A list of modified objects.
+   */
   const preprocessData = () => {
     const preprocessedData = [];
 

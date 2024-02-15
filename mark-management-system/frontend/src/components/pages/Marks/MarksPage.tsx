@@ -25,7 +25,12 @@ import { toast } from "sonner";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
-import { validateUploadFile } from "@/utils/FileUploadUtils";
+
+import {
+  validateFileSizeAndExtension,
+  validateUploadFile,
+} from "@/utils/FileUploadUtils";
+
 import { toLowerCaseIMarkRow } from "@/utils/Utils";
 
 const MarksPage = () => {
@@ -393,26 +398,6 @@ const MarksPage = () => {
     if (filePickedLocal && filePickedLocal.current !== null) {
       filePickedLocal.current.click();
     }
-  };
-
-  /**
-   * Validates the size & type of the file uploaded. If the file is not a CSV or >= 5MB, then an error + false is returned.
-   * @param file - The file uploaded by the user.
-   * @returns A boolean, true if it passes all validation and false if it fails at least one.
-   */
-  const validateFileSizeAndExtension = (file: File): boolean => {
-    if (file.size > 5242880) {
-      toast.error("The file size should not exceeed 5MB.");
-
-      return false;
-    }
-
-    if (file.type !== "text/csv") {
-      toast.error("The file should be in a CSV format.");
-      return false;
-    }
-
-    return true;
   };
 
   return (

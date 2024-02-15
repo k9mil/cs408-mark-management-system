@@ -41,6 +41,11 @@ export function StudentProfileDataTable<TData, TValue>({
     []
   );
 
+  /**
+   * Transforms the data array (TData) by deleting the id, so that the exported data
+   * matches the visual table.
+   * @returns A list of modified objects.
+   */
   const preprocessData = () => {
     const preprocessedData = [];
 

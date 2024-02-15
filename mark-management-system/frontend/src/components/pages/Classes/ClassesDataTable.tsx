@@ -71,6 +71,11 @@ export function ClassesDataTable<TData, TValue>({
     setSelectedRow(row.original as IClass);
   };
 
+  /**
+   * Transforms the data array (TData) by adding the number_of_students and lecturer, so that the exported data
+   * matches the visual table.
+   * @returns A list of modified objects.
+   */
   const preprocessData = () => {
     const preprocessedData = [];
 
@@ -80,7 +85,7 @@ export function ClassesDataTable<TData, TValue>({
         number_of_students: getNumOfStudents((classItem as IClass).students),
         lecturer: formatLecturerName((classItem as IClass).lecturer),
       };
-
+      
       delete processedClass.id;
       delete processedClass.students;
       delete processedClass.marks;

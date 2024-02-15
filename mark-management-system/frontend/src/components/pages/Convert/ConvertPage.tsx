@@ -27,6 +27,7 @@ import {
 } from "@/utils/Utils";
 
 import {
+  validateFileSizeAndExtension,
   validateMyPlaceFile,
   validateUploadFile,
 } from "@/utils/FileUploadUtils";
@@ -116,7 +117,7 @@ const ConvertPage = () => {
           parsedFileToLower &&
           validateUploadFile(parsedFileToLower.slice(0))
         ) {
-          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+          for (const row of parsedFileToLower.slice(0)) {
             convertedObject = convertToPegasus(row);
             convertedObjects.push(convertedObject);
           }
@@ -270,26 +271,6 @@ const ConvertPage = () => {
     if (filePickedLocal && filePickedLocal.current !== null) {
       filePickedLocal.current.click();
     }
-  };
-
-  /**
-   * Validates the size & type of the file uploaded. If the file is not a CSV or >= 5MB, then an error + false is returned.
-   * @param file - The file uploaded by the user.
-   * @returns A boolean, true if it passes all validation and false if it fails at least one.
-   */
-  const validateFileSizeAndExtension = (file: File): boolean => {
-    if (file.size > 5242880) {
-      toast.error("The file size should not exceeed 5MB.");
-
-      return false;
-    }
-
-    if (file.type !== "text/csv") {
-      toast.error("The file should be in a CSV format.");
-      return false;
-    }
-
-    return true;
   };
 
   return (
