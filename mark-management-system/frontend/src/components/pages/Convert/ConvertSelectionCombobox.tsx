@@ -59,7 +59,7 @@ export const ConvertSelectionCombobox = ({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Search conversion..." />
           <CommandEmpty>No conversions found.</CommandEmpty>
           <CommandGroup>
             {conversionList.map((conversionItem) => (
