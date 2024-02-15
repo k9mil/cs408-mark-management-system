@@ -32,10 +32,10 @@ export const studentService = {
       });
   },
 
-  getStudent: async (studentRegNo: string, accessToken: string) => {
+  getStudent: async (regNo: string, accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/students/${studentRegNo}`, {
-        data: { reg_no: studentRegNo },
+      .get(`${API_BASE_URL}/students/${regNo}`, {
+        data: { reg_no: regNo },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

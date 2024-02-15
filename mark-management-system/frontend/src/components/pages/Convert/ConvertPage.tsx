@@ -224,13 +224,13 @@ const ConvertPage = () => {
   };
 
   const retrieveStudentDetails = async (
-    studentRegNo: string,
+    regNo: string,
     index: number
   ) => {
     try {
       if (accessToken) {
         const studentDetails = await studentService.getStudent(
-          studentRegNo,
+          regNo,
           accessToken
         );
 
