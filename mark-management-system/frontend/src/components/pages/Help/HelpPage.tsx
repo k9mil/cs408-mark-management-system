@@ -6,7 +6,7 @@ import { useAuth } from "../../../AuthProvider";
 
 import {
   Card,
-  CardDescription,
+  CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/common/Card";
@@ -34,17 +34,17 @@ const HelpPage = () => {
             <CardTitle>Help & Support</CardTitle>
           </CardHeader>
           <div className="flex flex-col space-y-4">
-            <CardDescription className="mx-6">
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               We're here to help! You can find information boxes throughout the
               site, which will aid you in particular tasks, such as Marks
               Uploading and the constraints it has or general information about
               the system.
-            </CardDescription>
-            <CardDescription className="mx-6">
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               However — if you need additional help with regards to the service,
               contact us by email, phone or alternatively our IT Support Portal:
-            </CardDescription>
-            <CardDescription className="mx-6">
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               <div className="flex flex-row space-x-2">
                 <h2 className="font-bold">Email:</h2>{" "}
                 <span className="underline text-blue-400">
@@ -61,17 +61,17 @@ const HelpPage = () => {
                   https://helpdesk.strath.ac.uk/support/home
                 </span>
               </div>
-            </CardDescription>
-            <CardDescription className="mx-6">
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               For even more points of support, visit:{" "}
               <span className="text-blue-400 underline">
                 https://www.strath.ac.uk/professionalservices/informationservices/contact/
               </span>
-            </CardDescription>
-            <CardDescription className="mx-6">
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               Thanks for visiting our help section — we're always here to ensure
               your experience is smooth and enjoyable!
-            </CardDescription>
+            </CardContent>
           </div>
         </Card>
       </div>
