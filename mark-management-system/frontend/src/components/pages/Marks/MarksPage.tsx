@@ -569,7 +569,14 @@ const MarksPage = () => {
             <div className="flex flex-row mx-6 justify-between items-center">
               <MarksInfoBox />
               <div className="flex flex-row space-x-4">
-                <Button variant="secondary" className="w-20">
+                <Button
+                  variant="secondary"
+                  className="w-20"
+                  onClick={() => {
+                    setFile(null);
+                    toast.info("Upload Marks operation has been cancelled.");
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button
