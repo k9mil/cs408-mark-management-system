@@ -298,7 +298,7 @@ def get_student_statistics(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.get("/marks/{reg_no}/all", response_model=List[schemas.MarksRow])
+@marks.get("/marks/{reg_no}", response_model=List[schemas.MarksRow])
 def get_marks_for_student(
     reg_no: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

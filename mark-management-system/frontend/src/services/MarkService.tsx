@@ -128,7 +128,7 @@ export const markService = {
 
   getMarksForStudent: async (regNo: string, accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/marks/${regNo}/all/`, {
+      .get(`${API_BASE_URL}/marks/${regNo}/`, {
         data: { regNo: regNo },
         headers: {
           Authorization: `Bearer ${accessToken}`,
