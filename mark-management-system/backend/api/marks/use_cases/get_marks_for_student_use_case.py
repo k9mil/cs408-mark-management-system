@@ -38,9 +38,7 @@ class GetMarksForStudentUseCase:
         Returns:
             List[MarksRow]: A list of MarksRow schema object containing all information about the requested marks.
         """
-        user_email, _, _ = current_user
-
-        print(reg_no)
+        user_email, _, _ = current_user 
 
         user = self.user_repository.find_by_email(user_email)
 
