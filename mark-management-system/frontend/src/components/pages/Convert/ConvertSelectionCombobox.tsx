@@ -32,11 +32,11 @@ export const ConvertSelectionCombobox = ({
 }) => {
   const conversionList = [
     {
-      value: "myplacetomms",
+      value: "myplace_to_mms",
       label: "MyPlace to MMS",
     },
     {
-      value: "mmstopegasus",
+      value: "mms_to_pegasus",
       label: "MMS to Pegasus",
     },
   ];

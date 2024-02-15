@@ -25,8 +25,8 @@ import { toast } from "sonner";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
-import { validateParsedFile } from "@/utils/FileUploadUtils";
-import { toLowerCase } from "@/utils/Utils";
+import { validateUploadFile } from "@/utils/FileUploadUtils";
+import { toLowerCaseIMarkRow } from "@/utils/Utils";
 
 const MarksPage = () => {
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ const MarksPage = () => {
   }, [navigate, isAuthenticated]);
 
   const filePickedLocal = useRef<HTMLInputElement>(null);
-
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -61,10 +60,10 @@ const MarksPage = () => {
       let parsedFileToLower;
 
       if (parsedFile) {
-        parsedFileToLower = toLowerCase(parsedFile);
+        parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
       }
 
-      if (parsedFileToLower && validateParsedFile(parsedFileToLower.slice(0))) {
+      if (parsedFileToLower && validateUploadFile(parsedFileToLower.slice(0))) {
         parsedFileToLower.forEach((row) => {
           const degreeDetails = JSON.stringify({
             level: row.degree_level,

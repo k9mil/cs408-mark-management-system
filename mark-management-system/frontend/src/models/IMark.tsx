@@ -27,3 +27,11 @@ export interface IStatistics {
   mode: number;
   pass_rate: number;
 }
+
+export interface IMarkMyPlace {
+  class_code: string;
+  date: Date;
+  reg_no: string;
+  class_total: number;
+  override_mark: number;
+}

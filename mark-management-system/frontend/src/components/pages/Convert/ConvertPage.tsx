@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
+import Papa from "papaparse";
+
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../AuthProvider";
 
@@ -16,9 +18,14 @@ import MarksInfoBox from "../Marks/MarksInfoBox";
 import MarksUploadedFile from "../Marks/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
+import { IMarkMyPlace } from "@/models/IMark";
+
+import { toLowerCaseIMarkMyPlace } from "@/utils/Utils";
+import { validateMyPlaceFile } from "@/utils/FileUploadUtils";
+
 const ConvertPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
     document.title = "Mark Management System | Convert";
@@ -28,12 +35,64 @@ const ConvertPage = () => {
     }
   }, [navigate, isAuthenticated]);
 
-  const [converisonOpen, setConversionOpen] = React.useState<boolean>(false);
-  const [converisonType, setConversionType] = React.useState<string>("");
+  const [conversionOpen, setConversionOpen] = React.useState<boolean>(false);
+  const [conversionType, setConversionType] = React.useState<string>("");
 
   const filePickedLocal = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  const accessToken = getAccessToken();
+
+  const convertFile = async () => {
+    try {
+      if (!accessToken) {
+        toast.error("Access token is missing.");
+
+        return;
+      }
+
+      if (conversionType === "myplace_to_mms") {
+        const parsedFile = await parseMyPlaceFile();
+        let parsedFileToLower;
+
+        if (parsedFile) {
+          parsedFileToLower = toLowerCaseIMarkMyPlace(parsedFile);
+        }
+
+        if (
+          parsedFileToLower &&
+          validateMyPlaceFile(parsedFileToLower.slice(0))
+        ) {
+          toast.success("Your file has been succesfully converted!");
+        }
+      }
+
+      //   if (conversionType === "mms_to_pegasus") {
+      //   }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong when converting the file.");
+    }
+  };
+
+  const parseMyPlaceFile = async (): Promise<IMarkMyPlace[] | null> => {
+    if (file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          complete: (results) => {
+            resolve(results.data as IMarkMyPlace[]);
+          },
+          header: true,
+          error: (error) => {
+            reject(error);
+          },
+        });
+      });
+    }
+
+    return null;
+  };
 
   const preventEventDefaults = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -152,17 +211,18 @@ const ConvertPage = () => {
                   Cancel
                 </Button>
                 <ConvertSelectionCombobox
-                  conversionType={converisonType}
-                  conversionOpen={converisonOpen}
+                  conversionType={conversionType}
+                  conversionOpen={conversionOpen}
                   setConversionType={setConversionType}
                   setConversionOpen={setConversionOpen}
                 />
                 <Button
-                  disabled={!file}
+                  disabled={!file || !conversionType}
                   className="w-20"
                   onClick={() => {
-                    // upload   Marks();
+                    convertFile();
                     setFile(null);
+                    setConversionType("");
                   }}
                 >
                   Next
