@@ -21,7 +21,7 @@ import { IMarkMMS, IMarkMyPlace, IMarkPegasus, IMarkRow } from "@/models/IMark";
 import { IStudent } from "@/models/IStudent";
 
 import {
-  generateCSVname,
+  exportToCSV,
   toLowerCaseIMarkMyPlace,
   toLowerCaseIMarkRow,
 } from "@/utils/Utils";
@@ -91,7 +91,11 @@ const ConvertPage = () => {
             }
           }
 
-          exportToCSV(convertedObjects);
+          exportToCSV(
+            convertedObjects,
+            "The converted file has been downloaded.",
+            "converted_to_mms_format"
+          );
 
           toast.success("Your file has been succesfully converted!");
         }
@@ -117,7 +121,11 @@ const ConvertPage = () => {
             convertedObjects.push(convertedObject);
           }
 
-          exportToCSV(convertedObjects);
+          exportToCSV(
+            convertedObjects,
+            "The converted file has been downloaded.",
+            "converted_to_pegasus_format"
+          );
 
           toast.success("Your file has been succesfully converted!");
         }
@@ -154,35 +162,6 @@ const ConvertPage = () => {
       degree_code: "<UNKNOWN>",
       result: "<TO FILL IN>",
     };
-  };
-
-  const exportToCSV = (dataToExport: IMarkMMS[] | IMarkPegasus[]) => {
-    try {
-      const fileName = generateCSVname("converted_to");
-
-      if (dataToExport.length < 1) {
-        toast.info("Nothing to export.");
-
-        return;
-      }
-
-      const csv = Papa.unparse(dataToExport);
-
-      const csvDataAsBlob = new Blob([csv], {
-        type: "text/csv;charset=utf-8;",
-      });
-
-      const csvURL = window.URL.createObjectURL(csvDataAsBlob);
-      const csvElement = document.createElement("a");
-
-      csvElement.href = csvURL;
-      csvElement.setAttribute("download", fileName);
-      csvElement.click();
-
-      toast.success("The converted file has been downloaded.");
-    } catch (error) {
-      toast.error("Something went wrong when exporting this table to CSV.");
-    }
   };
 
   const parseMyPlaceFile = async (): Promise<IMarkMyPlace[] | null> => {
@@ -223,10 +202,7 @@ const ConvertPage = () => {
     return null;
   };
 
-  const retrieveStudentDetails = async (
-    regNo: string,
-    index: number
-  ) => {
+  const retrieveStudentDetails = async (regNo: string, index: number) => {
     try {
       if (accessToken) {
         const studentDetails = await studentService.getStudent(
