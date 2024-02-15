@@ -18,11 +18,19 @@ import MarksInfoBox from "../Marks/MarksInfoBox";
 import MarksUploadedFile from "../Marks/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
-import { IMarkMMS, IMarkMyPlace } from "@/models/IMark";
+import { IMarkMMS, IMarkMyPlace, IMarkPegasus, IMarkRow } from "@/models/IMark";
 import { IStudent } from "@/models/IStudent";
 
-import { generateCSVname, toLowerCaseIMarkMyPlace } from "@/utils/Utils";
-import { validateMyPlaceFile } from "@/utils/FileUploadUtils";
+import {
+  generateCSVname,
+  toLowerCaseIMarkMyPlace,
+  toLowerCaseIMarkRow,
+} from "@/utils/Utils";
+
+import {
+  validateMyPlaceFile,
+  validateUploadFile,
+} from "@/utils/FileUploadUtils";
 import { studentService } from "@/services/StudentService";
 
 const ConvertPage = () => {
@@ -87,8 +95,31 @@ const ConvertPage = () => {
         }
       }
 
-      //   if (conversionType === "mms_to_pegasus") {
-      //   }
+      if (conversionType === "mms_to_pegasus") {
+        const parsedFile = await parseMarksManagementSystemFile();
+        const convertedObjects = [];
+
+        let parsedFileToLower;
+        let convertedObject;
+
+        if (parsedFile) {
+          parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
+        }
+
+        if (
+          parsedFileToLower &&
+          validateUploadFile(parsedFileToLower.slice(0))
+        ) {
+          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+            convertedObject = convertToPegasus(row);
+            convertedObjects.push(convertedObject);
+          }
+
+          exportToCSV(convertedObjects);
+
+          toast.success("Your file has been succesfully converted!");
+        }
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when converting the file.");
@@ -109,7 +140,21 @@ const ConvertPage = () => {
     };
   };
 
-  const exportToCSV = (dataToExport: IMarkMMS[]) => {
+  const convertToPegasus = (data: IMarkRow): IMarkPegasus => {
+    return {
+      class_code: data.class_code,
+      reg_no: data.reg_no,
+      mark: data.mark,
+      mark_code: "<TO FILL IN>",
+      student_name: data.student_name,
+      course: data.degree_name,
+      degree: data.degree_level,
+      degree_code: "<UNKNOWN>",
+      result: "<TO FILL IN>",
+    };
+  };
+
+  const exportToCSV = (dataToExport: IMarkMMS[] | IMarkPegasus[]) => {
     try {
       const fileName = generateCSVname("converted_to");
 
@@ -144,6 +189,26 @@ const ConvertPage = () => {
         Papa.parse(file, {
           complete: (results) => {
             resolve(results.data as IMarkMyPlace[]);
+          },
+          header: true,
+          error: (error) => {
+            reject(error);
+          },
+        });
+      });
+    }
+
+    return null;
+  };
+
+  const parseMarksManagementSystemFile = async (): Promise<
+    IMarkRow[] | null
+  > => {
+    if (file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          complete: (results) => {
+            resolve(results.data as IMarkRow[]);
           },
           header: true,
           error: (error) => {

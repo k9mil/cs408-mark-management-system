@@ -25,6 +25,18 @@ export interface IMarkMMS {
   degree_name: string;
 }
 
+export interface IMarkPegasus {
+  class_code: string;
+  reg_no: string;
+  mark: number;
+  mark_code: string;
+  student_name: string;
+  course: string;
+  degree: string;
+  degree_code: string;
+  result: string;
+}
+
 export interface IMarkEdit {
   unique_code: string;
   mark: number | null;
