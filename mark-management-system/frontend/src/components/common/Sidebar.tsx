@@ -29,6 +29,7 @@ import {
   InformationCircleIcon,
   AcademicCapIcon,
   UserCircleIcon,
+  ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/common/Button";
@@ -66,6 +67,15 @@ const Sidebar = () => {
               >
                 <HomeIcon className="h-6 w-6 text-white" />
                 <h2 className="text-white">Dashboard</h2>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/convert"
+                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+              >
+                <ArrowPathIcon className="h-6 w-6 text-white" />
+                <h2 className="text-white">Convert</h2>
               </Link>
             </li>
             <li>
