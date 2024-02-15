@@ -19,9 +19,11 @@ import MarksUploadedFile from "../Marks/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
 import { IMarkMyPlace } from "@/models/IMark";
+import { IStudent } from "@/models/IStudent";
 
 import { toLowerCaseIMarkMyPlace } from "@/utils/Utils";
 import { validateMyPlaceFile } from "@/utils/FileUploadUtils";
+import { studentService } from "@/services/StudentService";
 
 const ConvertPage = () => {
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ const ConvertPage = () => {
 
   const accessToken = getAccessToken();
 
-  const convertFile = async () => {
+  const processFile = async () => {
     try {
       if (!accessToken) {
         toast.error("Access token is missing.");
@@ -54,7 +56,10 @@ const ConvertPage = () => {
 
       if (conversionType === "myplace_to_mms") {
         const parsedFile = await parseMyPlaceFile();
+        const convertedObjects = [];
+
         let parsedFileToLower;
+        let convertedObject;
 
         if (parsedFile) {
           parsedFileToLower = toLowerCaseIMarkMyPlace(parsedFile);
@@ -64,6 +69,20 @@ const ConvertPage = () => {
           parsedFileToLower &&
           validateMyPlaceFile(parsedFileToLower.slice(0))
         ) {
+          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+            const studentDetails = await retrieveStudentDetails(
+              row.reg_no,
+              index
+            );
+
+            if (studentDetails) {
+              convertedObject = convertToMMS(row, studentDetails);
+              convertedObjects.push(convertedObject);
+            }
+          }
+
+          console.log(convertedObjects);
+
           toast.success("Your file has been succesfully converted!");
         }
       }
@@ -74,6 +93,19 @@ const ConvertPage = () => {
       console.error(error);
       toast.error("Something went wrong when converting the file.");
     }
+  };
+
+  const convertToMMS = (data: IMarkMyPlace, studentDetails: IStudent) => {
+    console.log(studentDetails);
+    return {
+      class_code: data.class_code,
+      reg_no: data.reg_no,
+      mark: data.override_mark ? data.override_mark : data.class_total,
+      student_name: studentDetails.student_name,
+      degree_level: studentDetails.degree.level,
+      degree_name: studentDetails.degree.name,
+      unique_code: "123",
+    };
   };
 
   const parseMyPlaceFile = async (): Promise<IMarkMyPlace[] | null> => {
@@ -92,6 +124,34 @@ const ConvertPage = () => {
     }
 
     return null;
+  };
+
+  const retrieveStudentDetails = async (
+    studentRegNo: string,
+    index: number
+  ) => {
+    try {
+      if (accessToken) {
+        const studentDetails = await studentService.getStudent(
+          studentRegNo,
+          accessToken
+        );
+
+        if (studentDetails.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when checking if the student exists. ${studentDetails.data}.`
+          );
+        }
+
+        return studentDetails.data;
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when uploading the marks for Row ${index + 2}.`
+      );
+    }
   };
 
   const preventEventDefaults = (e: React.DragEvent<HTMLDivElement>) => {
@@ -220,7 +280,7 @@ const ConvertPage = () => {
                   disabled={!file || !conversionType}
                   className="w-20"
                   onClick={() => {
-                    convertFile();
+                    processFile();
                     setFile(null);
                     setConversionType("");
                   }}
