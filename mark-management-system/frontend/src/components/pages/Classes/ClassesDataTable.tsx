@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import Papa from "papaparse";
-
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 
@@ -37,9 +35,7 @@ import {
 import { IUser } from "@/models/IUser";
 import { IClass } from "@/models/IClass";
 
-import { generateCSVname } from "@/utils/Utils";
-
-import { toast } from "sonner";
+import { exportToCSV } from "@/utils/Utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -95,36 +91,6 @@ export function ClassesDataTable<TData, TValue>({
     return preprocessedData;
   };
 
-  const exportToCSV = () => {
-    try {
-      const dataToExport = preprocessData();
-      const fileName = generateCSVname("classes");
-
-      if (dataToExport.length < 1) {
-        toast.info("Nothing to export.");
-
-        return;
-      }
-
-      const csv = Papa.unparse(dataToExport);
-
-      const csvDataAsBlob = new Blob([csv], {
-        type: "text/csv;charset=utf-8;",
-      });
-
-      const csvURL = window.URL.createObjectURL(csvDataAsBlob);
-      const csvElement = document.createElement("a");
-
-      csvElement.href = csvURL;
-      csvElement.setAttribute("download", fileName);
-      csvElement.click();
-
-      toast.success("You have successfully exported this table to CSV!");
-    } catch (error) {
-      toast.error("Something went wrong when exporting this table to CSV.");
-    }
-  };
-
   const table = useReactTable({
     data,
     columns,
@@ -155,7 +121,13 @@ export function ClassesDataTable<TData, TValue>({
         </div>
         <Button
           onClick={() => {
-            exportToCSV();
+            const convertedObjects = preprocessData();
+
+            exportToCSV(
+              convertedObjects,
+              "You have successfully exported this table to CSV.",
+              "classes"
+            );
           }}
         >
           Export to CSV
