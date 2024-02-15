@@ -214,7 +214,7 @@ def edit_mark(
 
 @marks.delete("/marks/{mark_id}", response_model=None)
 def delete_mark(
-    mark_id: str,
+    mark_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     delete_mark_use_case: DeleteMarkUseCase = Depends(delete_mark_use_case),
 ):
