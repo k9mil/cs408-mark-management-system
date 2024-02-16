@@ -39,10 +39,6 @@ export const UploadSelectionCombobox = ({
       value: "personal_circumstances",
       label: "Personal Circumstances",
     },
-    {
-      value: "academic_misconduct",
-      label: "Academic Misconduct",
-    },
   ];
 
   return (

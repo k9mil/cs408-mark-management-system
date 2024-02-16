@@ -7,18 +7,27 @@ from api.system.schemas.schemas import PersonalCircumstancesCreate
 
 from api.personal_circumstances.repositories.personal_circumstance_repostitory import PersonalCircumstanceRepository
 from api.users.repositories.user_repository import UserRepository
+from api.students.repositories.student_repository import StudentRepository
 
 from api.personal_circumstances.errors.personal_circumstances_already_exist import PersonalCircumstanceAlreadyExists
 
 from api.users.errors.user_not_found import UserNotFound
 
+from api.students.errors.student_not_found import StudentNotFound
+
 class CreatePersonalCircumstanceUseCase:
     """
     The Use Case containing business logic for creating a new personal circumstance.
     """
-    def __init__(self, personal_circumstance_repository: PersonalCircumstanceRepository, user_repository: UserRepository) -> None:
+    def __init__(
+            self,
+            personal_circumstance_repository: PersonalCircumstanceRepository,
+            user_repository: UserRepository,
+            student_repository: StudentRepository
+        ) -> None:
         self.personal_circumstance_repository = personal_circumstance_repository
         self.user_repository = user_repository
+        self.student_repository = student_repository
 
     def execute(self, request: PersonalCircumstancesCreate, current_user: Tuple[str, bool, bool]) -> PersonalCircumstanceSchema:
         """
@@ -31,6 +40,7 @@ class CreatePersonalCircumstanceUseCase:
         Raises:
             UserNotFound: If the user from the JWT token is not found.
             PermissionError: If the user is not valid and a lecturer, or if they are not an administrator.
+            StudentNotFound: If the student from the request is not found.
             PersonalCircumstanceAlreadyExists: If the personal circumstance already exists.
         
         Returns:
@@ -45,6 +55,9 @@ class CreatePersonalCircumstanceUseCase:
         
         if not ((user and is_lecturer) or is_admin):
             raise PermissionError("Permission denied to access this resource")
+        
+        if self.student_repository.find_by_reg_no(request.reg_no) is None:
+            raise StudentNotFound("Student not found")
         
         if self.personal_circumstance_repository.find_by_details(request):
             raise PersonalCircumstanceAlreadyExists("Personal Circumstance already exists")

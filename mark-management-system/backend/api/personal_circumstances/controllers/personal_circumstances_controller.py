@@ -12,6 +12,8 @@ from api.personal_circumstances.errors.personal_circumstances_not_found import P
 
 from api.users.errors.user_not_found import UserNotFound
 
+from api.students.errors.student_not_found import StudentNotFound
+
 from api.middleware.dependencies import get_current_user
 
 from api.personal_circumstances.dependencies import create_personal_circumstance_use_case
@@ -38,7 +40,7 @@ def create_personal_circumstance(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found.
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if the student from the request is not found.
         - `HTTPException`, 409: If the personal circumstance already exists in the system.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
@@ -56,6 +58,8 @@ def create_personal_circumstance(
             request, current_user
         )
     except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except StudentNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except PersonalCircumstanceAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
