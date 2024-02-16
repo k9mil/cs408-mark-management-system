@@ -6,36 +6,45 @@ from api.system.schemas.schemas import PersonalCircumstancesBase as PersonalCirc
 from api.system.schemas.schemas import PersonalCircumstancesCreate
 
 from api.personal_circumstances.repositories.personal_circumstance_repostitory import PersonalCircumstanceRepository
+from api.users.repositories.user_repository import UserRepository
 
 from api.personal_circumstances.errors.personal_circumstances_already_exist import PersonalCircumstanceAlreadyExists
 
+from api.users.errors.user_not_found import UserNotFound
 
 class CreatePersonalCircumstanceUseCase:
     """
     The Use Case containing business logic for creating a new personal circumstance.
     """
-    def __init__(self, personal_circumstance_repository: PersonalCircumstanceRepository) -> None:
+    def __init__(self, personal_circumstance_repository: PersonalCircumstanceRepository, user_repository: UserRepository) -> None:
         self.personal_circumstance_repository = personal_circumstance_repository
+        self.user_repository = user_repository
 
     def execute(self, request: PersonalCircumstancesCreate, current_user: Tuple[str, bool, bool]) -> PersonalCircumstanceSchema:
         """
         Executes the Use Case to create a new personal circumstance in the system.
 
         Args:
-            request: A `DegreeCreate` object is required which contains the necessary degree details for degree creation.
+            request: A `PersonalCircumstancesCreate` object is required which contains the necessary degree details for personal circumstance creation.
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
-            PermissionError: If the user is not an administrator.
+            UserNotFound: If the user from the JWT token is not found.
+            PermissionError: If the user is not valid and a lecturer, or if they are not an administrator.
             PersonalCircumstanceAlreadyExists: If the personal circumstance already exists.
         
         Returns:
             PersonalCircumstanceSchema: A PersonalCircumstanceBase schema object containing all information about the newly created personal circumstances.
         """
-        # _, is_admin, _ = current_user
+        user_email, is_admin, is_lecturer = current_user
 
-        # if is_admin is False:
-        #     raise PermissionError("Permission denied to access this resource")
+        user = self.user_repository.find_by_email(user_email)
+
+        if user is None:
+            raise UserNotFound("User not found")
+        
+        if not ((user and is_lecturer) or is_admin):
+            raise PermissionError("Permission denied to access this resource")
         
         if self.personal_circumstance_repository.find_by_details(request):
             raise PersonalCircumstanceAlreadyExists("Personal Circumstance already exists")

@@ -38,6 +38,7 @@ def create_personal_circumstance(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found.
         - `HTTPException`, 409: If the personal circumstance already exists in the system.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
@@ -54,6 +55,8 @@ def create_personal_circumstance(
         return create_personal_circumstance_use_case.execute(
             request, current_user
         )
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except PersonalCircumstanceAlreadyExists as e:
         raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:

@@ -27,7 +27,7 @@ class GetPersonalCircumstancesForStudentUseCase:
 
         Raises:
             UserNotFound: If the user from the JWT token is not found.
-            PermissionError: If the user is not valid and a lecturer, or if they are not an aministrator.
+            PermissionError: If the user is not valid and a lecturer, or if they are not an administrator.
             PersonalCircumstanceNotFound: If no personal circumstances are found.
         
         Returns:
