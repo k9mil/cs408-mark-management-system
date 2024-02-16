@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException, Body
 
-from typing import Tuple, List, Annotated
+from typing import Tuple, List
 
 from api.system.schemas import schemas
 

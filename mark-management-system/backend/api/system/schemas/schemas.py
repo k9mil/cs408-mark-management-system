@@ -159,10 +159,24 @@ class Lecturer(BaseModel):
     
     classes: List["LecturerClass"] = []
 
+class PersonalCircumstancesBase(BaseModel):
+    details: str
+    semester: str
+    cat: int
+    comments: str
+
+class PersonalCircumstancesCreate(PersonalCircumstancesBase):
+    reg_no: str
+
+class PersonalCircumstances(PersonalCircumstancesBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
 class StudentBase(BaseModel):
     reg_no: str
     student_name: str
-    personal_circumstances: str | None = None
 
     degree_id: int
 
@@ -174,6 +188,7 @@ class Student(StudentBase):
 
     degree: DegreeBase
     classes: List[ClassBase] = []
+    personal_circustances: List[PersonalCircumstancesBase] = []
 
     class Config:
         from_attributes = True
@@ -203,6 +218,7 @@ class UserDetails(UserBase):
 
     class Config:
         from_attributes = True
+
 
 User.model_rebuild()
 Class.model_rebuild()

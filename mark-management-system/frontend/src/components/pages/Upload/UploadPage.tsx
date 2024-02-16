@@ -10,10 +10,14 @@ import { Button } from "@/components/common/Button";
 
 import Sidebar from "@/components/common/Sidebar";
 
-import MarksInfoBox from "./MarksInfoBox";
+import UploadInfoBox from "./UploadInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
 import { IMark, IMarkRow } from "@/models/IMark";
+import {
+  IPersonalCircumstance,
+  IPersonalCircumstanceRow,
+} from "@/models/IPersonalCircumstance";
 
 import { classService } from "@/services/ClassService";
 import { studentService } from "@/services/StudentService";
@@ -28,12 +32,19 @@ import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
 import {
   validateFileSizeAndExtension,
+  validatePersonalCircumstancesFile,
   validateUploadFile,
 } from "@/utils/FileUploadUtils";
 
-import { toLowerCaseIMarkRow } from "@/utils/Utils";
+import {
+  toLowerCaseIMarkRow,
+  toLowerCaseIPersonalCircumstanceRow,
+} from "@/utils/Utils";
 
-const MarksPage = () => {
+import UploadSelectionCombobox from "./UploadSelectionCombobox";
+import { personalCircumstanceService } from "@/services/PersonalCircumstanceService";
+
+const UploadPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, getAccessToken } = useAuth();
 
@@ -45,13 +56,16 @@ const MarksPage = () => {
     }
   }, [navigate, isAuthenticated]);
 
+  const [uploadOpen, setUploadOpen] = React.useState<boolean>(false);
+  const [uploadType, setUploadType] = React.useState<string>("");
+
   const filePickedLocal = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const accessToken = getAccessToken();
 
-  const uploadMarks = async () => {
+  const uploadFile = async () => {
     try {
       if (!accessToken) {
         toast.error("Access token is missing.");
@@ -59,27 +73,64 @@ const MarksPage = () => {
         return;
       }
 
-      const parsedFile = await parseFileContents();
-      let parsedFileToLower;
+      if (uploadType === "student_marks") {
+        const parsedFile = await parseStudentMarks();
+        let parsedFileToLower;
 
-      if (parsedFile) {
-        parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
+        if (parsedFile) {
+          parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
+        }
+
+        if (
+          parsedFileToLower &&
+          validateUploadFile(parsedFileToLower.slice(0))
+        ) {
+          const classCode = parsedFileToLower.slice(0)[0].class_code;
+          const classExist = await checkClassExists(classCode);
+
+          if (classExist) {
+            for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+              await checkStudentExists(
+                row.reg_no,
+                row.student_name,
+                row.degree_name,
+                index
+              );
+
+              await checkMarkExists(
+                row.mark,
+                row.class_code,
+                row.reg_no,
+                index
+              );
+            }
+
+            toast.success("Your file has been succesfully uploaded!");
+          }
+        }
       }
 
-      if (parsedFileToLower && validateUploadFile(parsedFileToLower.slice(0))) {
-        const classCode = parsedFileToLower.slice(0)[0].class_code;
-        const classExist = await checkClassExists(classCode);
+      if (uploadType === "personal_circumstances") {
+        const parsedFile = await parsePersonalCircumstances();
+        let parsedFileToLower;
 
-        if (classExist) {
+        if (parsedFile) {
+          parsedFileToLower = toLowerCaseIPersonalCircumstanceRow(parsedFile);
+        }
+
+        if (
+          parsedFileToLower &&
+          validatePersonalCircumstancesFile(parsedFileToLower.slice(0))
+        ) {
           for (const [index, row] of parsedFileToLower.slice(0).entries()) {
-            await checkStudentExists(
+            await createPersonalCircumstances(
               row.reg_no,
-              row.student_name,
-              row.degree_name,
+              row.personal_circumstance_details,
+              row.sem,
+              row.cat,
+              row.comments,
               index
             );
-
-            await checkMarkExists(row.mark, row.class_code, row.reg_no, index);
           }
 
           toast.success("Your file has been succesfully uploaded!");
@@ -87,16 +138,36 @@ const MarksPage = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error("Something went wrong when uploading the file.");
     }
   };
 
-  const parseFileContents = async (): Promise<IMarkRow[] | null> => {
+  const parseStudentMarks = async (): Promise<IMarkRow[] | null> => {
     if (file) {
       return new Promise((resolve, reject) => {
         Papa.parse(file, {
           complete: (results) => {
             resolve(results.data as IMarkRow[]);
+          },
+          header: true,
+          error: (error) => {
+            reject(error);
+          },
+        });
+      });
+    }
+
+    return null;
+  };
+
+  const parsePersonalCircumstances = async (): Promise<
+    IPersonalCircumstanceRow[] | null
+  > => {
+    if (file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          complete: (results) => {
+            resolve(results.data as IPersonalCircumstanceRow[]);
           },
           header: true,
           error: (error) => {
@@ -232,7 +303,6 @@ const MarksPage = () => {
         const studentDetails = {
           reg_no: studentRegNo,
           student_name: studentName,
-          personal_circumstances: null,
           degree_id: degreeId,
         };
 
@@ -296,6 +366,51 @@ const MarksPage = () => {
 
       toast.error(
         `Something went wrong when uploading a mark for Row ${index + 2}.`
+      );
+    }
+  };
+
+  const createPersonalCircumstances = async (
+    reg_no: string,
+    details: string,
+    semester: string,
+    cat: number,
+    comments: string,
+    index: number
+  ) => {
+    try {
+      if (accessToken) {
+        const personalCircumstanceDetails: IPersonalCircumstance = {
+          reg_no: reg_no,
+          details: details,
+          semester: semester,
+          cat: cat,
+          comments: comments,
+        };
+
+        const markCreated =
+          await personalCircumstanceService.createPersonalCircumstance(
+            personalCircumstanceDetails,
+            accessToken
+          );
+
+        if (markCreated.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when uploading the personal circumstances for Row ${
+              index + 2
+            }. ${markCreated.data}`
+          );
+        } else {
+          toast.success("Personal Circumstance was uploaded!");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when uploading a personal circumstance for Row ${
+          index + 2
+        }.`
       );
     }
   };
@@ -406,7 +521,7 @@ const MarksPage = () => {
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
         <Card className="2xl:w-1/2 xl:w-2/3 2xl:h-3/5 xl:h-4/5 space-y-4 p-6 flex flex-col justify-between">
           <CardHeader className="flex flex-row justify-between items-center">
-            <CardTitle>Upload Marks</CardTitle>
+            <CardTitle>Upload File</CardTitle>
           </CardHeader>
           <div
             className={
@@ -448,24 +563,32 @@ const MarksPage = () => {
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
             <div className="flex flex-row mx-6 justify-between items-center">
-              <MarksInfoBox />
+              <UploadInfoBox />
               <div className="flex flex-row space-x-4">
                 <Button
                   variant="secondary"
                   className="w-20"
                   onClick={() => {
                     setFile(null);
-                    toast.info("Upload Marks operation has been cancelled.");
+                    setUploadType("");
+                    toast.info("Upload File operation has been cancelled.");
                   }}
                 >
                   Cancel
                 </Button>
+                <UploadSelectionCombobox
+                  uploadType={uploadType}
+                  uploadOpen={uploadOpen}
+                  setUploadType={setUploadType}
+                  setUploadOpen={setUploadOpen}
+                />
                 <Button
-                  disabled={!file}
+                  disabled={!file || !uploadType}
                   className="w-20"
                   onClick={() => {
-                    uploadMarks();
+                    uploadFile();
                     setFile(null);
+                    setUploadType("");
                   }}
                 >
                   Next
@@ -479,4 +602,4 @@ const MarksPage = () => {
   );
 };
 
-export default MarksPage;
+export default UploadPage;

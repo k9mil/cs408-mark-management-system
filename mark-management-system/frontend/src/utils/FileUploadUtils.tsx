@@ -1,4 +1,5 @@
 import { IMarkRow, IMarkMyPlace } from "@/models/IMark";
+import { IPersonalCircumstanceRow } from "@/models/IPersonalCircumstance";
 
 import { toast } from "sonner";
 
@@ -234,6 +235,129 @@ export function validateMyPlaceFile(
         `Row ${i + 2} should have an override mark between 0 and 100.`
       );
 
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Validates the parsed file (for the upload of Personal Circumstances), and ensures data integrity.
+ * @param fileContents - A list of IPersonalCircumstanceRow objects, or null.
+ * @returns A boolean, true if passes all validation or false if it fails at least one.
+ */
+export function validatePersonalCircumstancesFile(
+  fileContents: IPersonalCircumstanceRow[] | null
+): boolean {
+  if (!fileContents || !Array.isArray(fileContents)) {
+    toast.error("The file provided is empty or corrupt.");
+    return false;
+  }
+
+  for (let i = 0; i < fileContents.length; i++) {
+    const row = fileContents[i];
+
+    if (Object.keys(row).length != 10) {
+      toast.error(
+        `Row ${i + 2} doesn't contain all necessary information. 
+        The row should have the following: 
+        REG_NO, NAME, PROGRAMME, YEAR, REG_STATUS, CERT_TYPE, PERSONAL_CIRCUMSTANCE_DETAILS, SEM, CAT, COMMENTS`
+      );
+
+      return false;
+    }
+
+    if (!("reg_no" in row) || row.reg_no === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a registration number. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("name" in row) || row.name === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a name. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("programme" in row) || row.programme === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a programme. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("year" in row) || row.year === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a year. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("reg_status" in row) || row.reg_status === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a reg status. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("cert_type" in row) || row.cert_type === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a certificate type. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (
+      !("personal_circumstance_details" in row) ||
+      row.personal_circumstance_details === null
+    ) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain personal circumstance details. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("sem" in row) || row.sem === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a semester. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("cat" in row) || row.cat === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a category. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("comments" in row) || row.comments === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain comments. Please fix the file and try again.`
+      );
       return false;
     }
   }

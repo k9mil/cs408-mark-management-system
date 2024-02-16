@@ -1,6 +1,6 @@
-class UserNotFound(Exception):
+class PersonalCircumstanceNotFound(Exception):
     """
-    A custom subclass exception, raised when no user is found.
+    A custom subclass exception, raised when no personal circumstances are found.
 
     Args:
         message: A parameter which allows for a custom error message.

@@ -26,11 +26,12 @@ class Student(Base):
 
     reg_no = Column(String(256), unique=True, index=True)
     student_name = Column(String(128), nullable=False)
-    personal_circumstances = Column(String(1024))
 
     degree_id = Column(Integer, ForeignKey("degrees.id"), index=True, nullable=False)
 
     degree = relationship("Degree", back_populates="students")
+    personal_circumstances = relationship("PersonalCircumstance", back_populates="student")
+
     classes = relationship("Class", secondary="marks", back_populates="students")
 
 class Degree(Base):
@@ -93,3 +94,17 @@ class DegreeClasses(Base):
 
     degree_id = Column(Integer, ForeignKey("degrees.id"), primary_key=True, nullable=False)
     class_id = Column(Integer, ForeignKey("classes.id"), primary_key=True, nullable=False)
+
+class PersonalCircumstance(Base):
+    __tablename__ = "personal_circumstances"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+
+    details = Column(String(512), nullable=False)
+    semester = Column(String(8), nullable=False)
+    cat = Column(Integer, nullable=False)
+    comments = Column(String(256), nullable=False)
+
+    student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
+
+    student = relationship("Student", back_populates="personal_circumstances")
