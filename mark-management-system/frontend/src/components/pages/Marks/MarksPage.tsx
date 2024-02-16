@@ -32,6 +32,7 @@ import {
 } from "@/utils/FileUploadUtils";
 
 import { toLowerCaseIMarkRow } from "@/utils/Utils";
+import UploadSelectionCombobox from "./UploadSelectionCombobox";
 
 const MarksPage = () => {
   const navigate = useNavigate();
@@ -44,6 +45,9 @@ const MarksPage = () => {
       navigate("/");
     }
   }, [navigate, isAuthenticated]);
+
+  const [uploadOpen, setUploadOpen] = React.useState<boolean>(false);
+  const [uploadType, setUploadType] = React.useState<string>("");
 
   const filePickedLocal = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -460,8 +464,14 @@ const MarksPage = () => {
                 >
                   Cancel
                 </Button>
+                <UploadSelectionCombobox
+                  uploadType={uploadType}
+                  uploadOpen={uploadOpen}
+                  setUploadType={setUploadType}
+                  setUploadOpen={setUploadOpen}
+                />
                 <Button
-                  disabled={!file}
+                  disabled={!file || !uploadType}
                   className="w-20"
                   onClick={() => {
                     uploadMarks();
