@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
-import MarksUploadedFile from "../Marks/MarksUploadedFile";
+import MarksUploadedFile from "../Upload/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
 import { IMarkMMS, IMarkMyPlace, IMarkPegasus, IMarkRow } from "@/models/IMark";

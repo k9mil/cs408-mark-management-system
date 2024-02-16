@@ -10,7 +10,7 @@ import { Button } from "@/components/common/Button";
 
 import Sidebar from "@/components/common/Sidebar";
 
-import MarksInfoBox from "./MarksInfoBox";
+import UploadInfoBox from "./UploadInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
 import { IMark, IMarkRow } from "@/models/IMark";
@@ -44,7 +44,7 @@ import {
 import UploadSelectionCombobox from "./UploadSelectionCombobox";
 import { personalCircumstanceService } from "@/services/PersonalCircumstanceService";
 
-const MarksPage = () => {
+const UploadPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, getAccessToken } = useAuth();
 
@@ -563,7 +563,7 @@ const MarksPage = () => {
               <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
             </div>
             <div className="flex flex-row mx-6 justify-between items-center">
-              <MarksInfoBox />
+              <UploadInfoBox />
               <div className="flex flex-row space-x-4">
                 <Button
                   variant="secondary"
@@ -602,4 +602,4 @@ const MarksPage = () => {
   );
 };
 
-export default MarksPage;
+export default UploadPage;

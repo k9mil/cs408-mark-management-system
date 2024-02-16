@@ -80,11 +80,11 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to="/marks"
+                to="/upload"
                 className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
               >
                 <PencilIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Marks</h2>
+                <h2 className="text-white">Upload</h2>
               </Link>
             </li>
             <li>

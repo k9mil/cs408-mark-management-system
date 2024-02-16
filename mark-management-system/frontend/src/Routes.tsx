@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import DashboardPage from "./components/pages/Dashboard/DashboardPage";
 import ConvertPage from "./components/pages/Convert/ConvertPage";
-import MarksPage from "./components/pages/Marks/MarksPage";
+import UploadPage from "./components/pages/Upload/UploadPage";
 import LoginPage from "./components/pages/Login/LoginPage";
 import ClassesPage from "./components/pages/Classes/ClassesPage";
 import StudentsPage from "./components/pages/Students/StudentsPage";
@@ -30,8 +30,8 @@ const Routes = () => {
       element: <ConvertPage />,
     },
     {
-      path: "/marks",
-      element: <MarksPage />,
+      path: "/upload",
+      element: <UploadPage />,
     },
     {
       path: "/classes",

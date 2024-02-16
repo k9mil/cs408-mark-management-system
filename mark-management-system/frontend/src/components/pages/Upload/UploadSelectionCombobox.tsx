@@ -52,14 +52,14 @@ export const UploadSelectionCombobox = ({
           {uploadType
             ? uploadList.find((uploadItem) => uploadItem.value === uploadType)
                 ?.label
-            : "Select conversion..."}
+            : "Select upload type..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Search upload type..." />
-          <CommandEmpty>No conversions found.</CommandEmpty>
+          <CommandEmpty>No upload types found.</CommandEmpty>
           <CommandGroup>
             {uploadList.map((uploadItem) => (
               <CommandItem

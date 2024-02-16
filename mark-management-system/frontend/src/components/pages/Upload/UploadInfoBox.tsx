@@ -14,7 +14,7 @@ import {
 
 import { Button } from "@/components/common/Button";
 
-const MarksInfoBox = () => {
+const UploadInfoBox = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -22,7 +22,7 @@ const MarksInfoBox = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="space-y-4">
-          <DialogTitle className="text-xl">Uploading Marks</DialogTitle>
+          <DialogTitle className="text-xl">Uploading Files</DialogTitle>
           <DialogDescription>
             To ensure a smooth and error-free experience, please adhere to the
             following guidelines:
@@ -35,6 +35,10 @@ const MarksInfoBox = () => {
           <DialogDescription>
             Files should also not exceed 5MB, and should only be in a CSV
             format.
+          </DialogDescription>
+          <DialogDescription>
+            In order to be able to proceed with the upload, you need to upload a
+            file as well as select an upload type from the dropdown menu.
           </DialogDescription>
           <DialogDescription>
             If anything goes wrong during the upload process, you will get a
@@ -52,4 +56,4 @@ const MarksInfoBox = () => {
   );
 };
 
-export default MarksInfoBox;
+export default UploadInfoBox;
