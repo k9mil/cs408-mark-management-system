@@ -12,7 +12,6 @@ export const studentService = {
         {
           reg_no: studentDetails.reg_no,
           student_name: studentDetails.student_name,
-          personal_circumstances: studentDetails.personal_circumstances,
           degree_id: studentDetails.degree_id,
         },
         {

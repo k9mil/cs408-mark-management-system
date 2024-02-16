@@ -32,6 +32,7 @@ import {
 } from "@/utils/FileUploadUtils";
 
 import { toLowerCaseIMarkRow } from "@/utils/Utils";
+
 import UploadSelectionCombobox from "./UploadSelectionCombobox";
 
 const MarksPage = () => {
@@ -55,7 +56,7 @@ const MarksPage = () => {
 
   const accessToken = getAccessToken();
 
-  const uploadMarks = async () => {
+  const uploadFile = async () => {
     try {
       if (!accessToken) {
         toast.error("Access token is missing.");
@@ -63,30 +64,40 @@ const MarksPage = () => {
         return;
       }
 
-      const parsedFile = await parseFileContents();
-      let parsedFileToLower;
+      if (uploadType === "student_marks") {
+        const parsedFile = await parseFileContents();
+        let parsedFileToLower;
 
-      if (parsedFile) {
-        parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
-      }
+        if (parsedFile) {
+          parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
+        }
 
-      if (parsedFileToLower && validateUploadFile(parsedFileToLower.slice(0))) {
-        const classCode = parsedFileToLower.slice(0)[0].class_code;
-        const classExist = await checkClassExists(classCode);
+        if (
+          parsedFileToLower &&
+          validateUploadFile(parsedFileToLower.slice(0))
+        ) {
+          const classCode = parsedFileToLower.slice(0)[0].class_code;
+          const classExist = await checkClassExists(classCode);
 
-        if (classExist) {
-          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
-            await checkStudentExists(
-              row.reg_no,
-              row.student_name,
-              row.degree_name,
-              index
-            );
+          if (classExist) {
+            for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+              await checkStudentExists(
+                row.reg_no,
+                row.student_name,
+                row.degree_name,
+                index
+              );
 
-            await checkMarkExists(row.mark, row.class_code, row.reg_no, index);
+              await checkMarkExists(
+                row.mark,
+                row.class_code,
+                row.reg_no,
+                index
+              );
+            }
+
+            toast.success("Your file has been succesfully uploaded!");
           }
-
-          toast.success("Your file has been succesfully uploaded!");
         }
       }
     } catch (error) {
@@ -236,7 +247,6 @@ const MarksPage = () => {
         const studentDetails = {
           reg_no: studentRegNo,
           student_name: studentName,
-          personal_circumstances: null,
           degree_id: degreeId,
         };
 
@@ -410,7 +420,7 @@ const MarksPage = () => {
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
         <Card className="2xl:w-1/2 xl:w-2/3 2xl:h-3/5 xl:h-4/5 space-y-4 p-6 flex flex-col justify-between">
           <CardHeader className="flex flex-row justify-between items-center">
-            <CardTitle>Upload Marks</CardTitle>
+            <CardTitle>Upload File</CardTitle>
           </CardHeader>
           <div
             className={
@@ -474,8 +484,9 @@ const MarksPage = () => {
                   disabled={!file || !uploadType}
                   className="w-20"
                   onClick={() => {
-                    uploadMarks();
+                    uploadFile();
                     setFile(null);
+                    setUploadType("");
                   }}
                 >
                   Next

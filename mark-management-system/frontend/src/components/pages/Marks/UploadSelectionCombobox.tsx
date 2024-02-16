@@ -32,7 +32,7 @@ export const UploadSelectionCombobox = ({
 }) => {
   const uploadList = [
     {
-      value: "marks",
+      value: "student_marks",
       label: "Student Marks",
     },
     {
