@@ -49,7 +49,7 @@ class PersonalCircumstanceRepository:
             student_reg_no=request.reg_no,
         ).all()
 
-    def get_by_student_reg_no(self, student_reg_no: int) -> List[PersonalCircumstance]:
+    def get_by_student_reg_no(self, reg_no: str) -> List[PersonalCircumstance]:
         """
         Get a list of personal circumstances by a registration number of a student.
 
@@ -59,4 +59,4 @@ class PersonalCircumstanceRepository:
         Returns:
             Optional[PersonalCircumstance]: A List[PersonalCircumstance] from the database.
         """
-        return self.db.query(PersonalCircumstance).filter_by(student_reg_no=student_reg_no).all()
+        return self.db.query(PersonalCircumstance).filter_by(student_reg_no=reg_no).all()
