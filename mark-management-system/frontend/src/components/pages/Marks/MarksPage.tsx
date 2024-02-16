@@ -14,6 +14,10 @@ import MarksInfoBox from "./MarksInfoBox";
 import MarksUploadedFile from "./MarksUploadedFile";
 
 import { IMark, IMarkRow } from "@/models/IMark";
+import {
+  IPersonalCircumstance,
+  IPersonalCircumstanceRow,
+} from "@/models/IPersonalCircumstance";
 
 import { classService } from "@/services/ClassService";
 import { studentService } from "@/services/StudentService";
@@ -28,12 +32,17 @@ import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
 import {
   validateFileSizeAndExtension,
+  validatePersonalCircumstancesFile,
   validateUploadFile,
 } from "@/utils/FileUploadUtils";
 
-import { toLowerCaseIMarkRow } from "@/utils/Utils";
+import {
+  toLowerCaseIMarkRow,
+  toLowerCaseIPersonalCircumstanceRow,
+} from "@/utils/Utils";
 
 import UploadSelectionCombobox from "./UploadSelectionCombobox";
+import { personalCircumstanceService } from "@/services/PersonalCircumstanceService";
 
 const MarksPage = () => {
   const navigate = useNavigate();
@@ -65,7 +74,7 @@ const MarksPage = () => {
       }
 
       if (uploadType === "student_marks") {
-        const parsedFile = await parseFileContents();
+        const parsedFile = await parseStudentMarks();
         let parsedFileToLower;
 
         if (parsedFile) {
@@ -100,18 +109,65 @@ const MarksPage = () => {
           }
         }
       }
+
+      if (uploadType === "personal_circumstances") {
+        const parsedFile = await parsePersonalCircumstances();
+        let parsedFileToLower;
+
+        if (parsedFile) {
+          parsedFileToLower = toLowerCaseIPersonalCircumstanceRow(parsedFile);
+        }
+
+        if (
+          parsedFileToLower &&
+          validatePersonalCircumstancesFile(parsedFileToLower.slice(0))
+        ) {
+          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+            await createPersonalCircumstances(
+              row.reg_no,
+              row.personal_circumstance_details,
+              row.sem,
+              row.cat,
+              row.comments,
+              index
+            );
+          }
+
+          toast.success("Your file has been succesfully uploaded!");
+        }
+      }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong when uploading the marks.");
+      toast.error("Something went wrong when uploading the file.");
     }
   };
 
-  const parseFileContents = async (): Promise<IMarkRow[] | null> => {
+  const parseStudentMarks = async (): Promise<IMarkRow[] | null> => {
     if (file) {
       return new Promise((resolve, reject) => {
         Papa.parse(file, {
           complete: (results) => {
             resolve(results.data as IMarkRow[]);
+          },
+          header: true,
+          error: (error) => {
+            reject(error);
+          },
+        });
+      });
+    }
+
+    return null;
+  };
+
+  const parsePersonalCircumstances = async (): Promise<
+    IPersonalCircumstanceRow[] | null
+  > => {
+    if (file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          complete: (results) => {
+            resolve(results.data as IPersonalCircumstanceRow[]);
           },
           header: true,
           error: (error) => {
@@ -310,6 +366,51 @@ const MarksPage = () => {
 
       toast.error(
         `Something went wrong when uploading a mark for Row ${index + 2}.`
+      );
+    }
+  };
+
+  const createPersonalCircumstances = async (
+    reg_no: string,
+    details: string,
+    semester: string,
+    cat: number,
+    comments: string,
+    index: number
+  ) => {
+    try {
+      if (accessToken) {
+        const personalCircumstanceDetails: IPersonalCircumstance = {
+          reg_no: reg_no,
+          details: details,
+          semester: semester,
+          cat: cat,
+          comments: comments,
+        };
+
+        const markCreated =
+          await personalCircumstanceService.createPersonalCircumstance(
+            personalCircumstanceDetails,
+            accessToken
+          );
+
+        if (markCreated.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when uploading the personal circumstances for Row ${
+              index + 2
+            }. ${markCreated.data}`
+          );
+        } else {
+          toast.success("Personal Circumstance was uploaded!");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when uploading a personal circumstance for Row ${
+          index + 2
+        }.`
       );
     }
   };

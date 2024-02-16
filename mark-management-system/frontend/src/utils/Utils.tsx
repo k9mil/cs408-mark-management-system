@@ -1,4 +1,5 @@
 import { IMarkRow, IMarkMyPlace } from "@/models/IMark";
+import { IPersonalCircumstanceRow } from "@/models/IPersonalCircumstance";
 
 import Papa from "papaparse";
 
@@ -28,6 +29,18 @@ export const toLowerCaseIMarkMyPlace = (
       Object.fromEntries(
         Object.entries(obj).map(([key, value]) => [key.toLowerCase(), value])
       ) as IMarkMyPlace
+  );
+};
+
+// https://stackoverflow.com/questions/12539574/whats-the-best-way-most-efficient-to-turn-all-the-keys-of-an-object-to-lower
+export const toLowerCaseIPersonalCircumstanceRow = (
+  fileContents: IPersonalCircumstanceRow[]
+): IPersonalCircumstanceRow[] => {
+  return fileContents.map(
+    (obj: IPersonalCircumstanceRow) =>
+      Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [key.toLowerCase(), value])
+      ) as IPersonalCircumstanceRow
   );
 };
 
