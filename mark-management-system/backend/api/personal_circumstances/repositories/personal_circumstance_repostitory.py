@@ -33,7 +33,7 @@ class PersonalCircumstanceRepository:
 
     def find_by_details(self, request: PersonalCircumstancesCreate) -> List[PersonalCircumstance]:
         """
-        Get a list of personal circumstances by a student_id.
+        Checks whether a given request is already in the database.
 
         Args:
             student_id: The student identificator.
@@ -47,14 +47,14 @@ class PersonalCircumstanceRepository:
             cat=request.cat,
             comments=request.comments,
             student_reg_no=request.reg_no,
-        ).all()
+        ).first()
 
     def get_by_student_reg_no(self, reg_no: str) -> List[PersonalCircumstance]:
         """
         Get a list of personal circumstances by a registration number of a student.
 
         Args:
-            student_reg_no: The student identificator.
+            reg_no: The student identificator.
         
         Returns:
             Optional[PersonalCircumstance]: A List[PersonalCircumstance] from the database.
