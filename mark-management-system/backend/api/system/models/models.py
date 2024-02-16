@@ -105,6 +105,6 @@ class PersonalCircumstance(Base):
     cat = Column(Integer, nullable=False)
     comments = Column(String(256), nullable=False)
 
-    students = Column(Integer, ForeignKey("students.id"), index=True)
+    student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
 
     student = relationship("Student", back_populates="personal_circumstances")

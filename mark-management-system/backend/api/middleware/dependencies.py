@@ -15,6 +15,7 @@ from api.classes.repositories.class_repository import ClassRepository
 from api.students.repositories.student_repository import StudentRepository
 from api.degrees.repositories.degree_repository import DegreeRepository
 from api.marks.repositories.mark_repository import MarkRepository
+from api.personal_circumstances.repositories.personal_circumstance_repostitory import PersonalCircumstanceRepository
 
 from api.config import Config
 
@@ -42,6 +43,9 @@ def get_degree_repository(db: Session = Depends(get_db)) -> DegreeRepository:
 
 def get_mark_repository(db: Session = Depends(get_db)) -> MarkRepository:
     return MarkRepository(db)
+
+def get_personal_circumstance_repository(db: Session = Depends(get_db)) -> PersonalCircumstanceRepository:
+    return PersonalCircumstanceRepository(db)
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> Optional[Tuple[str, bool, bool]]:
