@@ -469,7 +469,8 @@ const MarksPage = () => {
                   className="w-20"
                   onClick={() => {
                     setFile(null);
-                    toast.info("Upload Marks operation has been cancelled.");
+                    setUploadType("");
+                    toast.info("Upload File operation has been cancelled.");
                   }}
                 >
                   Cancel
