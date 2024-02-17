@@ -36,7 +36,7 @@ export const StudentProfileDropdown = ({
   studentList: IUserDropdown[];
 }) => {
   return (
-    <div className="flex flex-col space-y-2 w-full">
+    <div className="flex flex-col space-y-2 w-4/5">
       <Label htmlFor="student" className="text-left">
         Select a Student
       </Label>
@@ -55,7 +55,7 @@ export const StudentProfileDropdown = ({
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-full p-0">
           <Command>
             <CommandInput placeholder="Search students..." />
             <CommandEmpty>No lecturer found.</CommandEmpty>

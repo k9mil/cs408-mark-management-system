@@ -81,7 +81,7 @@ export function StudentProfileDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex flex-row justify-between py-2">
+      <div className="flex flex-row justify-between py-2 w-8/12">
         <div className="flex items-center">
           <Input
             placeholder="Search by class code..."
