@@ -20,6 +20,13 @@ import {
   CardTitle,
 } from "@/components/common/Card";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/common/Tooltip";
+
 import { markService } from "@/services/MarkService";
 
 import { toast } from "sonner";
@@ -96,7 +103,14 @@ export const StudentsModal = ({
             accessToken
           );
 
-          setStudentMarks(result);
+          const sortedStudentMarks = result.sort((a: IMarkRow, b: IMarkRow) => {
+            const markA = parseInt(a.class_code.slice(2), 10);
+            const markB = parseInt(b.class_code.slice(2), 10);
+
+            return markA - markB;
+          });
+
+          setStudentMarks(sortedStudentMarks);
         }
       } catch (error) {
         console.error(error);
@@ -269,7 +283,22 @@ export const StudentsModal = ({
             </Button>
           </DialogFooter>
         ) : (
-          <DialogFooter className="flex self-justify-end self-end">
+          <DialogFooter className="flex !justify-between items-center">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <h2 className="text-sm font-normal hover:cursor-pointer">
+                    What is this?
+                  </h2>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="w-96 p-1">
+                    This is a Quick View of all marks for the given user. For a
+                    more comprehensive view, visit the Student Profile page.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Button
               type="submit"
               onClick={() => {
