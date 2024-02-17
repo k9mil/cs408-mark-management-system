@@ -7,6 +7,7 @@ export interface IMark {
 export interface IMarkRow {
   id: number;
   class_code: string;
+  class_name: string | null;
   reg_no: string;
   mark: number;
   student_name: string;

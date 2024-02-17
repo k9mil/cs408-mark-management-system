@@ -20,6 +20,13 @@ import {
   CardTitle,
 } from "@/components/common/Card";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/common/Tooltip";
+
 import { markService } from "@/services/MarkService";
 
 import { toast } from "sonner";
@@ -96,7 +103,14 @@ export const StudentsModal = ({
             accessToken
           );
 
-          setStudentMarks(result);
+          const sortedStudentMarks = result.sort((a: IMarkRow, b: IMarkRow) => {
+            const markA = parseInt(a.class_code.slice(2), 10);
+            const markB = parseInt(b.class_code.slice(2), 10);
+
+            return markA - markB;
+          });
+
+          setStudentMarks(sortedStudentMarks);
         }
       } catch (error) {
         console.error(error);
@@ -119,7 +133,7 @@ export const StudentsModal = ({
           <DialogTitle className="flex flex-row space-x-4 justify-around">
             <h2
               className={`text-lg hover:cursor-pointer ${
-                activeTab == "class" ? "underline font-semibold" : "font-medium"
+                activeTab == "class" ? "underline font-bold" : "font-medium"
               }`}
               onClick={() => setActiveTab("class")}
             >
@@ -127,9 +141,7 @@ export const StudentsModal = ({
             </h2>
             <h2
               className={`text-lg hover:cursor-pointer ${
-                activeTab == "overall"
-                  ? "underline font-semibold"
-                  : "font-medium"
+                activeTab == "overall" ? "underline font-bold" : "font-medium"
               }`}
               onClick={() => setActiveTab("overall")}
             >
@@ -225,7 +237,7 @@ export const StudentsModal = ({
             </div>
           </div>
         ) : hasRendered ? (
-          <div className="grid grid-cols-3 gap-y-3 justify-items-center overflow-y-scroll py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="-mt-4 grid grid-cols-3 gap-y-3 justify-items-center overflow-y-scroll py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {studentMarks.map((mark_row: IMarkRow) => (
               <Card className="flex flex-col w-28 h-28 space-y-2 justify-center items-center shadow-lg">
                 <CardHeader className="flex flex-row justify-between items-center p-0">
@@ -234,7 +246,10 @@ export const StudentsModal = ({
                   </CardTitle>
                 </CardHeader>
                 <CardDescription>
-                  <h2 className="text-sm">Mark: {mark_row.mark}</h2>
+                  <h2 className="text-sm">
+                    Scored{" "}
+                    <span className="font-semibold">{mark_row.mark}%</span>
+                  </h2>
                 </CardDescription>
               </Card>
             ))}
@@ -268,7 +283,22 @@ export const StudentsModal = ({
             </Button>
           </DialogFooter>
         ) : (
-          <DialogFooter className="flex sm:self-justify-end">
+          <DialogFooter className="flex !justify-between items-center">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <h2 className="text-sm font-normal hover:cursor-pointer">
+                    What is this?
+                  </h2>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="w-96 p-1">
+                    This is a Quick View of all marks for the given user. For a
+                    more comprehensive view, visit the Student Profile page.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Button
               type="submit"
               onClick={() => {

@@ -3,8 +3,12 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from api.system.models.models import Student
+from api.system.models.models import Class
+from api.system.models.models import Marks
+from api.system.models.models import Degree
 
 from api.system.schemas.schemas import StudentBase
+from api.system.schemas.schemas import StudentStatistics
 
 
 class StudentRepository:
@@ -66,3 +70,21 @@ class StudentRepository:
             List[Student]: A list of `Student`(s) from the database, however can also return `[]` if none are found.
         """
         return self.db.query(Student).offset(skip).limit(limit).all()
+
+    def get_marks_and_details_for_student(self, reg_no: str) -> List[StudentStatistics]:
+        """
+        Retrieves a list of student marks alongside their details.
+
+        Args:
+            reg_no: The student for which the student marks should be retrieved.
+        
+        Returns:
+            List[StudentStatistics]: A list of `StudentStatistics` schematic objects.
+        """
+        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.mark)
+            .join(Marks, Marks.class_id == Class.id)
+            .join(Student, Student.id == Marks.student_id)
+            .join(Degree, Degree.id == Student.degree_id)
+            .filter(Student.reg_no == reg_no)
+            .all()
+        )

@@ -45,6 +45,7 @@ class MarksRow(BaseModel):
     id: int
 
     class_code: str
+    class_name: str | None
     reg_no: str
     mark: int
     student_name: str
@@ -192,6 +193,12 @@ class Student(StudentBase):
 
     class Config:
         from_attributes = True
+
+class StudentStatistics(BaseModel):
+    mean: int
+    median: int
+    mode: int
+    pass_rate: int
 
 
 class RoleUsersBase(BaseModel):

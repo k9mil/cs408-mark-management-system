@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
 
@@ -22,7 +22,8 @@ import { IClassUploaded } from "@/models/IClass";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const { id, isAuthenticated, getAccessToken } = useAuth();
+  const { id, isAuthenticated, getAccessToken, isAdmin, isLecturer } =
+    useAuth();
 
   const [statistics, setStatistics] = useState<IStatistics>();
   const [lecturer, setLecturer] = useState<ILecturer>();
@@ -108,9 +109,31 @@ const DashboardPage = () => {
                     </div>
                   </CardContent>
                 </div>
+              ) : (isAdmin || isLecturer) &&
+                lecturer &&
+                lecturer.classes.length ? (
+                <h2 className="px-6 font-normal text-sm">
+                  Ready to upload marks for one of your classes? Head over to
+                  the{" "}
+                  <Link
+                    to="/upload"
+                    className="text-blue-400 font-bold hover:underline"
+                  >
+                    upload page
+                  </Link>{" "}
+                  and get uploading!
+                </h2>
               ) : (
-                <h2 className="pl-7 font-normal text-sm">
-                  You haven't uploaded any marks yet.
+                <h2 className="px-6 font-normal text-sm">
+                  No classes assigned yet. To upload marks, please get assigned
+                  to a class by{" "}
+                  <Link
+                    to="/help"
+                    className="text-blue-400 font-bold hover:underline"
+                  >
+                    contacting an administrator
+                  </Link>
+                  .
                 </h2>
               )}
             </Card>
@@ -144,24 +167,24 @@ const DashboardPage = () => {
             <CardHeader className="flex flex-row justify-between items-center">
               <CardTitle className="text-lg">Class Overview</CardTitle>
             </CardHeader>
-            <div className="flex flex-col px-7">
+            <div className="flex flex-col px-6">
               <div className="flex flex-row space-x-4">
                 {lecturer && lecturer.classes.length > 0 ? (
                   lecturer.classes
                     .slice(0, 3)
                     .map((class_: IClassUploaded, index: number) => (
                       <React.Fragment key={class_.code}>
-                        <div className="flex flex-col w-1/3">
+                        <div className="flex flex-col w-1/3 space-y-2">
                           <h1 className="font-semibold text-base">
                             {class_.code} |
                             <span className="font-normal"> {class_.name}</span>
                           </h1>
                           {class_.is_uploaded === true ? (
-                            <h2 className="text-green-500 font-sm font-normal italic">
+                            <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
                               Uploaded
                             </h2>
                           ) : (
-                            <h2 className="text-red-500 font-sm font-normal italic">
+                            <h2 className="text-red-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-200 w-max">
                               Upload Due
                             </h2>
                           )}
@@ -171,15 +194,46 @@ const DashboardPage = () => {
                         )}
                       </React.Fragment>
                     ))
+                ) : isAdmin ? (
+                  <h2 className="font-normal text-sm -mt-6">
+                    It seems that you are not assigned to any classes. Start by
+                    heading over to{" "}
+                    <Link
+                      to="/classes"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      classes
+                    </Link>
+                    , to create a new class!
+                  </h2>
+                ) : isLecturer && !isAdmin ? (
+                  <h2 className="font-normal text-sm -mt-6">
+                    It seems that you are not assigned to any classes.{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      Contact an administrator
+                    </Link>{" "}
+                    to get assigned to one!
+                  </h2>
                 ) : (
-                  <h2 className="font-normal text-sm">
-                    You are not assigned to any classes.
+                  <h2 className="font-normal text-sm -mt-6">
+                    It seems that you are not assigned to any classes, and do
+                    not have any roles assigned.{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      Contact an administrator
+                    </Link>{" "}
+                    to get a role, and get assigned to a class!
                   </h2>
                 )}
               </div>
             </div>
             {lecturer && lecturer.classes.length > 0 ? (
-              <h2 className="text-sm text-black font-semibold flex self-end mr-8 relative -bottom-8">
+              <h2 className="text-sm text-black font-semibold flex self-end mr-8 relative -bottom-2">
                 “The place of useful learning.”
               </h2>
             ) : null}
