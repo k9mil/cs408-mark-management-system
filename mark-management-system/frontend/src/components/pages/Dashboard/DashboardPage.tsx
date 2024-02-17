@@ -174,17 +174,17 @@ const DashboardPage = () => {
                     .slice(0, 3)
                     .map((class_: IClassUploaded, index: number) => (
                       <React.Fragment key={class_.code}>
-                        <div className="flex flex-col w-1/3">
+                        <div className="flex flex-col w-1/3 space-y-2">
                           <h1 className="font-semibold text-base">
                             {class_.code} |
                             <span className="font-normal"> {class_.name}</span>
                           </h1>
                           {class_.is_uploaded === true ? (
-                            <h2 className="text-green-500 font-sm font-normal italic">
+                            <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
                               Uploaded
                             </h2>
                           ) : (
-                            <h2 className="text-red-500 font-sm font-normal italic">
+                            <h2 className="text-red-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-200 w-max">
                               Upload Due
                             </h2>
                           )}
@@ -233,7 +233,7 @@ const DashboardPage = () => {
               </div>
             </div>
             {lecturer && lecturer.classes.length > 0 ? (
-              <h2 className="text-sm text-black font-semibold flex self-end mr-8 relative -bottom-8">
+              <h2 className="text-sm text-black font-semibold flex self-end mr-8 relative -bottom-2">
                 “The place of useful learning.”
               </h2>
             ) : null}
