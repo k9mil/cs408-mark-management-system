@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
 
@@ -22,7 +22,8 @@ import { IClassUploaded } from "@/models/IClass";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const { id, isAuthenticated, getAccessToken } = useAuth();
+  const { id, isAuthenticated, getAccessToken, isAdmin, isLecturer } =
+    useAuth();
 
   const [statistics, setStatistics] = useState<IStatistics>();
   const [lecturer, setLecturer] = useState<ILecturer>();
@@ -108,9 +109,31 @@ const DashboardPage = () => {
                     </div>
                   </CardContent>
                 </div>
+              ) : (isAdmin || isLecturer) &&
+                lecturer &&
+                lecturer.classes.length ? (
+                <h2 className="px-6 font-normal text-sm">
+                  Ready to upload marks for one of your classes? Head over to
+                  the{" "}
+                  <Link
+                    to="/upload"
+                    className="text-blue-400 font-bold hover:underline"
+                  >
+                    upload page
+                  </Link>{" "}
+                  and get uploading!
+                </h2>
               ) : (
-                <h2 className="pl-7 font-normal text-sm">
-                  You haven't uploaded any marks yet.
+                <h2 className="px-6 font-normal text-sm">
+                  No classes assigned yet. To upload marks, please get assigned
+                  to a class by{" "}
+                  <Link
+                    to="/help"
+                    className="text-blue-400 font-bold hover:underline"
+                  >
+                    contacting an administrator
+                  </Link>
+                  .
                 </h2>
               )}
             </Card>
@@ -144,7 +167,7 @@ const DashboardPage = () => {
             <CardHeader className="flex flex-row justify-between items-center">
               <CardTitle className="text-lg">Class Overview</CardTitle>
             </CardHeader>
-            <div className="flex flex-col px-7">
+            <div className="flex flex-col px-6">
               <div className="flex flex-row space-x-4">
                 {lecturer && lecturer.classes.length > 0 ? (
                   lecturer.classes
@@ -171,9 +194,40 @@ const DashboardPage = () => {
                         )}
                       </React.Fragment>
                     ))
+                ) : isAdmin ? (
+                  <h2 className="font-normal text-sm -mt-6">
+                    It seems that you are not assigned to any classes. Start by
+                    heading over to{" "}
+                    <Link
+                      to="/classes"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      classes
+                    </Link>
+                    , to create a new class!
+                  </h2>
+                ) : isLecturer && !isAdmin ? (
+                  <h2 className="font-normal text-sm -mt-6">
+                    It seems that you are not assigned to any classes.{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      Contact an administrator
+                    </Link>{" "}
+                    to get assigned to one!
+                  </h2>
                 ) : (
-                  <h2 className="font-normal text-sm">
-                    You are not assigned to any classes.
+                  <h2 className="font-normal text-sm -mt-6">
+                    It seems that you are not assigned to any classes, and do
+                    not have any roles assigned.{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      Contact an administrator
+                    </Link>{" "}
+                    to get a role, and get assigned to a class!
                   </h2>
                 )}
               </div>
