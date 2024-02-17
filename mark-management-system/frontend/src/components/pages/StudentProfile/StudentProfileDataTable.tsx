@@ -81,7 +81,7 @@ export function StudentProfileDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex flex-row justify-between py-2">
+      <div className="flex flex-row justify-between py-2 w-full">
         <div className="flex items-center">
           <Input
             placeholder="Search by class code..."
@@ -108,7 +108,7 @@ export function StudentProfileDataTable<TData, TValue>({
           Export to CSV
         </Button>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -158,7 +158,7 @@ export function StudentProfileDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 2xl:py-4">
+      <div className="flex items-center justify-end space-x-2 2xl:py-4 w-full">
         <Button
           variant="outline"
           size="sm"

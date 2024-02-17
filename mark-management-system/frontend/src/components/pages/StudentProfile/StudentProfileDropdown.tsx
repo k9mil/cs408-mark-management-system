@@ -36,7 +36,7 @@ export const StudentProfileDropdown = ({
   studentList: IUserDropdown[];
 }) => {
   return (
-    <div className="flex flex-col space-y-2 w-5/6">
+    <div className="flex flex-col space-y-2 w-fit">
       <Label htmlFor="student" className="text-left">
         Select a Student
       </Label>
