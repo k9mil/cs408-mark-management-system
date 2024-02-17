@@ -36,7 +36,7 @@ export const StudentProfileDropdown = ({
   studentList: IUserDropdown[];
 }) => {
   return (
-    <div className="flex flex-col space-y-2 w-3/4">
+    <div className="flex flex-col space-y-2 w-full">
       <Label htmlFor="student" className="text-left">
         Select a Student
       </Label>
@@ -45,7 +45,7 @@ export const StudentProfileDropdown = ({
           <Button
             variant="outline"
             role="combobox"
-            className="w-full justify-between"
+            className="w-full justify-between overflow-x-hidden"
           >
             {student
               ? studentList.find(
