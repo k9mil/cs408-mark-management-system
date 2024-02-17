@@ -12,7 +12,7 @@ from api.marks.errors.mark_not_found import MarkNotFound
 from api.users.errors.user_not_found import UserNotFound
 
 
-class GetStudentsDetailsAndStatisticsUseCase:
+class GetStudentStatisticsUseCase:
     def __init__(self, student_repository: StudentRepository, user_repository: UserRepository):
         self.student_repository = student_repository
         self.user_repository = user_repository
@@ -36,15 +36,19 @@ class GetStudentsDetailsAndStatisticsUseCase:
         for current_mark in marks:
             mark_data.append(current_mark[6])
 
-        marks_statistics = StudentStatistics(
-            reg_no=marks[0][2],
-            student_name=marks[0][1],
-            degree_level=marks[0][4],
-            degree_name=marks[0][5],
-            mean=round(mean(mark_data)),
-            median=round(median(mark_data)),
-            mode=round(mode(mark_data)),
-            pass_rate=round(sum(mark >= self.pass_rate for mark in mark_data) / len(marks) * 100),
-        )
+        if mark_data:
+            marks_statistics = StudentStatistics(
+                mean=round(mean(mark_data)),
+                median=round(median(mark_data)),
+                mode=round(mode(mark_data)),
+                pass_rate=round(sum(mark >= self.pass_rate for mark in mark_data) / len(marks) * 100),
+            )
+        else:
+            marks_statistics = StudentStatistics(
+                mean=-1,
+                median=-1,
+                mode=-1,
+                pass_rate=-1,
+            )
 
         return marks_statistics

@@ -194,16 +194,10 @@ class Student(StudentBase):
         from_attributes = True
 
 class StudentStatistics(BaseModel):
-    reg_no: str
-    student_name: str
-
     mean: int
     median: int
     mode: int
     pass_rate: int
-
-    degree_name: str
-    degree_level: str
 
 
 class RoleUsersBase(BaseModel):

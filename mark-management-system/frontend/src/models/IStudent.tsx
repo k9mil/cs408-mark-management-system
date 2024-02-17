@@ -18,3 +18,10 @@ export interface IStudentBase {
 export interface IStudentWithId extends IStudent {
   id: number;
 }
+
+export interface IStudentDetailsWithStatistics {
+  mean: number;
+  mode: number;
+  median: number;
+  pass_rate: number;
+}

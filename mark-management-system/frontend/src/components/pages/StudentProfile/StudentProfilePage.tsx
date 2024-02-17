@@ -15,7 +15,11 @@ import {
 
 import { studentService } from "@/services/StudentService";
 
-import { IStudentBase } from "@/models/IStudent";
+import {
+  IStudent,
+  IStudentBase,
+  IStudentDetailsWithStatistics,
+} from "@/models/IStudent";
 import { IUserDropdown } from "@/models/IUser";
 import { IMarkRow } from "@/models/IMark";
 import { IPersonalCircumstance } from "@/models/IPersonalCircumstance";
@@ -41,7 +45,10 @@ const StudentProfilePage = () => {
 
   const [studentOpen, setStudentOpen] = React.useState<boolean>(false);
   const [student, setStudent] = React.useState<string>("");
+  const [studentStatistics, setStudentStatistics] =
+    React.useState<IStudentDetailsWithStatistics>();
   const [studentMarks, setStudentMarks] = React.useState<IMarkRow[]>([]);
+  const [studentData, setStudentData] = React.useState<IStudent>();
   const [studentPersonalCircumstances, setStudentPersonalCircumstances] =
     React.useState<IPersonalCircumstance[]>([]);
 
@@ -109,8 +116,42 @@ const StudentProfilePage = () => {
         }
       };
 
+      const retrieveStudentsStatistics = async () => {
+        try {
+          if (accessToken) {
+            const result = await studentService.getStudentStatistics(
+              student,
+              accessToken
+            );
+
+            setStudentStatistics(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const retrieveStudentData = async () => {
+        try {
+          if (accessToken) {
+            const result = await studentService.getStudent(
+              student,
+              accessToken
+            );
+
+            if (result.statusCode === 200) {
+              setStudentData(result.data);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       retrieveStudentMarks();
       retrievePersonalCircumstances();
+      retrieveStudentsStatistics();
+      retrieveStudentData();
     }
   }, [student, accessToken]);
 
@@ -200,74 +241,86 @@ const StudentProfilePage = () => {
                     Student Details
                   </CardTitle>
                 </CardHeader>
-                {studentMarks && studentMarks.length > 0 ? (
+                {studentData || studentStatistics ? (
                   <div className="flex flex-row w-full justify-between items-center">
-                    <div className="flex flex-col space-y-6 w-2/3">
-                      <div className="flex flex-col space-y-2">
-                        <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="text-md font-semibold">Name:</h2>
-                          <h2 className="text-sm font-regular flex justify-self-center self-center">
-                            {studentMarks[0].student_name}
-                          </h2>
-                        </div>
-                        <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="text-md font-semibold">
-                            Registration Number:
-                          </h2>
-                          <h2 className="text-sm font-regular flex justify-self-center self-center">
-                            {studentMarks[0].reg_no}
-                          </h2>
-                        </div>
-                        <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="text-md font-semibold">
-                            Degree Name:
-                          </h2>
-                          <h2 className="text-sm font-regular flex justify-self-center self-center">
-                            {studentMarks[0].degree_name}
-                          </h2>
-                        </div>
-                        <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="text-md font-semibold">
-                            Degree Level:
-                          </h2>
-                          <h2 className="text-sm font-regular flex justify-self-center self-center">
-                            {studentMarks[0].degree_level}
-                          </h2>
+                    {studentData ? (
+                      <div className="flex flex-col space-y-6 w-2/3">
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex flex-row space-x-2 w-full">
+                            <h2 className="text-md font-semibold">Name:</h2>
+                            <h2 className="text-sm font-regular flex justify-self-center self-center">
+                              {studentData.student_name}
+                            </h2>
+                          </div>
+                          <div className="flex flex-row space-x-2 w-full">
+                            <h2 className="text-md font-semibold">
+                              Registration Number:
+                            </h2>
+                            <h2 className="text-sm font-regular flex justify-self-center self-center">
+                              {studentData.reg_no}
+                            </h2>
+                          </div>
+                          <div className="flex flex-row space-x-2 w-full">
+                            <h2 className="text-md font-semibold">
+                              Degree Name:
+                            </h2>
+                            <h2 className="text-sm font-regular flex justify-self-center self-center">
+                              {studentData.degree.name}
+                            </h2>
+                          </div>
+                          <div className="flex flex-row space-x-2 w-full">
+                            <h2 className="text-md font-semibold">
+                              Degree Level:
+                            </h2>
+                            <h2 className="text-sm font-regular flex justify-self-center self-center">
+                              {studentData.degree.level}
+                            </h2>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex flex-col space-y-6 w-1/3">
-                      <CardContent className="flex flex-row justify-around p-0">
-                        <div className="flex flex-col justify-center items-center">
-                          <h1 className="font-bold text-3xl text-primary-blue">
-                            10%
-                          </h1>
-                          <h1 className="text-xs">Pass Rate</h1>
-                        </div>
-                        <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                        <div className="flex flex-col justify-center items-center">
-                          <h1 className="font-bold text-3xl text-primary-blue">
-                            10%
-                          </h1>
-                          <h1 className="text-xs">Mean</h1>
-                        </div>
-                      </CardContent>
-                      <CardContent className="flex flex-row justify-around p-0">
-                        <div className="flex flex-col justify-center items-center">
-                          <h1 className="font-bold text-3xl text-primary-blue">
-                            10%
-                          </h1>
-                          <h1 className="text-xs">Median</h1>
-                        </div>
-                        <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                        <div className="flex flex-col justify-center items-center">
-                          <h1 className="font-bold text-3xl text-primary-blue">
-                            10%
-                          </h1>
-                          <h1 className="text-xs">Mode</h1>
-                        </div>
-                      </CardContent>
-                    </div>
+                    ) : null}
+                    {studentStatistics ? (
+                      <div className="flex flex-col space-y-8 w-1/3">
+                        <CardContent className="flex flex-row space-x-4 justify-around p-0">
+                          <div className="flex flex-col justify-center items-center">
+                            <h1 className="font-bold text-3xl text-primary-blue">
+                              {studentStatistics.pass_rate === -1
+                                ? "N/A"
+                                : `${studentStatistics.pass_rate}%`}
+                            </h1>
+                            <h1 className="text-xs">Pass Rate</h1>
+                          </div>
+                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                          <div className="flex flex-col justify-center items-center">
+                            <h1 className="font-bold text-3xl text-primary-blue">
+                              {studentStatistics.mean === -1
+                                ? "N/A"
+                                : `${studentStatistics.mean}%`}
+                            </h1>
+                            <h1 className="text-xs">Mean</h1>
+                          </div>
+                        </CardContent>
+                        <CardContent className="space-x-4 flex flex-row justify-around p-0">
+                          <div className="flex flex-col justify-center items-center">
+                            <h1 className="font-bold text-3xl text-primary-blue">
+                              {studentStatistics.median === -1
+                                ? "N/A"
+                                : `${studentStatistics.median}%`}
+                            </h1>
+                            <h1 className="text-xs">Median</h1>
+                          </div>
+                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                          <div className="flex flex-col justify-center items-center">
+                            <h1 className="font-bold text-3xl text-primary-blue">
+                              {studentStatistics.mode === -1
+                                ? "N/A"
+                                : `${studentStatistics.mode}%`}
+                            </h1>
+                            <h1 className="text-xs">Mode</h1>
+                          </div>
+                        </CardContent>
+                      </div>
+                    ) : null}
                   </div>
                 ) : (
                   <h2 className="text-base font-regular">

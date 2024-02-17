@@ -6,7 +6,7 @@ from api.middleware.dependencies import UserRepository
 from api.students.use_cases.create_student_use_case import CreateStudentUseCase
 from api.students.use_cases.get_student_use_case import GetStudentUseCase
 from api.students.use_cases.get_students_use_case import GetStudentsUseCase
-from api.students.use_cases.get_students_details_and_statistics_use_case import GetStudentsDetailsAndStatisticsUseCase
+from api.students.use_cases.get_student_statistics_use_case import GetStudentStatisticsUseCase
 
 from api.middleware.dependencies import get_student_repository
 from api.middleware.dependencies import get_user_repository
@@ -39,11 +39,11 @@ def get_students_use_case(
         user_repository, 
     )
 
-def get_students_details_and_statistics_use_case(
+def get_student_statistics_use_case(
         student_repository: StudentRepository = Depends(get_student_repository),
         user_repository: UserRepository = Depends(get_user_repository)
-    ) -> GetStudentsDetailsAndStatisticsUseCase:
-    return GetStudentsDetailsAndStatisticsUseCase(
+    ) -> GetStudentStatisticsUseCase:
+    return GetStudentStatisticsUseCase(
         student_repository,
         user_repository, 
     )
