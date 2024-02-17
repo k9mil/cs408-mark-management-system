@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { useAuth } from "@/AuthProvider";
 
@@ -103,7 +103,6 @@ const StudentProfilePage = () => {
               );
 
             setStudentPersonalCircumstances(result);
-            console.log(result);
           }
         } catch (error) {
           console.error(error);
@@ -193,12 +192,7 @@ const StudentProfilePage = () => {
           {student && student !== "" ? (
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
           ) : null}
-          {student &&
-          student !== "" &&
-          studentMarks &&
-          studentMarks.length > 0 &&
-          studentPersonalCircumstances &&
-          studentPersonalCircumstances.length > 0 ? (
+          {student && student !== "" ? (
             <div className="flex flex-col justify-center items-center w-2/5 m-auto space-y-8">
               <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
                 <CardHeader className="flex flex-row justify-between items-center p-0">
@@ -206,70 +200,88 @@ const StudentProfilePage = () => {
                     Student Details
                   </CardTitle>
                 </CardHeader>
-                <div className="flex flex-row w-full justify-between items-center">
-                  <div className="flex flex-col space-y-6 w-2/3">
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Name:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {studentMarks[0].student_name}
-                        </h2>
-                      </div>
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">
-                          Registration Number:
-                        </h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {studentMarks[0].reg_no}
-                        </h2>
-                      </div>
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Degree Name:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {studentMarks[0].degree_name}
-                        </h2>
-                      </div>
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Degree Level:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {studentMarks[0].degree_level}
-                        </h2>
+                {studentMarks && studentMarks.length > 0 ? (
+                  <div className="flex flex-row w-full justify-between items-center">
+                    <div className="flex flex-col space-y-6 w-2/3">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">Name:</h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {studentMarks[0].student_name}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">
+                            Registration Number:
+                          </h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {studentMarks[0].reg_no}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">
+                            Degree Name:
+                          </h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {studentMarks[0].degree_name}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">
+                            Degree Level:
+                          </h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {studentMarks[0].degree_level}
+                          </h2>
+                        </div>
                       </div>
                     </div>
+                    <div className="flex flex-col space-y-6 w-1/3">
+                      <CardContent className="flex flex-row justify-around p-0">
+                        <div className="flex flex-col justify-center items-center">
+                          <h1 className="font-bold text-3xl text-primary-blue">
+                            10%
+                          </h1>
+                          <h1 className="text-xs">Pass Rate</h1>
+                        </div>
+                        <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                        <div className="flex flex-col justify-center items-center">
+                          <h1 className="font-bold text-3xl text-primary-blue">
+                            10%
+                          </h1>
+                          <h1 className="text-xs">Mean</h1>
+                        </div>
+                      </CardContent>
+                      <CardContent className="flex flex-row justify-around p-0">
+                        <div className="flex flex-col justify-center items-center">
+                          <h1 className="font-bold text-3xl text-primary-blue">
+                            10%
+                          </h1>
+                          <h1 className="text-xs">Median</h1>
+                        </div>
+                        <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                        <div className="flex flex-col justify-center items-center">
+                          <h1 className="font-bold text-3xl text-primary-blue">
+                            10%
+                          </h1>
+                          <h1 className="text-xs">Mode</h1>
+                        </div>
+                      </CardContent>
+                    </div>
                   </div>
-                  <div className="flex flex-col space-y-6 w-1/3">
-                    <CardContent className="flex flex-row justify-around p-0">
-                      <div className="flex flex-col justify-center items-center">
-                        <h1 className="font-bold text-3xl text-primary-blue">
-                          10%
-                        </h1>
-                        <h1 className="text-xs">Pass Rate</h1>
-                      </div>
-                      <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                      <div className="flex flex-col justify-center items-center">
-                        <h1 className="font-bold text-3xl text-primary-blue">
-                          10%
-                        </h1>
-                        <h1 className="text-xs">Mean</h1>
-                      </div>
-                    </CardContent>
-                    <CardContent className="flex flex-row justify-around p-0">
-                      <div className="flex flex-col justify-center items-center">
-                        <h1 className="font-bold text-3xl text-primary-blue">
-                          10%
-                        </h1>
-                        <h1 className="text-xs">Median</h1>
-                      </div>
-                      <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                      <div className="flex flex-col justify-center items-center">
-                        <h1 className="font-bold text-3xl text-primary-blue">
-                          10%
-                        </h1>
-                        <h1 className="text-xs">Mode</h1>
-                      </div>
-                    </CardContent>
-                  </div>
-                </div>
+                ) : (
+                  <h2 className="text-base font-regular">
+                    It seems like there are no student details available at the
+                    moment. If you are expecting to see something here,{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      contact an administrator
+                    </Link>
+                    .
+                  </h2>
+                )}
               </Card>
               <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
                 <CardHeader className="flex flex-row justify-between items-center p-0">
@@ -277,62 +289,87 @@ const StudentProfilePage = () => {
                     Personal Circumstances
                   </CardTitle>
                 </CardHeader>
-                <div className="flex flex-row w-full justify-between items-center">
-                  <div className="flex flex-col space-y-6 w-full">
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Details:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {
-                            studentPersonalCircumstances[
-                              currentPersonalCircumstance
-                            ].details
-                          }
-                        </h2>
+                {studentPersonalCircumstances &&
+                studentPersonalCircumstances.length > 0 ? (
+                  <div className="flex flex-row w-full justify-between items-center">
+                    <div className="flex flex-col space-y-6 w-full">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">Details:</h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {
+                              studentPersonalCircumstances[
+                                currentPersonalCircumstance
+                              ].details
+                            }
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">Semester:</h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {
+                              studentPersonalCircumstances[
+                                currentPersonalCircumstance
+                              ].semester
+                            }
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">Category:</h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {
+                              studentPersonalCircumstances[
+                                currentPersonalCircumstance
+                              ].cat
+                            }
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="text-md font-semibold">Comments:</h2>
+                          <h2 className="text-sm font-regular flex justify-self-center self-center">
+                            {
+                              studentPersonalCircumstances[
+                                currentPersonalCircumstance
+                              ].comments
+                            }
+                          </h2>
+                        </div>
                       </div>
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Semester:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {
-                            studentPersonalCircumstances[
-                              currentPersonalCircumstance
-                            ].semester
-                          }
-                        </h2>
+                      <div className="flex justify-end items-end w-full">
+                        <ChevronLeftIcon
+                          className={`h-6 w-6 ${
+                            currentPersonalCircumstance === 0
+                              ? "text-gray-400"
+                              : "hover:cursor-pointer text-black"
+                          }`}
+                          onClick={handlePrev}
+                        />
+                        <ChevronRightIcon
+                          className={`h-6 w-6 ${
+                            currentPersonalCircumstance ===
+                            studentPersonalCircumstances.length - 1
+                              ? "text-gray-400"
+                              : "hover:cursor-pointer text-black"
+                          }`}
+                          onClick={handleNext}
+                        />
                       </div>
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Category:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {
-                            studentPersonalCircumstances[
-                              currentPersonalCircumstance
-                            ].cat
-                          }
-                        </h2>
-                      </div>
-                      <div className="flex flex-row space-x-2 w-full">
-                        <h2 className="text-md font-semibold">Comments:</h2>
-                        <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          {
-                            studentPersonalCircumstances[
-                              currentPersonalCircumstance
-                            ].comments
-                          }
-                        </h2>
-                      </div>
-                    </div>
-                    <div className="flex justify-end items-end w-full">
-                      <ChevronLeftIcon
-                        className="h-6 w-6 text-black hover:cursor-pointer"
-                        onClick={handlePrev}
-                      />
-                      <ChevronRightIcon
-                        className="h-6 w-6 text-black hover:cursor-pointer"
-                        onClick={handleNext}
-                      />
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <h2 className="text-base font-regular">
+                    It seems like there are no recorded personal circumstances
+                    for this student. If you are expecting to see something
+                    here,{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      contact an administrator
+                    </Link>
+                    .
+                  </h2>
+                )}
               </Card>
             </div>
           ) : null}
