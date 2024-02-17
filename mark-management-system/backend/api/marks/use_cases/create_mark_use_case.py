@@ -39,19 +39,16 @@ class CreateMarkUseCase:
         Returns:
             MarksSchema: A MarksSchema schema object containing all information about the newly created mark.
         """
-        user_email, is_admin, is_lecturer = current_user
+        user_email, is_admin, _ = current_user
 
         user = self.user_repository.find_by_email(user_email)
 
         if user is None:
             raise UserNotFound("User not found")
-        
-        if not ((user and is_lecturer) or is_admin):
-            raise PermissionError("Permission denied to access this resource")
 
         is_lecturer_of_class = self.class_repository.is_lecturer_of_class(user.id, request.class_id)
 
-        if is_lecturer_of_class is None:
+        if not ((is_lecturer_of_class is None) or is_admin):
             raise PermissionError("Permission denied to access this resource")
 
         if self.mark_repository.find_by_student_id_and_class_id(request.student_id, request.class_id):

@@ -33,7 +33,7 @@ class GetClassUseCase:
         Returns:
             ClassSchema: A ClassSchema object containing all information about the requested class.
         """
-        user_email, is_admin, is_lecturer = current_user
+        user_email, is_admin, _ = current_user
 
         user = self.user_repository.find_by_email(user_email)
         
