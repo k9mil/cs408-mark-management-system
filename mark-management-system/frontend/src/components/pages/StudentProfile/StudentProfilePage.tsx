@@ -135,8 +135,12 @@ const StudentProfilePage = () => {
             </h2>
           </div>
         </div>
-        <div className="flex flex-row w-full">
-          <div className="flex flex-col space-y-1 m-8 w-1/2">
+        <div className="flex flex-row w-full h-[80vh]">
+          <div
+            className={`flex flex-col space-y-1 m-8 ${
+              student && student !== "" ? "w-1/2" : "w-full"
+            }`}
+          >
             <div className="flex flex-row justify-between py-2">
               <div className="flex items-center w-1/5">
                 {studentList !== null && studentList.length !== 0 ? (
@@ -157,7 +161,7 @@ const StudentProfilePage = () => {
                 accessToken={accessToken}
               />
             ) : (
-              <div className="flex flex-col justify-center items-center m-auto w-auto h-[60vh] space-y-4">
+              <div className="flex flex-col justify-center items-center m-auto h-full space-y-4">
                 <div className="w-96 h-96">
                   <img src="/empty_state.svg" alt="No data found" />
                 </div>
@@ -171,122 +175,126 @@ const StudentProfilePage = () => {
               </div>
             )}
           </div>
-          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-          <div className="flex flex-col justify-center items-center w-2/5 m-auto space-y-8">
-            <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
-              <CardHeader className="flex flex-row justify-between items-center p-0">
-                <CardTitle className="text-2xl font-bold mb-6">
-                  Student Details
-                </CardTitle>
-              </CardHeader>
-              <div className="flex flex-row w-full justify-between items-center">
-                <div className="flex flex-col space-y-6 w-2/3">
-                  <div className="flex flex-col space-y-2">
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Name:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        Jacksonqueho Manilamuna
-                      </h2>
+          {student && student !== "" ? (
+            <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+          ) : null}
+          {student && student !== "" ? (
+            <div className="flex flex-col justify-center items-center w-2/5 m-auto space-y-8">
+              <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
+                <CardHeader className="flex flex-row justify-between items-center p-0">
+                  <CardTitle className="text-2xl font-bold mb-6">
+                    Student Details
+                  </CardTitle>
+                </CardHeader>
+                <div className="flex flex-row w-full justify-between items-center">
+                  <div className="flex flex-col space-y-6 w-2/3">
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Name:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          Jacksonqueho Manilamuna
+                        </h2>
+                      </div>
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">
+                          Registration Number:
+                        </h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          abc12345
+                        </h2>
+                      </div>
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Degree Name:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          Computer Science
+                        </h2>
+                      </div>
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Degree Level:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          BSc
+                        </h2>
+                      </div>
                     </div>
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">
-                        Registration Number:
-                      </h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        abc12345
-                      </h2>
+                  </div>
+                  <div className="flex flex-col space-y-6 w-1/3">
+                    <CardContent className="flex flex-row justify-around p-0">
+                      <div className="flex flex-col justify-center items-center">
+                        <h1 className="font-bold text-3xl text-primary-blue">
+                          10%
+                        </h1>
+                        <h1 className="text-xs">Pass Rate</h1>
+                      </div>
+                      <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                      <div className="flex flex-col justify-center items-center">
+                        <h1 className="font-bold text-3xl text-primary-blue">
+                          10%
+                        </h1>
+                        <h1 className="text-xs">Mean</h1>
+                      </div>
+                    </CardContent>
+                    <CardContent className="flex flex-row justify-around p-0">
+                      <div className="flex flex-col justify-center items-center">
+                        <h1 className="font-bold text-3xl text-primary-blue">
+                          10%
+                        </h1>
+                        <h1 className="text-xs">Median</h1>
+                      </div>
+                      <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                      <div className="flex flex-col justify-center items-center">
+                        <h1 className="font-bold text-3xl text-primary-blue">
+                          10%
+                        </h1>
+                        <h1 className="text-xs">Mode</h1>
+                      </div>
+                    </CardContent>
+                  </div>
+                </div>
+              </Card>
+              <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
+                <CardHeader className="flex flex-row justify-between items-center p-0">
+                  <CardTitle className="text-2xl font-bold mb-6">
+                    Personal Circumstances
+                  </CardTitle>
+                </CardHeader>
+                <div className="flex flex-row w-full justify-between items-center">
+                  <div className="flex flex-col space-y-6 w-full">
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Details:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          01/01/2023 to 03/31/2023: Struggled with online
+                          learning environment
+                        </h2>
+                      </div>
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Semester:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          2
+                        </h2>
+                      </div>
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Category:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          3
+                        </h2>
+                      </div>
+                      <div className="flex flex-row space-x-2 w-full">
+                        <h2 className="text-md font-semibold">Comments:</h2>
+                        <h2 className="text-sm font-regular flex justify-self-center self-center">
+                          Consider extension for assignments
+                        </h2>
+                      </div>
                     </div>
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Degree Name:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        Computer Science
-                      </h2>
-                    </div>
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Degree Level:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        BSc
-                      </h2>
+                    <div className="flex justify-end items-end w-full">
+                      <ChevronLeftIcon className="h-6 w-6 text-black hover:cursor-pointer" />
+                      <ChevronRightIcon className="h-6 w-6 text-black hover:cursor-pointer" />
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col space-y-6 w-1/3">
-                  <CardContent className="flex flex-row justify-around p-0">
-                    <div className="flex flex-col justify-center items-center">
-                      <h1 className="font-bold text-3xl text-primary-blue">
-                        10%
-                      </h1>
-                      <h1 className="text-xs">Pass Rate</h1>
-                    </div>
-                    <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                    <div className="flex flex-col justify-center items-center">
-                      <h1 className="font-bold text-3xl text-primary-blue">
-                        10%
-                      </h1>
-                      <h1 className="text-xs">Mean</h1>
-                    </div>
-                  </CardContent>
-                  <CardContent className="flex flex-row justify-around p-0">
-                    <div className="flex flex-col justify-center items-center">
-                      <h1 className="font-bold text-3xl text-primary-blue">
-                        10%
-                      </h1>
-                      <h1 className="text-xs">Median</h1>
-                    </div>
-                    <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                    <div className="flex flex-col justify-center items-center">
-                      <h1 className="font-bold text-3xl text-primary-blue">
-                        10%
-                      </h1>
-                      <h1 className="text-xs">Mode</h1>
-                    </div>
-                  </CardContent>
-                </div>
-              </div>
-            </Card>
-            <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
-              <CardHeader className="flex flex-row justify-between items-center p-0">
-                <CardTitle className="text-2xl font-bold mb-6">
-                  Personal Circumstances
-                </CardTitle>
-              </CardHeader>
-              <div className="flex flex-row w-full justify-between items-center">
-                <div className="flex flex-col space-y-6 w-full">
-                  <div className="flex flex-col space-y-2">
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Details:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        01/01/2023 to 03/31/2023: Struggled with online learning
-                        environment
-                      </h2>
-                    </div>
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Semester:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        2
-                      </h2>
-                    </div>
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Category:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        3
-                      </h2>
-                    </div>
-                    <div className="flex flex-row space-x-2 w-full">
-                      <h2 className="text-md font-semibold">Comments:</h2>
-                      <h2 className="text-sm font-regular flex justify-self-center self-center">
-                        Consider extension for assignments
-                      </h2>
-                    </div>
-                  </div>
-                  <div className="flex justify-end items-end w-full">
-                    <ChevronLeftIcon className="h-6 w-6 text-black hover:cursor-pointer" />
-                    <ChevronRightIcon className="h-6 w-6 text-black hover:cursor-pointer" />
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </div>
+              </Card>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
