@@ -40,15 +40,12 @@ class GetClassUseCase:
         if user is None:
             raise UserNotFound("User not found")
         
-        if not ((user and is_lecturer) or is_admin):
-            raise PermissionError("Permission denied to access this resource")
-        
         class_ = self.class_repository.find_by_code(class_code)
 
         if class_ is None:
             raise ClassNotFound("Class not found")
-        
-        if class_.lecturer_id != user.id:
+
+        if not ((class_.lecturer_id == user.id) or is_admin):
             raise PermissionError("Permission denied to access this resource")
 
         return class_

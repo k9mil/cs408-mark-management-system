@@ -297,7 +297,6 @@ const UploadPage = () => {
     index: number
   ) => {
     // TODO: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
-    console.log("bA");
     try {
       if (accessToken) {
         const studentDetails = {
