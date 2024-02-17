@@ -166,9 +166,9 @@ export function LecturersDataTable<TData, TValue>({
                               );
                             const textColorClass =
                               isUploadedForAllClasses === "Yes"
-                                ? "text-green-500 font-bold"
+                                ? "text-green-500 font-bold inline-block rounded py-1 px-3 bg-green-200"
                                 : isUploadedForAllClasses === "No"
-                                ? "text-red-500 font-bold"
+                                ? "text-red-500 font-bold inline-block rounded py-1 px-3 bg-red-200"
                                 : "font-base";
                             return (
                               <span className={textColorClass}>

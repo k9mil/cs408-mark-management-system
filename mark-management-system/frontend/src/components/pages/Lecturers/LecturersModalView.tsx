@@ -47,12 +47,22 @@ export const LecturersModalView = ({
         {row.classes && row.classes.length !== 0 ? (
           <div className="grid grid-cols-2 gap-x-32 gap-y-8 mt-6">
             {row.classes.map((class_: IClassUploaded) => (
-              <div key={class_.code} className="flex flex-row space-x-2">
-                <Label className="font-bold">{class_.code}</Label>
+              <div key={class_.code} className="flex flex-row justify-between">
+                <Label className="font-extrabold flex justify-self-center self-center">
+                  {class_.code}
+                </Label>
                 {class_.is_uploaded === true ? (
-                  <Label className="text-green-500 font-bold">Uploaded</Label>
+                  <div className="rounded-md py-2 px-2 bg-green-100 flex justify-center items-center">
+                    <Label className="text-green-500 font-semibold text-center flex justify-center items-center">
+                      Uploaded
+                    </Label>
+                  </div>
                 ) : (
-                  <Label className="text-red-500 font-bold">Due</Label>
+                  <div className="rounded-md py-2 px-2 bg-red-100 flex justify-center items-center">
+                    <Label className="text-red-500 font-semibold text-center flex justify-center items-center">
+                      Upload Due
+                    </Label>
+                  </div>
                 )}
               </div>
             ))}

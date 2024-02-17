@@ -144,7 +144,7 @@ const StudentProfilePage = () => {
               accessToken={accessToken}
             />
           ) : (
-            <div className="flex flex-col justify-center items-center m-auto w-auto h-auto space-y-4">
+            <div className="flex flex-col justify-center items-center m-auto w-auto h-[60vh] space-y-4">
               <div className="w-96 h-96">
                 <img src="/empty_state.svg" alt="No data found" />
               </div>
