@@ -83,7 +83,7 @@ class MarkRepository:
         Returns:
             List[MarksRow]: A list of `MarksRow` schematic objects.
         """
-        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Degree.level, Degree.name, Marks.mark)
+        return (self.db.query(Student.id, Student.student_name, Student.reg_no, Class.code, Class.name, Degree.level, Degree.name, Marks.mark)
             .join(Marks, Marks.class_id == Class.id)
             .join(Student, Student.id == Marks.student_id)
             .join(Degree, Degree.id == Student.degree_id)

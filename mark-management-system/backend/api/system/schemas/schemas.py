@@ -45,6 +45,7 @@ class MarksRow(BaseModel):
     id: int
 
     class_code: str
+    class_name: str | None
     reg_no: str
     mark: int
     student_name: str

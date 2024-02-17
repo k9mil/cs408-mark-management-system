@@ -35,11 +35,11 @@ export const StudentProfileColumns: ColumnDef<IMarkRow>[] = [
     header: "Class Code",
   },
   {
-    accessorKey: "mark",
-    header: "Mark",
+    accessorKey: "class_name",
+    header: "Class Name",
   },
   {
-    accessorKey: "student_name",
-    header: "Student Name",
+    accessorKey: "mark",
+    header: "Mark",
   },
 ];

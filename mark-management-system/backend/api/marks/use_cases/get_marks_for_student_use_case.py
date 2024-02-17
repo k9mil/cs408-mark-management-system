@@ -60,12 +60,13 @@ class GetMarksForStudentUseCase:
         for mark in marks:
             mark_row = MarksRow(
                 id=mark[0],
-                class_code=mark[3],
-                reg_no=mark[2],
-                mark=mark[6],
                 student_name=mark[1],
-                degree_level=mark[4],
-                degree_name=mark[5],
+                reg_no=mark[2],
+                class_code=mark[3],
+                class_name=mark[4],
+                degree_level=mark[5],
+                degree_name=mark[6],
+                mark=mark[7],
             )
 
             marks_data.append(mark_row)
