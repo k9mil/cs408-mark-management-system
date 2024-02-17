@@ -64,72 +64,78 @@ const SettingsPage = () => {
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="w-1/2 2xl:h-3/5 xl:h-4/5 space-y-2 p-6 flex flex-col">
-          <CardHeader className="flex flex-row justify-between items-center">
-            <CardTitle>Account Settings</CardTitle>
-          </CardHeader>
-          <div className="flex flex-row justify-between mx-6">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="firstName" className="text-right">
-                  First Name
-                </Label>
-                <Input
-                  id="firstName"
-                  className="col-span-3"
-                  value={formFirstName}
-                  placeholder="John"
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
+        <Card className="2xl:w-2/5 xl:w-3/5 2xl:h-2/5 xl:h-1/2 space-x-2 p-6 flex flex-col justify-between">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col">
+              <CardHeader className="flex flex-row justify-between items-center">
+                <CardTitle>Account Settings</CardTitle>
+              </CardHeader>
+              <div className="flex flex-row justify-between mx-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="firstName" className="text-right">
+                      First Name
+                    </Label>
+                    <Input
+                      id="firstName"
+                      className="col-span-3"
+                      value={formFirstName}
+                      placeholder="John"
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName" className="text-right">
+                      Last Name
+                    </Label>
+                    <Input
+                      id="lastName"
+                      className="col-span-3"
+                      value={formLastName}
+                      placeholder="Doe"
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <Label htmlFor="lastName" className="text-right">
-                  Last Name
-                </Label>
-                <Input
-                  id="lastName"
-                  className="col-span-3"
-                  value={formLastName}
-                  placeholder="Doe"
-                  onChange={(e) => setLastName(e.target.value)}
-                />
+            </div>
+            <div className="flex flex-col">
+              <CardHeader className="flex flex-row justify-between items-center">
+                <CardTitle>Password Settings</CardTitle>
+              </CardHeader>
+              <div className="flex flex-row justify-between mx-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="password" className="text-right">
+                      Password
+                    </Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      className="col-span-3"
+                      value={password}
+                      placeholder="••••••••"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirmPassword" className="text-right">
+                      Confirm Password
+                    </Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      className="col-span-3"
+                      value={confirmPassword}
+                      placeholder="••••••••"
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <CardHeader className="flex flex-row justify-between items-center">
-            <CardTitle>Password Settings</CardTitle>
-          </CardHeader>
-          <div className="flex flex-row justify-between mx-6">
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="password" className="text-right">
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  className="col-span-3"
-                  value={password}
-                  placeholder="••••••••"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="confirmPassword" className="text-right">
-                  Confirm Password
-                </Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  className="col-span-3"
-                  value={confirmPassword}
-                  placeholder="••••••••"
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex self-end space-x-4">
+          <div className="px-6 w-full flex justify-between self-end space-x-4">
             <Button
               className="flex self-end"
               variant="destructive"
