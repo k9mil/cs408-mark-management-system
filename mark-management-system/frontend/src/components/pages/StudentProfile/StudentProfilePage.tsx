@@ -29,7 +29,6 @@ import { personalCircumstanceService } from "@/services/PersonalCircumstanceServ
 import { StudentProfileColumns } from "../Students/StudentsColumns";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { ChevronRight } from "lucide-react";
 
 const StudentProfilePage = () => {
   const navigate = useNavigate();
@@ -45,6 +44,9 @@ const StudentProfilePage = () => {
   const [studentMarks, setStudentMarks] = React.useState<IMarkRow[]>([]);
   const [studentPersonalCircumstances, setStudentPersonalCircumstances] =
     React.useState<IPersonalCircumstance[]>([]);
+
+  const [currentPersonalCircumstance, setCurrentPersonalCircumstance] =
+    useState<number>(0);
 
   const accessToken = getAccessToken();
 
@@ -101,6 +103,7 @@ const StudentProfilePage = () => {
               );
 
             setStudentPersonalCircumstances(result);
+            console.log(result);
           }
         } catch (error) {
           console.error(error);
@@ -122,6 +125,18 @@ const StudentProfilePage = () => {
       setStudentList(mappedStudents);
     }
   }, [students]);
+
+  const handlePrev = () => {
+    if (currentPersonalCircumstance > 0) {
+      setCurrentPersonalCircumstance(currentPersonalCircumstance - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPersonalCircumstance < studentPersonalCircumstances.length - 1) {
+      setCurrentPersonalCircumstance(currentPersonalCircumstance + 1);
+    }
+  };
 
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
@@ -178,7 +193,12 @@ const StudentProfilePage = () => {
           {student && student !== "" ? (
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
           ) : null}
-          {student && student !== "" ? (
+          {student &&
+          student !== "" &&
+          studentMarks &&
+          studentMarks.length > 0 &&
+          studentPersonalCircumstances &&
+          studentPersonalCircumstances.length > 0 ? (
             <div className="flex flex-col justify-center items-center w-2/5 m-auto space-y-8">
               <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
                 <CardHeader className="flex flex-row justify-between items-center p-0">
@@ -192,7 +212,7 @@ const StudentProfilePage = () => {
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Name:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          Jacksonqueho Manilamuna
+                          {studentMarks[0].student_name}
                         </h2>
                       </div>
                       <div className="flex flex-row space-x-2 w-full">
@@ -200,19 +220,19 @@ const StudentProfilePage = () => {
                           Registration Number:
                         </h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          abc12345
+                          {studentMarks[0].reg_no}
                         </h2>
                       </div>
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Degree Name:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          Computer Science
+                          {studentMarks[0].degree_name}
                         </h2>
                       </div>
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Degree Level:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          BSc
+                          {studentMarks[0].degree_level}
                         </h2>
                       </div>
                     </div>
@@ -263,32 +283,53 @@ const StudentProfilePage = () => {
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Details:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          01/01/2023 to 03/31/2023: Struggled with online
-                          learning environment
+                          {
+                            studentPersonalCircumstances[
+                              currentPersonalCircumstance
+                            ].details
+                          }
                         </h2>
                       </div>
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Semester:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          2
+                          {
+                            studentPersonalCircumstances[
+                              currentPersonalCircumstance
+                            ].semester
+                          }
                         </h2>
                       </div>
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Category:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          3
+                          {
+                            studentPersonalCircumstances[
+                              currentPersonalCircumstance
+                            ].cat
+                          }
                         </h2>
                       </div>
                       <div className="flex flex-row space-x-2 w-full">
                         <h2 className="text-md font-semibold">Comments:</h2>
                         <h2 className="text-sm font-regular flex justify-self-center self-center">
-                          Consider extension for assignments
+                          {
+                            studentPersonalCircumstances[
+                              currentPersonalCircumstance
+                            ].comments
+                          }
                         </h2>
                       </div>
                     </div>
                     <div className="flex justify-end items-end w-full">
-                      <ChevronLeftIcon className="h-6 w-6 text-black hover:cursor-pointer" />
-                      <ChevronRightIcon className="h-6 w-6 text-black hover:cursor-pointer" />
+                      <ChevronLeftIcon
+                        className="h-6 w-6 text-black hover:cursor-pointer"
+                        onClick={handlePrev}
+                      />
+                      <ChevronRightIcon
+                        className="h-6 w-6 text-black hover:cursor-pointer"
+                        onClick={handleNext}
+                      />
                     </div>
                   </div>
                 </div>
