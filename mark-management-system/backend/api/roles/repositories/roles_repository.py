@@ -20,6 +20,17 @@ class RolesRepository:
         """
         self.db = db
 
+    def add(self, role: Role) -> None:
+        """
+        Adds an object into the database.
+
+        Args:
+            role: The object to be added.
+        """
+        self.db.add(role)
+        self.db.commit()
+        self.db.refresh(role)
+
     def find_by_id(self, role_id: int) -> Optional[Role]:
         """
         Retrieves a role by a given identifier.
