@@ -36,7 +36,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const StudentProfilePage = () => {
   const navigate = useNavigate();
-  const { isLecturer, isAuthenticated, getAccessToken } = useAuth();
+  const { isLecturer, isAdmin, isAuthenticated, getAccessToken } = useAuth();
 
   const [students, setStudents] = useState<IStudentBase[]>([]);
   const [studentList, setStudentList] = React.useState<IUserDropdown[] | null>(
@@ -68,7 +68,7 @@ const StudentProfilePage = () => {
   const studentsData = async () => {
     try {
       if (accessToken) {
-        if (isLecturer) {
+        if (isLecturer || isAdmin) {
           const result = await studentService.getStudents(accessToken);
           setStudents(result);
         }
