@@ -5,10 +5,15 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
 
-from fastapi import Depends
+from sqlalchemy import create_engine
 
 from sqlalchemy.orm import Session
-from api.database import get_db
+from sqlalchemy.orm import sessionmaker
+
+from api.system.models.models import Base
+
+from api.config import DevelopmentConfig
+from api.config import TestingConfig
 
 from api.classes.repositories.class_repository import ClassRepository
 from api.degrees.repositories.degree_repository import DegreeRepository
@@ -93,7 +98,8 @@ def create_classes(db: Session) -> None:
 
     class_repository.add(Class(name="Information Access and Mining", code="CS412", credit="20", credit_level="4", lecturer_id=1))
     class_repository.add(Class(name="Computer Security", code="CS407", credit="20", credit_level="4", lecturer_id=1))
-    class_repository.add(Class(name="Human-Centred Security", code="CS426", credit="20", credit_level="4", lecturer_id=1))
+    class_repository.add(Class(name="Human-Centred Security", code="CS426", credit="20", credit_level="4", lecturer_id=2))
+    class_repository.add(Class(name="Individual Project", code="CS408", credit="40", credit_level="4", lecturer_id=2))
 
 
 def create_marks(db: Session) -> None:
@@ -107,9 +113,9 @@ def create_marks(db: Session) -> None:
     mark_repository.add(Marks(mark="79", class_id="2", student_id=2))
     mark_repository.add(Marks(mark="55", class_id="3", student_id=2))
     
-    mark_repository.add(Marks(mark="61", class_id="1", student_id=2))
-    mark_repository.add(Marks(mark="89", class_id="2", student_id=2))
-    mark_repository.add(Marks(mark="90", class_id="3", student_id=2))
+    mark_repository.add(Marks(mark="61", class_id="1", student_id=3))
+    mark_repository.add(Marks(mark="89", class_id="2", student_id=3))
+    mark_repository.add(Marks(mark="90", class_id="3", student_id=3))
 
 def create_personal_circumstances(db: Session) -> None:
     personal_circumstance_repository = PersonalCircumstanceRepository(db)
@@ -120,7 +126,7 @@ def create_personal_circumstances(db: Session) -> None:
             semester="1",
             cat="1",
             comments="Consider extension for Coursework",
-            reg_no="abc12345"
+            student_reg_no="abc12345"
         )
     )
 
@@ -130,7 +136,7 @@ def create_personal_circumstances(db: Session) -> None:
             semester="1",
             cat="3",
             comments="Discount attempt as CS426",
-            reg_no="abc12345",
+            student_reg_no="abc12345",
         )
     )
 
@@ -140,21 +146,30 @@ def create_personal_circumstances(db: Session) -> None:
             semester="2",
             cat="2",
             comments="Discount attempt as CS412",
-            reg_no="abc54321",
+            student_reg_no="abc54321",
         )
     )
 
 
 def main():
-    db = Depends(get_db)
+    database_url = DevelopmentConfig.DATABASE_URL or TestingConfig.DATABASE_URL
+    engine = create_engine(database_url)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-    initialise_roles(db)
-    create_degree(db)
-    create_students(db)
-    create_users(db)
-    create_classes(db)
-    create_marks(db)
-    create_personal_circumstances(db)
+    Base.metadata.create_all(bind=engine)
+
+    db = SessionLocal()
+
+    try:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)
+        create_personal_circumstances(db)
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
