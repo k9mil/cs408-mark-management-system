@@ -68,14 +68,14 @@ class Class(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     
     name = Column(String(128), nullable=False)
-    code = Column(String(32), nullable=False)
+    code = Column(String(32), nullable=False, unique=True)
     credit = Column(Integer, nullable=False)
     credit_level = Column(Integer, nullable=False)
 
     lecturer_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
 
     lecturer = relationship("User", back_populates="classes")
-    academic_misconducts = relationship("AcademicMisconduct", back_populates="classes")
+    academic_misconducts = relationship("AcademicMisconduct", back_populates="class_")
 
     students = relationship("Student", secondary="marks", back_populates="classes")
     degrees = relationship("Degree", secondary="degree_classes", back_populates="classes")
@@ -121,7 +121,7 @@ class AcademicMisconduct(Base):
     outcome = Column(String(16), nullable=False)
 
     student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
-    class_code = Column(String, ForeignKey("class.code"), index=True)
+    class_code = Column(String, ForeignKey("classes.code"), index=True)
 
     student = relationship("Student", back_populates="academic_misconducts")
     class_ = relationship("Class", back_populates="academic_misconducts")
