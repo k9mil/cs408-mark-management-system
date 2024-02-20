@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -31,6 +31,7 @@ class Student(Base):
 
     degree = relationship("Degree", back_populates="students")
     personal_circumstances = relationship("PersonalCircumstance", back_populates="student")
+    academic_misconducts = relationship("AcademicMisconduct", back_populates="student")
 
     classes = relationship("Class", secondary="marks", back_populates="students")
 
@@ -74,6 +75,8 @@ class Class(Base):
     lecturer_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
 
     lecturer = relationship("User", back_populates="classes")
+    academic_misconducts = relationship("AcademicMisconduct", back_populates="classes")
+
     students = relationship("Student", secondary="marks", back_populates="classes")
     degrees = relationship("Degree", secondary="degree_classes", back_populates="classes")
 
@@ -108,3 +111,17 @@ class PersonalCircumstance(Base):
     student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
 
     student = relationship("Student", back_populates="personal_circumstances")
+
+class AcademicMisconduct(Base):
+    __tablename__ = "academic_misconducts"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+
+    date = Column(Date, nullable=False)
+    outcome = Column(String(16), nullable=False)
+
+    student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
+    class_code = Column(String, ForeignKey("class.code"), index=True)
+
+    student = relationship("Student", back_populates="academic_misconducts")
+    class_ = relationship("Class", back_populates="academic_misconducts")
