@@ -166,14 +166,22 @@ const Sidebar = () => {
                       As an administrator on the platform, you have elevated
                       permissions and are able to create classes, assign
                       lecturers to classes, amend class details or remove
-                      classes in it's entirety.
+                      classes in it's entirety. You are also able to view the
+                      upload status for each class.
                     </DialogDescription>
                     <DialogDescription>
-                      If you are simultaneously an administrator and a lecturer,
-                      you also have the permission to upload marks for students
-                      that you teach, which you can then view on the Students
-                      subpage. The marks that you have uploaded can be amended,
-                      or deleted.
+                      If you are a lecturer, or an administrator, you also have
+                      the permission to upload marks for students that you
+                      teach, which you can then view on the Students subpage.
+                      The marks that you have uploaded can be amended, or
+                      deleted.
+                    </DialogDescription>
+                    <DialogDescription>
+                      You also have the ability to convert files, between the
+                      MyPlace default configuration to the one that the system
+                      expects, as well as from the default Marks Management
+                      System configuration to the Pegasus one. Additionally, you
+                      are able to view individual student profiles.
                     </DialogDescription>
                   </>
                 ) : (

@@ -28,8 +28,8 @@ const HelpPage = () => {
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
-      <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="2xl:w-1/2 xl:w-3/4 2xl:h-1/2 x:h-3/4 space-y-2 p-8 flex flex-col">
+      <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center space-x-2">
+        <Card className="2xl:w-1/2 xl:w-1/2 2xl:h-1/2 x:h-3/4 space-y-2 p-4 flex flex-col">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Help & Support</CardTitle>
           </CardHeader>
@@ -64,13 +64,42 @@ const HelpPage = () => {
             </CardContent>
             <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               For even more points of support, visit:{" "}
-              <span className="text-blue-400 underline">
+              <span className="text-blue-400 underline break-all">
                 https://www.strath.ac.uk/professionalservices/informationservices/contact/
               </span>
             </CardContent>
             <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               Thanks for visiting our help section — we're always here to ensure
               your experience is smooth and enjoyable!
+            </CardContent>
+          </div>
+        </Card>
+        <Card className="2xl:w-1/3 xl:w-1/3 2xl:h-1/2 x:h-3/4 space-y-2 p-4 flex flex-col">
+          <CardHeader className="flex flex-row justify-between items-center">
+            <CardTitle>Conversion Formats</CardTitle>
+          </CardHeader>
+          <div className="flex flex-col space-y-4">
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
+              If you are wanting to convert from the MyPlace format to the MMS
+              format, see below for the required format:
+            </CardContent>
+            <CardContent className="mx-6 text-sm font-semibold text-muted-foreground p-0">
+              CLASS_CODE, DATE, REG_NO, CLASS_TOTAL, OVERRIDE_MARK
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
+              (e.g., CS123,01/01/2024,abc12345,45,50).
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
+              If you are wanting to convert from the MMS format to the Pegasus
+              format, see below for the required format:
+            </CardContent>
+            <CardContent className="mx-6 text-sm font-semibold text-muted-foreground p-0">
+              CLASS_CODE, REG_NO, MARK, MARK_CODE, STUDENT_NAME, COURSE, DEGREE,
+              DEGREE_CODE, RESULT
+            </CardContent>
+            <CardContent className="mx-6 text-sm text-muted-foreground p-0">
+              (e.g., CS123,abc12345,FILL IN,John Doe,Computer
+              Science,BSc,0403/2,FILL IN).
             </CardContent>
           </div>
         </Card>
