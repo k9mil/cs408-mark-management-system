@@ -85,7 +85,7 @@ export function ClassesDataTable<TData, TValue>({
         number_of_students: getNumOfStudents((classItem as IClass).students),
         lecturer: formatLecturerName((classItem as IClass).lecturer),
       };
-      
+
       delete processedClass.id;
       delete processedClass.students;
       delete processedClass.marks;
@@ -116,10 +116,10 @@ export function ClassesDataTable<TData, TValue>({
       <div className="flex flex-row justify-between py-2">
         <div className="flex items-center">
           <Input
-            placeholder="Search by class name..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            placeholder="Search by class code..."
+            value={(table.getColumn("code")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table.getColumn("code")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
