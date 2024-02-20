@@ -2,6 +2,8 @@ from pydantic import BaseModel
 
 from typing import List, Optional, ForwardRef
 
+from datetime import date
+
 
 Class = ForwardRef("Class")
 Student = ForwardRef("Student")
@@ -159,6 +161,20 @@ class Lecturer(BaseModel):
     number_of_classes_taught: int
     
     classes: List["LecturerClass"] = []
+
+class AcademicMisconductBase(BaseModel):
+    date: date
+    outcome: str
+    
+class AcademicMisconductCreate(AcademicMisconductBase):
+    reg_no: str
+    class_code: str
+
+class AcademicMisconduct(AcademicMisconductBase):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 class PersonalCircumstancesBase(BaseModel):
     details: str

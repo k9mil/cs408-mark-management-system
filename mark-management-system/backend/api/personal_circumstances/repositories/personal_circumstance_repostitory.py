@@ -25,7 +25,7 @@ class PersonalCircumstanceRepository:
         Adds an object into the database.
 
         Args:
-            degree: The object to be added.
+            personal_circumstance: The object to be added.
         """
         self.db.add(personal_circumstance)
         self.db.commit()
