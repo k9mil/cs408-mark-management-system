@@ -48,6 +48,10 @@ const ConvertInfoBox = () => {
             went well, the file will be downloaded and a success message will be
             displayed.
           </DialogDescription>
+          <DialogDescription>
+            For further information regarding the conversion process, such as
+            the formats required, see the Help & Support page.
+          </DialogDescription>
         </DialogHeader>
         <DialogTrigger asChild>
           <DialogFooter>
