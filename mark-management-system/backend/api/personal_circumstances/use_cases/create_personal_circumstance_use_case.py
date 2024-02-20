@@ -34,7 +34,7 @@ class CreatePersonalCircumstanceUseCase:
         Executes the Use Case to create a new personal circumstance in the system.
 
         Args:
-            request: A `PersonalCircumstancesCreate` object is required which contains the necessary degree details for personal circumstance creation.
+            request: A `PersonalCircumstancesCreate` object is required which contains the necessary details for personal circumstance creation.
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
