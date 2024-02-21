@@ -523,10 +523,9 @@ const StudentProfilePage = () => {
                             Date:
                           </h2>
                           <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
-                            {
-                              misconductClasses[currentAcademicMisconduct]
-                                .academic_misconduct.date
-                            }
+                            {misconductClasses[
+                              currentAcademicMisconduct
+                            ].academic_misconduct.date.toString()}
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
