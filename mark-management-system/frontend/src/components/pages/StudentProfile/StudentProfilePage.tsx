@@ -51,6 +51,7 @@ const StudentProfilePage = () => {
   const [studentData, setStudentData] = React.useState<IStudent>();
   const [studentPersonalCircumstances, setStudentPersonalCircumstances] =
     React.useState<IPersonalCircumstance[]>([]);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const [currentPersonalCircumstance, setCurrentPersonalCircumstance] =
     useState<number>(0);
@@ -85,21 +86,6 @@ const StudentProfilePage = () => {
 
   useEffect(() => {
     if (student !== "") {
-      const retrieveStudentMarks = async () => {
-        try {
-          if (accessToken) {
-            const result = await markService.getMarksForStudent(
-              student,
-              accessToken
-            );
-
-            setStudentMarks(result);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
       const retrievePersonalCircumstances = async () => {
         try {
           if (accessToken) {
@@ -148,10 +134,25 @@ const StudentProfilePage = () => {
         }
       };
 
-      retrieveStudentMarks();
+      const retrieveStudentMarks = async () => {
+        try {
+          if (accessToken) {
+            const result = await markService.getMarksForStudent(
+              student,
+              accessToken
+            );
+
+            setStudentMarks(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       retrievePersonalCircumstances();
       retrieveStudentsStatistics();
       retrieveStudentData();
+      retrieveStudentMarks();
 
       setCurrentPersonalCircumstance(0);
     }
@@ -167,6 +168,29 @@ const StudentProfilePage = () => {
       setStudentList(mappedStudents);
     }
   }, [students]);
+
+  useEffect(() => {
+    if (studentData && studentData.classes.length > 0) {
+      const updatedMarks = studentMarks.map((mark) => {
+        const matchClassWithCode = studentData.classes.find(
+          (class_) => class_.code === mark.class_code
+        );
+
+        if (matchClassWithCode) {
+          return {
+            ...mark,
+            academic_misconduct: matchClassWithCode.academic_misconduct,
+          };
+        }
+
+        return mark;
+      });
+
+      setStudentMarks(updatedMarks);
+      setIsUpdated(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentData]);
 
   const handlePrev = () => {
     if (currentPersonalCircumstance > 0) {
@@ -211,7 +235,7 @@ const StudentProfilePage = () => {
                 ) : null}
               </div>
             </div>
-            {student && student !== "" ? (
+            {student && student !== "" && studentData && isUpdated ? (
               <StudentProfileDataTable
                 columns={StudentProfileColumns}
                 data={studentMarks}

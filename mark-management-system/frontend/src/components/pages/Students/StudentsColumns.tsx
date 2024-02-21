@@ -42,4 +42,8 @@ export const StudentProfileColumns: ColumnDef<IMarkRow>[] = [
     accessorKey: "mark",
     header: "Mark",
   },
+  {
+    accessorKey: "academic_misconduct.outcome",
+    header: "Outcome",
+  },
 ];
