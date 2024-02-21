@@ -176,6 +176,10 @@ class AcademicMisconduct(AcademicMisconductBase):
     class Config:
         orm_mode = True
 
+
+class ClassWithMisconduct(ClassBase):
+    academic_misconduct: AcademicMisconductCreate | None
+
 class PersonalCircumstancesBase(BaseModel):
     details: str
     semester: str
@@ -204,8 +208,8 @@ class Student(StudentBase):
     id: int
 
     degree: DegreeBase
-    classes: List[ClassBase] = []
-    personal_circustances: List[PersonalCircumstancesBase] = []
+    classes: List[ClassWithMisconduct] = []
+    personal_circumstances: List[PersonalCircumstancesBase] = []
 
     class Config:
         from_attributes = True
