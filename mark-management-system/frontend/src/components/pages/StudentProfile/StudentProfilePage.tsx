@@ -33,6 +33,7 @@ import { personalCircumstanceService } from "@/services/PersonalCircumstanceServ
 import { StudentProfileColumns } from "../Students/StudentsColumns";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { IClass } from "@/models/IClass";
 
 const StudentProfilePage = () => {
   const navigate = useNavigate();
@@ -53,6 +54,11 @@ const StudentProfilePage = () => {
     React.useState<IPersonalCircumstance[]>([]);
   const [currentPersonalCircumstance, setCurrentPersonalCircumstance] =
     useState<number>(0);
+  const [currentAcademicMisconduct, setCurrentAcademicMisconduct] =
+    useState<number>(0);
+  const [misconductClasses, setMisconductClasses] = React.useState<IClass[]>(
+    []
+  );
 
   const accessToken = getAccessToken();
 
@@ -167,6 +173,24 @@ const StudentProfilePage = () => {
     }
   }, [students]);
 
+  useEffect(() => {
+    const filteredClasses = [];
+
+    if (studentData) {
+      for (const classData of studentData.classes) {
+        if (
+          classData.academic_misconduct &&
+          classData.academic_misconduct.outcome &&
+          classData.academic_misconduct.reg_no == studentData.reg_no
+        ) {
+          filteredClasses.push(classData);
+        }
+      }
+    }
+
+    setMisconductClasses(filteredClasses);
+  }, [studentData]);
+
   const handlePrev = () => {
     if (currentPersonalCircumstance > 0) {
       setCurrentPersonalCircumstance(currentPersonalCircumstance - 1);
@@ -176,6 +200,18 @@ const StudentProfilePage = () => {
   const handleNext = () => {
     if (currentPersonalCircumstance < studentPersonalCircumstances.length - 1) {
       setCurrentPersonalCircumstance(currentPersonalCircumstance + 1);
+    }
+  };
+
+  const handlePrevMisconduct = () => {
+    if (currentAcademicMisconduct > 0) {
+      setCurrentAcademicMisconduct(currentAcademicMisconduct - 1);
+    }
+  };
+
+  const handleNextMisconduct = () => {
+    if (currentAcademicMisconduct < misconductClasses.length - 1) {
+      setCurrentAcademicMisconduct(currentAcademicMisconduct + 1);
     }
   };
 
@@ -360,8 +396,9 @@ const StudentProfilePage = () => {
                     />
                     <ChevronRightIcon
                       className={`h-6 w-6 ${
+                        studentPersonalCircumstances.length === 0 ||
                         currentPersonalCircumstance ===
-                        studentPersonalCircumstances.length - 1
+                          studentPersonalCircumstances.length - 1
                           ? "text-gray-400"
                           : "hover:cursor-pointer text-black"
                       }`}
@@ -448,24 +485,25 @@ const StudentProfilePage = () => {
                   <div className="flex justify-start items-start">
                     <ChevronLeftIcon
                       className={`h-6 w-6 ${
-                        currentPersonalCircumstance === 0
+                        currentAcademicMisconduct === 0
                           ? "text-gray-400"
                           : "hover:cursor-pointer text-black"
                       }`}
-                      onClick={handlePrev}
+                      onClick={handlePrevMisconduct}
                     />
                     <ChevronRightIcon
                       className={`h-6 w-6 ${
-                        currentPersonalCircumstance ===
-                        studentPersonalCircumstances.length - 1
+                        misconductClasses.length === 0 ||
+                        currentAcademicMisconduct ===
+                          misconductClasses.length - 1
                           ? "text-gray-400"
                           : "hover:cursor-pointer text-black"
                       }`}
-                      onClick={handleNext}
+                      onClick={handleNextMisconduct}
                     />
                   </div>
                 </CardHeader>
-                {studentData ? (
+                {studentData && misconductClasses.length > 0 ? (
                   <div className="flex flex-row w-full justify-between items-center">
                     <div className="flex flex-col space-y-6 w-full">
                       <div className="flex flex-col space-y-2">
@@ -474,7 +512,10 @@ const StudentProfilePage = () => {
                             Outcome:
                           </h2>
                           <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
-                            {studentData.classes[0].academic_misconduct.outcome}
+                            {
+                              misconductClasses[currentAcademicMisconduct]
+                                .academic_misconduct.outcome
+                            }
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
@@ -482,7 +523,10 @@ const StudentProfilePage = () => {
                             Date:
                           </h2>
                           <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
-                            {studentData.classes[0].academic_misconduct.outcome}
+                            {
+                              misconductClasses[currentAcademicMisconduct]
+                                .academic_misconduct.outcome
+                            }
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
@@ -491,8 +535,8 @@ const StudentProfilePage = () => {
                           </h2>
                           <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
                             {
-                              studentData.classes[0].academic_misconduct
-                                .class_code
+                              misconductClasses[currentAcademicMisconduct]
+                                .academic_misconduct.class_code
                             }
                           </h2>
                         </div>
