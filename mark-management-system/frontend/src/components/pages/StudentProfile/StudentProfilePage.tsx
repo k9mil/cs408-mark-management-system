@@ -525,7 +525,7 @@ const StudentProfilePage = () => {
                           <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
                             {
                               misconductClasses[currentAcademicMisconduct]
-                                .academic_misconduct.outcome
+                                .academic_misconduct.date
                             }
                           </h2>
                         </div>
