@@ -5,10 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../AuthProvider";
 
 import Sidebar from "../../common/Sidebar";
+
 import { classService } from "@/services/ClassService";
+import { markService } from "@/services/MarkService";
+
 import { IClass } from "@/models/IClass";
-import ClassProfileDropdown from "./ClassProfileDropdown";
 import { IUserDropdown } from "@/models/IUser";
+import { IMarkRow } from "@/models/IMark";
+
+import ClassProfileDropdown from "./ClassProfileDropdown";
+import ClassProfileDataTable from "./ClassProfileDataTable";
+import { ClassProfileColumns } from "../Classes/ClassesColumns";
 
 const ClassProfilePage = () => {
   const navigate = useNavigate();
@@ -21,6 +28,7 @@ const ClassProfilePage = () => {
   const [classOpen, setClassOpen] = React.useState<boolean>(false);
   const [class_, setClass] = React.useState<string>("");
   const [classData, setClassData] = useState<IClass[]>([]);
+  const [markData, setMarkData] = useState<IMarkRow[]>([]);
 
   const accessToken = getAccessToken();
 
@@ -46,13 +54,34 @@ const ClassProfilePage = () => {
   };
 
   useEffect(() => {
+    if (class_ !== "") {
+      const retrieveMarksForClasses = async () => {
+        try {
+          if (accessToken) {
+            const result = await markService.getMarksForClass(
+              class_,
+              accessToken
+            );
+
+            setMarkData(result);
+            console.log(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      retrieveMarksForClasses();
+    }
+  }, [class_, accessToken]);
+
+  useEffect(() => {
     retrieveClassData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (classData && Array.isArray(classData)) {
-      console.log(classData);
       const mappedClasses = classData.map((class_: IClass) => ({
         value: class_.code,
         label: class_.code,
@@ -77,7 +106,7 @@ const ClassProfilePage = () => {
         <div className="flex flex-row w-full h-[80vh]">
           <div
             className={`flex flex-col space-y-1 m-8 ${
-              classData && classData.length > 0 ? "w-1/2" : "w-full"
+              class_ && class_ !== "" ? "w-1/2" : "w-full"
             }`}
           >
             <div className="flex flex-row justify-between py-2">
@@ -93,10 +122,10 @@ const ClassProfilePage = () => {
                 ) : null}
               </div>
             </div>
-            {/* {classData && classData.length > 0 ? (
-              <StudentProfileDataTable
-                columns={StudentProfileColumns}
-                data={studentMarks}
+            {class_ && class_ !== "" && markData ? (
+              <ClassProfileDataTable
+                columns={ClassProfileColumns}
+                data={markData}
                 accessToken={accessToken}
               />
             ) : (
@@ -112,7 +141,7 @@ const ClassProfilePage = () => {
                   </h2>
                 </div>
               </div>
-            )} */}
+            )}
           </div>
         </div>
       </div>

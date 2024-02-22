@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { IClass } from "../../../models/IClass";
+import { IClass } from "@/models/IClass";
+import { IMarkRow } from "@/models/IMark";
 
 export const ClassColumns: ColumnDef<IClass>[] = [
   {
@@ -26,5 +27,24 @@ export const ClassColumns: ColumnDef<IClass>[] = [
   {
     accessorKey: "lecturer",
     header: "Lecturer",
+  },
+];
+
+export const ClassProfileColumns: ColumnDef<IMarkRow>[] = [
+  {
+    accessorKey: "class_code",
+    header: "Class Code",
+  },
+  {
+    accessorKey: "class_name",
+    header: "Class Name",
+  },
+  {
+    accessorKey: "student_name",
+    header: "Student Name",
+  },
+  {
+    accessorKey: "mark",
+    header: "Mark",
   },
 ];
