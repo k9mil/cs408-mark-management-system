@@ -1,6 +1,14 @@
-from typing import Tuple
+from typing import Tuple, List
+
+from api.system.models.models import Student
+from api.system.models.models import Degree
+from api.system.models.models import PersonalCircumstance
 
 from api.system.schemas.schemas import Student as StudentSchema
+from api.system.schemas.schemas import ClassWithMisconduct
+from api.system.schemas.schemas import AcademicMisconductCreate
+from api.system.schemas.schemas import DegreeBase
+from api.system.schemas.schemas import PersonalCircumstancesBase
 
 from api.students.repositories.student_repository import StudentRepository
 from api.users.repositories.user_repository import UserRepository
@@ -49,4 +57,60 @@ class GetStudentUseCase:
         if student is None:
             raise StudentNotFound("Student not found")
 
-        return student
+        return StudentSchema(
+            id=student.id,
+            reg_no=student.reg_no,
+            student_name=student.student_name,
+            classes=self.construct_classes_with_academic_misconduct(student),
+            personal_circumstances=self.construct_personal_circumstances(student.personal_circumstances),
+            degree_id=student.degree_id,
+            degree=self.construct_degree(student.degree),
+        )
+
+    def construct_classes_with_academic_misconduct(self, student: Student) -> List[ClassWithMisconduct]:
+        classes_with_academic_misconduct = []
+
+        for class_ in student.classes:
+            academic_misconducts = [misconduct for misconduct in class_.academic_misconducts if misconduct.student_reg_no == student.reg_no]
+            academic_misconduct = academic_misconducts[0] if academic_misconducts else None
+
+            if academic_misconduct:
+                academic_misconduct = AcademicMisconductCreate(
+                    reg_no=academic_misconduct.student_reg_no,
+                    class_code=academic_misconduct.class_code,
+                    date=academic_misconduct.date,
+                    outcome=academic_misconduct.outcome,
+                )
+            
+            class_with_misconduct = ClassWithMisconduct(
+                name=class_.name,
+                code=class_.code,
+                credit=class_.credit,
+                credit_level=class_.credit_level,
+                academic_misconduct=academic_misconduct
+            )
+        
+            classes_with_academic_misconduct.append(class_with_misconduct)
+
+        return classes_with_academic_misconduct
+
+    def construct_personal_circumstances(self, personal_circumstances: PersonalCircumstance) -> List[PersonalCircumstancesBase]:
+        personal_circumstances = []
+
+        for circumstance in personal_circumstances:
+            personal_circumstance = PersonalCircumstancesBase(
+                details=circumstance.details,
+                semester=circumstance.semester,
+                cat=circumstance.cat,
+                comments=circumstance.comments,
+            )
+
+            personal_circumstances.append(personal_circumstance)
+
+        return personal_circumstances
+
+    def construct_degree(self, degree: Degree) -> DegreeBase:
+        return DegreeBase(
+            level=degree.level,
+            name=degree.name,
+        )

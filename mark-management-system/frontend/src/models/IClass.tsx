@@ -1,3 +1,4 @@
+import { IAcademicMisconduct } from "./IAcademicMisconduct";
 import { IStudent } from "./IStudent";
 import { IUser } from "./IUser";
 
@@ -12,6 +13,8 @@ interface IBaseClass {
 export interface IClass extends IBaseClass {
   id: number;
   number_of_students: number;
+
+  academic_misconduct: IAcademicMisconduct;
   lecturer: IUser;
   students: IStudent[];
 }

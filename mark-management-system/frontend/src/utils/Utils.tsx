@@ -1,3 +1,4 @@
+import { IAcademicMisconductRow } from "@/models/IAcademicMisconduct";
 import { IMarkRow, IMarkMyPlace } from "@/models/IMark";
 import { IPersonalCircumstanceRow } from "@/models/IPersonalCircumstance";
 
@@ -41,6 +42,18 @@ export const toLowerCaseIPersonalCircumstanceRow = (
       Object.fromEntries(
         Object.entries(obj).map(([key, value]) => [key.toLowerCase(), value])
       ) as IPersonalCircumstanceRow
+  );
+};
+
+// https://stackoverflow.com/questions/12539574/whats-the-best-way-most-efficient-to-turn-all-the-keys-of-an-object-to-lower
+export const toLowerIAcademicMisconductRow = (
+  fileContents: IAcademicMisconductRow[]
+): IAcademicMisconductRow[] => {
+  return fileContents.map(
+    (obj: IAcademicMisconductRow) =>
+      Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [key.toLowerCase(), value])
+      ) as IAcademicMisconductRow
   );
 };
 

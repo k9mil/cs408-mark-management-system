@@ -2,6 +2,8 @@ from pydantic import BaseModel
 
 from typing import List, Optional, ForwardRef
 
+from datetime import date
+
 
 Class = ForwardRef("Class")
 Student = ForwardRef("Student")
@@ -142,7 +144,7 @@ class Class(ClassBase):
     id: int
     
     lecturer: UserBase # type: ignore
-    students: List["Student"] = [] # type: ignore
+    students: List["StudentBase"] = [] # type: ignore
     marks: List[Marks] = []
 
     class Config:
@@ -159,6 +161,24 @@ class Lecturer(BaseModel):
     number_of_classes_taught: int
     
     classes: List["LecturerClass"] = []
+
+class AcademicMisconductBase(BaseModel):
+    date: date
+    outcome: str
+    
+class AcademicMisconductCreate(AcademicMisconductBase):
+    reg_no: str
+    class_code: str
+
+class AcademicMisconduct(AcademicMisconductBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ClassWithMisconduct(ClassBase):
+    academic_misconduct: AcademicMisconductCreate | None
 
 class PersonalCircumstancesBase(BaseModel):
     details: str
@@ -188,8 +208,8 @@ class Student(StudentBase):
     id: int
 
     degree: DegreeBase
-    classes: List[ClassBase] = []
-    personal_circustances: List[PersonalCircumstancesBase] = []
+    classes: List[ClassWithMisconduct] = []
+    personal_circumstances: List[PersonalCircumstancesBase] = []
 
     class Config:
         from_attributes = True

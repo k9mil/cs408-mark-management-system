@@ -1,3 +1,4 @@
+import { IClass } from "./IClass";
 import { IDegree } from "./IDegree";
 
 export interface IStudent {
@@ -6,6 +7,7 @@ export interface IStudent {
   student_name: string;
   degree_id: number;
 
+  classes: IClass[];
   degree: IDegree;
 }
 

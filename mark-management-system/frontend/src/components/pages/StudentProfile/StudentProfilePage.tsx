@@ -33,6 +33,7 @@ import { personalCircumstanceService } from "@/services/PersonalCircumstanceServ
 import { StudentProfileColumns } from "../Students/StudentsColumns";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { IClass } from "@/models/IClass";
 
 const StudentProfilePage = () => {
   const navigate = useNavigate();
@@ -51,9 +52,13 @@ const StudentProfilePage = () => {
   const [studentData, setStudentData] = React.useState<IStudent>();
   const [studentPersonalCircumstances, setStudentPersonalCircumstances] =
     React.useState<IPersonalCircumstance[]>([]);
-
   const [currentPersonalCircumstance, setCurrentPersonalCircumstance] =
     useState<number>(0);
+  const [currentAcademicMisconduct, setCurrentAcademicMisconduct] =
+    useState<number>(0);
+  const [misconductClasses, setMisconductClasses] = React.useState<IClass[]>(
+    []
+  );
 
   const accessToken = getAccessToken();
 
@@ -85,21 +90,6 @@ const StudentProfilePage = () => {
 
   useEffect(() => {
     if (student !== "") {
-      const retrieveStudentMarks = async () => {
-        try {
-          if (accessToken) {
-            const result = await markService.getMarksForStudent(
-              student,
-              accessToken
-            );
-
-            setStudentMarks(result);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
       const retrievePersonalCircumstances = async () => {
         try {
           if (accessToken) {
@@ -148,10 +138,25 @@ const StudentProfilePage = () => {
         }
       };
 
-      retrieveStudentMarks();
+      const retrieveStudentMarks = async () => {
+        try {
+          if (accessToken) {
+            const result = await markService.getMarksForStudent(
+              student,
+              accessToken
+            );
+
+            setStudentMarks(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       retrievePersonalCircumstances();
       retrieveStudentsStatistics();
       retrieveStudentData();
+      retrieveStudentMarks();
 
       setCurrentPersonalCircumstance(0);
     }
@@ -168,6 +173,24 @@ const StudentProfilePage = () => {
     }
   }, [students]);
 
+  useEffect(() => {
+    const filteredClasses = [];
+
+    if (studentData) {
+      for (const classData of studentData.classes) {
+        if (
+          classData.academic_misconduct &&
+          classData.academic_misconduct.outcome &&
+          classData.academic_misconduct.reg_no == studentData.reg_no
+        ) {
+          filteredClasses.push(classData);
+        }
+      }
+    }
+
+    setMisconductClasses(filteredClasses);
+  }, [studentData]);
+
   const handlePrev = () => {
     if (currentPersonalCircumstance > 0) {
       setCurrentPersonalCircumstance(currentPersonalCircumstance - 1);
@@ -177,6 +200,18 @@ const StudentProfilePage = () => {
   const handleNext = () => {
     if (currentPersonalCircumstance < studentPersonalCircumstances.length - 1) {
       setCurrentPersonalCircumstance(currentPersonalCircumstance + 1);
+    }
+  };
+
+  const handlePrevMisconduct = () => {
+    if (currentAcademicMisconduct > 0) {
+      setCurrentAcademicMisconduct(currentAcademicMisconduct - 1);
+    }
+  };
+
+  const handleNextMisconduct = () => {
+    if (currentAcademicMisconduct < misconductClasses.length - 1) {
+      setCurrentAcademicMisconduct(currentAcademicMisconduct + 1);
     }
   };
 
@@ -211,7 +246,7 @@ const StudentProfilePage = () => {
                 ) : null}
               </div>
             </div>
-            {student && student !== "" ? (
+            {student && student !== "" && studentData ? (
               <StudentProfileDataTable
                 columns={StudentProfileColumns}
                 data={studentMarks}
@@ -236,9 +271,9 @@ const StudentProfilePage = () => {
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
           ) : null}
           {student && student !== "" ? (
-            <div className="flex flex-col justify-center items-center w-2/5 m-auto space-y-8">
-              <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
-                <CardHeader className="flex flex-row justify-between items-center p-0">
+            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-8 xl:space-y-4">
+              <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4">
+                <CardHeader className="flex flex-row justify-start items-start p-0">
                   <CardTitle className="2xl:text-2xl xl:text-xl font-bold mb-6">
                     Student Details
                   </CardTitle>
@@ -345,16 +380,36 @@ const StudentProfilePage = () => {
                   </h2>
                 )}
               </Card>
-              <Card className="w-full h-1/2 space-y-2 flex items-center justify-center flex-col shadow-xl p-8">
-                <CardHeader className="flex flex-row justify-between items-center p-0">
-                  <CardTitle className="text-2xl font-bold mb-6">
+              <Card className="w-full h-1/4 space-y-2 flex justify-between flex-col shadow-xl 2xl:p-8 xl:p-4">
+                <CardHeader className="flex flex-row justify-between items-center p-0 mb-6">
+                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold">
                     Personal Circumstances
                   </CardTitle>
+                  <div className="flex justify-start items-start">
+                    <ChevronLeftIcon
+                      className={`h-6 w-6 ${
+                        currentPersonalCircumstance === 0
+                          ? "text-gray-400"
+                          : "hover:cursor-pointer text-black"
+                      }`}
+                      onClick={handlePrev}
+                    />
+                    <ChevronRightIcon
+                      className={`h-6 w-6 ${
+                        studentPersonalCircumstances.length === 0 ||
+                        currentPersonalCircumstance ===
+                          studentPersonalCircumstances.length - 1
+                          ? "text-gray-400"
+                          : "hover:cursor-pointer text-black"
+                      }`}
+                      onClick={handleNext}
+                    />
+                  </div>
                 </CardHeader>
                 {studentPersonalCircumstances &&
                 studentPersonalCircumstances.length > 0 ? (
                   <div className="flex flex-row w-full justify-between items-center">
-                    <div className="flex flex-col space-y-6 w-full">
+                    <div className="flex flex-col 2xl:space-y-6 w-full">
                       <div className="flex flex-col space-y-2">
                         <div className="flex flex-row space-x-2 w-full">
                           <h2 className="2xl:text-base xl:text-sm font-semibold">
@@ -405,32 +460,92 @@ const StudentProfilePage = () => {
                           </h2>
                         </div>
                       </div>
-                      <div className="flex justify-end items-end w-full">
-                        <ChevronLeftIcon
-                          className={`h-6 w-6 ${
-                            currentPersonalCircumstance === 0
-                              ? "text-gray-400"
-                              : "hover:cursor-pointer text-black"
-                          }`}
-                          onClick={handlePrev}
-                        />
-                        <ChevronRightIcon
-                          className={`h-6 w-6 ${
-                            currentPersonalCircumstance ===
-                            studentPersonalCircumstances.length - 1
-                              ? "text-gray-400"
-                              : "hover:cursor-pointer text-black"
-                          }`}
-                          onClick={handleNext}
-                        />
+                    </div>
+                  </div>
+                ) : (
+                  <h2 className="2xl:text-base xl:text-sm font-regular">
+                    It seems like there are no recorded personal circumstances
+                    for this student. If you are expecting to see something
+                    here,{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      contact an administrator
+                    </Link>
+                    .
+                  </h2>
+                )}
+              </Card>
+              <Card className="w-full h-1/4 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4 ">
+                <CardHeader className="flex flex-row justify-between items-center p-0 mb-6">
+                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold">
+                    Academic Misconduct
+                  </CardTitle>
+                  <div className="flex justify-start items-start">
+                    <ChevronLeftIcon
+                      className={`h-6 w-6 ${
+                        currentAcademicMisconduct === 0
+                          ? "text-gray-400"
+                          : "hover:cursor-pointer text-black"
+                      }`}
+                      onClick={handlePrevMisconduct}
+                    />
+                    <ChevronRightIcon
+                      className={`h-6 w-6 ${
+                        misconductClasses.length === 0 ||
+                        currentAcademicMisconduct ===
+                          misconductClasses.length - 1
+                          ? "text-gray-400"
+                          : "hover:cursor-pointer text-black"
+                      }`}
+                      onClick={handleNextMisconduct}
+                    />
+                  </div>
+                </CardHeader>
+                {studentData && misconductClasses.length > 0 ? (
+                  <div className="flex flex-row w-full justify-between items-center">
+                    <div className="flex flex-col space-y-6 w-full">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Outcome:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {
+                              misconductClasses[currentAcademicMisconduct]
+                                .academic_misconduct.outcome
+                            }
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Date:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {misconductClasses[
+                              currentAcademicMisconduct
+                            ].academic_misconduct.date.toString()}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Class:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {
+                              misconductClasses[currentAcademicMisconduct]
+                                .academic_misconduct.class_code
+                            }
+                          </h2>
+                        </div>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <h2 className="text-base font-regular">
-                    It seems like there are no recorded personal circumstances
-                    for this student. If you are expecting to see something
-                    here,{" "}
+                  <h2 className="2xl:text-base xl:text-sm font-regular">
+                    It seems like there are no recorded academic misconducts for
+                    this student. If you are expecting to see something here,{" "}
                     <Link
                       to="/help"
                       className="text-blue-400 font-bold hover:underline"

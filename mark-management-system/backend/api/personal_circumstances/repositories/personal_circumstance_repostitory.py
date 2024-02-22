@@ -25,7 +25,7 @@ class PersonalCircumstanceRepository:
         Adds an object into the database.
 
         Args:
-            degree: The object to be added.
+            personal_circumstance: The object to be added.
         """
         self.db.add(personal_circumstance)
         self.db.commit()
@@ -36,10 +36,10 @@ class PersonalCircumstanceRepository:
         Checks whether a given request is already in the database.
 
         Args:
-            student_id: The student identificator.
+            request: The request containing information that was passed in to create the personal circumstances.
         
         Returns:
-            Optional[PersonalCircumstance]: A List[PersonalCircumstance] from the database.
+            Optional[PersonalCircumstance]: The first result from the database that matches the filter, otherwise None.
         """
         return self.db.query(PersonalCircumstance).filter_by(
             details=request.details,

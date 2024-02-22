@@ -3,6 +3,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from api.system.models.models import Class
+from api.system.models.models import Student
 from api.system.models.models import User
 
 from api.system.schemas.schemas import ClassEdit
@@ -106,6 +107,22 @@ class ClassRepository:
             bool: True if they are a lecturer, false if not.
         """
         return self.db.query(Class).filter_by(id=class_id, lecturer_id=lecturer_id).first() is not None
+    
+    def is_student_in_class(self, class_code: str, reg_no: str) -> bool:
+        """
+        Checks if a student belongs to a class.
+
+        Args:
+            class_code: The identifier of the class.
+            reg_no: The identifier of the student.
+        
+        Returns:
+            bool: True if they belong to the class, false if not.
+        """
+        print(class_code)
+        print(reg_no)
+        print(self.db.query(Class).join(Class.students).filter(Student.reg_no == reg_no, Class.code == class_code).first())
+        return self.db.query(Class).join(Class.students).filter(Student.reg_no == reg_no, Class.code == class_code).first() is not None
 
     def update(self, class_: Class, lecturer: User, request: ClassEdit) -> None:
         """
