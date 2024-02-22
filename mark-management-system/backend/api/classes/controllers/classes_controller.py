@@ -12,6 +12,8 @@ from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 from api.classes.use_cases.get_class_use_case import GetClassUseCase
 from api.classes.use_cases.check_if_class_is_associated_with_a_degree_use_case import CheckIfClassIsAssociatedWithADegreeUseCase
 from api.classes.use_cases.get_associated_degrees_for_class_use_case import GetAssociatedDegreesForClassUseCase
+from api.classes.use_cases.get_class_statistics_use_case import GetClassStatisticsUseCase
+
 
 from api.classes.errors.class_already_exists import ClassAlreadyExists
 from api.classes.errors.classes_not_found import ClassesNotFound
@@ -23,6 +25,8 @@ from api.users.errors.user_not_found import UserNotFound
 from api.degrees.errors.degree_not_found import DegreeNotFound
 from api.degrees.errors.degrees_not_found import DegreesNotFound
 
+from api.marks.errors.mark_not_found import MarkNotFound
+
 from api.classes.dependencies import create_class_use_case
 from api.classes.dependencies import get_classes_use_case
 from api.classes.dependencies import get_classes_for_lecturer_use_case
@@ -31,6 +35,7 @@ from api.classes.dependencies import delete_class_use_case
 from api.classes.dependencies import get_class_use_case
 from api.classes.dependencies import check_if_class_is_associated_with_a_degree_use_case
 from api.classes.dependencies import get_associated_degrees_for_class_use_case
+from api.classes.dependencies import get_class_statistics_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -399,6 +404,47 @@ def get_associated_degrees_for_class(
     except DegreesNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@classes.get("/api/v1/class/{class_code}/statistics", response_model=schemas.MarksStatistics)
+def get_class_statistics(
+    class_code: str,
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
+    get_class_statistics_use_case: GetClassStatisticsUseCase = Depends(get_class_statistics_use_case),
+):
+    """
+    Calculates statistics for a given class.
+
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
+
+    Args:  
+        - `class_code`: The class code of the class to calculate the statistics for.
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_class_statistics_use_case`: The class which handles the business logic for the calculation of statistics for the class.   
+
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 404: If the user (lecturer) from the JWT has not been found, or if no marks have been found.
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        - `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains statistics such as the mean, mode and median.
+    """
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )    
+
+    try:
+        return get_class_statistics_use_case.execute(class_code, current_user)
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except MarkNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
