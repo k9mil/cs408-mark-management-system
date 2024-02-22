@@ -408,7 +408,7 @@ def get_associated_degrees_for_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/api/v1/class/{class_code}/statistics", response_model=schemas.MarksStatistics)
+@classes.get("/api/v1/classes/{class_code}/statistics", response_model=schemas.MarksStatistics)
 def get_class_statistics(
     class_code: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

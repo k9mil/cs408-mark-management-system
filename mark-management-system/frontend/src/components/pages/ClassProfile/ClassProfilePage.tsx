@@ -11,9 +11,14 @@ import { markService } from "@/services/MarkService";
 
 import { IClass } from "@/models/IClass";
 import { IUserDropdown } from "@/models/IUser";
-import { IMarkRow } from "@/models/IMark";
+import { IMarkRow, IStatistics } from "@/models/IMark";
 
-import { Card, CardHeader, CardTitle } from "@/components/common/Card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/common/Card";
 
 import ClassProfileDropdown from "./ClassProfileDropdown";
 import ClassProfileDataTable from "./ClassProfileDataTable";
@@ -32,6 +37,7 @@ const ClassProfilePage = () => {
   const [currentClass, setCurrentClass] = useState<IClass>();
   const [classData, setClassData] = useState<IClass[]>([]);
   const [markData, setMarkData] = useState<IMarkRow[]>([]);
+  const [classStatistics, setClassStatistics] = useState<IStatistics>();
 
   const accessToken = getAccessToken();
 
@@ -73,7 +79,23 @@ const ClassProfilePage = () => {
         }
       };
 
+      const retrieveClassStatistics = async () => {
+        try {
+          if (accessToken) {
+            const result = await classService.getClassStatistics(
+              class_,
+              accessToken
+            );
+
+            setClassStatistics(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       retrieveMarksForClasses();
+      retrieveClassStatistics();
     }
   }, [class_, accessToken]);
 
@@ -200,6 +222,48 @@ const ClassProfilePage = () => {
                         </div>
                       </div>
                     </div>
+                    {classStatistics ? (
+                      <div className="flex flex-col space-y-8 w-1/3">
+                        <CardContent className="flex flex-row space-x-4 justify-around p-0 mr-4">
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                              {classStatistics.mean === -1
+                                ? "N/A"
+                                : `${classStatistics.mean}%`}
+                            </h1>
+                            <h1 className="text-xs 2xl:inline">Mean</h1>
+                          </div>
+                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                              {classStatistics.mode === -1
+                                ? "N/A"
+                                : `${classStatistics.mode}%`}
+                            </h1>
+                            <h1 className="text-xs">Mode</h1>
+                          </div>
+                        </CardContent>
+                        <CardContent className="space-x-4 flex flex-row justify-around p-0 mr-4">
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                              {classStatistics.median === -1
+                                ? "N/A"
+                                : `${classStatistics.median}%`}
+                            </h1>
+                            <h1 className="text-xs">Median</h1>
+                          </div>
+                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                              {classStatistics.pass_rate === -1
+                                ? "N/A"
+                                : `${classStatistics.pass_rate}%`}
+                            </h1>
+                            <h1 className="text-xs 2xl:inline">Pass R.</h1>
+                          </div>
+                        </CardContent>
+                      </div>
+                    ) : null}
                   </div>
                 ) : (
                   <h2 className="text-base font-regular">
