@@ -64,7 +64,6 @@ const ClassProfilePage = () => {
             );
 
             setMarkData(result);
-            console.log(result);
           }
         } catch (error) {
           console.error(error);
@@ -136,7 +135,7 @@ const ClassProfilePage = () => {
                 <div className="space-y-2 flex flex-col justify-center items-center">
                   <h1 className="font-bold text-2xl">No data found</h1>
                   <h2 className="font-light text-md">
-                    This area will fill with information once a user has been
+                    This area will fill with information once a class has been
                     picked.
                   </h2>
                 </div>
