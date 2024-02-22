@@ -39,6 +39,10 @@ export const UploadSelectionCombobox = ({
       value: "personal_circumstances",
       label: "Personal Circumstances",
     },
+    {
+      value: "academic_misconducts",
+      label: "Academic Misconducts",
+    },
   ];
 
   return (
@@ -47,7 +51,7 @@ export const UploadSelectionCombobox = ({
         <Button
           variant="outline"
           role="combobox"
-          className="w-[250px] justify-between"
+          className="w-[235px] justify-between"
         >
           {uploadType
             ? uploadList.find((uploadItem) => uploadItem.value === uploadType)

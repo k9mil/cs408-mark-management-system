@@ -31,6 +31,7 @@ import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
 import {
+  validateAcademicMisconductFile,
   validateFileSizeAndExtension,
   validatePersonalCircumstancesFile,
   validateUploadFile,
@@ -39,10 +40,16 @@ import {
 import {
   toLowerCaseIMarkRow,
   toLowerCaseIPersonalCircumstanceRow,
+  toLowerIAcademicMisconductRow,
 } from "@/utils/Utils";
 
 import UploadSelectionCombobox from "./UploadSelectionCombobox";
 import { personalCircumstanceService } from "@/services/PersonalCircumstanceService";
+import {
+  IAcademicMisconduct,
+  IAcademicMisconductRow,
+} from "@/models/IAcademicMisconduct";
+import { academicMisconductService } from "@/services/AcademicMisconductService";
 
 const UploadPage = () => {
   const navigate = useNavigate();
@@ -136,6 +143,32 @@ const UploadPage = () => {
           toast.success("Your file has been succesfully uploaded!");
         }
       }
+
+      if (uploadType === "academic_misconducts") {
+        const parsedFile = await parseAcademicMisconducts();
+        let parsedFileToLower;
+
+        if (parsedFile) {
+          parsedFileToLower = toLowerIAcademicMisconductRow(parsedFile);
+        }
+
+        if (
+          parsedFileToLower &&
+          validateAcademicMisconductFile(parsedFileToLower.slice(0))
+        ) {
+          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+            await createAcademicMisconduct(
+              row.date,
+              row.module,
+              row.reg_no,
+              row.outcome,
+              index
+            );
+          }
+
+          toast.success("Your file has been succesfully uploaded!");
+        }
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong when uploading the file.");
@@ -168,6 +201,26 @@ const UploadPage = () => {
         Papa.parse(file, {
           complete: (results) => {
             resolve(results.data as IPersonalCircumstanceRow[]);
+          },
+          header: true,
+          error: (error) => {
+            reject(error);
+          },
+        });
+      });
+    }
+
+    return null;
+  };
+
+  const parseAcademicMisconducts = async (): Promise<
+    IAcademicMisconductRow[] | null
+  > => {
+    if (file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          complete: (results) => {
+            resolve(results.data as IAcademicMisconductRow[]);
           },
           header: true,
           error: (error) => {
@@ -387,17 +440,17 @@ const UploadPage = () => {
           comments: comments,
         };
 
-        const markCreated =
+        const personalCircumstanceCreated =
           await personalCircumstanceService.createPersonalCircumstance(
             personalCircumstanceDetails,
             accessToken
           );
 
-        if (markCreated.statusCode !== 200) {
+        if (personalCircumstanceCreated.statusCode !== 200) {
           toast.error(
             `Something went wrong when uploading the personal circumstances for Row ${
               index + 2
-            }. ${markCreated.data}`
+            }. ${personalCircumstanceCreated.data}`
           );
         } else {
           toast.success("Personal Circumstance was uploaded!");
@@ -408,6 +461,50 @@ const UploadPage = () => {
 
       toast.error(
         `Something went wrong when uploading a personal circumstance for Row ${
+          index + 2
+        }.`
+      );
+    }
+  };
+
+  const createAcademicMisconduct = async (
+    date: Date,
+    module_: number,
+    reg_no: string,
+    outcome: string,
+    index: number
+  ) => {
+    try {
+      if (accessToken) {
+        const academicMisconductDetails: IAcademicMisconduct = {
+          date: date,
+          class_code: module_,
+          reg_no: reg_no,
+          outcome: outcome,
+        };
+
+        const academicMisconductCreated =
+          await academicMisconductService.createAcademicMisconduct(
+            academicMisconductDetails,
+            accessToken
+          );
+
+        if (academicMisconductCreated.statusCode !== 200) {
+          console.log(academicMisconductCreated.data);
+          toast.error(
+            `Something went wrong when uploading the academic misconduct for Row ${
+              index + 2
+            }. ${academicMisconductCreated.data}`
+          );
+        } else {
+          toast.success("Academic Misconduct was uploaded!");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when uploading an academic misconduct for Row ${
           index + 2
         }.`
       );

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { isValidClassCode } from "./ClassUtils";
 import { isNumber } from "./Utils";
+import { IAcademicMisconductRow } from "@/models/IAcademicMisconduct";
 
 /**
  * Validates the parsed file (uploaded marks), and ensures data integrity.
@@ -357,6 +358,92 @@ export function validatePersonalCircumstancesFile(
         `Row ${
           i + 2
         } doesn't contain comments. Please fix the file and try again.`
+      );
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Validates the parsed file (for the upload of Academic Misconduct), and ensures data integrity.
+ * @param fileContents - A list of IAcademicMisconductRow objects, or null.
+ * @returns A boolean, true if passes all validation or false if it fails at least one.
+ */
+export function validateAcademicMisconductFile(
+  fileContents: IAcademicMisconductRow[] | null
+): boolean {
+  if (!fileContents || !Array.isArray(fileContents)) {
+    toast.error("The file provided is empty or corrupt.");
+    return false;
+  }
+
+  for (let i = 0; i < fileContents.length; i++) {
+    const row = fileContents[i];
+
+    if (Object.keys(row).length != 5) {
+      toast.error(
+        `Row ${i + 2} doesn't contain all necessary information. 
+         The row should have the following: 
+         DATE, REG_NO, MODULE, MODULE_NAME, OUTCOME`
+      );
+
+      return false;
+    }
+
+    if (!("date" in row) || row.date === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a date. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("reg_no" in row) || row.reg_no === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a registration number. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("module" in row) || row.module === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a module. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("module_name" in row) || row.module_name === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a module name. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    if (!("outcome" in row) || row.outcome === null) {
+      toast.error(
+        `Row ${
+          i + 2
+        } doesn't contain a year. Please fix the file and try again.`
+      );
+      return false;
+    }
+
+    const outcomeToLower = row.outcome.toLowerCase();
+
+    if (outcomeToLower !== "upheld" && outcomeToLower !== "not upheld") {
+      toast.error(
+        `Row ${i + 2} contains an invalid outcome: '${
+          row.outcome
+        }'. Please use 'upheld' or 'not upheld' and try again.`
       );
       return false;
     }
