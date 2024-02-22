@@ -79,14 +79,14 @@ const DashboardPage = () => {
               {statistics ? (
                 <div className="flex flex-col justify-center items-center space-y-8">
                   <CardContent className="flex flex-row justify-around space-x-12 p-0">
-                    <div className="flex flex-col pl-12 justify-center items-center">
+                    <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
                       <h1 className="font-bold text-3xl text-primary-blue">
                         {statistics ? statistics.pass_rate + "%" : null}
                       </h1>
                       <h1 className="text-xs">Pass Rate</h1>
                     </div>
                     <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                    <div className="flex flex-col pr-12 justify-center items-center">
+                    <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
                       <h1 className="font-bold text-3xl text-primary-blue">
                         {statistics ? statistics.mean + "%" : null}
                       </h1>
@@ -94,14 +94,14 @@ const DashboardPage = () => {
                     </div>
                   </CardContent>
                   <CardContent className="flex flex-row justify-around space-x-12 p-0">
-                    <div className="flex flex-col pl-12 justify-center items-center">
+                    <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
                       <h1 className="font-bold text-3xl text-primary-blue">
                         {statistics ? statistics.median + "%" : null}
                       </h1>
                       <h1 className="text-xs">Median</h1>
                     </div>
                     <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                    <div className="flex flex-col pr-12 justify-center items-center">
+                    <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
                       <h1 className="font-bold text-3xl text-primary-blue">
                         {statistics ? statistics.mode + "%" : null}
                       </h1>

@@ -320,8 +320,8 @@ const StudentProfilePage = () => {
                     ) : null}
                     {studentStatistics ? (
                       <div className="flex flex-col space-y-8 w-1/3">
-                        <CardContent className="flex flex-row space-x-4 justify-around p-0">
-                          <div className="flex flex-col justify-center items-center">
+                        <CardContent className="flex flex-row space-x-4 justify-around p-0 mr-4">
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
                               {studentStatistics.mean === -1
                                 ? "N/A"
@@ -330,7 +330,7 @@ const StudentProfilePage = () => {
                             <h1 className="text-xs 2xl:inline">Mean</h1>
                           </div>
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                          <div className="flex flex-col justify-center items-center">
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
                               {studentStatistics.max_mark === -1
                                 ? "N/A"
@@ -339,8 +339,8 @@ const StudentProfilePage = () => {
                             <h1 className="text-xs">Max</h1>
                           </div>
                         </CardContent>
-                        <CardContent className="space-x-4 flex flex-row justify-around p-0">
-                          <div className="flex flex-col justify-center items-center">
+                        <CardContent className="space-x-4 flex flex-row justify-around p-0 mr-4">
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
                               {studentStatistics.min_mark === -1
                                 ? "N/A"
@@ -349,7 +349,7 @@ const StudentProfilePage = () => {
                             <h1 className="text-xs">Min</h1>
                           </div>
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                          <div className="flex flex-col justify-center items-center">
+                          <div className="flex flex-col justify-center items-center w-16 text-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
                               {studentStatistics.pass_rate === -1
                                 ? "N/A"
