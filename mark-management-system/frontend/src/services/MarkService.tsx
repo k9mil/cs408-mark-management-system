@@ -69,7 +69,7 @@ export const markService = {
 
   getStatistics: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/marks/statistics/`, {
+      .get(`${API_BASE_URL}/marks/statistics`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -128,7 +128,7 @@ export const markService = {
 
   getMarksForStudent: async (regNo: string, accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/marks/${regNo}/`, {
+      .get(`${API_BASE_URL}/marks/${regNo}`, {
         data: { regNo: regNo },
         headers: {
           Authorization: `Bearer ${accessToken}`,

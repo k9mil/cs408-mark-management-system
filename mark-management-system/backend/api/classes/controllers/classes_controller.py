@@ -38,7 +38,7 @@ from api.middleware.dependencies import get_current_user
 classes = APIRouter()
 
 
-@classes.post("/classes/", response_model=schemas.Class)
+@classes.post("/api/v1/classes", response_model=schemas.Class)
 def create_class(
     request: schemas.ClassCreate,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -85,7 +85,7 @@ def create_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.get("/classes/", response_model=List[schemas.Class])
+@classes.get("/api/v1/classes", response_model=List[schemas.Class])
 def get_classes(
     skip: int = 0,
     limit: int = 100,
@@ -129,7 +129,7 @@ def get_classes(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/classes/lecturer", response_model=List[schemas.Class])
+@classes.get("/api/v1/classes/lecturer", response_model=List[schemas.Class])
 def get_classes_for_lecturer(
     skip: int = 0,
     limit: int = 100,
@@ -172,7 +172,7 @@ def get_classes_for_lecturer(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.put("/classes/{class_id}", response_model=schemas.Class)
+@classes.put("/api/v1/classes/{class_id}", response_model=schemas.Class)
 def edit_class(
     request: schemas.ClassEdit,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -219,7 +219,7 @@ def edit_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.delete("/classes/{class_id}", response_model=None)
+@classes.delete("/api/v1/classes/{class_id}", response_model=None)
 def delete_class(
     class_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -261,7 +261,7 @@ def delete_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@classes.get("/classes/{class_code}", response_model=schemas.Class)
+@classes.get("/api/v1/classes/{class_code}", response_model=schemas.Class)
 def get_class(
     class_code: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -306,7 +306,7 @@ def get_class(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/classes/{class_code}/degree/{degree_level}/{degree_name}", response_model=schemas.ClassBase)
+@classes.get("/api/v1/classes/{class_code}/degree/{degree_level}/{degree_name}", response_model=schemas.ClassBase)
 def check_if_class_is_associated_with_a_degree_use_case(
     class_code: str,
     degree_level: str,
@@ -359,7 +359,7 @@ def check_if_class_is_associated_with_a_degree_use_case(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@classes.get("/classes/{class_code}/degrees", response_model=List[schemas.DegreeBase])
+@classes.get("/api/v1/classes/{class_code}/degrees", response_model=List[schemas.DegreeBase])
 def get_associated_degrees_for_class(
     class_code: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

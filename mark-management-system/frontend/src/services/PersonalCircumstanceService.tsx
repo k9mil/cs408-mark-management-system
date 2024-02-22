@@ -11,7 +11,7 @@ export const personalCircumstanceService = {
   ) => {
     return await axios
       .post(
-        `${API_BASE_URL}/personal-circumstances/`,
+        `${API_BASE_URL}/personal-circumstances`,
         {
           reg_no: personalCircumstanceDetails.reg_no,
           details: personalCircumstanceDetails.details,

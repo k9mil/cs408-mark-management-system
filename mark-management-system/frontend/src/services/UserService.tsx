@@ -70,7 +70,7 @@ export const userService = {
 
   getLecturers: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/lecturers/`, {
+      .get(`${API_BASE_URL}/lecturers`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

@@ -27,7 +27,7 @@ from api.middleware.dependencies import get_current_user
 students = APIRouter()
 
 
-@students.post("/students/", response_model=schemas.Student)
+@students.post("/api/v1/students", response_model=schemas.Student)
 def create_student(
     request: schemas.StudentCreate,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -74,7 +74,7 @@ def create_student(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@students.get("/students/{reg_no}", response_model=schemas.Student)
+@students.get("/api/v1/students/{reg_no}", response_model=schemas.Student)
 def get_student(
     reg_no: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -118,7 +118,7 @@ def get_student(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@students.get("/students/", response_model=List[schemas.StudentBase])
+@students.get("/api/v1/students", response_model=List[schemas.StudentBase])
 def get_students(
     skip: int = 0,
     limit: int = 100,
@@ -164,7 +164,7 @@ def get_students(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@students.get("/students/{reg_no}/statistics", response_model=schemas.StudentStatistics)
+@students.get("/api/v1/students/{reg_no}/statistics", response_model=schemas.StudentStatistics)
 def get_student_statistics(
     reg_no: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

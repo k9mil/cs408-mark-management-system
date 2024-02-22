@@ -53,7 +53,7 @@ export const degreeService = {
     const degrees = Array.from(degreeSet).map((degree) => JSON.parse(degree));
 
     return await axios
-      .post(`${API_BASE_URL}/degrees/search/`, degrees, {
+      .post(`${API_BASE_URL}/degrees/search`, degrees, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

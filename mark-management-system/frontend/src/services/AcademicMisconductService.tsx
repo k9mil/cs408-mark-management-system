@@ -11,7 +11,7 @@ export const academicMisconductService = {
   ) => {
     return await axios
       .post(
-        `${API_BASE_URL}/academic-misconducts/`,
+        `${API_BASE_URL}/academic-misconducts`,
         {
           date: academicMisconductDetails.date,
           class_code: academicMisconductDetails.class_code,

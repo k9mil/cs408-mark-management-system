@@ -23,7 +23,7 @@ from api.academic_misconducts.dependencies import create_academic_misconduct_use
 academic_misconducts = APIRouter()
 
 
-@academic_misconducts.post("/academic-misconducts/", response_model=schemas.AcademicMisconductBase)
+@academic_misconducts.post("/api/v1/academic-misconducts", response_model=schemas.AcademicMisconductBase)
 def create_academic_misconduct(
     request: schemas.AcademicMisconductCreate,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
