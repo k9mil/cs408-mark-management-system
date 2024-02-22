@@ -51,12 +51,10 @@ export function ClassProfileDataTable<TData, TValue>({
 
     for (const studentProfileItem of data) {
       const processedStudent = {
-        ...studentProfileItem,
+        student_name: studentProfileItem.student_name,
+        registration_number: studentProfileItem.reg_no,
+        mark: studentProfileItem.mark,
       };
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      delete processedStudent.id;
 
       preprocessedData.push(processedStudent);
     }
@@ -94,7 +92,7 @@ export function ClassProfileDataTable<TData, TValue>({
                 .getColumn("student_name")
                 ?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="w-[250px]"
           />
         </div>
         <Button

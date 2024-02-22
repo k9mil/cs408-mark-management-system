@@ -13,6 +13,13 @@ import { IClass } from "@/models/IClass";
 import { IUserDropdown } from "@/models/IUser";
 import { IMarkRow } from "@/models/IMark";
 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/common/Card";
+
 import ClassProfileDropdown from "./ClassProfileDropdown";
 import ClassProfileDataTable from "./ClassProfileDataTable";
 import { ClassProfileColumns } from "../Classes/ClassesColumns";
@@ -142,6 +149,9 @@ const ClassProfilePage = () => {
               </div>
             )}
           </div>
+          {class_ && class_ !== "" ? (
+            <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+          ) : null}
         </div>
       </div>
     </div>
