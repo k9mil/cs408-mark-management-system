@@ -23,7 +23,7 @@ export interface IStudentWithId extends IStudent {
 
 export interface IStudentDetailsWithStatistics {
   mean: number;
-  mode: number;
-  median: number;
+  max_mark: number;
+  min_mark: number;
   pass_rate: number;
 }

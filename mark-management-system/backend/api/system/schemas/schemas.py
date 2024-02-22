@@ -216,8 +216,8 @@ class Student(StudentBase):
 
 class StudentStatistics(BaseModel):
     mean: int
-    median: int
-    mode: int
+    max_mark: int
+    min_mark: int
     pass_rate: int
 
 

@@ -323,44 +323,39 @@ const StudentProfilePage = () => {
                         <CardContent className="flex flex-row space-x-4 justify-around p-0">
                           <div className="flex flex-col justify-center items-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
-                              {studentStatistics.pass_rate === -1
-                                ? "N/A"
-                                : `${studentStatistics.pass_rate}%`}
-                            </h1>
-                            <h1 className="text-xs hidden xl:inline 2xl:hidden">
-                              Pass R.
-                            </h1>
-                            <h1 className="text-xs hidden 2xl:inline">
-                              Pass Rate
-                            </h1>
-                          </div>
-                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                          <div className="flex flex-col justify-center items-center">
-                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
                               {studentStatistics.mean === -1
                                 ? "N/A"
                                 : `${studentStatistics.mean}%`}
                             </h1>
-                            <h1 className="text-xs">Mean</h1>
+                            <h1 className="text-xs 2xl:inline">Mean</h1>
+                          </div>
+                          <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                          <div className="flex flex-col justify-center items-center">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                              {studentStatistics.max_mark === -1
+                                ? "N/A"
+                                : `${studentStatistics.max_mark}%`}
+                            </h1>
+                            <h1 className="text-xs">Max</h1>
                           </div>
                         </CardContent>
                         <CardContent className="space-x-4 flex flex-row justify-around p-0">
                           <div className="flex flex-col justify-center items-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
-                              {studentStatistics.median === -1
+                              {studentStatistics.min_mark === -1
                                 ? "N/A"
-                                : `${studentStatistics.median}%`}
+                                : `${studentStatistics.min_mark}%`}
                             </h1>
-                            <h1 className="text-xs">Median</h1>
+                            <h1 className="text-xs">Min</h1>
                           </div>
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                           <div className="flex flex-col justify-center items-center">
                             <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
-                              {studentStatistics.mode === -1
+                              {studentStatistics.pass_rate === -1
                                 ? "N/A"
-                                : `${studentStatistics.mode}%`}
+                                : `${studentStatistics.pass_rate}%`}
                             </h1>
-                            <h1 className="text-xs">Mode</h1>
+                            <h1 className="text-xs 2xl:inline">Pass R.</h1>
                           </div>
                         </CardContent>
                       </div>
