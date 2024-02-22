@@ -30,6 +30,7 @@ import {
   AcademicCapIcon,
   UserCircleIcon,
   ArrowPathIcon,
+  BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/common/Button";
@@ -114,6 +115,17 @@ const Sidebar = () => {
                 <h2 className="text-white">Student Profile</h2>
               </Link>
             </li>
+            {isAdmin === true ? (
+              <li>
+                <Link
+                  to="/class-profile"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <BuildingOffice2Icon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Class Profile</h2>
+                </Link>
+              </li>
+            ) : null}
             {isAdmin === true ? (
               <li>
                 <Link

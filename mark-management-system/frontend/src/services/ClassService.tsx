@@ -132,6 +132,24 @@ export const classService = {
       });
   },
 
+  getClassStatistics: async (classCode: string, accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/classes/${classCode}/statistics`, {
+        data: { class_code: classCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving a classes statistics.",
+          error
+        );
+        throw error;
+      });
+  },
+
   getAssociatedDegreesForClass: async (
     classCode: string,
     accessToken: string

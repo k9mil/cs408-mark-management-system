@@ -12,6 +12,7 @@ from api.classes.use_cases.delete_class_use_case import DeleteClassUseCase
 from api.classes.use_cases.get_class_use_case import GetClassUseCase
 from api.classes.use_cases.check_if_class_is_associated_with_a_degree_use_case import CheckIfClassIsAssociatedWithADegreeUseCase
 from api.classes.use_cases.get_associated_degrees_for_class_use_case import GetAssociatedDegreesForClassUseCase
+from api.classes.use_cases.get_class_statistics_use_case import GetClassStatisticsUseCase
 
 from api.middleware.dependencies import get_class_repository
 from api.middleware.dependencies import get_user_repository
@@ -64,6 +65,15 @@ def get_class_use_case(
         user_repository: UserRepository = Depends(get_user_repository)
     ) -> GetClassUseCase:
     return GetClassUseCase(
+        class_repository, 
+        user_repository
+    )
+
+def get_class_statistics_use_case(
+        class_repository: ClassRepository = Depends(get_class_repository),
+        user_repository: UserRepository = Depends(get_user_repository)
+    ) -> GetClassStatisticsUseCase:
+    return GetClassStatisticsUseCase(
         class_repository, 
         user_repository
     )

@@ -5,8 +5,10 @@ from sqlalchemy.orm import Session
 from api.system.models.models import Class
 from api.system.models.models import Student
 from api.system.models.models import User
+from api.system.models.models import Marks
 
 from api.system.schemas.schemas import ClassEdit
+from api.system.schemas.schemas import MarksStatistics
 
 
 class ClassRepository:
@@ -119,10 +121,24 @@ class ClassRepository:
         Returns:
             bool: True if they belong to the class, false if not.
         """
-        print(class_code)
-        print(reg_no)
-        print(self.db.query(Class).join(Class.students).filter(Student.reg_no == reg_no, Class.code == class_code).first())
         return self.db.query(Class).join(Class.students).filter(Student.reg_no == reg_no, Class.code == class_code).first() is not None
+    
+    def get_marks_for_class(self, class_code: str) -> List[MarksStatistics]:
+        """
+        Retrieves a list of marks for a given class.
+
+        Args:
+            class_code: The class for which the student marks should be retrieved.
+        
+        Returns:
+            List[MarksStatistics]: A list of `MarksStatistics` schematic objects.
+        """
+        return (self.db.query(Class.code, Marks.mark)
+            .join(Marks, Marks.class_id == Class.id)
+            .filter(Class.code == class_code)
+            .all()
+        )
+
 
     def update(self, class_: Class, lecturer: User, request: ClassEdit) -> None:
         """

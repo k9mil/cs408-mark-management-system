@@ -143,4 +143,22 @@ export const markService = {
         throw error;
       });
   },
+
+  getMarksForClass: async (classCode: string, accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/marks/class/${classCode}/all`, {
+        data: { class_code: classCode },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving marks for the class.",
+          error
+        );
+        throw error;
+      });
+  },
 };
