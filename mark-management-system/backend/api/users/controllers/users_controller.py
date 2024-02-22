@@ -39,7 +39,7 @@ from api.users.validators import PasswordValidator
 users = APIRouter()
 
 
-@users.post("/users", response_model=schemas.User)
+@users.post("/api/v1/users", response_model=schemas.User)
 def create_user(
     request: schemas.UserCreate,
     create_user_use_case: CreateUserUseCase = Depends(create_user_use_case),
@@ -87,7 +87,7 @@ def create_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@users.post("/users/login", response_model=schemas.UserDetails)
+@users.post("/api/v1/users/login", response_model=schemas.UserDetails)
 def authenticate_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     login_user_use_case: LoginUserUseCase = Depends(login_user_use_case),
@@ -119,7 +119,7 @@ def authenticate_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/users/", response_model=List[schemas.User])
+@users.get("/api/v1/users", response_model=List[schemas.User])
 def get_users(
     skip: int = 0,
     limit: int = 100,
@@ -163,7 +163,7 @@ def get_users(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/users/{user_id}", response_model=schemas.User)
+@users.get("/api/v1/users/{user_id}", response_model=schemas.User)
 def get_user(
     user_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -205,7 +205,7 @@ def get_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@users.put("/users/{user_id}", response_model=schemas.User)
+@users.put("/api/v1/users/{user_id}", response_model=schemas.User)
 def edit_user(
     request: schemas.UserEdit,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -265,7 +265,7 @@ def edit_user(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@users.get("/lecturers/", response_model=List[schemas.Lecturer])
+@users.get("/api/v1/lecturers", response_model=List[schemas.Lecturer])
 def get_lecturers(
     skip: int = 0,
     limit: int = 100,
@@ -309,7 +309,7 @@ def get_lecturers(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@users.get("/lecturers/{user_id}", response_model=schemas.Lecturer)
+@users.get("/api/v1/lecturers/{user_id}", response_model=schemas.Lecturer)
 def get_lecturer(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_lecturer_use_case: GetLecturerUseCase = Depends(get_lecturer_use_case),

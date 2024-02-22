@@ -33,7 +33,7 @@ from api.middleware.dependencies import get_current_user
 marks = APIRouter()
 
 
-@marks.post("/marks/", response_model=schemas.Marks)
+@marks.post("/api/v1/marks", response_model=schemas.Marks)
 def create_mark(
     request: schemas.MarksCreate,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -80,7 +80,7 @@ def create_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.get("/marks/{student_id}/{class_id}", response_model=schemas.Marks)
+@marks.get("/api/v1/marks/{student_id}/{class_id}", response_model=schemas.Marks)
 def get_mark(
     student_id: int,
     class_id: int,
@@ -126,7 +126,7 @@ def get_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.get("/marks/", response_model=List[schemas.MarksRow])
+@marks.get("/api/v1/marks", response_model=List[schemas.MarksRow])
 def get_student_marks(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_student_marks_use_case: GetStudentMarksUseCase = Depends(get_student_marks_use_case),
@@ -168,7 +168,7 @@ def get_student_marks(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.put("/marks/{mark_id}", response_model=schemas.Marks)
+@marks.put("/api/v1/marks/{mark_id}", response_model=schemas.Marks)
 def edit_mark(
     request: schemas.MarksEdit,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -212,7 +212,7 @@ def edit_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.delete("/marks/{mark_id}", response_model=None)
+@marks.delete("/api/v1/marks/{mark_id}", response_model=None)
 def delete_mark(
     mark_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -258,7 +258,7 @@ def delete_mark(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@marks.get("/marks/statistics/", response_model=schemas.MarksStatistics)
+@marks.get("/api/v1/marks/statistics", response_model=schemas.MarksStatistics)
 def get_student_statistics(
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     get_student_statistics_use_case: GetStudentStatisticsUseCase = Depends(get_student_statistics_use_case),
@@ -298,7 +298,7 @@ def get_student_statistics(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@marks.get("/marks/{reg_no}", response_model=List[schemas.MarksRow])
+@marks.get("/api/v1/marks/{reg_no}", response_model=List[schemas.MarksRow])
 def get_marks_for_student(
     reg_no: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

@@ -22,7 +22,7 @@ from api.personal_circumstances.dependencies import get_personal_circumstances_f
 
 personal_circumstances = APIRouter()
 
-@personal_circumstances.post("/personal-circumstances/", response_model=schemas.PersonalCircumstancesBase)
+@personal_circumstances.post("/api/v1/personal-circumstances", response_model=schemas.PersonalCircumstancesBase)
 def create_personal_circumstance(
     request: schemas.PersonalCircumstancesCreate,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -68,7 +68,7 @@ def create_personal_circumstance(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@personal_circumstances.get("/personal-circumstances/{reg_no}", response_model=List[schemas.PersonalCircumstancesBase])
+@personal_circumstances.get("/api/v1/personal-circumstances/{reg_no}", response_model=List[schemas.PersonalCircumstancesBase])
 def get_personal_circumstances_for_student(
     reg_no: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

@@ -22,7 +22,7 @@ from api.middleware.dependencies import get_current_user
 roles = APIRouter()
 
 
-@roles.post("/roles/{role_id}/user/{user_id}", response_model=schemas.RoleUsers)
+@roles.post("/api/v1/roles/{role_id}/user/{user_id}", response_model=schemas.RoleUsers)
 def add_user_to_role(
     request: schemas.RoleUsersData,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -71,7 +71,7 @@ def add_user_to_role(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@roles.delete("/roles/{role_id}/user/{user_id}", response_model=None)
+@roles.delete("/api/v1/roles/{role_id}/user/{user_id}", response_model=None)
 def remove_user_from_role(
     request: schemas.RoleUsersData,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),

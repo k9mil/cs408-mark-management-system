@@ -70,7 +70,7 @@ export const studentService = {
 
   getStudents: async (accessToken: string) => {
     return await axios
-      .get(`${API_BASE_URL}/students/`, {
+      .get(`${API_BASE_URL}/students`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

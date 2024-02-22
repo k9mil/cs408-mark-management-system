@@ -23,7 +23,7 @@ from api.middleware.dependencies import get_current_user
 degrees = APIRouter()
 
 
-@degrees.post("/degrees/", response_model=schemas.Degree)
+@degrees.post("/api/v1/degrees", response_model=schemas.Degree)
 def create_degree(
     request: schemas.DegreeCreate,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -64,7 +64,7 @@ def create_degree(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@degrees.get("/degrees/{degree_name}", response_model=schemas.Degree)
+@degrees.get("/api/v1/degrees/{degree_name}", response_model=schemas.Degree)
 def get_degree(
     degree_name: str,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
@@ -105,7 +105,7 @@ def get_degree(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@degrees.post("/degrees/search", response_model=List[schemas.Degree])
+@degrees.post("/api/v1/degrees/search", response_model=List[schemas.Degree])
 def get_degrees(
     degrees: List[schemas.DegreeBase] = Body(...), 
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
