@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
 
@@ -13,12 +13,7 @@ import { IClass } from "@/models/IClass";
 import { IUserDropdown } from "@/models/IUser";
 import { IMarkRow } from "@/models/IMark";
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/common/Card";
+import { Card, CardHeader, CardTitle } from "@/components/common/Card";
 
 import ClassProfileDropdown from "./ClassProfileDropdown";
 import ClassProfileDataTable from "./ClassProfileDataTable";
@@ -34,6 +29,7 @@ const ClassProfilePage = () => {
 
   const [classOpen, setClassOpen] = React.useState<boolean>(false);
   const [class_, setClass] = React.useState<string>("");
+  const [currentClass, setCurrentClass] = useState<IClass>();
   const [classData, setClassData] = useState<IClass[]>([]);
   const [markData, setMarkData] = useState<IMarkRow[]>([]);
 
@@ -97,6 +93,12 @@ const ClassProfilePage = () => {
     }
   }, [classData]);
 
+  useEffect(() => {
+    const foundClass = classData.find((c) => c.code === class_);
+
+    setCurrentClass(foundClass);
+  }, [class_, classData]);
+
   return (
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
@@ -151,6 +153,69 @@ const ClassProfilePage = () => {
           </div>
           {class_ && class_ !== "" ? (
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+          ) : null}
+          {class_ && class_ !== "" ? (
+            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-8 xl:space-y-4">
+              <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4">
+                <CardHeader className="flex flex-row justify-start items-start p-0">
+                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold mb-6">
+                    Class Details
+                  </CardTitle>
+                </CardHeader>
+                {classData && currentClass ? (
+                  <div className="flex flex-row w-full justify-between items-center">
+                    <div className="flex flex-col space-y-6 w-2/3">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Class Name:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {currentClass.name}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Class Code:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {currentClass.code}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Credit:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {currentClass.credit}
+                          </h2>
+                        </div>
+                        <div className="flex flex-row space-x-2 w-full">
+                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            Credit Level:
+                          </h2>
+                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            {currentClass.credit_level}
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <h2 className="text-base font-regular">
+                    It seems like there are no student details available at the
+                    moment. If you are expecting to see something here,{" "}
+                    <Link
+                      to="/help"
+                      className="text-blue-400 font-bold hover:underline"
+                    >
+                      contact an administrator
+                    </Link>
+                    .
+                  </h2>
+                )}
+              </Card>
+            </div>
           ) : null}
         </div>
       </div>
