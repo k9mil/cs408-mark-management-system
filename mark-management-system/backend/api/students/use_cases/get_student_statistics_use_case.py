@@ -1,5 +1,3 @@
-from statistics import mean, mode, median
-
 from typing import Tuple
 
 from api.system.schemas.schemas import StudentStatistics
@@ -31,23 +29,28 @@ class GetStudentStatisticsUseCase:
         if marks is None:
             raise MarkNotFound("No marks found for the student")
         
-        mark_data = []
+        marks = [mark[7] for mark in marks]
+        weights = [mark[4] for mark in marks]
 
-        for current_mark in marks:
-            mark_data.append(current_mark[6])
+        if marks:
+            weighted_sum = 0
+            total_weight = 0
 
-        if mark_data:
+            for mark, weight in zip(marks, weights):
+                weighted_sum += mark * weight
+                total_weight += weight
+
             marks_statistics = StudentStatistics(
-                mean=round(mean(mark_data)),
-                median=round(median(mark_data)),
-                mode=round(mode(mark_data)),
-                pass_rate=round(sum(mark >= self.pass_rate for mark in mark_data) / len(marks) * 100),
+                mean=round(weighted_sum / total_weight),
+                max_mark=max(marks),
+                min_mark=min(marks),
+                pass_rate=round(sum(mark >= self.pass_rate for mark in marks) / len(marks) * 100),
             )
         else:
             marks_statistics = StudentStatistics(
                 mean=-1,
-                median=-1,
-                mode=-1,
+                max_mark=-1,
+                min_mark=-1,
                 pass_rate=-1,
             )
 

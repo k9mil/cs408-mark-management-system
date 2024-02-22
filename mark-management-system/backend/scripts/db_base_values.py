@@ -114,7 +114,7 @@ def create_marks(db: Session) -> None:
     
     mark_repository.add(Marks(mark="61", class_id="1", student_id=3))
     mark_repository.add(Marks(mark="89", class_id="2", student_id=3))
-    mark_repository.add(Marks(mark="90", class_id="3", student_id=3))
+    mark_repository.add(Marks(mark="90", class_id="4", student_id=3))
 
 def create_personal_circumstances(db: Session) -> None:
     personal_circumstance_repository = PersonalCircumstanceRepository(db)
