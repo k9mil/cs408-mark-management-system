@@ -24,19 +24,19 @@ class GetStudentStatisticsUseCase:
         if user is None:
             raise UserNotFound("User not found")
         
-        marks = self.student_repository.get_marks_and_details_for_student(reg_no)
+        marksForStudent = self.student_repository.get_marks_and_details_for_student(reg_no)
 
-        if marks is None:
+        if marksForStudent is None:
             raise MarkNotFound("No marks found for the student")
-        
-        marks = [mark[7] for mark in marks]
-        weights = [mark[4] for mark in marks]
+
+        marks = [mark[7] for mark in marksForStudent]
+        weights = [mark[4] for mark in marksForStudent]
 
         if marks:
             weighted_sum = 0
             total_weight = 0
 
-            for mark, weight in zip(marks, weights):
+            for (mark, weight) in zip(marks, weights):
                 weighted_sum += mark * weight
                 total_weight += weight
 
