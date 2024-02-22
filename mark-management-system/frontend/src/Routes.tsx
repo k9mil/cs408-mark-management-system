@@ -12,6 +12,7 @@ import StudentProfilePage from "./components/pages/StudentProfile/StudentProfile
 import LecturersPage from "./components/pages/Lecturers/LecturersPage";
 import HelpPage from "./components/pages/Help/HelpPage";
 import SettingsPage from "./components/pages/Settings/SettingsPage";
+import ClassProfilePage from "./components/pages/ClassProfile/ClassProfilePage";
 
 import ErrorPage from "./components/pages/Error/ErrorPage_404";
 
@@ -44,6 +45,10 @@ const Routes = () => {
     {
       path: "/student-profile",
       element: <StudentProfilePage />,
+    },
+    {
+      path: "/class-profile",
+      element: <ClassProfilePage />,
     },
     {
       path: "/lecturers",
