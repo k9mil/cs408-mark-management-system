@@ -144,7 +144,7 @@ class Class(ClassBase):
     id: int
     
     lecturer: UserBase # type: ignore
-    students: List["Student"] = [] # type: ignore
+    students: List["StudentBase"] = [] # type: ignore
     marks: List[Marks] = []
 
     class Config:

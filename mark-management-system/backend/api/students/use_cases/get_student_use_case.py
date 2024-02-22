@@ -71,7 +71,8 @@ class GetStudentUseCase:
         classes_with_academic_misconduct = []
 
         for class_ in student.classes:
-            academic_misconduct = class_.academic_misconducts[0] if class_.academic_misconducts else None
+            academic_misconducts = [misconduct for misconduct in class_.academic_misconducts if misconduct.student_reg_no == student.reg_no]
+            academic_misconduct = academic_misconducts[0] if academic_misconducts else None
 
             if academic_misconduct:
                 academic_misconduct = AcademicMisconductCreate(

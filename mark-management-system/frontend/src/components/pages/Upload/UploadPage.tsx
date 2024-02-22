@@ -494,7 +494,7 @@ const UploadPage = () => {
           toast.error(
             `Something went wrong when uploading the academic misconduct for Row ${
               index + 2
-            }. ${academicMisconductCreated.data}`
+            }. ${academicMisconductCreated.data}.`
           );
         } else {
           toast.success("Academic Misconduct was uploaded!");

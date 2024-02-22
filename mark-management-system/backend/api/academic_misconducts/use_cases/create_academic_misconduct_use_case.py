@@ -68,6 +68,9 @@ class CreateAcademicMisconductUseCase:
         
         if self.class_repository.find_by_code(request.class_code) is None:
             raise ClassNotFound("Class not found")
+
+        if self.class_repository.is_student_in_class(request.class_code, request.reg_no) is False:
+            raise StudentNotFound("Student doesnt belong to the provided class not found")
         
         if self.academic_misconduct_repository.find_by_details(request):
             raise AcademicMisconductsAreadyExist("Academic Misconduct already exists")
