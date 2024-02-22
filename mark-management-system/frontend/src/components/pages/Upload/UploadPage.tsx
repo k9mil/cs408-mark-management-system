@@ -490,7 +490,6 @@ const UploadPage = () => {
           );
 
         if (academicMisconductCreated.statusCode !== 200) {
-          console.log(academicMisconductCreated.data);
           toast.error(
             `Something went wrong when uploading the academic misconduct for Row ${
               index + 2
