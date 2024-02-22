@@ -480,7 +480,7 @@ const StudentProfilePage = () => {
               <Card className="w-full h-1/4 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4 ">
                 <CardHeader className="flex flex-row justify-between items-center p-0 mb-6">
                   <CardTitle className="2xl:text-2xl xl:text-xl font-bold">
-                    Academic Misconduct
+                    Academic Misconducts
                   </CardTitle>
                   <div className="flex justify-start items-start">
                     <ChevronLeftIcon

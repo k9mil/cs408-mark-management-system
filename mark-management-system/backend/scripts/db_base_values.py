@@ -22,8 +22,9 @@ from api.personal_circumstances.repositories.personal_circumstance_repostitory i
 from api.roles.repositories.roles_repository import RolesRepository
 from api.students.repositories.student_repository import StudentRepository
 from api.users.repositories.user_repository import UserRepository
+from api.academic_misconducts.repositories.academic_misconduct_repository import AcademicMisconductRepository
 
-from api.system.models.models import Role, Class, Degree, Marks, PersonalCircumstance, Student, User, RoleUsers
+from api.system.models.models import Role, Class, Degree, Marks, PersonalCircumstance, Student, User, RoleUsers, AcademicMisconduct
 
 from api.users.hashers.bcrypt_hasher import BCryptHasher
 
@@ -92,15 +93,13 @@ def create_users(db: Session) -> None:
         lecturer_user
     )
 
-
 def create_classes(db: Session) -> None:
     class_repository = ClassRepository(db)
 
-    class_repository.add(Class(name="Information Access and Mining", code="CS412", credit="20", credit_level="4", lecturer_id=1))
-    class_repository.add(Class(name="Computer Security", code="CS407", credit="20", credit_level="4", lecturer_id=1))
+    class_repository.add(Class(name="Information Access and Mining", code="CS412", credit="20", credit_level="4", lecturer_id=2))
+    class_repository.add(Class(name="Computer Security", code="CS407", credit="20", credit_level="4", lecturer_id=2))
     class_repository.add(Class(name="Human-Centred Security", code="CS426", credit="20", credit_level="4", lecturer_id=2))
     class_repository.add(Class(name="Individual Project", code="CS408", credit="40", credit_level="4", lecturer_id=2))
-
 
 def create_marks(db: Session) -> None:
     mark_repository = MarkRepository(db)
@@ -150,6 +149,36 @@ def create_personal_circumstances(db: Session) -> None:
         )
     )
 
+def create_academic_misconducts(db: Session) -> None:
+    academic_misconduct_repository = AcademicMisconductRepository(db)
+
+    academic_misconduct_repository.add(
+        AcademicMisconduct(
+            date="2024-01-01",
+            outcome="UPHELD",
+            student_reg_no="abc12345",
+            class_code="CS412",
+        )
+    )
+
+    academic_misconduct_repository.add(
+        AcademicMisconduct(
+            date="2024-02-01",
+            outcome="NOT UPHELD",
+            student_reg_no="abc12345",
+            class_code="CS407",
+        )
+    )
+
+    academic_misconduct_repository.add(
+        AcademicMisconduct(
+            date="2023-07-07",
+            outcome="NOT UPHELD",
+            student_reg_no="abc33311",
+            class_code="CS407",
+        )
+    )
+
 
 def main():
     database_url = DevelopmentConfig.DATABASE_URL or TestingConfig.DATABASE_URL
@@ -168,6 +197,7 @@ def main():
         create_classes(db)
         create_marks(db)
         create_personal_circumstances(db)
+        create_academic_misconducts(db)
     finally:
         db.close()
 
