@@ -8,6 +8,7 @@ import Sidebar from "../../common/Sidebar";
 
 import AdministratorView from "./AdministratorView";
 import LecturerView from "./LecturerView";
+import NoRoleView from "./NoRoleView";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -28,7 +29,9 @@ const DashboardPage = () => {
             <LecturerView />
           ) : isAdmin ? (
             <AdministratorView />
-          ) : null}
+          ) : (
+            <NoRoleView />
+          )}
         </div>
       </div>
     </div>
