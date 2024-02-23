@@ -30,34 +30,6 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
-const data = {
-  labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
-  datasets: [
-    {
-      label: "Number of Students",
-      data: [10, 20, 30, 40, 25],
-      backgroundColor: [
-        "rgba(98, 178, 253, 1)",
-        "rgba(155, 223, 196, 1)",
-        "rgba(249, 155, 171, 1)",
-        "rgba(255, 180, 79, 1)",
-        "rgba(159, 151, 247, 1)",
-      ],
-      borderColor: [
-        "rgba(98, 178, 253, 1)",
-        "rgba(155, 223, 196, 1)",
-        "rgba(249, 155, 171, 1)",
-        "rgba(255, 180, 79, 1)",
-        "rgba(159, 151, 247, 1)",
-      ],
-    },
-  ],
-};
-
-const options = {
-  maintainAspectRatio: false,
-};
-
 const LecturerView = () => {
   const { id, getAccessToken } = useAuth();
   const accessToken = getAccessToken();
@@ -65,10 +37,52 @@ const LecturerView = () => {
   const [statistics, setStatistics] = useState<IStatistics>();
   const [lecturer, setLecturer] = useState<ILecturer>();
 
+  const data = {
+    labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
+    datasets: [
+      {
+        label: "Number of Students",
+        data: statistics
+          ? [
+              statistics.first_bucket,
+              statistics.second_bucket,
+              statistics.third_bucket,
+              statistics.fourth_bucket,
+              statistics.fifth_bucket,
+            ]
+          : [0, 0, 0, 0, 0],
+        backgroundColor: [
+          "rgba(98, 178, 253, 1)",
+          "rgba(155, 223, 196, 1)",
+          "rgba(249, 155, 171, 1)",
+          "rgba(255, 180, 79, 1)",
+          "rgba(159, 151, 247, 1)",
+        ],
+        borderColor: [
+          "rgba(98, 178, 253, 1)",
+          "rgba(155, 223, 196, 1)",
+          "rgba(249, 155, 171, 1)",
+          "rgba(255, 180, 79, 1)",
+          "rgba(159, 151, 247, 1)",
+        ],
+      },
+    ],
+  };
+
+  const options = {
+    maintainAspectRatio: false,
+    scale: {
+      ticks: {
+        precision: 0,
+      },
+    },
+  };
+
   const statisticsData = async () => {
     try {
       if (accessToken) {
         const result = await markService.getStatistics(accessToken);
+        console.log(result);
         setStatistics(result);
       }
     } catch (error) {

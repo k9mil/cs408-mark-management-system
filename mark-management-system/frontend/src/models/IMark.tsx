@@ -46,6 +46,11 @@ export interface IStatistics {
   median: number;
   mode: number;
   pass_rate: number;
+  first_bucket: number | null;
+  second_bucket: number | null;
+  third_bucket: number | null;
+  fourth_bucket: number | null;
+  fifth_bucket: number | null;
 }
 
 export interface IMarkMyPlace {

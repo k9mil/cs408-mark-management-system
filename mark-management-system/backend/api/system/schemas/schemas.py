@@ -66,6 +66,12 @@ class MarksStatistics(BaseModel):
     mode: int
     pass_rate: int
 
+    first_bucket: int | None
+    second_bucket: int | None
+    third_bucket: int | None
+    fourth_bucket: int | None
+    fifth_bucket: int | None
+
 class DegreeBase(BaseModel):
     level: str
     name: str

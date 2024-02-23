@@ -42,6 +42,11 @@ class GetClassStatisticsUseCase:
                 median=round(median(mark_data)),
                 mode=round(mode(mark_data)),
                 pass_rate=round(sum(mark >= self.pass_rate for mark in mark_data) / len(marks) * 100),
+                first_bucket=None,
+                second_bucket=None,
+                third_bucket=None,
+                fourth_bucket=None,
+                fifth_bucket=None,
             )
         else:
             marks_statistics = MarksStatistics(
@@ -49,6 +54,11 @@ class GetClassStatisticsUseCase:
                 median=-1,
                 mode=-1,
                 pass_rate=-1,
+                first_bucket=-1,
+                second_bucket=-1,
+                third_bucket=-1,
+                fourth_bucket=-1,
+                fifth_bucket=-1,
             )
 
         return marks_statistics
