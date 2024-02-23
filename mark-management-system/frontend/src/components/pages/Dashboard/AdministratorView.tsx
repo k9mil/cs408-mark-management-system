@@ -67,6 +67,11 @@ const AdministratorView = () => {
 
   const options = {
     maintainAspectRatio: false,
+    scale: {
+      ticks: {
+        precision: 0,
+      },
+    },
   };
 
   const globalStatisticsData = async () => {
