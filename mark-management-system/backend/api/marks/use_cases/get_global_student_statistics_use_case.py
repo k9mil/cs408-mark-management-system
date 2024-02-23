@@ -12,10 +12,9 @@ from api.marks.errors.mark_not_found import MarkNotFound
 from api.users.errors.user_not_found import UserNotFound
 
 
-class GetStudentStatisticsUseCase:
+class GetGlobalStudentStatisticsUseCase:
     """
-    The Use Case containing business logic for retrieving and calculating student marks for a particular
-    lecturer.
+    The Use Case containing business logic for retrieving and calculating all student marks in the system.
     """
     def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository):
         self.mark_repository = mark_repository
@@ -24,34 +23,38 @@ class GetStudentStatisticsUseCase:
     
     def execute(self, current_user: Tuple[str, bool, bool]) -> MarksStatistics:
         """
-        Executes the Use Case to retrieve marks for a lecturer and calculate statistics.
+        Executes the Use Case to retrieve all marks from the system and perform calculations on them.
 
         Args:
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
-            MarkNotFound: If no marks can be found for the lecturer.
             UserNotFound: If the user (from the JWT) cannot be found.
+            PermissionError: If the requestor is not a lecturer or an administrator.
+            MarkNotFound: If no marks can be found for the lecturer.
         
         Returns:
-            MarksStatistics: A MarksStatistics schema object containing all statistics about the uploaded marks of the lecturer (requestor).
+            MarksStatistics: A MarksStatistics schema object containing all statistics about the marks in the system.
         """
-        user_email, _, _ = current_user
+        user_email, is_lecturer, is_admin = current_user
 
         user = self.user_repository.find_by_email(user_email)
 
         if user is None:
             raise UserNotFound("User not found")
+
+        if not (is_lecturer or is_admin):
+            raise PermissionError("Permission denied to access this resource")
         
-        marks = self.mark_repository.get_student_marks_for_lecturer(user.id)
+        marks = self.mark_repository.get_all_student_marks()
 
         if marks is None:
-            raise MarkNotFound("No results found for the lecturer")
+            raise MarkNotFound("No marks found in the system")
         
         mark_data = []
 
         for current_mark in marks:
-            mark_data.append(current_mark[6])
+            mark_data.append(current_mark.mark)
 
         marks_statistics = MarksStatistics(
             mean=round(mean(mark_data)),

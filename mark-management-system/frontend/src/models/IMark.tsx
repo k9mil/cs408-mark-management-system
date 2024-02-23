@@ -1,3 +1,5 @@
+import { IClassBaseMetric } from "./IClass";
+
 export interface IMark {
   mark: number;
   class_id: number;
@@ -46,6 +48,17 @@ export interface IStatistics {
   median: number;
   mode: number;
   pass_rate: number;
+  first_bucket: number | null;
+  second_bucket: number | null;
+  third_bucket: number | null;
+  fourth_bucket: number | null;
+  fifth_bucket: number | null;
+}
+
+export interface IMarkMetrics {
+  lowest_performing_classes: IClassBaseMetric[];
+  highest_performing_classes: IClassBaseMetric[];
+  most_consistent_classes: IClassBaseMetric[];
 }
 
 export interface IMarkMyPlace {

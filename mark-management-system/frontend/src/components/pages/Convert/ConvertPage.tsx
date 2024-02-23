@@ -38,15 +38,15 @@ import ConvertInfoBox from "./ConvertInfoBox";
 
 const ConvertPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, getAccessToken } = useAuth();
+  const { isAdmin, isLecturer, isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
     document.title = "Mark Management System | Convert";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const [conversionOpen, setConversionOpen] = React.useState<boolean>(false);
   const [conversionType, setConversionType] = React.useState<string>("");

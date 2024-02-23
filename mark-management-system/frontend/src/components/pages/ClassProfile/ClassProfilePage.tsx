@@ -44,10 +44,10 @@ const ClassProfilePage = () => {
   useEffect(() => {
     document.title = "Mark Management System | Class Profile";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const retrieveClassData = async () => {
     try {

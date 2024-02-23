@@ -22,18 +22,25 @@ import { validateUserEditDetails } from "@/utils/UserUtils";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
-  const { id, firstName, lastName, isAuthenticated, getAccessToken } =
-    useAuth();
+  const {
+    id,
+    firstName,
+    lastName,
+    isAuthenticated,
+    getAccessToken,
+    isAdmin,
+    isLecturer,
+  } = useAuth();
 
   const accessToken = getAccessToken();
 
   useEffect(() => {
     document.title = "Mark Management System | Settings";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const [formFirstName, setFirstName] = useState(firstName);
   const [formLastName, setLastName] = useState(lastName);

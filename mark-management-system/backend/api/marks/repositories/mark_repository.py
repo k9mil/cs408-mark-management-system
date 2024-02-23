@@ -73,6 +73,18 @@ class MarkRepository:
             .all()
         )
     
+    def get_all_student_marks(self) -> List[MarksRow]:
+        """
+        Retrieves a list of of marks and classes.
+        
+        Returns:
+            List[MarksRow]: A list of `MarksRow` schematic objects.
+        """
+        return (self.db.query(Class.code, Class.name, Class.credit, Class.credit_level, Marks.mark)
+            .join(Marks, Marks.class_id == Class.id)
+            .all()
+        )
+    
     def get_marks_for_student(self, reg_no: str) -> List[MarksRow]:
         """
         Retrieves a list of student marks for a particular student.

@@ -37,7 +37,7 @@ import { Button } from "@/components/common/Button";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const { isAdmin, updateAuthentication } = useAuth();
+  const { isAdmin, isLecturer, updateAuthentication } = useAuth();
 
   const logout = async () => {
     try {
@@ -60,102 +60,104 @@ const Sidebar = () => {
           <div className="border-b-2 border-black">
             <img src="/strathclyde_logo.svg" alt="Strathclyde Logo" />
           </div>
-          <ul>
-            <li>
-              <Link
-                to="/dashboard"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <HomeIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Dashboard</h2>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/convert"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <ArrowPathIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Convert</h2>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/upload"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <PencilIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Upload</h2>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/classes"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <BuildingLibraryIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Classes</h2>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/graded-students"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <AcademicCapIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Graded Students</h2>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/student-profile"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <UserCircleIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Student Profile</h2>
-              </Link>
-            </li>
-            {isAdmin === true ? (
+          {isAdmin || isLecturer ? (
+            <ul>
               <li>
                 <Link
-                  to="/class-profile"
+                  to="/dashboard"
                   className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
-                  <BuildingOffice2Icon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Class Profile</h2>
+                  <HomeIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Dashboard</h2>
                 </Link>
               </li>
-            ) : null}
-            {isAdmin === true ? (
               <li>
                 <Link
-                  to="/lecturers"
+                  to="/convert"
                   className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
-                  <UserIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Lecturers</h2>
+                  <ArrowPathIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Convert</h2>
                 </Link>
               </li>
-            ) : null}
-            <li>
-              <Link
-                to="/help"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Help & Support</h2>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/settings"
-                className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
-              >
-                <Cog8ToothIcon className="h-6 w-6 text-white" />
-                <h2 className="text-white">Settings</h2>
-              </Link>
-            </li>
-          </ul>
+              <li>
+                <Link
+                  to="/upload"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <PencilIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Upload</h2>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/classes"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <BuildingLibraryIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Classes</h2>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/graded-students"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <AcademicCapIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Graded Students</h2>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/student-profile"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <UserCircleIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Student Profile</h2>
+                </Link>
+              </li>
+              {isAdmin === true ? (
+                <li>
+                  <Link
+                    to="/class-profile"
+                    className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  >
+                    <BuildingOffice2Icon className="h-6 w-6 text-white" />
+                    <h2 className="text-white">Class Profile</h2>
+                  </Link>
+                </li>
+              ) : null}
+              {isAdmin === true ? (
+                <li>
+                  <Link
+                    to="/lecturers"
+                    className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  >
+                    <UserIcon className="h-6 w-6 text-white" />
+                    <h2 className="text-white">Lecturers</h2>
+                  </Link>
+                </li>
+              ) : null}
+              <li>
+                <Link
+                  to="/help"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Help & Support</h2>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/settings"
+                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                >
+                  <Cog8ToothIcon className="h-6 w-6 text-white" />
+                  <h2 className="text-white">Settings</h2>
+                </Link>
+              </li>
+            </ul>
+          ) : null}
         </div>
         <div className="flex justify-between mx-6 my-4">
           <Dialog>

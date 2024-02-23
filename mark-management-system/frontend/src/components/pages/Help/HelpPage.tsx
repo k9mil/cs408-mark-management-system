@@ -15,15 +15,15 @@ import Sidebar from "../../common/Sidebar";
 
 const HelpPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAdmin, isLecturer, isAuthenticated } = useAuth();
 
   useEffect(() => {
     document.title = "Mark Management System | Help & Support";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   return (
     <div className="bg-primary-blue h-screen w-screen flex">

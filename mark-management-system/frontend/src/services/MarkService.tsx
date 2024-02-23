@@ -84,6 +84,23 @@ export const markService = {
       });
   },
 
+  getGlobalStatistics: async (accessToken: string) => {
+    return await axios
+      .get(`${API_BASE_URL}/marks/global/statistics/all`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(
+          "Error: There has been an issue when retrieving all student statistics.",
+          error
+        );
+        throw error;
+      });
+  },
+
   editMark: async (markDetails: IMarkEdit, accessToken: string) => {
     return await axios
       .put(

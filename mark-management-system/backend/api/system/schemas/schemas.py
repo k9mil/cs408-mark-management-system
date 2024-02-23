@@ -66,6 +66,12 @@ class MarksStatistics(BaseModel):
     mode: int
     pass_rate: int
 
+    first_bucket: int | None
+    second_bucket: int | None
+    third_bucket: int | None
+    fourth_bucket: int | None
+    fifth_bucket: int | None
+
 class DegreeBase(BaseModel):
     level: str
     name: str
@@ -76,7 +82,7 @@ class DegreeCreate(DegreeBase):
 class Degree(DegreeBase):
     id: int
 
-    students: List["Student"] = []
+    students: List["StudentBase"] = []
     classes: List["Class"] = []
 
     class Config:
@@ -131,6 +137,10 @@ class ClassBase(BaseModel):
     credit: int
     credit_level: int
 
+class ClassBaseMetric(ClassBase):
+    mean: int
+    stdev: float
+
 class ClassCreate(ClassBase):
     lecturer_id: int
 
@@ -149,6 +159,11 @@ class Class(ClassBase):
 
     class Config:
         from_attributes = True
+
+class MarksMetrics(BaseModel):
+    lowest_performing_classes: List[ClassBaseMetric]
+    highest_performing_classes: List[ClassBaseMetric]
+    most_consistent_classes: List[ClassBaseMetric]
 
 class LecturerClass(ClassBase):
     is_uploaded: bool
