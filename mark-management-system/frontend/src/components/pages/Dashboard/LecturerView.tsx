@@ -268,15 +268,15 @@ const LecturerView = () => {
                 ))
               ) : (
                 <h2 className="font-normal text-sm -mt-6">
-                  It seems that you are not assigned to any classes, and do not
-                  have any roles assigned.{" "}
+                  It seems that you are not assigned to any classes.
                   <Link
                     to="/help"
                     className="text-blue-400 font-bold hover:underline"
                   >
+                    {" "}
                     Contact an administrator
                   </Link>{" "}
-                  to get a role, and get assigned to a class!
+                  and get assigned to a class!
                 </h2>
               )}
             </div>

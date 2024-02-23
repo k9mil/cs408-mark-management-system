@@ -37,14 +37,14 @@ class GetMarkUseCase:
         Returns:
             MarksSchema: A MarksSchema schema object containing all information about the requested mark.
         """
-        user_email, _, is_lecturer = current_user
+        user_email, is_admin, is_lecturer = current_user
 
         user = self.user_repository.find_by_email(user_email)
 
         if user is None:
             raise UserNotFound("User not found")
         
-        if not ((user and is_lecturer)):
+        if not ((user and is_lecturer) or is_admin):
             raise PermissionError("Permission denied to access this resource")
         
         mark = self.mark_repository.find_by_student_id_and_class_id(student_id, class_id)

@@ -48,7 +48,7 @@ class CreateMarkUseCase:
 
         is_lecturer_of_class = self.class_repository.is_lecturer_of_class(user.id, request.class_id)
 
-        if not ((is_lecturer_of_class is None) or is_admin):
+        if not (is_lecturer_of_class or is_admin):
             raise PermissionError("Permission denied to access this resource")
 
         if self.mark_repository.find_by_student_id_and_class_id(request.student_id, request.class_id):

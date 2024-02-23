@@ -82,7 +82,7 @@ class DegreeCreate(DegreeBase):
 class Degree(DegreeBase):
     id: int
 
-    students: List["Student"] = []
+    students: List["StudentBase"] = []
     classes: List["Class"] = []
 
     class Config:
