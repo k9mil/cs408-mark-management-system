@@ -123,6 +123,11 @@ const DashboardPage = () => {
                   </Link>{" "}
                   and get uploading!
                 </h2>
+              ) : isAdmin && !isLecturer ? (
+                <h2 className="px-6 font-normal text-sm">
+                  No classes assigned yet. To display student performance, you
+                  have to be assigned to a class and upload marks.
+                </h2>
               ) : (
                 <h2 className="px-6 font-normal text-sm">
                   No classes assigned yet. To upload marks, please get assigned
