@@ -1,4 +1,14 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+
+import { Link } from "react-router-dom";
+
+import { markService } from "@/services/MarkService";
+import { userService } from "@/services/UserService";
+
+import { IStatistics } from "@/models/IMark";
+import { ILecturer } from "@/models/IUser";
+
+import { useAuth } from "../../../AuthProvider";
 
 import { Bar } from "react-chartjs-2";
 
@@ -49,6 +59,42 @@ const options = {
 };
 
 const LecturerView = () => {
+  const { id, getAccessToken } = useAuth();
+  const accessToken = getAccessToken();
+
+  const [statistics, setStatistics] = useState<IStatistics>();
+  const [lecturer, setLecturer] = useState<ILecturer>();
+
+  const statisticsData = async () => {
+    try {
+      if (accessToken) {
+        const result = await markService.getStatistics(accessToken);
+        setStatistics(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const lecturerData = async () => {
+    try {
+      if (accessToken) {
+        const result = await userService.getLecturer(id, accessToken);
+        setLecturer(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    document.title = "Mark Management System | Dashboard";
+
+    statisticsData();
+    lecturerData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-8 h-2/3 w-3/4">
       <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full">
@@ -58,7 +104,7 @@ const LecturerView = () => {
               Global Student Performance
             </CardTitle>
           </CardHeader>
-          <div className="flex flex-col justify-center items-center space-y-8">
+          <div className="flex flex-col justify-center items-center space-y-8 mt-4">
             <CardContent className="flex flex-row justify-around space-x-12 p-0">
               <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
                 <h1 className="font-bold text-3xl text-primary-blue">10%</h1>
@@ -87,30 +133,63 @@ const LecturerView = () => {
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle className="text-lg">Your Student Performance</CardTitle>
           </CardHeader>
-          <div className="flex flex-col justify-center items-center space-y-8">
-            <CardContent className="flex flex-row justify-around space-x-12 p-0">
-              <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
-                <h1 className="font-bold text-3xl text-primary-blue">10%</h1>
-                <h1 className="text-xs">Pass Rate</h1>
-              </div>
-              <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-              <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
-                <h1 className="font-bold text-3xl text-primary-blue">10%</h1>
-                <h1 className="text-xs">Mean</h1>
-              </div>
-            </CardContent>
-            <CardContent className="flex flex-row justify-around space-x-12 p-0">
-              <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
-                <h1 className="font-bold text-3xl text-primary-blue">10%</h1>
-                <h1 className="text-xs">Median</h1>
-              </div>
-              <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-              <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
-                <h1 className="font-bold text-3xl text-primary-blue">10%</h1>
-                <h1 className="text-xs">Mode</h1>
-              </div>
-            </CardContent>
-          </div>
+          {statistics ? (
+            <div className="flex flex-col justify-center items-center space-y-8 mt-4">
+              <CardContent className="flex flex-row justify-around space-x-12 p-0">
+                <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
+                  <h1 className="font-bold text-3xl text-primary-blue">
+                    {statistics ? statistics.pass_rate + "%" : null}
+                  </h1>
+                  <h1 className="text-xs">Pass Rate</h1>
+                </div>
+                <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
+                  <h1 className="font-bold text-3xl text-primary-blue">
+                    {statistics ? statistics.mean + "%" : null}
+                  </h1>
+                  <h1 className="text-xs">Mean</h1>
+                </div>
+              </CardContent>
+              <CardContent className="flex flex-row justify-around space-x-12 p-0">
+                <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
+                  <h1 className="font-bold text-3xl text-primary-blue">
+                    {statistics ? statistics.median + "%" : null}
+                  </h1>
+                  <h1 className="text-xs">Median</h1>
+                </div>
+                <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
+                  <h1 className="font-bold text-3xl text-primary-blue">
+                    {statistics ? statistics.mode + "%" : null}
+                  </h1>
+                  <h1 className="text-xs">Mode</h1>
+                </div>
+              </CardContent>
+            </div>
+          ) : lecturer && lecturer.classes.length ? (
+            <h2 className="px-6 font-normal text-sm">
+              Ready to upload marks for one of your classes? Head over to the{" "}
+              <Link
+                to="/upload"
+                className="text-blue-400 font-bold hover:underline"
+              >
+                upload page
+              </Link>{" "}
+              and get uploading!
+            </h2>
+          ) : (
+            <h2 className="px-6 font-normal text-sm">
+              No classes assigned yet. To upload marks, please get assigned to a
+              class by{" "}
+              <Link
+                to="/help"
+                className="text-blue-400 font-bold hover:underline"
+              >
+                contacting an administrator
+              </Link>
+              .
+            </h2>
+          )}
         </Card>
         <Card className="col-span-1 row-span-2 flex flex-col shadow-xl">
           <CardHeader className="flex flex-col justify-start items-start">
@@ -129,38 +208,45 @@ const LecturerView = () => {
             <CardTitle className="text-lg">Class Overview</CardTitle>
           </CardHeader>
           <div className="flex flex-col px-6">
-            <div className="flex flex-row space-x-4">
-              <div className="flex flex-col w-1/3 space-y-2">
-                <h1 className="font-semibold text-base">
-                  CS407 |<span className="font-normal"> Computer Security</span>
-                </h1>
-                <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
-                  Uploaded
+            <div className="flex flex-row space-x-4 mt-8">
+              {lecturer && lecturer.classes.length > 0 ? (
+                lecturer.classes.slice(0, 3).map((class_, index) => (
+                  <React.Fragment key={class_.code}>
+                    <div className="flex flex-col w-1/3 space-y-2">
+                      <h1 className="font-semibold text-base">
+                        {class_.code} |{" "}
+                        <span className="font-normal"> {class_.name}</span>
+                      </h1>
+                      {class_.is_uploaded === true ? (
+                        <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
+                          Uploaded
+                        </h2>
+                      ) : (
+                        <h2 className="text-red-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-200 w-max">
+                          Upload Due
+                        </h2>
+                      )}
+                    </div>
+                    {index !== lecturer.classes.slice(0, 3).length - 1 && (
+                      <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
+                    )}
+                  </React.Fragment>
+                ))
+              ) : (
+                <h2 className="font-normal text-sm -mt-6">
+                  It seems that you are not assigned to any classes, and do not
+                  have any roles assigned.{" "}
+                  <Link
+                    to="/help"
+                    className="text-blue-400 font-bold hover:underline"
+                  >
+                    Contact an administrator
+                  </Link>{" "}
+                  to get a role, and get assigned to a class!
                 </h2>
-              </div>
-              <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-              <div className="flex flex-col w-1/3 space-y-2">
-                <h1 className="font-semibold text-base">
-                  CS407 |<span className="font-normal"> Computer Security</span>
-                </h1>
-                <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
-                  Uploaded
-                </h2>
-              </div>
-              <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-              <div className="flex flex-col w-1/3 space-y-2">
-                <h1 className="font-semibold text-base">
-                  CS407 |<span className="font-normal"> Computer Security</span>
-                </h1>
-                <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
-                  Uploaded
-                </h2>
-              </div>
+              )}
             </div>
           </div>
-          <h2 className="text-sm text-black font-semibold flex self-end mr-8 relative mt-14">
-            “The place of useful learning.”
-          </h2>
         </Card>
       </div>
     </div>

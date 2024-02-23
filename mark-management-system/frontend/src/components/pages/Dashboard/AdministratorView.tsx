@@ -58,7 +58,7 @@ const AdministratorView = () => {
               Global Student Performance
             </CardTitle>
           </CardHeader>
-          <div className="flex flex-col justify-center items-center space-y-8">
+          <div className="flex flex-col justify-center items-center space-y-8 mt-4">
             <CardContent className="flex flex-row justify-around space-x-12 p-0">
               <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
                 <h1 className="font-bold text-3xl text-primary-blue">10%</h1>
@@ -87,7 +87,7 @@ const AdministratorView = () => {
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle className="text-lg">High Performing Classes</CardTitle>
           </CardHeader>
-          <div className="flex flex-col pl-7 space-y-4">
+          <div className="flex flex-col pl-7 space-y-4 mt-4">
             <div className="flex flex-row space-x-2">
               <div className="flex flex-col">
                 <h2 className="text-md font-normal">
