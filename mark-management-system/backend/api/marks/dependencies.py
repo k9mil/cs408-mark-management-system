@@ -13,6 +13,7 @@ from api.marks.use_cases.edit_mark_use_case import EditMarkUseCase
 from api.marks.use_cases.delete_mark_use_case import DeleteMarkUseCase
 from api.marks.use_cases.get_marks_for_student_use_case import GetMarksForStudentUseCase
 from api.marks.use_cases.get_marks_for_class_use_case import GetMarksForClassUseCase
+from api.marks.use_cases.get_global_student_statistics_use_case import GetGlobalStudentStatisticsUseCase
 
 from api.middleware.dependencies import get_mark_repository
 from api.middleware.dependencies import get_user_repository
@@ -98,6 +99,15 @@ def get_marks_for_class_use_case(
         user_repository: UserRepository = Depends(get_user_repository),
     ) -> GetMarksForClassUseCase:
     return GetMarksForClassUseCase(
+        mark_repository,
+        user_repository,
+    )
+
+def get_global_student_statistics_use_case(
+        mark_repository: MarkRepository = Depends(get_mark_repository),
+        user_repository: UserRepository = Depends(get_user_repository),
+    ) -> GetGlobalStudentStatisticsUseCase:
+    return GetGlobalStudentStatisticsUseCase(
         mark_repository,
         user_repository,
     )

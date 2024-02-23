@@ -12,6 +12,7 @@ from api.marks.use_cases.edit_mark_use_case import EditMarkUseCase
 from api.marks.use_cases.delete_mark_use_case import DeleteMarkUseCase
 from api.marks.use_cases.get_marks_for_student_use_case import GetMarksForStudentUseCase
 from api.marks.use_cases.get_marks_for_class_use_case import GetMarksForClassUseCase
+from api.marks.use_cases.get_global_student_statistics_use_case import GetGlobalStudentStatisticsUseCase
 
 from api.marks.errors.mark_already_exists import MarkAlreadyExists
 from api.marks.errors.mark_not_found import MarkNotFound
@@ -28,6 +29,7 @@ from api.marks.dependencies import edit_mark_use_case
 from api.marks.dependencies import delete_mark_use_case
 from api.marks.dependencies import get_marks_for_student_use_case
 from api.marks.dependencies import get_marks_for_class_use_case
+from api.marks.dependencies import get_global_student_statistics_use_case
 
 from api.middleware.dependencies import get_current_user
 
@@ -273,14 +275,14 @@ def get_student_statistics(
     OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
     Args:  
-        `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
                       The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
-        `get_student_statistics_use_case`: The class which handles the business logic for retrieving & calculating student marks.   
+        - `get_student_statistics_use_case`: The class which handles the business logic for retrieving & calculating student marks.   
 
     Raises:  
-        `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
-        `HTTPException`, 404: If the user from the JWT cannot be found, or if no marks are found for the lecturer.  
-        `HTTPException`, 500: If any other system exception occurs.  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if no marks are found for the lecturer.  
+        - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
         `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains the student statistics.
@@ -297,6 +299,48 @@ def get_student_statistics(
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@marks.get("/api/v1/marks/global/statistics/all", response_model=schemas.MarksStatistics)
+def get_global_student_statistics(
+    current_user: Tuple[str, bool, bool] = Depends(get_current_user),
+    get_global_student_statistics_use_case: GetGlobalStudentStatisticsUseCase = Depends(get_global_student_statistics_use_case),
+):
+    """
+    Retrieves students statistics (mean, median, mode, pass_rate) for every uploaded mark in the system.    
+
+    **Note**: If you are viewing the below documentation from OpenAPI, or Redocly API docs, be aware that the documentation is mainly concerning the code, and that there may be some differences.
+    OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
+
+    Args:  
+        - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.  
+                      The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
+        - `get_global_student_statistics_use_case`: The class which handles the business logic for retrieving & calculating student marks.   
+
+    Raises:  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 403: If there has been a permission error.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if no marks are found for the lecturer.  
+        - `HTTPException`, 500: If any other system exception occurs.  
+
+    Returns:  
+        `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains the student statistics.
+    """
+    if current_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid JWT provided",
+        )
+
+    try:
+        return get_global_student_statistics_use_case.execute(current_user)
+    except MarkNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except PermissionError as e:
+        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

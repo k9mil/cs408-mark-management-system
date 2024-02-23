@@ -73,6 +73,15 @@ class MarkRepository:
             .all()
         )
     
+    def get_all_student_marks(self) -> List[Marks]:
+        """
+        Retrieves a list of all student marks.
+        
+        Returns:
+            List[Marks]: A list of `Marks` objects.
+        """
+        return self.db.query(Marks).all()
+    
     def get_marks_for_student(self, reg_no: str) -> List[MarksRow]:
         """
         Retrieves a list of student marks for a particular student.
