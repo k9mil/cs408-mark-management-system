@@ -218,11 +218,11 @@ const AdministratorView = () => {
                         <span className="font-bold">{class_.code}</span> —{" "}
                         <span className="pr-4 text-sm">{class_.name}</span>
                       </h2>
-                      <h2 className="text-sm font-light w-3/4">
+                      <h2 className="text-sm font-light">
                         <span className="text-green-500 font-bold">
                           {class_.stdev}%
                         </span>{" "}
-                        Mean
+                        Standard Deviation
                       </h2>
                     </div>
                   </div>
