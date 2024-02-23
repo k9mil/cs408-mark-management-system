@@ -137,6 +137,10 @@ class ClassBase(BaseModel):
     credit: int
     credit_level: int
 
+class ClassBaseMetric(ClassBase):
+    mean: int
+    stdev: float
+
 class ClassCreate(ClassBase):
     lecturer_id: int
 
@@ -155,6 +159,11 @@ class Class(ClassBase):
 
     class Config:
         from_attributes = True
+
+class MarksMetrics(BaseModel):
+    lowest_performing_classes: List[ClassBaseMetric]
+    highest_performing_classes: List[ClassBaseMetric]
+    most_consistent_classes: List[ClassBaseMetric]
 
 class LecturerClass(ClassBase):
     is_uploaded: bool
