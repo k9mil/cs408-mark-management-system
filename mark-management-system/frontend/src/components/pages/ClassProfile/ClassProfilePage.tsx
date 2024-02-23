@@ -28,6 +28,7 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
+  CardDescription,
 } from "@/components/common/Card";
 
 import ClassProfileDropdown from "./ClassProfileDropdown";
@@ -90,6 +91,9 @@ const ClassProfilePage = () => {
     scale: {
       ticks: {
         precision: 0,
+      },
+      y: {
+        min: 0,
       },
     },
   };
@@ -333,6 +337,22 @@ const ClassProfilePage = () => {
                   </h2>
                 )}
               </Card>
+              {currentClass ? (
+                <Card className="col-span-1 row-span-2 flex flex-col shadow-xl">
+                  <CardHeader className="flex flex-col justify-start items-start p-5">
+                    <CardTitle className="text-lg">
+                      Class Mark Distribution
+                    </CardTitle>
+                    <CardDescription className="font-light">
+                      This bar graph depicts all student marks grouped into five
+                      performance brackets for {currentClass.code}.
+                    </CardDescription>
+                  </CardHeader>
+                  <div className="flex flex-col pl-7 pr-7 mb-7 h-full">
+                    <Bar data={data} options={options} />
+                  </div>
+                </Card>
+              ) : null}
             </div>
           ) : null}
         </div>
