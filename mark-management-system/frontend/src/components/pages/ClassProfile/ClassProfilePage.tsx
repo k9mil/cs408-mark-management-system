@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 
+import { Bar } from "react-chartjs-2";
+
 import { useNavigate, Link } from "react-router-dom";
 
 import { useAuth } from "../../../AuthProvider";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+} from "chart.js";
 
 import Sidebar from "../../common/Sidebar";
 
@@ -24,6 +34,8 @@ import ClassProfileDropdown from "./ClassProfileDropdown";
 import ClassProfileDataTable from "./ClassProfileDataTable";
 import { ClassProfileColumns } from "../Classes/ClassesColumns";
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
+
 const ClassProfilePage = () => {
   const navigate = useNavigate();
   const { isLecturer, isAdmin, isAuthenticated, getAccessToken } = useAuth();
@@ -40,6 +52,47 @@ const ClassProfilePage = () => {
   const [classStatistics, setClassStatistics] = useState<IStatistics>();
 
   const accessToken = getAccessToken();
+
+  const data = {
+    labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
+    datasets: [
+      {
+        label: "Number of Students",
+        data: classStatistics
+          ? [
+              classStatistics.first_bucket,
+              classStatistics.second_bucket,
+              classStatistics.third_bucket,
+              classStatistics.fourth_bucket,
+              classStatistics.fifth_bucket,
+            ]
+          : [0, 0, 0, 0, 0],
+        backgroundColor: [
+          "rgba(98, 178, 253, 1)",
+          "rgba(155, 223, 196, 1)",
+          "rgba(249, 155, 171, 1)",
+          "rgba(255, 180, 79, 1)",
+          "rgba(159, 151, 247, 1)",
+        ],
+        borderColor: [
+          "rgba(98, 178, 253, 1)",
+          "rgba(155, 223, 196, 1)",
+          "rgba(249, 155, 171, 1)",
+          "rgba(255, 180, 79, 1)",
+          "rgba(159, 151, 247, 1)",
+        ],
+      },
+    ],
+  };
+
+  const options = {
+    maintainAspectRatio: false,
+    scale: {
+      ticks: {
+        precision: 0,
+      },
+    },
+  };
 
   useEffect(() => {
     document.title = "Mark Management System | Class Profile";
@@ -87,6 +140,7 @@ const ClassProfilePage = () => {
               accessToken
             );
 
+            console.log(result);
             setClassStatistics(result);
           }
         } catch (error) {

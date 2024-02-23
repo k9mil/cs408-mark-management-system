@@ -42,11 +42,11 @@ class GetClassStatisticsUseCase:
                 median=round(median(mark_data)),
                 mode=round(mode(mark_data)),
                 pass_rate=round(sum(mark >= self.pass_rate for mark in mark_data) / len(marks) * 100),
-                first_bucket=None,
-                second_bucket=None,
-                third_bucket=None,
-                fourth_bucket=None,
-                fifth_bucket=None,
+                first_bucket=len([mark for mark in mark_data if mark <= 19]),
+                second_bucket=len([mark for mark in mark_data if 20 <= mark <= 39]),
+                third_bucket=len([mark for mark in mark_data if 40 <= mark <= 59]),
+                fourth_bucket=len([mark for mark in mark_data if 60 <= mark <= 79]),
+                fifth_bucket=len([mark for mark in mark_data if 80 <= mark <= 100]),
             )
         else:
             marks_statistics = MarksStatistics(
