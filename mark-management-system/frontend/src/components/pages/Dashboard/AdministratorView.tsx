@@ -21,7 +21,8 @@ import {
 } from "@/components/common/Card";
 
 import { markService } from "@/services/MarkService";
-import { IStatistics } from "@/models/IMark";
+import { IMarkMetrics, IStatistics } from "@/models/IMark";
+import { classService } from "@/services/ClassService";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -30,6 +31,7 @@ const AdministratorView = () => {
   const accessToken = getAccessToken();
 
   const [globalStatistics, setGlobalStatistics] = useState<IStatistics>();
+  const [classMetrics, setClassMetrics] = useState<IMarkMetrics>();
 
   const data = {
     labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
@@ -78,10 +80,22 @@ const AdministratorView = () => {
     }
   };
 
+  const globalMetricsData = async () => {
+    try {
+      if (accessToken) {
+        const result = await classService.getClassMetrics(accessToken);
+        setClassMetrics(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     document.title = "Mark Management System | Dashboard";
 
     globalStatisticsData();
+    globalMetricsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,7 +103,7 @@ const AdministratorView = () => {
     <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-8 h-2/3 w-3/4">
       <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center  p-5">
             <CardTitle className="text-lg">
               Global Student Performance
             </CardTitle>
@@ -128,44 +142,34 @@ const AdministratorView = () => {
           </div>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">High Performing Classes</CardTitle>
           </CardHeader>
-          <div className="flex flex-col pl-7 space-y-4 mt-4">
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-green-500 font-bold">91%</span> Mean
-                </h2>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-green-500 font-bold">91%</span> Mean
-                </h2>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-green-500 font-bold">91%</span> Mean
-                </h2>
-              </div>
-            </div>
+          <div className="flex flex-col pl-7 space-y-4">
+            {classMetrics
+              ? classMetrics.highest_performing_classes
+                  .reverse()
+                  .map((class_) => (
+                    <div className="flex flex-row space-x-2" key={class_.code}>
+                      <div className="flex flex-col">
+                        <h2 className="text-md font-normal max-w-sm">
+                          <span className="font-bold">{class_.code}</span> —{" "}
+                          <span className="pr-4 text-sm">{class_.name}</span>
+                        </h2>
+                        <h2 className="text-sm font-light w-3/4">
+                          <span className="text-green-500 font-bold">
+                            {class_.mean}%
+                          </span>{" "}
+                          Mean
+                        </h2>
+                      </div>
+                    </div>
+                  ))
+              : null}
           </div>
         </Card>
         <Card className="col-span-1 row-span-2 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-col justify-start items-start">
+          <CardHeader className="flex flex-col justify-start items-start p-5">
             <CardTitle className="text-lg">Student Mark Distribution</CardTitle>
             <CardDescription className="font-light">
               This bar graph depicts all student marks grouped into five
@@ -177,80 +181,53 @@ const AdministratorView = () => {
           </div>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">Low Performing Classes</CardTitle>
           </CardHeader>
           <div className="flex flex-col pl-7 space-y-4">
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-red-500 font-bold">19%</span> Mean
-                </h2>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-red-500 font-bold">19%</span> Mean
-                </h2>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-red-500 font-bold">19%</span> Mean
-                </h2>
-              </div>
-            </div>
+            {classMetrics
+              ? classMetrics.lowest_performing_classes.map((class_) => (
+                  <div className="flex flex-row space-x-2" key={class_.code}>
+                    <div className="flex flex-col">
+                      <h2 className="text-md font-normal max-w-sm">
+                        <span className="font-bold">{class_.code}</span> —{" "}
+                        <span className="pr-4 text-sm">{class_.name}</span>
+                      </h2>
+                      <h2 className="text-sm font-light w-3/4">
+                        <span className="text-red-500 font-bold">
+                          {class_.mean}%
+                        </span>{" "}
+                        Mean
+                      </h2>
+                    </div>
+                  </div>
+                ))
+              : null}
           </div>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">Most Consistent Classes</CardTitle>
           </CardHeader>
           <div className="flex flex-col pl-7 space-y-4">
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-green-500 font-bold">1%</span> Standard
-                  Deviation
-                </h2>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-green-500 font-bold">1%</span> Standard
-                  Deviation
-                </h2>
-              </div>
-            </div>
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <h2 className="text-md font-normal">
-                  <span className="font-bold">CS409</span> — Database and Design
-                </h2>
-                <h2 className="text-sm font-light w-3/4">
-                  <span className="text-green-500 font-bold">1%</span> Standard
-                  Deviation
-                </h2>
-              </div>
-            </div>
+            {classMetrics
+              ? classMetrics.most_consistent_classes.map((class_) => (
+                  <div className="flex flex-row space-x-2" key={class_.code}>
+                    <div className="flex flex-col">
+                      <h2 className="text-md font-normal max-w-sm">
+                        <span className="font-bold">{class_.code}</span> —{" "}
+                        <span className="pr-4 text-sm">{class_.name}</span>
+                      </h2>
+                      <h2 className="text-sm font-light w-3/4">
+                        <span className="text-green-500 font-bold">
+                          {class_.stdev}%
+                        </span>{" "}
+                        Mean
+                      </h2>
+                    </div>
+                  </div>
+                ))
+              : null}
           </div>
         </Card>
       </div>

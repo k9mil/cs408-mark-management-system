@@ -35,3 +35,8 @@ export interface IClassUploaded {
   credit_level: number;
   is_uploaded: boolean;
 }
+
+export interface IClassBaseMetric extends IBaseClass {
+  mean: number;
+  stdev: number;
+}
