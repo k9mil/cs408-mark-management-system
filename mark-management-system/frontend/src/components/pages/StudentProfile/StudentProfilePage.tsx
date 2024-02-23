@@ -65,10 +65,10 @@ const StudentProfilePage = () => {
   useEffect(() => {
     document.title = "Mark Management System | Student Profile";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const studentsData = async () => {
     try {

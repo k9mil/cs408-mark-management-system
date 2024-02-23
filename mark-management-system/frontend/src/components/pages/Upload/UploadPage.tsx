@@ -53,15 +53,15 @@ import { academicMisconductService } from "@/services/AcademicMisconductService"
 
 const UploadPage = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, getAccessToken } = useAuth();
+  const { isAuthenticated, getAccessToken, isAdmin, isLecturer } = useAuth();
 
   useEffect(() => {
     document.title = "Mark Management System | Marks";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const [uploadOpen, setUploadOpen] = React.useState<boolean>(false);
   const [uploadType, setUploadType] = React.useState<string>("");

@@ -39,13 +39,13 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 
 const ClassesPage = () => {
   const navigate = useNavigate();
-  const { isAdmin, isAuthenticated, getAccessToken } = useAuth();
+  const { isAdmin, isLecturer, isAuthenticated, getAccessToken } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const [openDialogRow, setOpenDialogRow] = useState<boolean>(false);
 

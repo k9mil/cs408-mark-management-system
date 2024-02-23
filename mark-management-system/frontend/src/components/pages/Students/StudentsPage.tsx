@@ -15,7 +15,7 @@ import { IMarkRow } from "@/models/IMark";
 
 const StudentsPage = () => {
   const navigate = useNavigate();
-  const { isLecturer, isAuthenticated, getAccessToken } = useAuth();
+  const { isLecturer, isAuthenticated, getAccessToken, isAdmin } = useAuth();
 
   const [details, setDetails] = useState<IMarkRow[]>([]);
 
@@ -24,10 +24,10 @@ const StudentsPage = () => {
   useEffect(() => {
     document.title = "Mark Management System | Graded Students";
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || (!isAdmin && !isLecturer)) {
       navigate("/");
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, isAdmin, isLecturer]);
 
   const marksData = async () => {
     try {
