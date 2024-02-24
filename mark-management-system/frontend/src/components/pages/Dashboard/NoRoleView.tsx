@@ -1,14 +1,4 @@
-import React, { useEffect, useState } from "react";
-
-import { Link } from "react-router-dom";
-
-import { markService } from "@/services/MarkService";
-import { userService } from "@/services/UserService";
-
-import { IStatistics } from "@/models/IMark";
-import { ILecturer } from "@/models/IUser";
-
-import { useAuth } from "../../../AuthProvider";
+import React, { useEffect } from "react";
 
 import { Bar } from "react-chartjs-2";
 
@@ -22,7 +12,6 @@ import {
 
 import {
   Card,
-  CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
@@ -70,8 +59,8 @@ const NoRoleView = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-6 h-2/3 w-3/4">
-      <div className="grid grid-cols-3 grid-rows-2 gap-3 h-full w-full">
+    <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-8 h-2/3 w-3/4">
+      <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle className="text-lg">
