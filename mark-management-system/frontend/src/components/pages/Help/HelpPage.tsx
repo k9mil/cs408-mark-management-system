@@ -74,7 +74,7 @@ const HelpPage = () => {
             </CardContent>
           </div>
         </Card>
-        <Card className="2xl:w-1/3 xl:w-1/3 2xl:h-1/2 xl:h-3/4 space-y-2 p-4 flex flex-col">
+        <Card className="w-2/5 2xl:h-1/2 xl:h-3/4 space-y-2 p-4 flex flex-col">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Conversion Formats</CardTitle>
           </CardHeader>
