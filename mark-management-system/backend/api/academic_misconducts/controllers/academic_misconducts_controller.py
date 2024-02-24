@@ -41,7 +41,7 @@ def create_academic_misconduct(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, or if the student, or the class from the request is not found.
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if the student, or the class from the request is not found.  
         - `HTTPException`, 409: If the academic misconduct already exists in the system.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
