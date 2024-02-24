@@ -29,7 +29,7 @@ const HelpPage = () => {
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center space-x-2">
-        <Card className="2xl:w-1/2 xl:w-1/2 2xl:h-1/2 x:h-3/4 space-y-2 p-4 flex flex-col">
+        <Card className="2xl:w-1/2 xl:w-1/2 2xl:h-1/2 xl:h-3/4 space-y-2 p-4 flex flex-col">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Help & Support</CardTitle>
           </CardHeader>
@@ -74,7 +74,7 @@ const HelpPage = () => {
             </CardContent>
           </div>
         </Card>
-        <Card className="2xl:w-1/3 xl:w-1/3 2xl:h-1/2 x:h-3/4 space-y-2 p-4 flex flex-col">
+        <Card className="2xl:w-1/3 xl:w-1/3 2xl:h-1/2 xl:h-3/4 space-y-2 p-4 flex flex-col">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Conversion Formats</CardTitle>
           </CardHeader>
