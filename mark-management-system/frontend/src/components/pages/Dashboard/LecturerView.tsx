@@ -12,6 +12,8 @@ import { useAuth } from "../../../AuthProvider";
 
 import { Bar } from "react-chartjs-2";
 
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -37,6 +39,8 @@ const LecturerView = () => {
   const [statistics, setStatistics] = useState<IStatistics>();
   const [globalStatistics, setGlobalStatistics] = useState<IStatistics>();
   const [lecturer, setLecturer] = useState<ILecturer>();
+  const [currentSliceStart, setCurrentSliceStart] = useState<number>(0);
+  const [currentSliceEnd, setCurrentSliceEnd] = useState<number>(3);
 
   const data = {
     labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
@@ -120,6 +124,20 @@ const LecturerView = () => {
     lecturerData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handlePrev = () => {
+    if (currentSliceStart > 0) {
+      setCurrentSliceStart(currentSliceStart - 3);
+      setCurrentSliceEnd(currentSliceEnd - 3);
+    }
+  };
+
+  const handleNext = () => {
+    if (lecturer && currentSliceEnd < lecturer.classes.length) {
+      setCurrentSliceStart(currentSliceStart + 3);
+      setCurrentSliceEnd(currentSliceEnd + 3);
+    }
+  };
 
   return (
     <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-6 h-2/3 w-3/4">
@@ -244,28 +262,30 @@ const LecturerView = () => {
           <div className="flex flex-col px-6">
             <div className="flex flex-row space-x-4 mt-8">
               {lecturer && lecturer.classes.length > 0 ? (
-                lecturer.classes.slice(0, 3).map((class_, index) => (
-                  <React.Fragment key={class_.code}>
-                    <div className="flex flex-col w-1/3 space-y-2">
-                      <h1 className="font-semibold text-base">
-                        {class_.code} |{" "}
-                        <span className="font-normal"> {class_.name}</span>
-                      </h1>
-                      {class_.is_uploaded === true ? (
-                        <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
-                          Uploaded
-                        </h2>
-                      ) : (
-                        <h2 className="text-red-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-200 w-max">
-                          Upload Due
-                        </h2>
+                lecturer.classes
+                  .slice(currentSliceStart, currentSliceEnd)
+                  .map((class_, index) => (
+                    <React.Fragment key={class_.code}>
+                      <div className="flex flex-col w-1/3 space-y-2">
+                        <h1 className="font-semibold text-base">
+                          {class_.code} |{" "}
+                          <span className="font-normal"> {class_.name}</span>
+                        </h1>
+                        {class_.is_uploaded === true ? (
+                          <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
+                            Uploaded
+                          </h2>
+                        ) : (
+                          <h2 className="text-red-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-200 w-max">
+                            Upload Due
+                          </h2>
+                        )}
+                      </div>
+                      {index !== lecturer.classes.slice(0, 3).length - 1 && (
+                        <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                       )}
-                    </div>
-                    {index !== lecturer.classes.slice(0, 3).length - 1 && (
-                      <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
-                    )}
-                  </React.Fragment>
-                ))
+                    </React.Fragment>
+                  ))
               ) : (
                 <h2 className="font-normal text-sm -mt-6">
                   It seems that you are not assigned to any classes.
@@ -281,6 +301,27 @@ const LecturerView = () => {
               )}
             </div>
           </div>
+          {lecturer && lecturer.classes.length > 0 ? (
+            <div className="flex justify-end items-end h-full w-full p-6">
+              <ChevronLeftIcon
+                className={`h-6 w-6 ${
+                  currentSliceStart === 0
+                    ? "text-gray-400"
+                    : "hover:cursor-pointer text-black"
+                }`}
+                onClick={handlePrev}
+              />
+              <ChevronRightIcon
+                className={`h-6 w-6 ${
+                  lecturer.classes.length === 0 ||
+                  currentSliceEnd >= lecturer.classes.length
+                    ? "text-gray-400"
+                    : "hover:cursor-pointer text-black"
+                }`}
+                onClick={handleNext}
+              />
+            </div>
+          ) : null}
         </Card>
       </div>
     </div>
