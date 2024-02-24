@@ -11,12 +11,29 @@ from api.users.errors.user_not_found import UserNotFound
 
 
 class GetStudentStatisticsUseCase:
-    def __init__(self, student_repository: StudentRepository, user_repository: UserRepository):
+    """
+    The Use Case containing business logic for calculating a student's statistics.
+    """
+    def __init__(self, student_repository: StudentRepository, user_repository: UserRepository) -> None:
         self.student_repository = student_repository
         self.user_repository = user_repository
         self.pass_rate = 40
     
     def execute(self, reg_no: str, current_user: Tuple[str, bool, bool]) -> StudentStatistics:
+        """
+        Executes the Use Case to retrieve a a students data, and calculate a few statistics from that data.
+
+        Args:
+            reg_no: The unique identifier for the student, the registration number.
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            UserNotFound: If the user (from the JWT) cannot be found.
+            MarkNotFound: If no marks are found for the student.
+        
+        Returns:
+            StudentStatistics: A StudentStatistics schema object containing calculated statistics about the student, i.e. the mean, max mark, min mark and pass rate.
+        """
         user_email, _, _ = current_user
 
         user = self.user_repository.find_by_email(user_email)
@@ -24,13 +41,13 @@ class GetStudentStatisticsUseCase:
         if user is None:
             raise UserNotFound("User not found")
         
-        marksForStudent = self.student_repository.get_marks_and_details_for_student(reg_no)
+        marks_for_student = self.student_repository.get_marks_and_details_for_student(reg_no)
 
-        if marksForStudent is None:
+        if marks_for_student is None:
             raise MarkNotFound("No marks found for the student")
 
-        marks = [mark[7] for mark in marksForStudent]
-        weights = [mark[4] for mark in marksForStudent]
+        marks = [mark[7] for mark in marks_for_student]
+        weights = [mark[4] for mark in marks_for_student]
 
         if marks:
             weighted_sum = 0

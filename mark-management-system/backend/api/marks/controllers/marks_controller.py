@@ -285,7 +285,7 @@ def get_student_statistics(
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
-        `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains the student statistics.
+        - `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains the student statistics.
     """
     if current_user is None:
         raise HTTPException(
@@ -325,7 +325,7 @@ def get_global_student_statistics(
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
-        `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains the student statistics.
+        - `response_model`: The response is in the model of the `schemas.MarksStatistics` schema, which contains the student statistics.
     """
     if current_user is None:
         raise HTTPException(
@@ -364,7 +364,7 @@ def get_marks_for_student(
 
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, if the student is not found or if no marks are found.
+        - `HTTPException`, 404: If the user from the JWT cannot be found, if the student is not found or if no marks are found.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -408,7 +408,7 @@ def get_marks_for_class(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, or if no marks are found. 
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or if no marks are found.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  

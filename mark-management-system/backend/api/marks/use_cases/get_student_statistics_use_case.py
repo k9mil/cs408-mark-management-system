@@ -17,7 +17,7 @@ class GetStudentStatisticsUseCase:
     The Use Case containing business logic for retrieving and calculating student marks for a particular
     lecturer.
     """
-    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository):
+    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository) -> None:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
         self.pass_rate = 40

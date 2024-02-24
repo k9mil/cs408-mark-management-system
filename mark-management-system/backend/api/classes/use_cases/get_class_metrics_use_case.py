@@ -14,11 +14,28 @@ from api.users.errors.user_not_found import UserNotFound
 
 
 class GetClassMetricsUseCase:
-    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository):
+    """
+    The Use Case containing business logic for retrieving class data & calculating
+    metrics from them.
+    """
+    def __init__(self, mark_repository: MarkRepository, user_repository: UserRepository) -> None:
         self.mark_repository = mark_repository
         self.user_repository = user_repository
     
     def execute(self, current_user: Tuple[str, bool, bool]) -> MarksMetrics:
+        """
+        Executes the Use Case to calculate metrics of all classes in the system.
+
+        Args:
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            MarkNotFound: If no marks are found in the system.
+            UserNotFound: If the user (from the JWT) cannot be found.
+        
+        Returns:
+            MarksMetrics: A MarksMetrics schema object containing metrics about the classes, i.e. lowest, most and most consistently performing.
+        """
         user_email, _, _ = current_user
 
         user = self.user_repository.find_by_email(user_email)

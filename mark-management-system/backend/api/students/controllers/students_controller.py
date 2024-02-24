@@ -184,7 +184,7 @@ def get_student_statistics(
 
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
-        - `HTTPException`, 404: If the user (lecturer) from the JWT has not been found, or if no marks have been found.
+        - `HTTPException`, 404: If the user (lecturer) from the JWT has not been found, or if no marks have been found.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  

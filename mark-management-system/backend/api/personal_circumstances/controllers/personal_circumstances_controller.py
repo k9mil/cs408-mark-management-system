@@ -84,7 +84,7 @@ def get_personal_circumstances_for_student(
         - `create_personal_circumstance_use_case`: The class which handles the business logic for personal circumstances creation.   
 
     Raises:  
-        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
+        - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.   
         - `HTTPException`, 403: If the requestor doesn't have the required permissions.  
         - `HTTPException`, 404: If the user from the JWT cannot be found, or the personal circumstances aren't found.  
         - `HTTPException`, 500: If any other system exception occurs.  
