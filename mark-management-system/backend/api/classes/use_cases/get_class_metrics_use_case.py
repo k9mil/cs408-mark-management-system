@@ -69,16 +69,17 @@ class GetClassMetricsUseCase:
             for code, data in classes.items():
                 class_base = data["class_base"]
                 class_base.mean = round(mean(data["marks"]))
-                class_base.stdev = round(stdev(data["marks"]))
+                
+                if len(data["marks"]) > 1:
+                    class_base.stdev = round(stdev(data["marks"]))
 
             sorted_classes_by_mean = sorted(classes.items(), key=lambda class_: class_[1]["class_base"].mean)
 
-            lowest_performing_classes_sorted_list = [data[1]["class_base"] for data in sorted_classes_by_mean[:3]]
-            highest_performing_classes_sorted_list = [data[1]["class_base"] for data in sorted_classes_by_mean[-3:]]
+            lowest_performing_classes_sorted_list = [data[1]["class_base"] for data in sorted_classes_by_mean[:min(3, len(sorted_classes_by_mean))]]
+            highest_performing_classes_sorted_list = [data[1]["class_base"] for data in sorted_classes_by_mean[-min(3, len(sorted_classes_by_mean)):]]
 
             sorted_classes_by_stdev = sorted(classes.items(), key=lambda class_: class_[1]["class_base"].stdev)
-            most_consistent_classes_sorted_list = [data[1]["class_base"] for data in sorted_classes_by_stdev[-3:]]
-
+            most_consistent_classes_sorted_list = [data[1]["class_base"] for data in sorted_classes_by_stdev[-min(3, len(sorted_classes_by_mean)):]]
 
             marks_statistics = MarksMetrics(
                 lowest_performing_classes=lowest_performing_classes_sorted_list,
