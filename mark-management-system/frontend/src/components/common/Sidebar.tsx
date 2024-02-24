@@ -195,7 +195,8 @@ const Sidebar = () => {
                       MyPlace default configuration to the one that the system
                       expects, as well as from the default Marks Management
                       System configuration to the Pegasus one. Additionally, you
-                      are able to view individual student profiles.
+                      are able to view individual student profiles, as well as
+                      class profiles which provide unique insights.
                     </DialogDescription>
                   </>
                 ) : (

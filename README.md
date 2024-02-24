@@ -6,7 +6,8 @@ Mark Management System is a platform that streamlines data aggregation and prese
 
 - **User Login/Registration System**: A secure authentication system enabling administrators to set up accounts and users to log in with their credentials.
 - **Personalised Dashboard**: Each user is provided with a tailored dashboard, with custom cards including information such as student performance metrics which contain data such as the mean, median, mode and pass rate, a list of taught classes, and an overview of classes.
-- **Marks Upload**: Allows the ability to upload student marks for the classes you teach with robust validation to ensure accuracy and integrity of data.
+- **Unique Graphs**: On each dashboard, amongst other pages, there are Bar Graphs present which offer unique insights into the performance of students.
+- **Data Upload**: Allows the ability to upload student marks for the classes you teach with robust validation to ensure accuracy and integrity of data. Additionally, allows the upload of academic misconduct, or personal circumstances of stuednts.
 - **Data Conversion**: Instead of leaving the laborious process of converting files from MyPlace to the Marks Management System format, or from the Marks Management System format to the format Pegasus exepcts, the system does that for you.
 - **Class System**: Allows administrators to create classes, assign lecturers to classes and modify class details. These classes serve as a core part of the application as they are connected to degrees, students and marks.
 - **Role System**: Different user roles exist throughout the application, such as administrators and lecturers, each with tailored permissions and controls.
@@ -14,7 +15,7 @@ Mark Management System is a platform that streamlines data aggregation and prese
 - **JWT Tokens**: Ensures safety & security by storing key data in JWT tokens which is used as an additional layer of authentication and verification.
 - **Modals**: Help and support can be found throughout the page, with a dedicated page with useful information, alongside Modals which contain tips are scattered throughout the system.
 
-and much more, such as individual Student Profiles and Error Pages!
+and much more, such as individual Student Profiles, Class Profiles and Error Pages!
 
 ## Sample Data Generation
 
