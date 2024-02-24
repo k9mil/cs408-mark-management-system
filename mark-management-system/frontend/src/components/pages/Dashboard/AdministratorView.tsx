@@ -89,6 +89,7 @@ const AdministratorView = () => {
     try {
       if (accessToken) {
         const result = await classService.getClassMetrics(accessToken);
+        result.highest_performing_classes.reverse();
         setClassMetrics(result);
       }
     } catch (error) {
@@ -152,24 +153,22 @@ const AdministratorView = () => {
           </CardHeader>
           <div className="flex flex-col pl-7 space-y-4">
             {classMetrics
-              ? classMetrics.highest_performing_classes
-                  .reverse()
-                  .map((class_) => (
-                    <div className="flex flex-row space-x-2" key={class_.code}>
-                      <div className="flex flex-col">
-                        <h2 className="text-md font-normal max-w-sm">
-                          <span className="font-bold">{class_.code}</span> —{" "}
-                          <span className="pr-4 text-sm">{class_.name}</span>
-                        </h2>
-                        <h2 className="text-sm font-light w-3/4">
-                          <span className="text-green-500 font-bold">
-                            {class_.mean}%
-                          </span>{" "}
-                          Mean
-                        </h2>
-                      </div>
+              ? classMetrics.highest_performing_classes.map((class_) => (
+                  <div className="flex flex-row space-x-2" key={class_.code}>
+                    <div className="flex flex-col">
+                      <h2 className="text-md font-normal max-w-sm">
+                        <span className="font-bold">{class_.code}</span> —{" "}
+                        <span className="pr-4 text-sm">{class_.name}</span>
+                      </h2>
+                      <h2 className="text-sm font-light w-3/4">
+                        <span className="text-green-500 font-bold">
+                          {class_.mean}%
+                        </span>{" "}
+                        Mean
+                      </h2>
                     </div>
-                  ))
+                  </div>
+                ))
               : null}
           </div>
         </Card>
