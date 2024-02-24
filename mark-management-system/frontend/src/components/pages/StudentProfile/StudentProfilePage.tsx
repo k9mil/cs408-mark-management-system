@@ -381,6 +381,10 @@ const StudentProfilePage = () => {
                     Personal Circumstances
                   </CardTitle>
                   <div className="flex justify-start items-start">
+                    <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-end self-center pr-2">
+                      {currentPersonalCircumstance + 1} of{" "}
+                      {studentPersonalCircumstances.length}
+                    </h2>
                     <ChevronLeftIcon
                       className={`h-6 w-6 ${
                         currentPersonalCircumstance === 0
@@ -478,6 +482,10 @@ const StudentProfilePage = () => {
                     Academic Misconducts
                   </CardTitle>
                   <div className="flex justify-start items-start">
+                    <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-end self-center pr-2">
+                      {currentAcademicMisconduct + 1} of{" "}
+                      {misconductClasses.length}
+                    </h2>
                     <ChevronLeftIcon
                       className={`h-6 w-6 ${
                         currentAcademicMisconduct === 0
