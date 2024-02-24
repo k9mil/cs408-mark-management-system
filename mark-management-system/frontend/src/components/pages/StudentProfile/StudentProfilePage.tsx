@@ -271,7 +271,7 @@ const StudentProfilePage = () => {
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
           ) : null}
           {student && student !== "" ? (
-            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-8 xl:space-y-4">
+            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-4 xl:space-y-2">
               <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4">
                 <CardHeader className="flex flex-row justify-start items-start p-0">
                   <CardTitle className="2xl:text-2xl xl:text-xl font-bold mb-6">

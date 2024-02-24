@@ -82,7 +82,7 @@ export function StudentProfileDataTable<TData, TValue>({
   return (
     <>
       <div className="flex flex-row justify-between py-2 w-full">
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <Input
             placeholder="Search by class code..."
             value={
@@ -91,7 +91,7 @@ export function StudentProfileDataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("class_code")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-[15rem]"
           />
         </div>
         <Button
