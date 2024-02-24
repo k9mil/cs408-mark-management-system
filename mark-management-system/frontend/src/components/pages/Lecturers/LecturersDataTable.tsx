@@ -99,7 +99,7 @@ export function LecturersDataTable<TData, TValue>({
   return (
     <>
       <div className="flex flex-row justify-between py-2">
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <Input
             placeholder="Search by last name..."
             value={
@@ -108,7 +108,7 @@ export function LecturersDataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("last_name")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-[15rem]"
           />
         </div>
         <Button
