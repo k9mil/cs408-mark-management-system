@@ -13,12 +13,31 @@ from api.users.errors.user_not_found import UserNotFound
 
 
 class GetClassStatisticsUseCase:
-    def __init__(self, class_repository: ClassRepository, user_repository: UserRepository):
+    """
+    The Use Case containing business logic for retrieving class data & calculating
+    statistics for that class.
+    """
+    def __init__(self, class_repository: ClassRepository, user_repository: UserRepository) -> None:
         self.class_repository = class_repository
         self.user_repository = user_repository
         self.pass_rate = 40
     
-    def execute(self, reg_no: str, current_user: Tuple[str, bool, bool]) -> MarksStatistics:
+    def execute(self, class_code: str, current_user: Tuple[str, bool, bool]) -> MarksStatistics:
+        """
+        Executes the Use Case to calculate statistics of a given class.
+
+        Args:
+            class_code: The class code to which the metrics should be calculated for
+            current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
+
+        Raises:
+            UserNotFound: If the user (from the JWT) cannot be found.
+            MarkNotFound: If no marks are found in the system.
+        
+        Returns:
+            MarksStatistics: A MarksStatistics schema object containing statistics about the class, i.e. mean, mode median and pass rate
+            as well as storing five performance buckets of students.
+        """
         user_email, _, _ = current_user
 
         user = self.user_repository.find_by_email(user_email)
@@ -26,7 +45,7 @@ class GetClassStatisticsUseCase:
         if user is None:
             raise UserNotFound("User not found")
         
-        marks = self.class_repository.get_marks_for_class(reg_no)
+        marks = self.class_repository.get_marks_for_class(class_code)
 
         if marks is None:
             raise MarkNotFound("No marks found for the class")
