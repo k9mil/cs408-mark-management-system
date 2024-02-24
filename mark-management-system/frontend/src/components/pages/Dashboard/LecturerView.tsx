@@ -122,8 +122,8 @@ const LecturerView = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-8 h-2/3 w-3/4">
-      <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full">
+    <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-6 h-2/3 w-3/4">
+      <div className="grid grid-cols-3 grid-rows-2 gap-3 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle className="text-lg">
