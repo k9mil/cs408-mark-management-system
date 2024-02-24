@@ -362,7 +362,7 @@ const StudentProfilePage = () => {
                     ) : null}
                   </div>
                 ) : (
-                  <h2 className="text-base font-regular">
+                  <h2 className="text-sm font-regular">
                     It seems like there are no student details available at the
                     moment. If you are expecting to see something here,{" "}
                     <Link
@@ -458,7 +458,7 @@ const StudentProfilePage = () => {
                     </div>
                   </div>
                 ) : (
-                  <h2 className="2xl:text-base xl:text-sm font-regular">
+                  <h2 className="text-sm font-regular">
                     It seems like there are no recorded personal circumstances
                     for this student. If you are expecting to see something
                     here,{" "}
@@ -538,7 +538,7 @@ const StudentProfilePage = () => {
                     </div>
                   </div>
                 ) : (
-                  <h2 className="2xl:text-base xl:text-sm font-regular">
+                  <h2 className="text-sm font-regular">
                     It seems like there are no recorded academic misconducts for
                     this student. If you are expecting to see something here,{" "}
                     <Link
