@@ -22,6 +22,8 @@ services:
       - "mms.network"
     ports:
       - "5173"
+    environment:
+      - NODE_ENV=production
     volumes:
       - frontend-volume:/frontend/dist
 
