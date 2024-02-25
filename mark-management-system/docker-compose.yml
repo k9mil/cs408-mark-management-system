@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    networks:
+      - "mms.network"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_MMS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_MMS}
+      - POSTGRES_DB=${POSTGRES_DB_MMS}
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: "no"
+    networks:
+      - "mms.network"
+    ports:
+      - "5173"
+    volumes:
+      - frontend-volume:/frontend/dist
+
+  backend:
+    build: ./backend
+    restart: always
+    networks:
+      - "mms.network"
+    environment:
+      - MMS_DATABASE_URL=${MMS_DATABASE_URL_DOCKER}
+      - SECRET_KEY=${SECRET_KEY_MMS}
+      - REFRESH_SECRET_KEY=${REFRESH_SECRET_KEY_MMS}
+    ports:
+      - "5000"
+    depends_on:
+      - postgres
+    command: sh -c "sleep 5; uvicorn asgi:app --host 0.0.0.0 --port 5000"
+
+  caddy:
+    build: ./caddy
+    networks:
+      - "mms.network"
+    ports:
+      - "80:80"
+    links:
+      - "backend"
+      - "postgres"
+      - "frontend"
+    volumes:
+      - frontend-volume:/usr/share/caddy
+
+networks:
+  mms.network:
+
+volumes:
+  postgresdata:
+  frontend-volume:
