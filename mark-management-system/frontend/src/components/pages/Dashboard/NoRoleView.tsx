@@ -59,7 +59,7 @@ const NoRoleView = () => {
   }, []);
 
   return (
-    <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-8 h-2/3 w-3/4">
+    <div className="bg-white rounded-3xl flex justify-center items-center m-8 p-8 2xl:h-2/3 2xl:w-3/4 xl:h-4/5 xl:w-full">
       <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
           <CardHeader className="flex flex-row justify-between items-center">
