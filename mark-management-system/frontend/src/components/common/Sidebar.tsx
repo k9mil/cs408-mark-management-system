@@ -65,65 +65,65 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/dashboard"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <HomeIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Dashboard</h2>
+                  <h2 className="text-white text-center">Dashboard</h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/convert"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <ArrowPathIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Convert</h2>
+                  <h2 className="text-white text-center">Convert</h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/upload"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <PencilIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Upload</h2>
+                  <h2 className="text-white text-center">Upload</h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/classes"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <BuildingLibraryIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Classes</h2>
+                  <h2 className="text-white text-center">Classes</h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/graded-students"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <AcademicCapIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Graded Students</h2>
+                  <h2 className="text-white text-center">Graded Students</h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/student-profile"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <UserCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Student Profile</h2>
+                  <h2 className="text-white text-center">Student Profile</h2>
                 </Link>
               </li>
               {isAdmin === true ? (
                 <li>
                   <Link
                     to="/class-profile"
-                    className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                    className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                   >
                     <BuildingOffice2Icon className="h-6 w-6 text-white" />
-                    <h2 className="text-white">Class Profile</h2>
+                    <h2 className="text-white text-center">Class Profile</h2>
                   </Link>
                 </li>
               ) : null}
@@ -131,29 +131,29 @@ const Sidebar = () => {
                 <li>
                   <Link
                     to="/lecturers"
-                    className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                    className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                   >
                     <UserIcon className="h-6 w-6 text-white" />
-                    <h2 className="text-white">Lecturers</h2>
+                    <h2 className="text-white text-center">Lecturers</h2>
                   </Link>
                 </li>
               ) : null}
               <li>
                 <Link
                   to="/help"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Help & Support</h2>
+                  <h2 className="text-white text-center">Help & Support</h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/settings"
-                  className="h-16 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <Cog8ToothIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white">Settings</h2>
+                  <h2 className="text-white text-center">Settings</h2>
                 </Link>
               </li>
             </ul>
