@@ -271,10 +271,10 @@ const StudentProfilePage = () => {
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
           ) : null}
           {student && student !== "" ? (
-            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-4 xl:space-y-2">
-              <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4">
+            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-4 space-y-2">
+              <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4 lg:p-2">
                 <CardHeader className="flex flex-row justify-start items-start p-0">
-                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold mb-6">
+                  <CardTitle className="2xl:text-2xl xl:text-xl lg:text-base font-bold mb-6">
                     Student Details
                   </CardTitle>
                 </CardHeader>
@@ -284,34 +284,34 @@ const StudentProfilePage = () => {
                       <div className="flex flex-col space-y-6 w-2/3">
                         <div className="flex flex-col space-y-2">
                           <div className="flex flex-row space-x-2 w-full">
-                            <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            <h2 className="2xl:text-base xtext-sm font-semibold">
                               Name:
                             </h2>
-                            <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                               {studentData.student_name}
                             </h2>
                           </div>
                           <div className="flex flex-row space-x-2 w-full">
-                            <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            <h2 className="2xl:text-base text-sm font-semibold">
                               Registration Number:
                             </h2>
-                            <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                               {studentData.reg_no}
                             </h2>
                           </div>
                           <div className="flex flex-row space-x-2 2xl:w-full">
-                            <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            <h2 className="2xl:text-base text-sm font-semibold">
                               Degree Name:
                             </h2>
-                            <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                               {studentData.degree.name}
                             </h2>
                           </div>
                           <div className="flex flex-row space-x-2 w-full">
-                            <h2 className="2xl:text-base xl:text-sm font-semibold">
+                            <h2 className="2xl:text-base text-sm font-semibold">
                               Degree Level:
                             </h2>
-                            <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                            <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                               {studentData.degree.level}
                             </h2>
                           </div>
@@ -322,7 +322,7 @@ const StudentProfilePage = () => {
                       <div className="flex flex-col space-y-8 w-1/3">
                         <CardContent className="flex flex-row space-x-4 justify-around p-0 mr-4">
                           <div className="flex flex-col justify-center items-center w-16 text-center">
-                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl lg:text-base text-primary-blue">
                               {studentStatistics.mean === -1
                                 ? "N/A"
                                 : `${studentStatistics.mean}%`}
@@ -331,7 +331,7 @@ const StudentProfilePage = () => {
                           </div>
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                           <div className="flex flex-col justify-center items-center w-16 text-center">
-                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl lg:text-base text-primary-blue">
                               {studentStatistics.max_mark === -1
                                 ? "N/A"
                                 : `${studentStatistics.max_mark}%`}
@@ -341,7 +341,7 @@ const StudentProfilePage = () => {
                         </CardContent>
                         <CardContent className="space-x-4 flex flex-row justify-around p-0 mr-4">
                           <div className="flex flex-col justify-center items-center w-16 text-center">
-                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl lg:text-base text-primary-blue">
                               {studentStatistics.min_mark === -1
                                 ? "N/A"
                                 : `${studentStatistics.min_mark}%`}
@@ -350,7 +350,7 @@ const StudentProfilePage = () => {
                           </div>
                           <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
                           <div className="flex flex-col justify-center items-center w-16 text-center">
-                            <h1 className="font-bold 2xl:text-3xl xl:text-xl text-primary-blue">
+                            <h1 className="font-bold 2xl:text-3xl xl:text-xl lg:text-base text-primary-blue">
                               {studentStatistics.pass_rate === -1
                                 ? "N/A"
                                 : `${studentStatistics.pass_rate}%`}
@@ -375,9 +375,9 @@ const StudentProfilePage = () => {
                   </h2>
                 )}
               </Card>
-              <Card className="w-full h-1/4 space-y-2 flex justify-between flex-col shadow-xl 2xl:p-8 xl:p-4">
+              <Card className="w-full h-1/4 space-y-2 flex justify-between flex-col shadow-xl 2xl:p-8 xl:p-4 lg:p-2">
                 <CardHeader className="flex flex-row justify-between items-center p-0 mb-6">
-                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold">
+                  <CardTitle className="2xl:text-2xl xl:text-xl lg:text-base font-bold">
                     Personal Circumstances
                   </CardTitle>
                   <div className="flex justify-start items-start">
@@ -413,10 +413,10 @@ const StudentProfilePage = () => {
                     <div className="flex flex-col 2xl:space-y-6 w-full">
                       <div className="flex flex-col space-y-2">
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Details:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
                               studentPersonalCircumstances[
                                 currentPersonalCircumstance
@@ -425,10 +425,10 @@ const StudentProfilePage = () => {
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Semester:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
                               studentPersonalCircumstances[
                                 currentPersonalCircumstance
@@ -437,10 +437,10 @@ const StudentProfilePage = () => {
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Category:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
                               studentPersonalCircumstances[
                                 currentPersonalCircumstance
@@ -449,10 +449,10 @@ const StudentProfilePage = () => {
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Comments:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
                               studentPersonalCircumstances[
                                 currentPersonalCircumstance
@@ -478,9 +478,9 @@ const StudentProfilePage = () => {
                   </h2>
                 )}
               </Card>
-              <Card className="w-full h-1/4 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4 ">
+              <Card className="w-full h-1/4 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4 lg:p-2">
                 <CardHeader className="flex flex-row justify-between items-center p-0 mb-6">
-                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold">
+                  <CardTitle className="2xl:text-2xl xl:text-xl lg:text-base font-bold">
                     Academic Misconducts
                   </CardTitle>
                   <div className="flex justify-start items-start">
@@ -515,10 +515,10 @@ const StudentProfilePage = () => {
                     <div className="flex flex-col space-y-6 w-full">
                       <div className="flex flex-col space-y-2">
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Outcome:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
                               misconductClasses[currentAcademicMisconduct]
                                 .academic_misconduct.outcome
@@ -526,20 +526,20 @@ const StudentProfilePage = () => {
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Date:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {misconductClasses[
                               currentAcademicMisconduct
                             ].academic_misconduct.date.toString()}
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Class:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
                               misconductClasses[currentAcademicMisconduct]
                                 .academic_misconduct.class_code

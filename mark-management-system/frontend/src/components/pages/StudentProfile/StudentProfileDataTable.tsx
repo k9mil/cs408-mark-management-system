@@ -79,7 +79,7 @@ export function StudentProfileDataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: 9,
       },
     },
   });
@@ -87,15 +87,18 @@ export function StudentProfileDataTable<TData, TValue>({
   useEffect(() => {
     // https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-reactjs
     const updateDataTablePageSize = () => {
+      const TAILWIND_LG = 1024;
       const TAILWIND_XL = 1280;
       const TAILWIND_2_XL = 1536;
 
       const userScreenWidth = window.innerWidth;
 
       if (userScreenWidth >= TAILWIND_2_XL) {
-        table.setPageSize(10);
+        table.setPageSize(9);
       } else if (userScreenWidth >= TAILWIND_XL) {
         table.setPageSize(6);
+      } else if (userScreenWidth >= TAILWIND_LG) {
+        table.setPageSize(5);
       }
     };
 

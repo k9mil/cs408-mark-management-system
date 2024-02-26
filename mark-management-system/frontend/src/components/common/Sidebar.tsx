@@ -55,7 +55,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <nav className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-2 border-black">
+      <nav className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-2 border-black overflow-hidden">
         <div>
           <div className="border-b-2 border-black">
             <img src="/strathclyde_logo.svg" alt="Strathclyde Logo" />
@@ -65,7 +65,7 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/dashboard"
-                  className="2xl:h-16 xl:h-[3.7rem] flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <HomeIcon className="h-6 w-6 text-white" />
                   <h2 className="text-white text-center">Dashboard</h2>
@@ -74,7 +74,7 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/convert"
-                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <ArrowPathIcon className="h-6 w-6 text-white" />
                   <h2 className="text-white text-center">Convert</h2>
@@ -83,7 +83,7 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/upload"
-                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <PencilIcon className="h-6 w-6 text-white" />
                   <h2 className="text-white text-center">Upload</h2>
@@ -92,7 +92,7 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/classes"
-                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <BuildingLibraryIcon className="h-6 w-6 text-white" />
                   <h2 className="text-white text-center">Classes</h2>
@@ -101,29 +101,44 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/graded-students"
-                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <AcademicCapIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center">Graded Students</h2>
+                  <h2 className="xl:hidden md:block text-white text-center">
+                    Graded S.
+                  </h2>
+                  <h2 className="text-white text-center md:hidden xl:block">
+                    Graded Students
+                  </h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/student-profile"
-                  className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <UserCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center">Student Profile</h2>
+                  <h2 className="xl:hidden md:block text-white text-center">
+                    Student S.
+                  </h2>
+                  <h2 className="text-white text-center md:hidden xl:block">
+                    Student Profile
+                  </h2>
                 </Link>
               </li>
               {isAdmin === true ? (
                 <li>
                   <Link
                     to="/class-profile"
-                    className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                    className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                   >
                     <BuildingOffice2Icon className="h-6 w-6 text-white" />
-                    <h2 className="text-white text-center">Class Profile</h2>
+                    <h2 className="xl:hidden md:block text-white text-center">
+                      Class P.
+                    </h2>
+                    <h2 className="text-white text-center md:hidden xl:block">
+                      Class Profile
+                    </h2>
                   </Link>
                 </li>
               ) : null}
@@ -131,7 +146,7 @@ const Sidebar = () => {
                 <li>
                   <Link
                     to="/lecturers"
-                    className="2xl:h-16 xl:h-[3.7rem]  flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                    className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                   >
                     <UserIcon className="h-6 w-6 text-white" />
                     <h2 className="text-white text-center">Lecturers</h2>
@@ -141,16 +156,21 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/help"
-                  className="2xl:h-16 xl:h-[3.7rem] flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center">Help & Support</h2>
+                  <h2 className="xl:hidden md:block text-white text-center">
+                    Support
+                  </h2>
+                  <h2 className="text-white text-center md:hidden xl:block">
+                    Help & Support
+                  </h2>
                 </Link>
               </li>
               <li>
                 <Link
                   to="/settings"
-                  className="2xl:h-16 xl:h-[3.7rem] flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <Cog8ToothIcon className="h-6 w-6 text-white" />
                   <h2 className="text-white text-center">Settings</h2>
