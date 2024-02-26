@@ -77,7 +77,7 @@ export function ClassProfileDataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 10,
+        pageSize: 9,
       },
     },
   });
@@ -92,7 +92,7 @@ export function ClassProfileDataTable<TData, TValue>({
       const userScreenWidth = window.innerWidth;
 
       if (userScreenWidth >= TAILWIND_2_XL) {
-        table.setPageSize(10);
+        table.setPageSize(9);
       } else if (userScreenWidth >= TAILWIND_XL) {
         table.setPageSize(6);
       } else if (userScreenWidth >= TAILWIND_LG) {
