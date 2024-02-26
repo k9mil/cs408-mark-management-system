@@ -109,7 +109,7 @@ const AdministratorView = () => {
     <div className="bg-white rounded-3xl flex justify-center items-center xl:m-8 m-2 2xl:p-6 p-4 2xl:h-2/3 2xl:w-3/4 xl:h-5/6 xl:w-full h-[90%] w-full">
       <div className="grid grid-cols-3 grid-rows-2 xl:gap-3 gap-2 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center  p-5">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">
               Global Student Performance
             </CardTitle>

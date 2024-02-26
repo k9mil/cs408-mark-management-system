@@ -143,7 +143,7 @@ const LecturerView = () => {
     <div className="bg-white rounded-3xl flex justify-center items-center xl:m-8 m-2 2xl:p-6 p-4 2xl:h-2/3 2xl:w-3/4 xl:h-5/6 xl:w-full h-[90%] w-full">
       <div className="grid grid-cols-3 grid-rows-2 gap-3 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">
               Global Student Performance
             </CardTitle>
@@ -182,7 +182,7 @@ const LecturerView = () => {
           </div>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">Your Student Performance</CardTitle>
           </CardHeader>
           {statistics ? (
@@ -244,7 +244,7 @@ const LecturerView = () => {
           )}
         </Card>
         <Card className="col-span-1 row-span-2 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-col justify-start items-start">
+          <CardHeader className="flex flex-col justify-start items-start p-5">
             <CardTitle className="text-lg">Student Mark Distribution</CardTitle>
             <CardDescription className="font-light">
               This bar graph depicts your uploaded student marks grouped into
@@ -256,7 +256,7 @@ const LecturerView = () => {
           </div>
         </Card>
         <Card className="col-span-2 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">Class Overview</CardTitle>
           </CardHeader>
           <div className="flex flex-col px-6">
