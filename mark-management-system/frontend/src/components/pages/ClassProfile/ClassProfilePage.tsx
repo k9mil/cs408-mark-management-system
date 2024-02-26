@@ -235,10 +235,10 @@ const ClassProfilePage = () => {
             <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
           ) : null}
           {class_ && class_ !== "" ? (
-            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-8 xl:space-y-4">
-              <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4">
+            <div className="flex flex-col justify-center items-center w-2/5 m-auto 2xl:space-y-8 space-y-4">
+              <Card className="w-full h-1/2 space-y-2 flex justify-center flex-col shadow-xl 2xl:p-8 xl:p-4 lg:p-2">
                 <CardHeader className="flex flex-row justify-start items-start p-0">
-                  <CardTitle className="2xl:text-2xl xl:text-xl font-bold mb-6">
+                  <CardTitle className="2xl:text-2xl xl:text-xl lg:text-base font-bold mb-6">
                     Class Details
                   </CardTitle>
                 </CardHeader>
@@ -247,34 +247,34 @@ const ClassProfilePage = () => {
                     <div className="flex flex-col space-y-6 w-2/3">
                       <div className="flex flex-col space-y-2">
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Class Name:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {currentClass.name}
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Class Code:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {currentClass.code}
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Credit:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {currentClass.credit}
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
-                          <h2 className="2xl:text-base xl:text-sm font-semibold">
+                          <h2 className="2xl:text-base text-sm font-semibold">
                             Credit Level:
                           </h2>
-                          <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-center self-center">
+                          <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {currentClass.credit_level}
                           </h2>
                         </div>

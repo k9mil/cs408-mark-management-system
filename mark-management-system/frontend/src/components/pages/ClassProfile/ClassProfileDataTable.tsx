@@ -85,6 +85,7 @@ export function ClassProfileDataTable<TData, TValue>({
   useEffect(() => {
     // https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-reactjs
     const updateDataTablePageSize = () => {
+      const TAILWIND_LG = 1024;
       const TAILWIND_XL = 1280;
       const TAILWIND_2_XL = 1536;
 
@@ -94,6 +95,8 @@ export function ClassProfileDataTable<TData, TValue>({
         table.setPageSize(10);
       } else if (userScreenWidth >= TAILWIND_XL) {
         table.setPageSize(6);
+      } else if (userScreenWidth >= TAILWIND_LG) {
+        table.setPageSize(5);
       }
     };
 

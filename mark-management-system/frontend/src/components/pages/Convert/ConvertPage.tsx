@@ -277,7 +277,7 @@ const ConvertPage = () => {
     <div className="bg-primary-blue h-screen w-screen flex">
       <Sidebar />
       <div className="w-4/5 h-[95vh] m-auto bg-slate-100 rounded-3xl flex justify-center items-center">
-        <Card className="2xl:w-1/2 xl:w-2/3 2xl:h-3/5 xl:h-4/5 space-y-4 p-6 flex flex-col justify-between">
+        <Card className="2xl:w-1/2 w-2/3 2xl:h-3/5 h-4/5 space-y-4 p-6 flex flex-col justify-between">
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Convert File</CardTitle>
           </CardHeader>

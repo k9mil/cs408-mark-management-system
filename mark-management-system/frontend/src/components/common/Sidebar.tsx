@@ -104,7 +104,7 @@ const Sidebar = () => {
                   className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <AcademicCapIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center xl:text-lg">
+                  <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
                     Graded S.
                   </h2>
                   <h2 className="hidden xl:block text-white text-center">
@@ -118,7 +118,7 @@ const Sidebar = () => {
                   className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <UserCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center xl:text-lg">
+                  <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
                     Student P.
                   </h2>
                   <h2 className="hidden xl:block text-white text-center">
@@ -133,7 +133,7 @@ const Sidebar = () => {
                     className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                   >
                     <BuildingOffice2Icon className="h-6 w-6 text-white" />
-                    <h2 className="text-white text-center xl:text-lg">
+                    <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
                       Class P.
                     </h2>
                     <h2 className="hidden xl:block text-white text-center">
@@ -159,7 +159,9 @@ const Sidebar = () => {
                   className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center xl:text-lg">Support</h2>
+                  <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
+                    Support
+                  </h2>
                   <h2 className="hidden xl:block text-white text-center">
                     Help & Support
                   </h2>
