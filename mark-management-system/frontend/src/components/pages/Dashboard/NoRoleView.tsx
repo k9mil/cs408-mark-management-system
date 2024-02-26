@@ -62,7 +62,7 @@ const NoRoleView = () => {
     <div className="bg-white rounded-3xl flex justify-center items-center xl:m-8 m-2 2xl:p-6 p-4 2xl:h-2/3 2xl:w-3/4 xl:h-5/6 xl:w-full h-[90%] w-full">
       <div className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full">
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">
               Global Student Performance
             </CardTitle>
@@ -73,7 +73,7 @@ const NoRoleView = () => {
           </h2>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">Your Student Performance</CardTitle>
           </CardHeader>
           <h2 className="px-6 font-normal text-sm">
@@ -82,7 +82,7 @@ const NoRoleView = () => {
           </h2>
         </Card>
         <Card className="col-span-1 row-span-2 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-col justify-start items-start">
+          <CardHeader className="flex flex-col justify-start items-start p-5">
             <CardTitle className="text-lg">Student Mark Distribution</CardTitle>
             <CardDescription className="font-light">No access.</CardDescription>
           </CardHeader>
@@ -91,7 +91,7 @@ const NoRoleView = () => {
           </div>
         </Card>
         <Card className="col-span-2 row-span-1 flex flex-col shadow-xl">
-          <CardHeader className="flex flex-row justify-between items-center">
+          <CardHeader className="flex flex-row justify-between items-center p-5">
             <CardTitle className="text-lg">Class Overview</CardTitle>
           </CardHeader>
           <h2 className="px-6 font-normal text-sm">
