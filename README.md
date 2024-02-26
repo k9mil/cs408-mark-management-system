@@ -95,7 +95,7 @@ Additionally, each page is recreated inside [Figma](https://www.figma.com/), whi
 
 ## Demo
 
-If you wish to use the system — without going through the trouble of setting it up yourself, feel free to visit the [hosted variant](http://3.8.144.109) of Marks Management System.
+If you wish to use the system — without going through the trouble of setting it up yourself, feel free to visit the [hosted variant](http://16.171.10.73) of Marks Management System.
 
 The details of the accounts provided earlier also work for the site.
 
