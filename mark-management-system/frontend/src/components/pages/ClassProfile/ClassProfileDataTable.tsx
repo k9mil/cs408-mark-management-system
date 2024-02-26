@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
@@ -75,7 +75,33 @@ export function ClassProfileDataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
+
+  useEffect(() => {
+    // https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-reactjs
+    const updateDataTablePageSize = () => {
+      const TAILWIND_XL = 1280;
+      const TAILWIND_2_XL = 1536;
+
+      const userScreenWidth = window.innerWidth;
+
+      if (userScreenWidth >= TAILWIND_2_XL) {
+        table.setPageSize(10);
+      } else if (userScreenWidth >= TAILWIND_XL) {
+        table.setPageSize(6);
+      }
+    };
+
+    updateDataTablePageSize();
+
+    window.addEventListener("resize", updateDataTablePageSize);
+    return () => window.removeEventListener("resize", updateDataTablePageSize);
+  }, [table]);
 
   return (
     <>

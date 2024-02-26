@@ -124,7 +124,6 @@ export function StudentsDataTable<TData, TValue>({
     updateDataTablePageSize();
 
     window.addEventListener("resize", updateDataTablePageSize);
-
     return () => window.removeEventListener("resize", updateDataTablePageSize);
   }, [table]);
 
