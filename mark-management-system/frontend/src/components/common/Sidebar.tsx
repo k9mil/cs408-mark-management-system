@@ -104,10 +104,10 @@ const Sidebar = () => {
                   className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <AcademicCapIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
+                  <h2 className="hidden md:block text-white text-center">
                     Graded S.
                   </h2>
-                  <h2 className="hidden xl:block text-white text-center">
+                  <h2 className="text-white text-center md:hidden">
                     Graded Students
                   </h2>
                 </Link>
@@ -118,10 +118,10 @@ const Sidebar = () => {
                   className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <UserCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
+                  <h2 className="hidden md:block text-white text-center">
                     Student P.
                   </h2>
-                  <h2 className="hidden xl:block text-white text-center">
+                  <h2 className="text-white text-center md:hidden">
                     Student Profile
                   </h2>
                 </Link>
@@ -133,10 +133,10 @@ const Sidebar = () => {
                     className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                   >
                     <BuildingOffice2Icon className="h-6 w-6 text-white" />
-                    <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
+                    <h2 className="hidden md:block text-white text-center">
                       Class P.
                     </h2>
-                    <h2 className="hidden xl:block text-white text-center">
+                    <h2 className="text-white text-center md:hidden">
                       Class Profile
                     </h2>
                   </Link>
@@ -159,10 +159,10 @@ const Sidebar = () => {
                   className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <MagnifyingGlassCircleIcon className="h-6 w-6 text-white" />
-                  <h2 className="text-white text-center xl:text-lg lg:block xl:hidden">
+                  <h2 className="hidden md:block text-white text-center">
                     Support
                   </h2>
-                  <h2 className="hidden xl:block text-white text-center">
+                  <h2 className="text-white text-center md:hidden">
                     Help & Support
                   </h2>
                 </Link>
