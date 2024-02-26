@@ -55,7 +55,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <nav className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-2 border-black">
+      <nav className="h-screen w-1/6 bg-primary-blue flex flex-col justify-between border-r-2 border-black overflow-hidden">
         <div>
           <div className="border-b-2 border-black">
             <img src="/strathclyde_logo.svg" alt="Strathclyde Logo" />
@@ -65,7 +65,7 @@ const Sidebar = () => {
               <li>
                 <Link
                   to="/dashboard"
-                  className="2xl:h-16 xl:h-[3.7rem] h-12 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
+                  className="2xl:h-16 xl:h-[3.7rem] h-1 flex items-center space-x-4 hover:bg-hover-blue px-6 cursor-pointer"
                 >
                   <HomeIcon className="h-6 w-6 text-white" />
                   <h2 className="text-white text-center">Dashboard</h2>
