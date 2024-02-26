@@ -7,11 +7,11 @@ Mark Management System is a platform that streamlines data aggregation and prese
 - **User Login/Registration System**: A secure authentication system enabling administrators to set up accounts and users to log in with their credentials.
 - **Personalised Dashboard**: Each user is provided with a tailored dashboard, with custom cards including information such as student performance metrics which contain data such as the mean, median, mode and pass rate, a list of taught classes, and an overview of classes.
 - **Unique Graphs**: On each dashboard, amongst other pages, there are Bar Graphs present which offer unique insights into the performance of students.
-- **Data Upload**: Allows the ability to upload student marks for the classes you teach with robust validation to ensure accuracy and integrity of data. Additionally, allows the upload of academic misconduct, or personal circumstances of stuednts.
-- **Data Conversion**: Instead of leaving the laborious process of converting files from MyPlace to the Marks Management System format, or from the Marks Management System format to the format Pegasus exepcts, the system does that for you.
+- **Data Upload**: Allows the ability to upload student marks for the classes you teach with robust validation to ensure accuracy and integrity of data. Additionally, allows the upload of academic misconduct, or personal circumstances of students.
+- **Data Conversion**: Instead of leaving the laborious process of converting files from MyPlace to the Marks Management System format, or from the Marks Management System format to the format Pegasus expects, the system does that for you.
 - **Class System**: Allows administrators to create classes, assign lecturers to classes and modify class details. These classes serve as a core part of the application as they are connected to degrees, students and marks.
 - **Role System**: Different user roles exist throughout the application, such as administrators and lecturers, each with tailored permissions and controls.
-- **Settings**: Customizable settings allow for users of the site to edit their personal details, such as their first name, last name or password.
+- **Settings**: Customisable settings allow for users of the site to edit their personal details, such as their first name, last name or password.
 - **JWT Tokens**: Ensures safety & security by storing key data in JWT tokens which is used as an additional layer of authentication and verification.
 - **Modals**: Help and support can be found throughout the page, with a dedicated page with useful information, alongside Modals which contain tips are scattered throughout the system.
 
@@ -19,7 +19,7 @@ and much more, such as individual Student Profiles, Class Profiles and Error Pag
 
 ## Sample Data Generation
 
-This system contains a file inside of /backend/scripts, which is called `db_base_values.py`. After setting up the dependencies and going through the installation process outlined below, you can run the file to generate some sample data, including roles, users, classes, students, degrees and some marks.
+This system contains a file inside /backend/scripts, which is called `db_base_values.py`. After setting up the dependencies and going through the installation process outlined below, you can run the file to generate some sample data, including roles, users, classes, students, degrees and some marks.
 
 The system will generate two types of users, an administrator and a lecturer which you can access with these details:
 
@@ -92,6 +92,12 @@ In the backend, a mixture of OpenAPI + ReDoc endpoint documentation and loose [G
 For the frontend, a good chunk of the components are from [shadcn/UI](https://ui.shadcn.com/), therefore no component documentation takes place. However, some functions are commented based on the [TSDoc](https://tsdoc.org/) standard for additional clarity.
 
 Additionally, each page is recreated inside [Figma](https://www.figma.com/), which not only allows for quick prototyping, but also serves as additional documentation of the entire frontend of the system.
+
+## Demo
+
+If you wish to use the system — without going through the trouble of setting it up yourself, feel free to visit the [hosted variant](http://3.8.144.109) of Marks Management System.
+
+The details of the accounts provided earlier also work for the site.
 
 ## Contact
 
