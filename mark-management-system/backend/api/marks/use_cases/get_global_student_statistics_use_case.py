@@ -48,7 +48,7 @@ class GetGlobalStudentStatisticsUseCase:
         
         marks = self.mark_repository.get_all_student_marks()
 
-        if marks is None:
+        if not marks:
             raise MarkNotFound("No marks found in the system")
         
         mark_data = []

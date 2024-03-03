@@ -51,7 +51,7 @@ class GetLecturersUseCase:
         
         lecturers = self.user_repository.get_lecturers(skip, limit)
 
-        if lecturers is None:
+        if not lecturers:
             raise LecturersNotFound("Users not found")
         
         lecturers_with_classes: List = []

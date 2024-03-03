@@ -37,7 +37,7 @@ class GetUsersUseCase:
         
         users = self.user_repository.get_users(skip, limit)
 
-        if users is None:
+        if not users:
             raise UsersNotFound("Users not found")
 
         return users

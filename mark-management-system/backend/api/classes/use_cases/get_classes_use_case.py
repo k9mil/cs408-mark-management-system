@@ -37,7 +37,7 @@ class GetClassesUseCase:
         
         classes = self.class_repository.get_classes(skip, limit)
 
-        if classes is None:
+        if not classes:
             raise ClassesNotFound("Classes not found")
 
         return classes

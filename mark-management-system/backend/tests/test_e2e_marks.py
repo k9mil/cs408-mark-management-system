@@ -95,6 +95,50 @@ def test_when_creating_a_mark_with_correct_details_then_mark_is_created(
     
     assert response.status_code == 200
 
+def test_given_an_existing_mark_when_creating_a_mark_with_same_details_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_MARK_BODY = {
+        "mark": 72,
+        "class_id": 1,
+        "student_id": 1
+    }
+
+    response = client.post(
+        f"/api/v1/marks",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_MARK_BODY
+    )
+
+    response = client.post(
+        f"/api/v1/marks",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_MARK_BODY
+    )
+    
+    assert response.status_code == 409
+
 def test_given_marks_in_the_system_when_retrieving_marks_then_marks_are_returned(
         test_db: Generator[None, Any, None]
     ):
@@ -105,6 +149,37 @@ def test_given_marks_in_the_system_when_retrieving_marks_then_marks_are_returned
         create_students(db)
         create_classes(db)
         create_marks(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    response = client.get(
+        f"/api/v1/marks",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 200
+
+def test_given_no_marks_in_the_system_when_retrieving_marks_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
         db.commit()
 
     SAMPLE_LOGIN_BODY = {
@@ -125,7 +200,7 @@ def test_given_marks_in_the_system_when_retrieving_marks_then_marks_are_returned
         headers={"Authorization": f"Bearer {JSON_TOKEN}"},
     )
     
-    assert response.status_code == 200
+    assert response.status_code == 404
 
 def test_given_existing_mark_in_the_system_when_retrieving_mark_for_a_student_and_class_then_mark_is_returned(
         test_db: Generator[None, Any, None]
@@ -161,6 +236,41 @@ def test_given_existing_mark_in_the_system_when_retrieving_mark_for_a_student_an
     )
     
     assert response.status_code == 200
+
+def test_given_non_existing_data_when_retrieving_mark_for_a_student_and_class_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        create_marks(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_STUDENT_ID = 101
+    SAMPLE_CLASS_ID = 202
+
+    response = client.get(
+        f"/api/v1/marks/{SAMPLE_STUDENT_ID}/{SAMPLE_CLASS_ID}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
 
 def test_given_an_existing_mark_when_editing_the_mark_then_mark_is_edited(
         test_db: Generator[None, Any, None]
@@ -202,6 +312,46 @@ def test_given_an_existing_mark_when_editing_the_mark_then_mark_is_edited(
     
     assert response.status_code == 200
 
+def test_given_a_non_existing_mark_when_editing_the_mark_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        create_marks(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_MARK_ID = 1
+
+    SAMPLE_MARK_BODY = {
+        "id": 919,
+        "mark": 73,
+    }
+
+    response = client.put(
+        f"/api/v1/marks/{SAMPLE_MARK_ID}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_MARK_BODY
+    )
+    
+    assert response.status_code == 404
+
 def test_given_existing_mark_in_the_system_when_deleting_mark_then_mark_is_deleted(
         test_db: Generator[None, Any, None]
     ):
@@ -236,6 +386,40 @@ def test_given_existing_mark_in_the_system_when_deleting_mark_then_mark_is_delet
     
     assert response.status_code == 200
 
+def test_given_a_nonexisting_mark_in_the_system_when_deleting_mark_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        create_marks(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_MARK_ID = 191
+
+    response = client.delete(
+        f"/api/v1/marks/{SAMPLE_MARK_ID}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
+
 def test_given_valid_system_details_when_retrieving_student_statistics_then_statistics_are_returned(
         test_db: Generator[None, Any, None]
     ):
@@ -268,6 +452,37 @@ def test_given_valid_system_details_when_retrieving_student_statistics_then_stat
     
     assert response.status_code == 200
 
+def test_given_no_marks_in_the_system_when_retrieving_student_statistics_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    response = client.get(
+        f"/api/v1/marks/statistics",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
+
 def test_given_valid_system_details_when_retrieving_student_statistics_globally_then_statistics_are_returned(
         test_db: Generator[None, Any, None]
     ):
@@ -299,6 +514,37 @@ def test_given_valid_system_details_when_retrieving_student_statistics_globally_
     )
     
     assert response.status_code == 200
+
+def test_given_no_marks_in_the_system_details_when_retrieving_student_statistics_globally_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    response = client.get(
+        f"/api/v1/marks/global/statistics/all",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
 
 def test_given_a_valid_student_reg_no_when_retrieving_student_marks_then_marks_are_returned(
         test_db: Generator[None, Any, None]
@@ -334,6 +580,73 @@ def test_given_a_valid_student_reg_no_when_retrieving_student_marks_then_marks_a
     
     assert response.status_code == 200
 
+def test_given_an_invalid_student_reg_no_when_retrieving_student_marks_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        create_marks(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_STUDENT_REG_NO = "abc91919"
+
+    response = client.get(
+        f"/api/v1/marks/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
+
+def test_given_no_marks_in_the_system_when_retrieving_student_marks_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
+    response = client.get(
+        f"/api/v1/marks/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
+
 def test_given_a_class_code_when_retrieving_student_marks_for_the_class_then_the_marks_are_returned(
         test_db: Generator[None, Any, None]
     ):
@@ -367,3 +680,70 @@ def test_given_a_class_code_when_retrieving_student_marks_for_the_class_then_the
     )
     
     assert response.status_code == 200
+
+def test_given_not_an_admin_requestor_when_retrieving_student_marks_for_the_class_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        create_marks(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_CLASS_CODE = "CS412"
+
+    response = client.get(
+        f"/api/v1/marks/class/{SAMPLE_CLASS_CODE}/all",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 403
+
+def test_given_no_marks_in_the_system_when_retrieving_student_marks_for_the_class_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_students(db)
+        create_classes(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_CLASS_CODE = "CS412"
+
+    response = client.get(
+        f"/api/v1/marks/class/{SAMPLE_CLASS_CODE}/all",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404

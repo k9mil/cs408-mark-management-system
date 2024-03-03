@@ -93,6 +93,48 @@ def test_when_creating_a_student_with_correct_details_then_student_is_created(
     
     assert response.status_code == 200
 
+def test_given_an_existing_student_when_creating_a_student_with_same_details_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_CLASS_BODY = {
+        "reg_no": "myb21881",
+        "student_name": "John Doe",
+        "degree_id": 1
+    }
+
+    response = client.post(
+        f"/api/v1/students",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_CLASS_BODY
+    )
+
+    response = client.post(
+        f"/api/v1/students",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_CLASS_BODY
+    )
+    
+    assert response.status_code == 409
+
 def test_given_students_when_retrieving_students_then_students_are_returned(
         test_db: Generator[None, Any, None]
     ):
@@ -122,6 +164,35 @@ def test_given_students_when_retrieving_students_then_students_are_returned(
     )
     
     assert response.status_code == 200
+
+def test_given_no_students_in_the_system_when_retrieving_students_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    response = client.get(
+        f"/api/v1/students",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
 
 def test_given_students_when_retrieving_a_student_then_student_is_returned(
         test_db: Generator[None, Any, None]
@@ -156,6 +227,39 @@ def test_given_students_when_retrieving_a_student_then_student_is_returned(
     
     assert response.status_code == 200
 
+def test_given_non_existing_student_when_retrieving_a_student_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_classes(db)
+        create_students(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_STUDENT_REG_NO = "abc91919"
+
+    response = client.get(
+        f"/api/v1/students/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
+
 def test_given_students_when_retrieving_a_students_statistics_then_student_statistics_are_returned(
         test_db: Generator[None, Any, None]
     ):
@@ -181,9 +285,44 @@ def test_given_students_when_retrieving_a_students_statistics_then_student_stati
     assert response.status_code == 200
     JSON_TOKEN = response.json()["access_token"]
 
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
     response = client.get(
-        f"/api/v1/students/{1}/statistics",
+        f"/api/v1/students/{SAMPLE_STUDENT_REG_NO}/statistics",
         headers={"Authorization": f"Bearer {JSON_TOKEN}"},
     )
     
     assert response.status_code == 200
+
+def test_given_no_marks_for_student_when_retrieving_a_students_statistics_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        create_degree(db)
+        create_classes(db)
+        create_students(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
+    response = client.get(
+        f"/api/v1/students/{SAMPLE_STUDENT_REG_NO}/statistics",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404

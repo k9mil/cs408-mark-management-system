@@ -47,7 +47,7 @@ class GetMarksForClassUseCase:
         
         marks = self.mark_repository.get_student_marks_for_class_as_marks_row(class_code)
 
-        if marks is None:
+        if not marks:
             raise MarkNotFound("Marks not found")
         
         marks_data = []

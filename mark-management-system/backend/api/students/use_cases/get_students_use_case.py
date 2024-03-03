@@ -45,7 +45,7 @@ class GetStudentsUseCase:
         
         students = self.student_repository.get_students(skip, limit)
 
-        if students is None:
+        if not students:
             raise StudentNotFound("Students not found")
 
         return students

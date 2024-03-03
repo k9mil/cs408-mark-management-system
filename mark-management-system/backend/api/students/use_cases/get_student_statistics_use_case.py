@@ -43,7 +43,7 @@ class GetStudentStatisticsUseCase:
         
         marks_for_student = self.student_repository.get_marks_and_details_for_student(reg_no)
 
-        if marks_for_student is None:
+        if not marks_for_student:
             raise MarkNotFound("No marks found for the student")
 
         marks = [mark[7] for mark in marks_for_student]
