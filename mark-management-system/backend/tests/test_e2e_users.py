@@ -119,7 +119,7 @@ def test_given_users_in_the_database_when_calling_get_users_then_users_are_retur
 
     response = client.get(
         "/api/v1/users",
-        headers={"Authorization": f"Bearer {JSON_TOKEN}"}
+        headers={"Authorization": f"Bearer JSON_TOKEN"}
     )
     
     assert response.status_code == 200
