@@ -1,4 +1,4 @@
-name: Python Tests
+name: Run Python Tests
 
 on: [push]
 
@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Docker-Compose & run tests
         env:
