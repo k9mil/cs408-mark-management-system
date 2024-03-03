@@ -80,12 +80,120 @@ def test_given_a_user_and_a_role_when_adding_a_role_to_a_user_then_user_has_role
     }
 
     response = client.post(
-        f"/api/v1/roles/{1}/user/{2}",
+        f"/api/v1/roles/1/user/2",
         headers={"Authorization": f"Bearer {JSON_TOKEN}"},
         json=SAMPLE_USER_ROLE_BODY
     )
     
     assert response.status_code == 200
+
+def test_given_non_admin_request_when_adding_a_role_to_a_user_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "lecturer@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_USER_ROLE_BODY = {
+        "user_id": 2,
+        "role_id": 1,
+    }
+
+    response = client.post(
+        f"/api/v1/roles/1/user/2",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_USER_ROLE_BODY
+    )
+    
+    assert response.status_code == 403
+
+def test_given_non_existing_role_when_adding_a_role_to_a_user_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_USER_ROLE_BODY = {
+        "user_id": 2,
+        "role_id": 10,
+    }
+
+    response = client.post(
+        f"/api/v1/roles/10/user/2",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_USER_ROLE_BODY
+    )
+    
+    assert response.status_code == 404
+
+def test_given_user_has_role_when_adding_same_role_to_a_user_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "admin@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_USER_ROLE_BODY = {
+        "user_id": 2,
+        "role_id": 2,
+    }
+
+    response = client.post(
+        f"/api/v1/roles/1/user/2",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_USER_ROLE_BODY
+    )
+    
+    response = client.post(
+        f"/api/v1/roles/1/user/2",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_USER_ROLE_BODY
+    )
+    
+    assert response.status_code == 409
 
 # TODO: Redesign API design? JSON body on Delete.
 # def test_given_a_user_with_a_role_when_removing_a_role_to_a_user_then_users_role_has_been_removed(
