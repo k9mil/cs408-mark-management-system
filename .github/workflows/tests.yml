@@ -1,0 +1,24 @@
+name: Python Tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker-Compose & run tests
+        env:
+          POSTGRES_USER_MMS: ${{ secrets.POSTGRES_USER_MMS }}
+          POSTGRES_PASSWORD_MMS: ${{ secrets.POSTGRES_PASSWORD_MMS }}
+          POSTGRES_DB_MMS_TEST: ${{ secrets.POSTGRES_DB_MMS_TEST }}
+          MMS_DATABASE_URL_DOCKER_TEST: ${{ secrets.MMS_DATABASE_URL_DOCKER_TEST }}
+          SECRET_KEY_MMS: ${{ secrets.SECRET_KEY_MMS }}
+          REFRESH_SECRET_KEY_MMS: ${{ secrets.REFRESH_SECRET_KEY_MMS }}
+        run: docker-compose -f mark-management-system/docker-compose.test.yml up --build --abort-on-container-exit
+
+      - name: Cleanup after Docker-Compose
+        run: docker-compose -f mark-management-system/docker-compose.test.yml down
