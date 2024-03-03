@@ -15,7 +15,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.test
-    restart: always
     networks:
       - "mms.network"
     environment:
