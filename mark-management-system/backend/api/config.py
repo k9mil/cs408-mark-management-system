@@ -15,4 +15,4 @@ class DevelopmentConfig(Config):
     DATABASE_URL = os.environ.get("MMS_DATABASE_URL")
 
 class TestingConfig(Config):
-    DATABASE_URL = "sqlite:///:memory:"
+    DATABASE_URL = os.environ.get("MMS_DATABASE_URL_TEST")

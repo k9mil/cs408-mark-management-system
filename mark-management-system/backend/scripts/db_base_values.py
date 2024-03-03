@@ -182,11 +182,12 @@ def create_academic_misconducts(db: Session) -> None:
 
 def main():
     database_url = DevelopmentConfig.DATABASE_URL or TestingConfig.DATABASE_URL
-    engine = create_engine(database_url)
+    
+    if database_url:
+        engine = create_engine(database_url)
+
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
     Base.metadata.create_all(bind=engine)
-
     db = SessionLocal()
 
     try:
