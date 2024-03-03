@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    networks:
+      - "mms.network"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_MMS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_MMS}
+      - POSTGRES_DB=${POSTGRES_DB_MMS_TEST}
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.test
+    restart: always
+    networks:
+      - "mms.network"
+    environment:
+      - MMS_DATABASE_URL_TEST=${MMS_DATABASE_URL_DOCKER_TEST}
+      - SECRET_KEY=${SECRET_KEY_MMS}
+      - REFRESH_SECRET_KEY=${REFRESH_SECRET_KEY_MMS}
+    ports:
+      - "5000"
+    depends_on:
+      - postgres
+    command: sh -c "sleep 5; pytest /tests"
+
+networks:
+  mms.network:
