@@ -45,7 +45,7 @@ class GetPersonalCircumstancesForStudentUseCase:
         
         personal_circumstances = self.personal_circumstance_repository.get_by_student_reg_no(reg_no)
 
-        if personal_circumstances is None:
+        if not personal_circumstances:
             raise PersonalCircumstanceNotFound("No personal circumstances found")
         
         return personal_circumstances
