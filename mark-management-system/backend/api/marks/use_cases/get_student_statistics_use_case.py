@@ -45,7 +45,7 @@ class GetStudentStatisticsUseCase:
         
         marks = self.mark_repository.get_student_marks_for_lecturer(user.id)
 
-        if marks is None:
+        if not marks:
             raise MarkNotFound("No results found for the lecturer")
         
         mark_data = []
