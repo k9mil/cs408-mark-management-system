@@ -38,12 +38,12 @@ class GetClassesForLecturerUseCase:
 
         lecturer = self.user_repository.find_by_email(user_email)
 
-        if lecturer is None:
+        if not lecturer:
             raise UserNotFound("Lecturer not found")
 
         classes = self.class_repository.get_classes_by_lecturer_id(lecturer.id, skip, limit)
 
-        if classes is None:
+        if not classes:
             raise ClassesNotFound("Classes not found")
 
         return classes

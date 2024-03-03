@@ -47,7 +47,7 @@ class GetClassStatisticsUseCase:
         
         marks = self.class_repository.get_marks_for_class(class_code)
 
-        if marks is None:
+        if not marks:
             raise MarkNotFound("No marks found for the class")
 
         mark_data = []
