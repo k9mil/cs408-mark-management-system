@@ -161,7 +161,7 @@ export const StudentsModal = ({
           )}
         </DialogHeader>
         {activeTab === "class" ? (
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between gap-14">
             <div className="space-y-4">
               <div>
                 <Label htmlFor="name" className="text-right">
