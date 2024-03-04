@@ -140,6 +140,47 @@ def test_given_invalid_student_reg_no_when_creating_personal_circumstances_with_
     
     assert response.status_code == 404
 
+def test_given_a_user_with_insufficient_permissions_when_creating_personal_circumstances_with_correct_details_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)   
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "base@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_PERSONAL_CIRCUMSTANCES_BODY = {
+        "details": "03/31/2023 to 05/29/2024: Mental Health Issues",
+        "semester": "2",
+        "cat": "2",
+        "comments": "Discount attempt as CS412",
+        "reg_no": "abc12345"
+    }
+
+    response = client.post(
+        f"/api/v1/personal-circumstances",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_PERSONAL_CIRCUMSTANCES_BODY
+    )
+    
+    assert response.status_code == 403
+
 def test_given_already_existing_circumstance_when_creating_personal_circumstances_with_same_details_then_error_is_thrown(
         test_db: Generator[None, Any, None]
     ):
@@ -255,3 +296,38 @@ def test_given_no_personal_circumstances_in_the_system_when_retrieving_personal_
     )
     
     assert response.status_code == 404
+
+def test_given_a_user_with_insufficient_permissions_when_retrieving_personal_circumstances_for_student_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)  
+        create_personal_circumstances(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "base@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
+    response = client.get(
+        f"/api/v1/personal-circumstances/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 403

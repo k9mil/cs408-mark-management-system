@@ -203,7 +203,7 @@ def test_given_users_in_the_database_when_calling_get_users_then_users_are_retur
     )
     
     assert response.status_code == 200
-    assert len(response.json()) == 2
+    assert len(response.json()) == 3
 
 def test_given_a_non_admin_requestor_when_calling_get_users_then_error_is_thrown(
         test_db: Generator[None, Any, None]
@@ -350,7 +350,7 @@ def test_given_a_user_when_editing_the_users_details_then_the_users_details_are_
     }
 
     response = client.put(
-        f"/api/v1/users/{1}",
+        f"/api/v1/users/1",
         headers={"Authorization": f"Bearer {JSON_TOKEN}"},
         json=SAMPLE_EDIT_BODY
     )
@@ -391,6 +391,40 @@ def test_given_an_invalid_password_when_editing_the_users_details_then_error_is_
     )
     
     assert response.status_code == 400
+
+def test_given_a_user_with_insufficient_permissions_when_editing_the_users_details_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        db.commit()
+
+    SAMPLE_LOGIN_BODY = {
+        "username": "base@mms.com",
+        "password": "12345678"
+    }
+
+    response = client.post(
+        "/api/v1/users/login",
+        data=SAMPLE_LOGIN_BODY
+    )
+    
+    assert response.status_code == 200
+    JSON_TOKEN = response.json()["access_token"]
+
+    SAMPLE_EDIT_BODY = {
+        "id": "1",
+        "first_name": "John"
+    }
+
+    response = client.put(
+        f"/api/v1/users/{1}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_EDIT_BODY
+    )
+    
+    assert response.status_code == 403
     
 def test_given_lecturers_in_the_system_when_getting_all_lecturers_then_lecturers_are_returned(
         test_db: Generator[None, Any, None]
