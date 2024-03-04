@@ -66,18 +66,9 @@ def test_when_creating_a_student_with_correct_details_then_student_is_created(
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_CLASS_BODY = {
         "reg_no": "myb21881",
@@ -102,18 +93,9 @@ def test_given_an_existing_student_when_creating_a_student_with_same_details_the
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_CLASS_BODY = {
         "reg_no": "myb21881",
@@ -144,18 +126,9 @@ def test_given_a_user_with_insufficient_permissions_when_creating_a_student_then
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_CLASS_BODY = {
         "reg_no": "myb21881",
@@ -181,18 +154,9 @@ def test_given_students_when_retrieving_students_then_students_are_returned(
         create_students(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         f"/api/v1/students",
@@ -210,18 +174,9 @@ def test_given_no_students_in_the_system_when_retrieving_students_then_error_is_
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         f"/api/v1/students",
@@ -240,18 +195,9 @@ def test_given_a_user_with_insufficient_permissions_when_retrieving_students_the
         create_students(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         f"/api/v1/students",
@@ -271,18 +217,9 @@ def test_given_students_when_retrieving_a_student_then_student_is_returned(
         create_students(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -304,18 +241,9 @@ def test_given_non_existing_student_when_retrieving_a_student_then_error_is_thro
         create_students(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc91919"
 
@@ -337,18 +265,9 @@ def test_given_a_user_with_insufficient_permissions_when_retrieving_a_student_th
         create_students(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -371,18 +290,9 @@ def test_given_students_when_retrieving_a_students_statistics_then_student_stati
         create_marks(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -404,18 +314,9 @@ def test_given_no_marks_for_student_when_retrieving_a_students_statistics_then_e
         create_students(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -425,3 +326,13 @@ def test_given_no_marks_for_student_when_retrieving_a_students_statistics_then_e
     )
     
     assert response.status_code == 404
+
+def _prepare_login_and_retrieve_token(
+    username: str,
+    password: str
+) -> str:
+    SAMPLE_LOGIN_BODY = {"username": username, "password": password}
+    response = client.post("/api/v1/users/login", data=SAMPLE_LOGIN_BODY)
+
+    assert response.status_code == 200
+    return response.json()["access_token"]

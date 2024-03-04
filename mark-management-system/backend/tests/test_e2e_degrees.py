@@ -62,18 +62,9 @@ def test_when_creating_a_degree_with_correct_details_then_degree_is_created(
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_BODY = {
         "level": "BSc",
@@ -96,18 +87,9 @@ def test_given_a_degree_in_the_system_when_creating_a_degree_with_same_details_t
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_BODY = {
         "level": "BSc",
@@ -136,18 +118,9 @@ def test_given_not_an_administrator_when_creating_a_degree_then_error_is_thrown(
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_BODY = {
         "level": "BSc",
@@ -171,18 +144,9 @@ def test_given_degrees_when_retrieving_a_degree_with_then_degree_is_returned(
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_NAME = "Computer Science"
 
@@ -202,18 +166,9 @@ def test_given_non_existing_degree_name_when_retrieving_degree_details_then_erro
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_NAME = "Computer Sciance"
 
@@ -233,18 +188,9 @@ def test_given_a_user_with_insufficient_permissions_when_retrieving_degree_detai
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_NAME = "Computer Science"
 
@@ -264,18 +210,9 @@ def test_given_valid_degrees_when_searching_in_bulk_then_degrees_are_returned(
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_JSON = [
         {
@@ -300,19 +237,10 @@ def test_given_an_invalid_degree_when_searching_in_bulk_then_error_is_thrown(
         create_users(db)
         create_degree(db)
         db.commit()
-
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
-    )
     
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
+    )
 
     SAMPLE_DEGREE_JSON = [
         {
@@ -338,18 +266,9 @@ def test_given_given_a_user_with_insufficient_permissions_when_searching_in_bulk
         create_degree(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_DEGREE_JSON = [
         {
@@ -365,3 +284,13 @@ def test_given_given_a_user_with_insufficient_permissions_when_searching_in_bulk
     )
     
     assert response.status_code == 403
+
+def _prepare_login_and_retrieve_token(
+    username: str,
+    password: str
+) -> str:
+    SAMPLE_LOGIN_BODY = {"username": username, "password": password}
+    response = client.post("/api/v1/users/login", data=SAMPLE_LOGIN_BODY)
+
+    assert response.status_code == 200
+    return response.json()["access_token"]

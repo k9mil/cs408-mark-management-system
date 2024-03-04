@@ -70,18 +70,9 @@ def test_when_creating_personal_circumstances_with_correct_details_then_personal
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_PERSONAL_CIRCUMSTANCES_BODY = {
         "details": "03/31/2023 to 05/29/2024: Mental Health Issues",
@@ -111,18 +102,9 @@ def test_given_invalid_student_reg_no_when_creating_personal_circumstances_with_
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_PERSONAL_CIRCUMSTANCES_BODY = {
         "details": "03/31/2023 to 05/29/2024: Mental Health Issues",
@@ -152,18 +134,9 @@ def test_given_a_user_with_insufficient_permissions_when_creating_personal_circu
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_PERSONAL_CIRCUMSTANCES_BODY = {
         "details": "03/31/2023 to 05/29/2024: Mental Health Issues",
@@ -193,18 +166,9 @@ def test_given_already_existing_circumstance_when_creating_personal_circumstance
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_PERSONAL_CIRCUMSTANCES_BODY = {
         "details": "03/31/2023 to 05/29/2024: Mental Health Issues",
@@ -241,18 +205,9 @@ def test_given_student_reg_no_when_retrieving_personal_circumstances_for_student
         create_personal_circumstances(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -275,18 +230,9 @@ def test_given_no_personal_circumstances_in_the_system_when_retrieving_personal_
         create_marks(db)  
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -310,18 +256,9 @@ def test_given_a_user_with_insufficient_permissions_when_retrieving_personal_cir
         create_personal_circumstances(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "base@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_STUDENT_REG_NO = "abc12345"
 
@@ -331,3 +268,13 @@ def test_given_a_user_with_insufficient_permissions_when_retrieving_personal_cir
     )
     
     assert response.status_code == 403
+
+def _prepare_login_and_retrieve_token(
+    username: str,
+    password: str
+) -> str:
+    SAMPLE_LOGIN_BODY = {"username": username, "password": password}
+    response = client.post("/api/v1/users/login", data=SAMPLE_LOGIN_BODY)
+
+    assert response.status_code == 200
+    return response.json()["access_token"]

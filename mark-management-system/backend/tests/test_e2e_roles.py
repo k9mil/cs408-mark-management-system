@@ -61,18 +61,9 @@ def test_given_a_user_and_a_role_when_adding_a_role_to_a_user_then_user_has_role
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ROLE_BODY = {
         "user_id": 2,
@@ -95,18 +86,9 @@ def test_given_non_admin_request_when_adding_a_role_to_a_user_then_error_is_thro
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ROLE_BODY = {
         "user_id": 2,
@@ -129,18 +111,9 @@ def test_given_non_existing_role_when_adding_a_role_to_a_user_then_error_is_thro
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ROLE_BODY = {
         "user_id": 2,
@@ -163,18 +136,9 @@ def test_given_user_has_role_when_adding_same_role_to_a_user_then_error_is_throw
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ROLE_BODY = {
         "user_id": 2,
@@ -203,18 +167,9 @@ def test_given_a_user_with_a_role_when_removing_a_role_from_a_user_then_users_ro
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.delete(
         f"/api/v1/roles/1/user/1",
@@ -231,18 +186,9 @@ def test_given_a_user_with_insufficient_permissions_when_removing_a_role_from_a_
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.delete(
         f"/api/v1/roles/1/user/2",
@@ -259,18 +205,9 @@ def test_given_a_non_existing_role_when_removing_a_role_from_a_user_then_error_i
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.delete(
         f"/api/v1/roles/100/user/2",
@@ -287,18 +224,9 @@ def test_given_user_does_not_have_role_when_removing_a_role_from_a_user_then_err
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.delete(
         f"/api/v1/roles/1/user/3",
@@ -306,3 +234,13 @@ def test_given_user_does_not_have_role_when_removing_a_role_from_a_user_then_err
     )
     
     assert response.status_code == 404
+
+def _prepare_login_and_retrieve_token(
+    username: str,
+    password: str
+) -> str:
+    SAMPLE_LOGIN_BODY = {"username": username, "password": password}
+    response = client.post("/api/v1/users/login", data=SAMPLE_LOGIN_BODY)
+
+    assert response.status_code == 200
+    return response.json()["access_token"]
