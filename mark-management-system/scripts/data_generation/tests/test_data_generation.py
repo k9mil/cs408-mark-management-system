@@ -1,9 +1,12 @@
 import unittest
 import csv
 import os
+import sys
 
 from typing import List, Dict
 from datetime import datetime
+
+sys.path.append("../")
 
 from data_generation import DataGenerator, CSVWriter
 
