@@ -74,7 +74,7 @@ def test_when_creating_academic_misconducts_with_correct_details_then_academic_m
     )
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
-        "date": "2024-03-03",
+        "date": "2024-03-04",
         "outcome": "UPHELD",
         "reg_no": "abc12345",
         "class_code": "CS412"
