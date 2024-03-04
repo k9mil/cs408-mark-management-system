@@ -19,12 +19,13 @@ class RemoveUserFromRoleUseCase:
         self.roles_repository = roles_repository
         self.user_repository = user_repository
 
-    def execute(self, request: RoleUsersData, current_user: Tuple[str, bool, bool]) -> None:
+    def execute(self, role_id: int, user_id: int, current_user: Tuple[str, bool, bool]) -> None:
         """
         Executes the Use Case to remove a user from a role.
 
         Args:
-            request: A `RoleUsersData` object which contains the role_id of the role, and the user_id of the user.
+            role_id: The role_id to remove.
+            user_id: The user_id to remove the role from.
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
@@ -37,17 +38,17 @@ class RemoveUserFromRoleUseCase:
         if is_admin is False:
             raise PermissionError("Permission denied to access this resource")
         
-        user = self.user_repository.find_by_id(request.user_id)
+        user = self.user_repository.find_by_id(user_id)
 
         if user is None:
             raise UserNotFound("User not found.")
 
-        role = self.roles_repository.find_by_id(request.role_id)
+        role = self.roles_repository.find_by_id(role_id)
 
         if role is None:
             raise RoleNotFound("Role not found.")
         
-        user_role = self.roles_repository.find_role_association(request)
+        user_role = self.roles_repository.find_role_association(role_id, user_id)
 
         if user_role is None:
             raise RoleAssociationNotFound("Role association not found.")

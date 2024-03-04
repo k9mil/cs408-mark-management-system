@@ -43,19 +43,20 @@ class RolesRepository:
         """
         return self.db.query(Role).filter_by(id=role_id).first()
 
-    def find_role_association(self, request: RoleUsersData) -> Optional[RoleUsers]:
+    def find_role_association(self, role_id: int, user_id: int) -> Optional[RoleUsers]:
         """
         Retrieves a role association between a user & role.
 
         Args:
-            request:  A `RoleUsersData` schematic object which contains a user_id & role_id.
+            role_id: The role_id to remove.
+            user_id: The user_id to remove the role from.
         
         Returns:
             Optional[RoleUsers]: A `RoleUsers` object from the database, however can also return `None` if not found.
         """
         return self.db.query(RoleUsers).filter_by(
-            role_id=request.role_id,
-            user_id=request.user_id
+            role_id=role_id,
+            user_id=user_id
         ).first()
 
     def add_user(self, role_user: RoleUsers, user: User) -> None:
