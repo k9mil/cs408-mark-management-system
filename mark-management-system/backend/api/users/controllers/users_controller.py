@@ -330,7 +330,6 @@ def get_lecturer(
 
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
-        - `HTTPException`, 403: If there has been a permission error.  
         - `HTTPException`, 404: If the user has not been found.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
@@ -347,7 +346,5 @@ def get_lecturer(
         return get_lecturer_use_case.execute(current_user)
     except UserNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
-    except PermissionError as e:
-        raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

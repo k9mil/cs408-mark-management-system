@@ -73,7 +73,8 @@ def add_user_to_role(
     
 @roles.delete("/api/v1/roles/{role_id}/user/{user_id}", response_model=None)
 def remove_user_from_role(
-    request: schemas.RoleUsersData,
+    role_id: int,
+    user_id: int,
     current_user: Tuple[str, bool, bool] = Depends(get_current_user),
     remove_user_from_role_use_case: RemoveUserFromRoleUseCase = Depends(remove_user_from_role_use_case),
 ):
@@ -84,7 +85,8 @@ def remove_user_from_role(
     OpenAPI and Redocly API docs only show FastAPI (Pydantic) responses, i.e. 200 & 422, and ignore custom exceptions.
 
     Args:  
-        - `request`: A `schemas.RoleUsersData` object which contains the role_id of the role, and the user_id of the user.  
+        - `role_id`: The role_id to remove.
+        - `user_id`: The user_id to remove the role from.
         - `current_user`: A middleware object `current_user` which contains a Tuple of a string, boolean and a boolean.   
                       The initial string is the user_email (which is extracted from the JWT), followed by is_admin & is_lecturer flags.  
         - `remove_user_from_role_use_case`: The class which handles the business logic for removing a user from a role.  
@@ -103,7 +105,7 @@ def remove_user_from_role(
     
     try:
         return remove_user_from_role_use_case.execute(
-            request, current_user
+            role_id, user_id, current_user
         )
     except UserNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))

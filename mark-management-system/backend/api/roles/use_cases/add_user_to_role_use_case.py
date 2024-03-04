@@ -52,7 +52,10 @@ class AddUserToRoleUseCase:
         if role is None:
             raise RoleNotFound("Role not found.")
         
-        user_role = self.roles_repository.find_role_association(request)
+        user_role = self.roles_repository.find_role_association(
+            request.role_id,
+            request.user_id
+        )
 
         if user_role is not None:
             raise RoleAssociationAlreadyExists("Role association already exists.")

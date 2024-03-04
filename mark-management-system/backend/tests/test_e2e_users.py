@@ -184,18 +184,9 @@ def test_given_users_in_the_database_when_calling_get_users_then_users_are_retur
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         "/api/v1/users",
@@ -203,7 +194,7 @@ def test_given_users_in_the_database_when_calling_get_users_then_users_are_retur
     )
     
     assert response.status_code == 200
-    assert len(response.json()) == 2
+    assert len(response.json()) == 3
 
 def test_given_a_non_admin_requestor_when_calling_get_users_then_error_is_thrown(
         test_db: Generator[None, Any, None]
@@ -213,18 +204,9 @@ def test_given_a_non_admin_requestor_when_calling_get_users_then_error_is_thrown
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         "/api/v1/users",
@@ -241,18 +223,9 @@ def test_given_a_valid_user_id_when_getting_user_details_then_user_is_returned(
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ID = "1"
 
@@ -271,18 +244,9 @@ def test_given_a_invalid_user_id_when_getting_user_details_then_error_is_thrown(
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ID = "191"
 
@@ -301,18 +265,9 @@ def test_given_a_non_admin_requestor_when_getting_user_details_then_error_is_thr
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_USER_ID = "1"
 
@@ -331,18 +286,9 @@ def test_given_a_user_when_editing_the_users_details_then_the_users_details_are_
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_EDIT_BODY = {
         "id":"1",
@@ -350,7 +296,7 @@ def test_given_a_user_when_editing_the_users_details_then_the_users_details_are_
     }
 
     response = client.put(
-        f"/api/v1/users/{1}",
+        f"/api/v1/users/1",
         headers={"Authorization": f"Bearer {JSON_TOKEN}"},
         json=SAMPLE_EDIT_BODY
     )
@@ -365,18 +311,9 @@ def test_given_an_invalid_password_when_editing_the_users_details_then_error_is_
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_EDIT_BODY = {
         "id":"1",
@@ -391,6 +328,31 @@ def test_given_an_invalid_password_when_editing_the_users_details_then_error_is_
     )
     
     assert response.status_code == 400
+
+def test_given_a_user_with_insufficient_permissions_when_editing_the_users_details_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_users(db)
+        db.commit()
+
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
+    )
+
+    SAMPLE_EDIT_BODY = {
+        "id": "1",
+        "first_name": "John"
+    }
+
+    response = client.put(
+        f"/api/v1/users/{1}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_EDIT_BODY
+    )
+    
+    assert response.status_code == 403
     
 def test_given_lecturers_in_the_system_when_getting_all_lecturers_then_lecturers_are_returned(
         test_db: Generator[None, Any, None]
@@ -400,18 +362,9 @@ def test_given_lecturers_in_the_system_when_getting_all_lecturers_then_lecturers
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         f"/api/v1/lecturers",
@@ -429,18 +382,9 @@ def test_given_not_admin_requestor_when_getting_all_lecturers_then_error_is_thro
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         f"/api/v1/lecturers",
@@ -457,18 +401,9 @@ def test_given_lecturers_in_the_database_when_calling_get_lecturer_with_an_exist
         create_users(db)
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "lecturer@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "lecturer@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     response = client.get(
         f"/api/v1/lecturers/1",
@@ -476,3 +411,13 @@ def test_given_lecturers_in_the_database_when_calling_get_lecturer_with_an_exist
     )
     
     assert response.status_code == 200
+
+def _prepare_login_and_retrieve_token(
+    username: str,
+    password: str
+) -> str:
+    SAMPLE_LOGIN_BODY = {"username": username, "password": password}
+    response = client.post("/api/v1/users/login", data=SAMPLE_LOGIN_BODY)
+
+    assert response.status_code == 200
+    return response.json()["access_token"]

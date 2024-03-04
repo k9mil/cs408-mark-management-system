@@ -69,18 +69,9 @@ def test_when_creating_academic_misconducts_with_correct_details_then_academic_m
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
         "date": "2024-03-03",
@@ -109,18 +100,9 @@ def test_when_creating_academic_misconducts_with_wrong_student_reg_no_then_stude
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
         "date": "2024-03-03",
@@ -149,18 +131,9 @@ def test_when_creating_academic_misconducts_with_wrong_student_class_code_then_c
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
         "date": "2024-03-03",
@@ -190,18 +163,9 @@ def test_when_creating_academic_misconducts_with_same_misconduct_existing_then_e
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
         "date": "2024-03-03",
@@ -236,18 +200,9 @@ def test_when_creating_academic_misconducts_when_student_not_belong_to_class_the
         create_marks(db)   
         db.commit()
 
-    SAMPLE_LOGIN_BODY = {
-        "username": "admin@mms.com",
-        "password": "12345678"
-    }
-
-    response = client.post(
-        "/api/v1/users/login",
-        data=SAMPLE_LOGIN_BODY
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
     )
-    
-    assert response.status_code == 200
-    JSON_TOKEN = response.json()["access_token"]
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
         "date": "2024-03-03",
@@ -263,3 +218,44 @@ def test_when_creating_academic_misconducts_when_student_not_belong_to_class_the
     )
     
     assert response.status_code == 404
+
+def test_given_a_base_user_when_creating_academic_misconducts_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)   
+        db.commit()
+
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
+    )
+
+    SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
+        "date": "2024-03-03",
+        "outcome": "UPHELD",
+        "reg_no": "abc12345",
+        "class_code": "CS408"
+    }
+
+    response = client.post(
+        f"/api/v1/academic-misconducts",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+        json=SAMPLE_ACADEMIC_MISCONDUCT_BODY
+    )
+    
+    assert response.status_code == 403
+
+def _prepare_login_and_retrieve_token(
+    username: str,
+    password: str
+) -> str:
+    SAMPLE_LOGIN_BODY = {"username": username, "password": password}
+    response = client.post("/api/v1/users/login", data=SAMPLE_LOGIN_BODY)
+
+    assert response.status_code == 200
+    return response.json()["access_token"]
