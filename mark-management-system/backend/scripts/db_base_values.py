@@ -66,6 +66,13 @@ def create_users(db: Session) -> None:
             last_name="Zak",
             password=hashed_password
         )
+    
+    base_user = User(
+            email_address="base@mms.com",
+            first_name="Kamil",
+            last_name="Zack",
+            password=hashed_password
+        )
 
     user_repository.add(
         admin_user
@@ -73,6 +80,10 @@ def create_users(db: Session) -> None:
 
     user_repository.add(
         lecturer_user
+    )
+
+    user_repository.add(
+        base_user
     )
 
     roles_repository = RolesRepository(db)
