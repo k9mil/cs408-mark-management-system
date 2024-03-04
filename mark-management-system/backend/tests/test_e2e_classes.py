@@ -476,7 +476,7 @@ def test_given_a_class_code_when_editing_when_class_code_doesnt_exist_then_error
         
         assert response.status_code == 404
 
-def test_given_an_existing_class_when_deleting_the_class_then_class_is_deleting(
+def test_given_an_existing_class_when_deleting_the_class_then_class_is_deleted(
         test_db: Generator[None, Any, None]
     ):
     with TestingSessionLocal() as db:
