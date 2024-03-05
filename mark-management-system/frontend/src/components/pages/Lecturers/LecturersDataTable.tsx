@@ -132,7 +132,7 @@ export function LecturersDataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-gray-800">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -166,9 +166,9 @@ export function LecturersDataTable<TData, TValue>({
                               );
                             const textColorClass =
                               isUploadedForAllClasses === "Yes"
-                                ? "text-green-500 font-bold inline-block rounded py-1 px-3 bg-green-200"
+                                ? "text-green-800 font-bold inline-block rounded py-1 px-3 bg-green-100"
                                 : isUploadedForAllClasses === "No"
-                                ? "text-red-500 font-bold inline-block rounded py-1 px-3 bg-red-200"
+                                ? "text-red-800 font-bold inline-block rounded py-1 px-3 bg-red-100"
                                 : "font-base";
                             return (
                               <span className={textColorClass}>

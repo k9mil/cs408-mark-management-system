@@ -48,6 +48,8 @@ export const ConvertSelectionCombobox = ({
           variant="outline"
           role="combobox"
           className="w-[200px] justify-between"
+          aria-label="conversionType"
+          aria-labelledby="conversionType"
         >
           {conversionType
             ? conversionList.find(

@@ -222,7 +222,7 @@ const StudentProfilePage = () => {
         <div className="mt-8 ml-8 mr-8 flex flex-col space-y-4">
           <div className="flex 2xl:flex-col xl:flex-row 2xl:space-y-1 xl:space-x-2 2xl:space-x-0 xl:items-center 2xl:items-start">
             <h1 className="text-3xl font-bold">Student Profile</h1>
-            <h2 className="text-gray-400">
+            <h2 className="text-gray-600">
               Enter a student name to view their history of uploaded marks
             </h2>
           </div>
@@ -390,7 +390,7 @@ const StudentProfilePage = () => {
                     <ChevronLeftIcon
                       className={`h-6 w-6 ${
                         currentPersonalCircumstance === 0
-                          ? "text-gray-400"
+                          ? "text-gray-600"
                           : "hover:cursor-pointer text-black"
                       }`}
                       onClick={handlePrev}
@@ -400,7 +400,7 @@ const StudentProfilePage = () => {
                         studentPersonalCircumstances.length === 0 ||
                         currentPersonalCircumstance ===
                           studentPersonalCircumstances.length - 1
-                          ? "text-gray-400"
+                          ? "text-gray-600"
                           : "hover:cursor-pointer text-black"
                       }`}
                       onClick={handleNext}
@@ -493,7 +493,7 @@ const StudentProfilePage = () => {
                     <ChevronLeftIcon
                       className={`h-6 w-6 ${
                         currentAcademicMisconduct === 0
-                          ? "text-gray-400"
+                          ? "text-gray-600"
                           : "hover:cursor-pointer text-black"
                       }`}
                       onClick={handlePrevMisconduct}
@@ -503,7 +503,7 @@ const StudentProfilePage = () => {
                         misconductClasses.length === 0 ||
                         currentAcademicMisconduct ===
                           misconductClasses.length - 1
-                          ? "text-gray-400"
+                          ? "text-gray-600"
                           : "hover:cursor-pointer text-black"
                       }`}
                       onClick={handleNextMisconduct}

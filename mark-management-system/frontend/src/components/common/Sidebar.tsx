@@ -245,7 +245,7 @@ const Sidebar = () => {
             </DialogContent>
           </Dialog>
           <h2
-            className="text-gray-400 cursor-pointer"
+            className="text-gray-200 cursor-pointer"
             onClick={() => {
               logout();
             }}

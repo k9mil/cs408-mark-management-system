@@ -72,7 +72,7 @@ const LoginPage = () => {
         <div className="flex flex-col space-y-12">
           <div className="flex flex-col items-center space-y-2">
             <h1 className="font-bold text-2xl">Welcome Back! Please Log In</h1>
-            <h2 className="text-gray-400 text-sm font-light">
+            <h2 className="text-gray-600 text-sm font-light">
               Enter your details below to access your account.
             </h2>
           </div>
