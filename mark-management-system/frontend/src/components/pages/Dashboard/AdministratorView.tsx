@@ -161,7 +161,7 @@ const AdministratorView = () => {
                         <span className="pr-4 text-sm">{class_.name}</span>
                       </h2>
                       <h2 className="text-sm font-light w-3/4">
-                        <span className="text-green-500 font-bold">
+                        <span className="text-green-800 font-bold">
                           {class_.mean}%
                         </span>{" "}
                         Mean
@@ -198,7 +198,7 @@ const AdministratorView = () => {
                         <span className="pr-4 text-sm">{class_.name}</span>
                       </h2>
                       <h2 className="text-sm font-light w-3/4">
-                        <span className="text-red-500 font-bold">
+                        <span className="text-red-800 font-bold">
                           {class_.mean}%
                         </span>{" "}
                         Mean
@@ -223,7 +223,7 @@ const AdministratorView = () => {
                         <span className="pr-4 text-sm">{class_.name}</span>
                       </h2>
                       <h2 className="text-sm font-light">
-                        <span className="text-green-500 font-bold">
+                        <span className="text-green-800 font-bold">
                           {class_.stdev}%
                         </span>{" "}
                         Standard Deviation

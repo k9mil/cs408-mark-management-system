@@ -52,6 +52,8 @@ export const UploadSelectionCombobox = ({
           variant="outline"
           role="combobox"
           className="w-[235px] justify-between"
+          aria-label="uploadType"
+          aria-labelledby="uploadType"
         >
           {uploadType
             ? uploadList.find((uploadItem) => uploadItem.value === uploadType)

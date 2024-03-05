@@ -186,7 +186,7 @@ const ClassProfilePage = () => {
         <div className="mt-8 ml-8 mr-8 flex flex-col space-y-4">
           <div className="flex 2xl:flex-col xl:flex-row 2xl:space-y-1 xl:space-x-2 2xl:space-x-0 xl:items-center 2xl:items-start">
             <h1 className="text-3xl font-bold">Class Profile</h1>
-            <h2 className="text-gray-400">
+            <h2 className="text-gray-600">
               Enter a class code to view all marks recorded for that class
             </h2>
           </div>

@@ -126,7 +126,7 @@ const ClassesPage = () => {
           <div className="flex 2xl:flex-col xl:flex-row 2xl:space-y-1 xl:space-x-2 2xl:space-x-0 xl:items-center 2xl:items-start">
             <h1 className="text-3xl font-bold">Classes</h1>
             <div className="flex justify-between xl:w-full">
-              <h2 className="text-gray-400">
+              <h2 className="text-gray-600">
                 View a list of classes in the system
               </h2>
               {isAdmin === true ? (

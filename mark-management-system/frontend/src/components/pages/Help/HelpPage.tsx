@@ -47,7 +47,7 @@ const HelpPage = () => {
             <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               <div className="flex flex-row space-x-2">
                 <h2 className="font-bold">Email:</h2>{" "}
-                <span className="underline text-blue-400">
+                <span className="underline text-blue-700">
                   help@strath.ac.uk
                 </span>
               </div>
@@ -57,14 +57,14 @@ const HelpPage = () => {
               </div>
               <div className="flex flex-row space-x-2">
                 <h2 className="font-bold">IT Support Portal:</h2>{" "}
-                <span className="text-blue-400 underline">
+                <span className="text-blue-700 underline">
                   https://helpdesk.strath.ac.uk/support/home
                 </span>
               </div>
             </CardContent>
             <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               For even more points of support, visit:{" "}
-              <span className="text-blue-400 underline break-all">
+              <span className="text-blue-700 underline break-all">
                 https://www.strath.ac.uk/professionalservices/informationservices/contact/
               </span>
             </CardContent>

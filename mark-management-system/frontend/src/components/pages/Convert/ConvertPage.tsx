@@ -317,8 +317,8 @@ const ConvertPage = () => {
           {file ? <MarksUploadedFile file={file} setFile={setFile} /> : null}
           <div className="h-1/4 flex flex-col justify-end space-y-4">
             <div className="flex flex-row justify-between mx-6">
-              <h2 className="text-sm text-gray-400">Supported formats: CSV</h2>
-              <h2 className="text-sm text-gray-400">Maximum size: 5MB</h2>
+              <h2 className="text-sm text-gray-600">Supported formats: CSV</h2>
+              <h2 className="text-sm text-gray-600">Maximum size: 5MB</h2>
             </div>
             <div className="flex flex-row mx-6 justify-between items-center">
               <ConvertInfoBox />

@@ -56,7 +56,7 @@ const LecturersPage = () => {
         <div className="m-8 flex flex-col space-y-4">
           <div className="flex flex-col space-y-1">
             <h1 className="text-3xl font-bold">Lecturers</h1>
-            <h2 className="text-gray-400">
+            <h2 className="text-gray-600">
               View a list of lecturers in the system
             </h2>
           </div>

@@ -53,13 +53,13 @@ export const LecturersModalView = ({
                 </Label>
                 {class_.is_uploaded === true ? (
                   <div className="rounded-md py-2 px-2 bg-green-100 flex justify-center items-center">
-                    <Label className="text-green-500 font-semibold text-center flex justify-center items-center">
+                    <Label className="text-green-800 font-semibold text-center flex justify-center items-center">
                       Uploaded
                     </Label>
                   </div>
                 ) : (
                   <div className="rounded-md py-2 px-2 bg-red-100 flex justify-center items-center">
-                    <Label className="text-red-500 font-semibold text-center flex justify-center items-center">
+                    <Label className="text-red-800 font-semibold text-center flex justify-center items-center">
                       Upload Due
                     </Label>
                   </div>

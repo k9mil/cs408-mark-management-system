@@ -54,7 +54,7 @@ const StudentsPage = () => {
         <div className="m-8 flex flex-col space-y-4">
           <div className="flex 2xl:flex-col xl:flex-row 2xl:space-y-1 xl:space-x-2 2xl:space-x-0 xl:items-center 2xl:items-start">
             <h1 className="text-3xl font-bold">Graded Students</h1>
-            <h2 className="text-gray-400">
+            <h2 className="text-gray-600">
               View the students that you have uploaded marks for
             </h2>
           </div>

@@ -46,6 +46,8 @@ export const StudentProfileDropdown = ({
             variant="outline"
             role="combobox"
             className="w-full justify-between overflow-x-hidden"
+            aria-label="studentDropdown"
+            aria-labelledby="studentDropdown"
           >
             {student
               ? studentList.find(

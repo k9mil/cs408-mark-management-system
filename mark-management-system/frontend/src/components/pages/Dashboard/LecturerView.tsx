@@ -272,11 +272,11 @@ const LecturerView = () => {
                           <span className="font-normal"> {class_.name}</span>
                         </h1>
                         {class_.is_uploaded === true ? (
-                          <h2 className="text-green-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-200 w-max">
+                          <h2 className="text-green-800 font-sm font-bold inline-block rounded-md py-1 px-3 bg-green-100 w-max">
                             Uploaded
                           </h2>
                         ) : (
-                          <h2 className="text-red-500 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-200 w-max">
+                          <h2 className="text-red-800 font-sm font-bold inline-block rounded-md py-1 px-3 bg-red-100 w-max">
                             Upload Due
                           </h2>
                         )}
@@ -306,7 +306,7 @@ const LecturerView = () => {
               <ChevronLeftIcon
                 className={`h-6 w-6 ${
                   currentSliceStart === 0
-                    ? "text-gray-400"
+                    ? "text-gray-600"
                     : "hover:cursor-pointer text-black"
                 }`}
                 onClick={handlePrev}
@@ -315,7 +315,7 @@ const LecturerView = () => {
                 className={`h-6 w-6 ${
                   lecturer.classes.length === 0 ||
                   currentSliceEnd >= lecturer.classes.length
-                    ? "text-gray-400"
+                    ? "text-gray-600"
                     : "hover:cursor-pointer text-black"
                 }`}
                 onClick={handleNext}
