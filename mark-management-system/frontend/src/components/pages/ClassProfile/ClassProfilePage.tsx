@@ -144,7 +144,6 @@ const ClassProfilePage = () => {
               accessToken
             );
 
-            console.log(result);
             setClassStatistics(result);
           }
         } catch (error) {
