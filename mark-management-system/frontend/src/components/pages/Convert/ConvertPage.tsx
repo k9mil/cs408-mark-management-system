@@ -76,11 +76,15 @@ const ConvertPage = () => {
           parsedFileToLower = toLowerCaseIMarkMyPlace(parsedFile);
         }
 
-        if (
-          parsedFileToLower &&
-          validateMyPlaceFile(parsedFileToLower.slice(0))
-        ) {
-          for (const [index, row] of parsedFileToLower.slice(0).entries()) {
+        const fileContents = parsedFileToLower
+          ?.slice(0)
+          .filter(
+            (fileContent) =>
+              !Object.values(fileContent).every((value) => value === "")
+          );
+
+        if (fileContents && validateMyPlaceFile(fileContents)) {
+          for (const [index, row] of fileContents.entries()) {
             const studentDetails = await retrieveStudentDetails(
               row.reg_no,
               index
