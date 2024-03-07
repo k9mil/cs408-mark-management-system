@@ -1,13 +1,10 @@
 from fastapi import Depends, APIRouter, HTTPException
 
-from typing import Tuple, List
+from typing import Tuple
 
 from api.system.schemas import schemas
 
 from api.academic_misconducts.use_cases.create_academic_misconduct_use_case import CreateAcademicMisconductUseCase
-
-from api.academic_misconducts.errors.academic_misconducts_already_exist import AcademicMisconductsAreadyExist
-from api.academic_misconducts.errors.academic_misconducts_not_found import AcademicMisconductNotFound
 
 from api.users.errors.user_not_found import UserNotFound
 
@@ -42,7 +39,6 @@ def create_academic_misconduct(
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.  
         - `HTTPException`, 403: If there has been a permission error.  
         - `HTTPException`, 404: If the user from the JWT cannot be found, or if the student, or the class from the request is not found.  
-        - `HTTPException`, 409: If the academic misconduct already exists in the system.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -64,8 +60,6 @@ def create_academic_misconduct(
         raise HTTPException(status_code=404, detail=str(e))
     except ClassNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
-    except AcademicMisconductsAreadyExist as e:
-        raise HTTPException(status_code=409, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=403, detail=str(e))
     except Exception as e:

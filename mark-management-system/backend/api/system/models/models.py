@@ -118,7 +118,7 @@ class AcademicMisconduct(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
     date = Column(Date, nullable=False)
-    outcome = Column(String(16), nullable=False)
+    outcome = Column(String(32), nullable=False)
 
     student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
     class_code = Column(String, ForeignKey("classes.code"), index=True)

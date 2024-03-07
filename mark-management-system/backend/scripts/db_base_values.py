@@ -175,7 +175,7 @@ def create_academic_misconducts(db: Session) -> None:
     academic_misconduct_repository.add(
         AcademicMisconduct(
             date="2024-02-01",
-            outcome="NOT UPHELD",
+            outcome="UNDER INVESTIGATION",
             student_reg_no="abc12345",
             class_code="CS407",
         )
@@ -184,7 +184,7 @@ def create_academic_misconducts(db: Session) -> None:
     academic_misconduct_repository.add(
         AcademicMisconduct(
             date="2023-07-07",
-            outcome="NOT UPHELD",
+            outcome="UNDER INVESTIGATION",
             student_reg_no="abc33311",
             class_code="CS407",
         )

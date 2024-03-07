@@ -11,8 +11,6 @@ from api.users.repositories.user_repository import UserRepository
 from api.students.repositories.student_repository import StudentRepository
 from api.classes.repositories.class_repository import ClassRepository
 
-from api.academic_misconducts.errors.academic_misconducts_already_exist import AcademicMisconductsAreadyExist
-
 from api.users.errors.user_not_found import UserNotFound
 
 from api.classes.errors.class_not_found import ClassNotFound
@@ -48,7 +46,6 @@ class CreateAcademicMisconductUseCase:
             PermissionError: If the user is not valid and a lecturer, or if they are not an administrator.
             StudentNotFound: If the student from the request is not found.
             ClassNotFound: If the class code from the request is not found.
-            AcademicMisconductsAreadyExist: If the academic misconduct already exists.
         
         Returns:
             AcademicMisconductSchema: A AcademicMisconductSchema schema object containing all information about the newly created academic misconduct.
@@ -71,9 +68,6 @@ class CreateAcademicMisconductUseCase:
 
         if self.class_repository.is_student_in_class(request.class_code, request.reg_no) is False:
             raise StudentNotFound("Student doesnt belong to the provided class not found")
-        
-        if self.academic_misconduct_repository.find_by_details(request):
-            raise AcademicMisconductsAreadyExist("Academic Misconduct already exists")
 
         academic_misconduct = AcademicMisconduct(
             date=request.date,

@@ -439,11 +439,14 @@ export function validateAcademicMisconductFile(
 
     const outcomeToLower = row.outcome.toLowerCase();
 
-    if (outcomeToLower !== "upheld" && outcomeToLower !== "not upheld") {
+    if (
+      outcomeToLower !== "upheld" &&
+      outcomeToLower !== "under investigation"
+    ) {
       toast.error(
         `Row ${i + 2} contains an invalid outcome: '${
           row.outcome
-        }'. Please use 'upheld' or 'not upheld' and try again.`
+        }'. Please use one of these states: 'upheld' or 'under investigation' and try again.`
       );
       return false;
     }
