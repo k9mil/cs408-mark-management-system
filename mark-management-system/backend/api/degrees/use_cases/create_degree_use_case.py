@@ -43,6 +43,7 @@ class CreateDegreeUseCase:
         degree = Degree(
             level=request.level,
             name=request.name,
+            code=request.code,
         )
 
         self.degree_repository.add(degree)

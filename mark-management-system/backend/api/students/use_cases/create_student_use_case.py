@@ -55,6 +55,7 @@ class CreateStudentUseCase:
         student = Student(
             reg_no=request.reg_no,
             student_name=request.student_name,
+            year=request.year,
             degree_id=request.degree_id,
         )
 

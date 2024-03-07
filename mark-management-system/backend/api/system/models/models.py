@@ -26,6 +26,7 @@ class Student(Base):
 
     reg_no = Column(String(256), unique=True, index=True)
     student_name = Column(String(128), nullable=False)
+    year = Column(Integer, nullable=False)
 
     degree_id = Column(Integer, ForeignKey("degrees.id"), index=True, nullable=False)
 
@@ -42,6 +43,7 @@ class Degree(Base):
 
     level = Column(String(64), nullable=False)
     name = Column(String(256), nullable=False)
+    code = Column(String(16), nullable=False)
 
     students = relationship("Student", back_populates="degree")
     classes = relationship("Class", secondary="degree_classes", back_populates="degrees")

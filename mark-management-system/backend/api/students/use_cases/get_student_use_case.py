@@ -63,6 +63,7 @@ class GetStudentUseCase:
             student_name=student.student_name,
             classes=self.construct_classes_with_academic_misconduct(student),
             personal_circumstances=self.construct_personal_circumstances(student.personal_circumstances),
+            year=student.year,
             degree_id=student.degree_id,
             degree=self.construct_degree(student.degree),
         )

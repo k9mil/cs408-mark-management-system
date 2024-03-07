@@ -38,14 +38,15 @@ def initialise_roles(db: Session) -> None:
 def create_degree(db: Session) -> None:
     degree_repository = DegreeRepository(db)
 
-    degree_repository.add(Degree(level="BSc", name="Computer Science"))
+    degree_repository.add(Degree(level="BSc (Hons)", name="Computer Science", code="0403"))
+    degree_repository.add(Degree(level="BSc", name="Software Engineering", code="0404"))
 
 def create_students(db: Session) -> None:
     student_repository = StudentRepository(db)
 
-    student_repository.add(Student(reg_no="abc12345", student_name="John Doe", degree_id=1))
-    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", degree_id=1))
-    student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", degree_id=1))
+    student_repository.add(Student(reg_no="abc12345", student_name="John Doe", year=1, degree_id=1))
+    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", year=2, degree_id=1))
+    student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", year=3, degree_id=1))
 
 def create_users(db: Session) -> None:
     user_repository = UserRepository(db)

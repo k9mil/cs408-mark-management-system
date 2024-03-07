@@ -75,6 +75,7 @@ class MarksStatistics(BaseModel):
 class DegreeBase(BaseModel):
     level: str
     name: str
+    code: str
 
 class DegreeCreate(DegreeBase):
     pass
@@ -214,6 +215,7 @@ class PersonalCircumstances(PersonalCircumstancesBase):
 class StudentBase(BaseModel):
     reg_no: str
     student_name: str
+    year: int
 
     degree_id: int
 
