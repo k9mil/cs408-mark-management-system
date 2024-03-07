@@ -193,7 +193,7 @@ class AcademicMisconduct(AcademicMisconductBase):
 
 
 class ClassWithMisconduct(ClassBase):
-    academic_misconduct: AcademicMisconductCreate | None
+    academic_misconducts: List[AcademicMisconductCreate] | None
 
 class PersonalCircumstancesBase(BaseModel):
     details: str

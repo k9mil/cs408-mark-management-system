@@ -71,23 +71,19 @@ class GetStudentUseCase:
         classes_with_academic_misconduct = []
 
         for class_ in student.classes:
-            academic_misconducts = [misconduct for misconduct in class_.academic_misconducts if misconduct.student_reg_no == student.reg_no]
-            academic_misconduct = academic_misconducts[0] if academic_misconducts else None
-
-            if academic_misconduct:
-                academic_misconduct = AcademicMisconductCreate(
-                    reg_no=academic_misconduct.student_reg_no,
-                    class_code=academic_misconduct.class_code,
-                    date=academic_misconduct.date,
-                    outcome=academic_misconduct.outcome,
-                )
+            academic_misconducts = [AcademicMisconductCreate(
+                                    reg_no=misconduct.student_reg_no,
+                                    class_code=misconduct.class_code,
+                                    date=misconduct.date,
+                                    outcome=misconduct.outcome,
+                                ) for misconduct in class_.academic_misconducts if misconduct.student_reg_no == student.reg_no]
             
             class_with_misconduct = ClassWithMisconduct(
                 name=class_.name,
                 code=class_.code,
                 credit=class_.credit,
                 credit_level=class_.credit_level,
-                academic_misconduct=academic_misconduct
+                academic_misconducts=academic_misconducts
             )
         
             classes_with_academic_misconduct.append(class_with_misconduct)

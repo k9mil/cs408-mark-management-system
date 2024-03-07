@@ -22,7 +22,7 @@ class GetPersonalCircumstancesForStudentUseCase:
         Executes the Use Case to retrieve all personal circumstances for a particular student in the system.
 
         Args:
-            reg_no: The stuuent for which to retrieve the data.
+            reg_no: The student for which to retrieve the data.
             current_user: A middleware object `current_user` which contains JWT information. For more details see the controller.
 
         Raises:
