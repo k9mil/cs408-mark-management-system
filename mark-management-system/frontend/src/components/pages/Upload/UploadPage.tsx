@@ -480,7 +480,7 @@ const UploadPage = () => {
           date: date,
           class_code: module_,
           reg_no: reg_no,
-          outcome: outcome,
+          outcome: outcome.toUpperCase(),
         };
 
         const academicMisconductCreated =

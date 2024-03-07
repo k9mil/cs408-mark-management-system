@@ -180,6 +180,7 @@ class Lecturer(BaseModel):
 class AcademicMisconductBase(BaseModel):
     date: date
     outcome: str
+    class_code: str
     
 class AcademicMisconductCreate(AcademicMisconductBase):
     reg_no: str

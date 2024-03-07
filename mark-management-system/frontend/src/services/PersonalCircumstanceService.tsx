@@ -50,7 +50,7 @@ export const personalCircumstanceService = {
       .then((response) => response.data)
       .catch((error) => {
         console.error(
-          "Error: There has been an issue when retrieving personal circumstances for a student.",
+          "Error: There has been an issue when retrieving personal circumstances for the student.",
           error
         );
         throw error;

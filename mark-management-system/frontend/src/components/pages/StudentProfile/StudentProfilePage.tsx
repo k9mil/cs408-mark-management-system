@@ -23,17 +23,18 @@ import {
 import { IUserDropdown } from "@/models/IUser";
 import { IMarkRow } from "@/models/IMark";
 import { IPersonalCircumstance } from "@/models/IPersonalCircumstance";
+import { IAcademicMisconduct } from "@/models/IAcademicMisconduct";
 
 import StudentProfileDropdown from "./StudentProfileDropdown";
 import { StudentProfileDataTable } from "./StudentProfileDataTable";
 
 import { markService } from "@/services/MarkService";
 import { personalCircumstanceService } from "@/services/PersonalCircumstanceService";
+import { academicMisconductService } from "@/services/AcademicMisconductService";
 
 import { StudentProfileColumns } from "../Students/StudentsColumns";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { IClass } from "@/models/IClass";
 
 const StudentProfilePage = () => {
   const navigate = useNavigate();
@@ -50,15 +51,16 @@ const StudentProfilePage = () => {
     React.useState<IStudentDetailsWithStatistics>();
   const [studentMarks, setStudentMarks] = React.useState<IMarkRow[]>([]);
   const [studentData, setStudentData] = React.useState<IStudent>();
+
   const [studentPersonalCircumstances, setStudentPersonalCircumstances] =
     React.useState<IPersonalCircumstance[]>([]);
   const [currentPersonalCircumstance, setCurrentPersonalCircumstance] =
     useState<number>(0);
+
+  const [studentAcademicMisconducts, setStudentAcademicMisconducts] =
+    React.useState<IAcademicMisconduct[]>([]);
   const [currentAcademicMisconduct, setCurrentAcademicMisconduct] =
     useState<number>(0);
-  const [misconductClasses, setMisconductClasses] = React.useState<IClass[]>(
-    []
-  );
 
   const accessToken = getAccessToken();
 
@@ -100,6 +102,22 @@ const StudentProfilePage = () => {
               );
 
             setStudentPersonalCircumstances(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const retrieveAcademicMisconducts = async () => {
+        try {
+          if (accessToken) {
+            const result =
+              await academicMisconductService.getAcademicMisconductsForStudent(
+                student,
+                accessToken
+              );
+
+            setStudentAcademicMisconducts(result);
           }
         } catch (error) {
           console.error(error);
@@ -154,11 +172,13 @@ const StudentProfilePage = () => {
       };
 
       retrievePersonalCircumstances();
+      retrieveAcademicMisconducts();
       retrieveStudentsStatistics();
       retrieveStudentData();
       retrieveStudentMarks();
 
       setCurrentPersonalCircumstance(0);
+      setCurrentAcademicMisconduct(0);
     }
   }, [student, accessToken]);
 
@@ -172,24 +192,6 @@ const StudentProfilePage = () => {
       setStudentList(mappedStudents);
     }
   }, [students]);
-
-  useEffect(() => {
-    const filteredClasses = [];
-
-    if (studentData) {
-      for (const classData of studentData.classes) {
-        if (
-          classData.academic_misconduct &&
-          classData.academic_misconduct.outcome &&
-          classData.academic_misconduct.reg_no == studentData.reg_no
-        ) {
-          filteredClasses.push(classData);
-        }
-      }
-    }
-
-    setMisconductClasses(filteredClasses);
-  }, [studentData]);
 
   const handlePrev = () => {
     if (currentPersonalCircumstance > 0) {
@@ -210,7 +212,7 @@ const StudentProfilePage = () => {
   };
 
   const handleNextMisconduct = () => {
-    if (currentAcademicMisconduct < misconductClasses.length - 1) {
+    if (currentAcademicMisconduct < studentAcademicMisconducts.length - 1) {
       setCurrentAcademicMisconduct(currentAcademicMisconduct + 1);
     }
   };
@@ -484,10 +486,10 @@ const StudentProfilePage = () => {
                     Academic Misconducts
                   </CardTitle>
                   <div className="flex justify-start items-start">
-                    {misconductClasses.length > 0 ? (
+                    {studentAcademicMisconducts.length > 0 ? (
                       <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-end self-center pr-2">
                         {currentAcademicMisconduct + 1} of{" "}
-                        {misconductClasses.length}
+                        {studentAcademicMisconducts.length}
                       </h2>
                     ) : null}
                     <ChevronLeftIcon
@@ -500,9 +502,9 @@ const StudentProfilePage = () => {
                     />
                     <ChevronRightIcon
                       className={`h-6 w-6 ${
-                        misconductClasses.length === 0 ||
+                        studentAcademicMisconducts.length === 0 ||
                         currentAcademicMisconduct ===
-                          misconductClasses.length - 1
+                          studentAcademicMisconducts.length - 1
                           ? "text-gray-600"
                           : "hover:cursor-pointer text-black"
                       }`}
@@ -510,7 +512,8 @@ const StudentProfilePage = () => {
                     />
                   </div>
                 </CardHeader>
-                {studentData && misconductClasses.length > 0 ? (
+                {studentAcademicMisconducts &&
+                studentAcademicMisconducts.length > 0 ? (
                   <div className="flex flex-row w-full justify-between items-center">
                     <div className="flex flex-col space-y-6 w-full">
                       <div className="flex flex-col space-y-2">
@@ -520,8 +523,9 @@ const StudentProfilePage = () => {
                           </h2>
                           <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
-                              misconductClasses[currentAcademicMisconduct]
-                                .academic_misconduct.outcome
+                              studentAcademicMisconducts[
+                                currentAcademicMisconduct
+                              ].outcome
                             }
                           </h2>
                         </div>
@@ -530,9 +534,9 @@ const StudentProfilePage = () => {
                             Date:
                           </h2>
                           <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
-                            {misconductClasses[
+                            {studentAcademicMisconducts[
                               currentAcademicMisconduct
-                            ].academic_misconduct.date.toString()}
+                            ].date.toString()}
                           </h2>
                         </div>
                         <div className="flex flex-row space-x-2 w-full">
@@ -541,8 +545,9 @@ const StudentProfilePage = () => {
                           </h2>
                           <h2 className="2xl:text-sm text-xs font-regular flex justify-self-center self-center">
                             {
-                              misconductClasses[currentAcademicMisconduct]
-                                .academic_misconduct.class_code
+                              studentAcademicMisconducts[
+                                currentAcademicMisconduct
+                              ].class_code
                             }
                           </h2>
                         </div>

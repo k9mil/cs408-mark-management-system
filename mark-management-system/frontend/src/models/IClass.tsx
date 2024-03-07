@@ -14,7 +14,7 @@ export interface IClass extends IBaseClass {
   id: number;
   number_of_students: number;
 
-  academic_misconduct: IAcademicMisconduct;
+  academic_misconducts: IAcademicMisconduct[];
   lecturer: IUser;
   students: IStudent[];
 }
