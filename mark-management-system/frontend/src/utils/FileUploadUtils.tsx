@@ -139,11 +139,11 @@ export function validateMyPlaceFile(
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 5) {
+    if (Object.keys(row).length < 4) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
-        CLASS_CODE, DATE, REG_NO, CLASS_TOTAL, OVERRIDE_MARK`
+        CLASS_CODE, DATE, REG_NO, CLASS_TOTAL`
       );
 
       return false;
@@ -202,15 +202,6 @@ export function validateMyPlaceFile(
       return false;
     }
 
-    if (!("override_mark" in row) || row.override_mark === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain an override mark. Please fix the file and try again.`
-      );
-      return false;
-    }
-
     if (!isNumber(row.class_total)) {
       toast.error(
         `Row ${i + 2} should have a class total which is an integer.`
@@ -224,14 +215,17 @@ export function validateMyPlaceFile(
       return false;
     }
 
-    if (!isNumber(row.override_mark)) {
+    if (row.override_mark && !isNumber(row.override_mark)) {
       toast.error(
         `Row ${i + 2} should have an override mark which is an integer.`
       );
       return false;
     }
 
-    if (row.override_mark < 0 || row.override_mark > 100) {
+    if (
+      (row.override_mark && row.override_mark < 0) ||
+      (row.override_mark && row.override_mark > 100)
+    ) {
       toast.error(
         `Row ${i + 2} should have an override mark between 0 and 100.`
       );
