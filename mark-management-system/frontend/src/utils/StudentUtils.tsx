@@ -30,5 +30,18 @@ export function validateMarkDetailsOnEdit(markDetails: IMarkEdit): boolean {
     return false;
   }
 
+  if (
+    markDetails.code &&
+    markDetails.code !== "FO" &&
+    markDetails.code !== "UM" &&
+    markDetails.code !== "PM" &&
+    markDetails.code !== "EN" &&
+    markDetails.code !== "EX"
+  ) {
+    toast.error("Mark Code should be one of the following: FO, UM, PM, EN, EX");
+
+    return false;
+  }
+
   return true;
 }

@@ -82,8 +82,8 @@ export function ClassesDataTable<TData, TValue>({
     for (const classItem of data) {
       const processedClass = {
         ...classItem,
-        number_of_students: getNumOfStudents((classItem as IClass).students),
         lecturer: formatLecturerName((classItem as IClass).lecturer),
+        number_of_students: getNumOfStudents((classItem as IClass).students),
       };
 
       delete processedClass.id;

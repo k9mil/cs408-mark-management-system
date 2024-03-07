@@ -54,11 +54,19 @@ class CreateMarkUseCase:
         if self.mark_repository.find_by_student_id_and_class_id(request.student_id, request.class_id):
             raise MarkAlreadyExists("Mark already exists")
 
-        mark = Marks(
-            mark=request.mark,
-            class_id=request.class_id,
-            student_id=request.student_id
-        )
+        if request.code is None:
+            mark = Marks(
+                mark=request.mark,
+                class_id=request.class_id,
+                student_id=request.student_id
+            )
+        else:
+            mark = Marks(
+                mark=request.mark,
+                code=request.code,
+                class_id=request.class_id,
+                student_id=request.student_id
+            )
 
         self.mark_repository.add(mark)
 

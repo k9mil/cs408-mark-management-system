@@ -22,7 +22,6 @@ import {
 import { classService } from "@/services/ClassService";
 import { studentService } from "@/services/StudentService";
 import { markService } from "@/services/MarkService";
-import { degreeService } from "@/services/DegreeService";
 
 import { toast } from "sonner";
 
@@ -97,17 +96,13 @@ const UploadPage = () => {
 
           if (classExist) {
             for (const [index, row] of parsedFileToLower.slice(0).entries()) {
-              await checkStudentExists(
-                row.reg_no,
-                row.student_name,
-                row.degree_name,
-                index
-              );
+              await checkStudentExists(row.reg_no, index);
 
               await checkMarkExists(
                 row.mark,
                 row.class_code,
                 row.reg_no,
+                row.code !== null ? row.code : undefined,
                 index
               );
             }
@@ -261,12 +256,7 @@ const UploadPage = () => {
     }
   };
 
-  const checkStudentExists = async (
-    studentRegNo: string,
-    studentName: string,
-    degreeName: string,
-    index: number
-  ) => {
+  const checkStudentExists = async (studentRegNo: string, index: number) => {
     try {
       if (accessToken) {
         const studentDetails = await studentService.getStudent(
@@ -275,17 +265,9 @@ const UploadPage = () => {
         );
 
         if (studentDetails.statusCode !== 200) {
-          if (studentDetails.statusCode === 404) {
-            const degreeId = await getDegreeDetails(degreeName, index);
-
-            if (degreeId) {
-              await createStudent(studentRegNo, studentName, degreeId, index);
-            }
-          } else {
-            toast.error(
-              `Something went wrong when checking if the student exists. ${studentDetails.data}.`
-            );
-          }
+          toast.error(
+            `Something went wrong when checking if the student exists. ${studentDetails.data}.`
+          );
         }
       }
     } catch (error) {
@@ -301,6 +283,7 @@ const UploadPage = () => {
     mark: number,
     classCode: string,
     regNo: string,
+    code: string | undefined,
     index: number
   ) => {
     try {
@@ -317,7 +300,11 @@ const UploadPage = () => {
         if (markDetails.statusCode !== 200) {
           if (markDetails.statusCode === 404) {
             if (classId && studentId) {
-              await createMark(mark, studentId, classId, index);
+              if (code && code !== undefined) {
+                await createMark(mark, studentId, classId, index, code);
+              } else {
+                await createMark(mark, studentId, classId, index);
+              }
             }
           } else {
             toast.error(
@@ -343,63 +330,34 @@ const UploadPage = () => {
     }
   };
 
-  const createStudent = async (
-    studentRegNo: string,
-    studentName: string,
-    degreeId: number,
-    index: number
-  ) => {
-    // TODO: THIS IS ONLY FOR TESTING/DEVELOPMENT PURPOSES. TO BE DELETED BEFORE FINAL PRODUCT.
-    try {
-      if (accessToken) {
-        const studentDetails = {
-          reg_no: studentRegNo,
-          student_name: studentName,
-          degree_id: degreeId,
-        };
-
-        const studentCreated = await studentService.createStudent(
-          studentDetails,
-          accessToken
-        );
-
-        if (studentCreated.statusCode !== 200) {
-          toast.error(
-            `Something went wrong when uploading the marks for Row ${
-              index + 2
-            }. ${studentCreated.data}`
-          );
-        } else {
-          toast.success("Student was created successfully! DEV.");
-        }
-      }
-    } catch (error) {
-      console.error(error);
-
-      toast.error(
-        `Something went wrong when creating a student for Row ${
-          index + 2
-        }. DEV.`
-      );
-    }
-  };
-
   const createMark = async (
     mark: number,
     studentId: number,
     classId: number,
-    index: number
+    index: number,
+    code?: string
   ) => {
     try {
       if (accessToken) {
-        const markDetails: IMark = {
-          mark: mark,
-          class_id: classId,
-          student_id: studentId,
-        };
+        let markDetails;
+
+        if (code) {
+          markDetails = {
+            mark: mark,
+            code: code,
+            class_id: classId,
+            student_id: studentId,
+          };
+        } else {
+          markDetails = {
+            mark: mark,
+            class_id: classId,
+            student_id: studentId,
+          };
+        }
 
         const markCreated = await markService.createMark(
-          markDetails,
+          markDetails as IMark,
           accessToken
         );
 
@@ -506,25 +464,6 @@ const UploadPage = () => {
         `Something went wrong when uploading an academic misconduct for Row ${
           index + 2
         }.`
-      );
-    }
-  };
-
-  const getDegreeDetails = async (degreeName: string, index: number) => {
-    try {
-      if (accessToken) {
-        const degreeDetails = await degreeService.getDegree(
-          degreeName,
-          accessToken
-        );
-
-        return degreeDetails.data.id;
-      }
-    } catch (error) {
-      console.error(error);
-
-      toast.error(
-        `Something went wrong when uploading the marks for Row ${index + 2}.`
       );
     }
   };

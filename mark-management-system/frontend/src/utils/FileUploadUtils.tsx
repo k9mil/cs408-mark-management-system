@@ -23,7 +23,7 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 6) {
+    if (Object.keys(row).length < 6) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
@@ -94,6 +94,23 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
           i + 2
         } doesn't contain a student name. Please fix the file and try again.`
       );
+      return false;
+    }
+
+    if (
+      row.code &&
+      row.code !== "FO" &&
+      row.code !== "UM" &&
+      row.code !== "PM" &&
+      row.code !== "EN" &&
+      row.code !== "EX"
+    ) {
+      toast.error(
+        `Row ${
+          i + 2
+        } should have a mark code of: FO, UM, PM, EN, EX, ABS, EX50.`
+      );
+
       return false;
     }
 

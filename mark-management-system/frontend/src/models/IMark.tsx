@@ -2,6 +2,8 @@ import { IClassBaseMetric } from "./IClass";
 
 export interface IMark {
   mark: number;
+  code: string | null;
+
   class_id: number;
   student_id: number;
 }
@@ -11,7 +13,9 @@ export interface IMarkRow {
   class_code: string;
   class_name: string | null;
   reg_no: string;
+
   mark: number;
+  code: string | null;
 
   student_name: string;
 
@@ -33,8 +37,10 @@ export interface IMarkMMS {
 export interface IMarkPegasus {
   class_code: string;
   reg_no: string;
+
   mark: number;
-  mark_code: string;
+  code: string;
+
   student_name: string;
 
   course: string;
@@ -47,6 +53,7 @@ export interface IMarkPegasus {
 export interface IMarkEdit {
   id: number;
   mark: number | null;
+  code: string | null;
 }
 
 export interface IStatistics {

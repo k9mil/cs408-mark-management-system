@@ -43,7 +43,7 @@ class Degree(Base):
 
     level = Column(String(64), nullable=False)
     name = Column(String(256), nullable=False)
-    code = Column(String(16), nullable=False)
+    code = Column(String(16), nullable=False, unique=True)
 
     students = relationship("Student", back_populates="degree")
     classes = relationship("Class", secondary="degree_classes", back_populates="degrees")
@@ -88,6 +88,7 @@ class Marks(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
     mark = Column(Integer, nullable=False)
+    code = Column(String(8))
 
     class_id = Column(Integer, ForeignKey("classes.id"), index=True)
     student_id = Column(Integer, ForeignKey("students.id"), index=True)

@@ -31,6 +31,7 @@ class RoleInUser(RoleBase):
 
 class MarksBase(BaseModel):
     mark: int
+    code: str | None = None
 
     class_id: int
     student_id: int
@@ -42,6 +43,7 @@ class MarksEdit(BaseModel):
     id: int
     
     mark: int
+    code: str | None = None
 
 class MarksRow(BaseModel):
     id: int
@@ -50,6 +52,7 @@ class MarksRow(BaseModel):
     class_name: str | None
     reg_no: str
     mark: int
+    code: str | None = None
     student_name: str
     degree_level: str
     degree_name: str

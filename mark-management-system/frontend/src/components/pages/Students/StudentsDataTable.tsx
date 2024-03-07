@@ -79,6 +79,7 @@ export function StudentsDataTable<TData, TValue>({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       delete processedStudent.id;
+      delete processedStudent.class_name;
 
       preprocessedData.push(processedStudent);
     }

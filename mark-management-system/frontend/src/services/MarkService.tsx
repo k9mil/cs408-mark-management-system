@@ -13,6 +13,10 @@ export const markService = {
           mark: markDetails.mark,
           class_id: markDetails.class_id,
           student_id: markDetails.student_id,
+          ...(markDetails.code &&
+            markDetails.code !== undefined && {
+              code: markDetails.code,
+            }),
         },
         {
           headers: {
@@ -108,6 +112,7 @@ export const markService = {
         {
           id: markDetails.id,
           mark: markDetails.mark,
+          code: markDetails.code,
         },
         {
           headers: {
