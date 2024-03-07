@@ -12,7 +12,9 @@ export interface IMarkRow {
   class_name: string | null;
   reg_no: string;
   mark: number;
+
   student_name: string;
+
   degree_level: string;
   degree_name: string;
 }
@@ -21,7 +23,9 @@ export interface IMarkMMS {
   class_code: string;
   reg_no: string;
   mark: number;
+
   student_name: string;
+
   degree_level: string;
   degree_name: string;
 }
@@ -32,9 +36,11 @@ export interface IMarkPegasus {
   mark: number;
   mark_code: string;
   student_name: string;
+
   course: string;
   degree: string;
   degree_code: string;
+
   result: string;
 }
 

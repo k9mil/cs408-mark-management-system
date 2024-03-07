@@ -110,4 +110,5 @@ class GetStudentUseCase:
         return DegreeBase(
             level=degree.level,
             name=degree.name,
+            code=degree.code,
         )

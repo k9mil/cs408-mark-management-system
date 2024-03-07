@@ -5,6 +5,8 @@ export interface IStudent {
   id: number;
   reg_no: string;
   student_name: string;
+  year: number;
+
   degree_id: number;
 
   classes: IClass[];

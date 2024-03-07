@@ -117,13 +117,24 @@ const ConvertPage = () => {
           parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
         }
 
-        if (
-          parsedFileToLower &&
-          validateUploadFile(parsedFileToLower.slice(0))
-        ) {
-          for (const row of parsedFileToLower.slice(0)) {
-            convertedObject = convertToPegasus(row);
-            convertedObjects.push(convertedObject);
+        const fileContents = parsedFileToLower
+          ?.slice(0)
+          .filter(
+            (fileContent) =>
+              !Object.values(fileContent).every((value) => value === "")
+          );
+
+        if (fileContents && validateUploadFile(fileContents)) {
+          for (const [index, row] of fileContents.entries()) {
+            const studentDetails = await retrieveStudentDetails(
+              row.reg_no,
+              index
+            );
+
+            if (studentDetails) {
+              convertedObject = convertToPegasus(row, studentDetails);
+              convertedObjects.push(convertedObject);
+            }
           }
 
           exportToCSV(
@@ -155,7 +166,10 @@ const ConvertPage = () => {
     };
   };
 
-  const convertToPegasus = (data: IMarkRow): IMarkPegasus => {
+  const convertToPegasus = (
+    data: IMarkRow,
+    studentDetails: IStudent
+  ): IMarkPegasus => {
     return {
       class_code: data.class_code,
       reg_no: data.reg_no,
@@ -164,7 +178,7 @@ const ConvertPage = () => {
       student_name: data.student_name,
       course: data.degree_name,
       degree: data.degree_level,
-      degree_code: "<UNKNOWN>",
+      degree_code: studentDetails.degree.code + "/" + studentDetails.year,
       result: "<TO FILL IN>",
     };
   };
