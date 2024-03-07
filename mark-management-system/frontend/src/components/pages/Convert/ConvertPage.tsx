@@ -35,6 +35,8 @@ import {
 import { studentService } from "@/services/StudentService";
 
 import ConvertInfoBox from "./ConvertInfoBox";
+import { classService } from "@/services/ClassService";
+import { IClass } from "@/models/IClass";
 
 const ConvertPage = () => {
   const navigate = useNavigate();
@@ -131,8 +133,18 @@ const ConvertPage = () => {
               index
             );
 
+            const classDetails = await retrieveClassDetails(
+              row.class_code,
+              index
+            );
+
             if (studentDetails) {
-              convertedObject = convertToPegasus(row, studentDetails);
+              convertedObject = convertToPegasus(
+                row,
+                studentDetails,
+                classDetails
+              );
+
               convertedObjects.push(convertedObject);
             }
           }
@@ -168,7 +180,8 @@ const ConvertPage = () => {
 
   const convertToPegasus = (
     data: IMarkRow,
-    studentDetails: IStudent
+    studentDetails: IStudent,
+    classDetails: IClass
   ): IMarkPegasus => {
     return {
       class_code: data.class_code,
@@ -179,7 +192,13 @@ const ConvertPage = () => {
       course: data.degree_name,
       degree: data.degree_level,
       degree_code: studentDetails.degree.code + "/" + studentDetails.year,
-      result: "<TO FILL IN>",
+      result:
+        (classDetails.credit_level >= 1 &&
+          classDetails.credit_level <= 4 &&
+          data.mark >= 40) ||
+        (classDetails.credit_level === 5 && data.mark >= 50)
+          ? "PASS"
+          : "FAIL",
     };
   };
 
@@ -242,6 +261,33 @@ const ConvertPage = () => {
 
       toast.error(
         `Something went wrong when retrieving student details for Row ${
+          index + 2
+        }.`
+      );
+    }
+  };
+
+  const retrieveClassDetails = async (classCode: string, index: number) => {
+    try {
+      if (accessToken) {
+        const classDetails = await classService.getClass(
+          classCode,
+          accessToken
+        );
+
+        if (classDetails.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when checking if the class exists. ${classDetails.data}.`
+          );
+        }
+
+        return classDetails.data;
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when retrieving class details for Row ${
           index + 2
         }.`
       );
