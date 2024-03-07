@@ -47,7 +47,7 @@ class GetDegreesUseCase:
         
         degree_list: List = []
 
-        for degree_level, degree_name in degrees:
+        for degree_level, degree_name, _ in degrees:
             degree = self.degree_repository.find_by_name_and_level(
                 degree_name[1],
                 degree_level[1],

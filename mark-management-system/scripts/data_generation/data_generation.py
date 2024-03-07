@@ -44,7 +44,7 @@ class DataGenerator:
                     "REG_NO": f"{faker.random_lowercase_letter()}{faker.random_lowercase_letter()}{faker.random_lowercase_letter()}{faker.random_number(5)}",
                     "MARK": str(generated_mark) if self.LOWER_MARK_BOUND <= generated_mark <= self.UPPER_MARK_BOUND else "100",
                     "STUDENT_NAME": faker.first_name() + " " + faker.last_name(),
-                    "DEGREE_LEVEL": "BSc",
+                    "DEGREE_LEVEL": "BSc (Hons)",
                     "DEGREE_NAME": "Computer Science",
                 }
             )
