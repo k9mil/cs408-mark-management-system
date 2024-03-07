@@ -35,17 +35,17 @@ export interface IMarkMMS {
 }
 
 export interface IMarkPegasus {
-  class_code: string;
-  reg_no: string;
+  classcode: string;
+  regno: string;
 
   mark: number;
   code: string;
 
-  student_name: string;
+  studentname: string;
 
   course: string;
   degree: string;
-  degree_code: string;
+  degreecode: string;
 
   result: string;
 }

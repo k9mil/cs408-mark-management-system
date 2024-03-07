@@ -199,17 +199,17 @@ const ConvertPage = () => {
     marksDetails: IMark
   ): IMarkPegasus => {
     return {
-      class_code: data.class_code,
-      reg_no: data.reg_no,
+      classcode: data.class_code,
+      regno: data.reg_no,
       mark: data.mark,
       code:
         marksDetails.code !== null && marksDetails.code !== ""
           ? marksDetails.code
           : "TO_BE_ADDED",
-      student_name: data.student_name,
+      studentname: data.student_name,
       course: data.degree_name,
       degree: data.degree_level,
-      degree_code: studentDetails.degree.code + "/" + studentDetails.year,
+      degreecode: studentDetails.degree.code + "/" + studentDetails.year,
       result:
         (classDetails.credit_level >= 1 &&
           classDetails.credit_level <= 4 &&
