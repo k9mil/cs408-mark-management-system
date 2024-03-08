@@ -10,6 +10,7 @@ from api.users.repositories.user_repository import UserRepository
 from api.classes.repositories.class_repository import ClassRepository
 
 from api.marks.errors.mark_already_exists import MarkAlreadyExists
+from api.marks.errors.mark_and_code_not_provided import MarkAndCodeNotProvided
 
 from api.users.errors.user_not_found import UserNotFound
 
@@ -54,15 +55,24 @@ class CreateMarkUseCase:
         if self.mark_repository.find_by_student_id_and_class_id(request.student_id, request.class_id):
             raise MarkAlreadyExists("Mark already exists")
 
-        if request.code is None:
+        if request.code is None and request.mark is None:
+            raise MarkAndCodeNotProvided("Neither Mark or Code as provided.")
+
+        if request.code is None and request.mark:
             mark = Marks(
                 mark=request.mark,
                 class_id=request.class_id,
                 student_id=request.student_id
             )
-        else:
+        elif request.code and request.mark:
             mark = Marks(
                 mark=request.mark,
+                code=request.code,
+                class_id=request.class_id,
+                student_id=request.student_id
+            )
+        else:
+            mark = Marks(
                 code=request.code,
                 class_id=request.class_id,
                 student_id=request.student_id

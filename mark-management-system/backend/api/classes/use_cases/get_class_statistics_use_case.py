@@ -53,7 +53,8 @@ class GetClassStatisticsUseCase:
         mark_data = []
 
         for current_mark in marks:
-            mark_data.append(current_mark[1])
+            if current_mark[1]:
+                mark_data.append(current_mark[1])
 
         if mark_data:
             marks_statistics = MarksStatistics(

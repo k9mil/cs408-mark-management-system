@@ -168,6 +168,7 @@ const StudentProfilePage = () => {
           }
         } catch (error) {
           console.error(error);
+          setStudentMarks([]);
         }
       };
 
@@ -251,7 +252,7 @@ const StudentProfilePage = () => {
             {student && student !== "" && studentData ? (
               <StudentProfileDataTable
                 columns={StudentProfileColumns}
-                data={studentMarks}
+                data={studentMarks || []}
                 accessToken={accessToken}
               />
             ) : (

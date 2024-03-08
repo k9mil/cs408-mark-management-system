@@ -87,7 +87,7 @@ class Marks(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
-    mark = Column(Integer, nullable=False)
+    mark = Column(Integer)
     code = Column(String(8))
 
     class_id = Column(Integer, ForeignKey("classes.id"), index=True)
