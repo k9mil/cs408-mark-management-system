@@ -209,14 +209,20 @@ const ConvertPage = () => {
     classDetails: IClass,
     marksDetails: IMark
   ): IMarkPegasus => {
-    return {
+    const classCodeAndRegNo = {
       classcode: data.class_code,
       regno: data.reg_no,
-      mark: data.mark,
-      code:
-        marksDetails.code !== null && marksDetails.code !== ""
-          ? marksDetails.code
-          : "TO_BE_ADDED",
+    };
+
+    const markData =
+      data.mark !== null && data.mark !== undefined ? { mark: data.mark } : {};
+
+    const codeData =
+      marksDetails.code !== null && marksDetails.code !== undefined
+        ? { code: marksDetails.code }
+        : {};
+
+    const restOfPegasusFile = {
       studentname: data.student_name,
       course: data.degree_name,
       degree: data.degree_level,
@@ -224,10 +230,18 @@ const ConvertPage = () => {
       result:
         (classDetails.credit_level >= 1 &&
           classDetails.credit_level <= 4 &&
+          data.mark &&
           data.mark >= 40) ||
-        (classDetails.credit_level === 5 && data.mark >= 50)
+        (classDetails.credit_level === 5 && data.mark && data.mark >= 50)
           ? "PASS"
           : "FAIL",
+    };
+
+    return {
+      ...classCodeAndRegNo,
+      ...markData,
+      ...codeData,
+      ...restOfPegasusFile,
     };
   };
 
