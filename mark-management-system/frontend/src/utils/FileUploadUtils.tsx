@@ -319,6 +319,15 @@ export function validatePersonalCircumstancesFile(
       return false;
     }
 
+    if (+row.cat !== 0 && +row.cat !== 1 && +row.cat !== 2 && +row.cat !== 3) {
+      toast.error(
+        `Row ${
+          i + 2
+        } contains an invalid CAT: '${+row.cat}'. Please enter a number between 0 and 3.`
+      );
+      return false;
+    }
+
     if (!("comments" in row) || row.comments === null) {
       toast.error(
         `Row ${
