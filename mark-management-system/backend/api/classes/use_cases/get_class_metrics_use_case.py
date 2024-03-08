@@ -59,8 +59,8 @@ class GetClassMetricsUseCase:
                                 code=code,
                                 credit=credit,
                                 credit_level=credit_level,
-                                mean=-1,
-                                stdev=-1,
+                                mean=0,
+                                stdev=0,
                             )
 
                             classes[code] = {"class_base": class_base, "marks": [mark]}
