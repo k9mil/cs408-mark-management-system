@@ -306,7 +306,7 @@ const LecturerView = () => {
               <ChevronLeftIcon
                 className={`h-6 w-6 ${
                   currentSliceStart === 0
-                    ? "text-gray-600"
+                    ? "text-gray-200"
                     : "hover:cursor-pointer text-black"
                 }`}
                 onClick={handlePrev}
@@ -315,7 +315,7 @@ const LecturerView = () => {
                 className={`h-6 w-6 ${
                   lecturer.classes.length === 0 ||
                   currentSliceEnd >= lecturer.classes.length
-                    ? "text-gray-600"
+                    ? "text-gray-200"
                     : "hover:cursor-pointer text-black"
                 }`}
                 onClick={handleNext}
