@@ -98,6 +98,11 @@ const UploadPage = () => {
             for (const [index, row] of parsedFileToLower.slice(0).entries()) {
               await checkStudentExists(row.reg_no, index);
 
+              if ("mark_code" in row && typeof row["mark_code"] === "string") {
+                row.code = row["mark_code"];
+                delete row["mark_code"];
+              }
+
               await checkMarkExists(
                 row.mark,
                 row.class_code,
