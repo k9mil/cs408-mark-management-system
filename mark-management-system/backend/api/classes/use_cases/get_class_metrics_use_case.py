@@ -52,20 +52,20 @@ class GetClassMetricsUseCase:
             classes = {}
 
             for code, name, credit, credit_level, mark in marks:
-                if code not in classes:
-                    if mark:
-                        class_base = ClassBaseMetric(
-                            name=name,
-                            code=code,
-                            credit=credit,
-                            credit_level=credit_level,
-                            mean=-1,
-                            stdev=-1,
-                        )
+                if mark:
+                    if code not in classes:
+                            class_base = ClassBaseMetric(
+                                name=name,
+                                code=code,
+                                credit=credit,
+                                credit_level=credit_level,
+                                mean=-1,
+                                stdev=-1,
+                            )
 
-                        classes[code] = {"class_base": class_base, "marks": [mark]}
-                else:
-                    classes[code]["marks"].append(mark)
+                            classes[code] = {"class_base": class_base, "marks": [mark]}
+                    else:
+                        classes[code]["marks"].append(mark)
 
             for code, data in classes.items():
                 class_base = data["class_base"]
