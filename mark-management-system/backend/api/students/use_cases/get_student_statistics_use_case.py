@@ -5,8 +5,6 @@ from api.system.schemas.schemas import StudentStatistics
 from api.students.repositories.student_repository import StudentRepository
 from api.users.repositories.user_repository import UserRepository
 
-from api.marks.errors.mark_not_found import MarkNotFound
-
 from api.users.errors.user_not_found import UserNotFound
 
 
@@ -29,7 +27,6 @@ class GetStudentStatisticsUseCase:
 
         Raises:
             UserNotFound: If the user (from the JWT) cannot be found.
-            MarkNotFound: If no marks are found for the student.
         
         Returns:
             StudentStatistics: A StudentStatistics schema object containing calculated statistics about the student, i.e. the mean, max mark, min mark and pass rate.
@@ -43,13 +40,8 @@ class GetStudentStatisticsUseCase:
         
         marks_for_student = self.student_repository.get_marks_and_details_for_student(reg_no)
 
-        if not marks_for_student:
-            raise MarkNotFound("No marks found for the student")
-        
-        print(marks_for_student)
-
-        marks = [mark[7] for mark in marks_for_student if mark[7] is not None]
-        weights = [marks_for_student[i][4] for i, mark in enumerate(marks_for_student) if mark[7] is not None]
+        marks = [mark[7] for mark in marks_for_student if mark[7] is not None and marks_for_student]
+        weights = [marks_for_student[i][4] for i, mark in enumerate(marks_for_student) if mark[7] is not None and marks_for_student]
 
         if marks:
             weighted_sum = 0
