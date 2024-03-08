@@ -38,14 +38,16 @@ def initialise_roles(db: Session) -> None:
 def create_degree(db: Session) -> None:
     degree_repository = DegreeRepository(db)
 
-    degree_repository.add(Degree(level="BSc", name="Computer Science"))
+    degree_repository.add(Degree(level="BSc (Hons)", name="Computer Science", code="0403"))
+    degree_repository.add(Degree(level="BSc", name="Software Engineering", code="0404"))
 
 def create_students(db: Session) -> None:
     student_repository = StudentRepository(db)
 
-    student_repository.add(Student(reg_no="abc12345", student_name="John Doe", degree_id=1))
-    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", degree_id=1))
-    student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", degree_id=1))
+    student_repository.add(Student(reg_no="abc12345", student_name="John Doe", year=1, degree_id=1))
+    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", year=2, degree_id=1))
+    student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", year=3, degree_id=1))
+    student_repository.add(Student(reg_no="abc33355", student_name="Annie Doe", year=4, degree_id=1))
 
 def create_users(db: Session) -> None:
     user_repository = UserRepository(db)
@@ -117,11 +119,11 @@ def create_marks(db: Session) -> None:
 
     mark_repository.add(Marks(mark="70", class_id="1", student_id=1))
     mark_repository.add(Marks(mark="54", class_id="2", student_id=1))
-    mark_repository.add(Marks(mark="30", class_id="3", student_id=1))
+    mark_repository.add(Marks(mark="30", code="EN", class_id="3", student_id=1))
     
     mark_repository.add(Marks(mark="61", class_id="1", student_id=2))
     mark_repository.add(Marks(mark="79", class_id="2", student_id=2))
-    mark_repository.add(Marks(mark="55", class_id="3", student_id=2))
+    mark_repository.add(Marks(mark="55", code="EN", class_id="3", student_id=2))
     
     mark_repository.add(Marks(mark="61", class_id="1", student_id=3))
     mark_repository.add(Marks(mark="89", class_id="2", student_id=3))
@@ -175,7 +177,7 @@ def create_academic_misconducts(db: Session) -> None:
     academic_misconduct_repository.add(
         AcademicMisconduct(
             date="2024-02-01",
-            outcome="NOT UPHELD",
+            outcome="UNDER INVESTIGATION",
             student_reg_no="abc12345",
             class_code="CS407",
         )
@@ -184,7 +186,7 @@ def create_academic_misconducts(db: Session) -> None:
     academic_misconduct_repository.add(
         AcademicMisconduct(
             date="2023-07-07",
-            outcome="NOT UPHELD",
+            outcome="UNDER INVESTIGATION",
             student_reg_no="abc33311",
             class_code="CS407",
         )

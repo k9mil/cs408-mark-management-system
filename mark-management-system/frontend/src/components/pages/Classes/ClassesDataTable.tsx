@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
@@ -62,6 +62,9 @@ export function ClassesDataTable<TData, TValue>({
   const [openDialogRowId, setOpenDialogRowId] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<IClass | null>(null);
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pages, setPages] = useState<number>(1);
+
   const { isAdmin, isLecturer } = useAuth();
 
   const handleRowClick = (row: Row<TData>) => {
@@ -82,8 +85,8 @@ export function ClassesDataTable<TData, TValue>({
     for (const classItem of data) {
       const processedClass = {
         ...classItem,
-        number_of_students: getNumOfStudents((classItem as IClass).students),
         lecturer: formatLecturerName((classItem as IClass).lecturer),
+        number_of_students: getNumOfStudents((classItem as IClass).students),
       };
 
       delete processedClass.id;
@@ -109,7 +112,59 @@ export function ClassesDataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
+
+  useEffect(() => {
+    // https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-reactjs
+    const updateDataTablePageSize = () => {
+      const TAILWIND_LG = 1024;
+      const TAILWIND_XL = 1280;
+      const TAILWIND_2_XL = 1536;
+
+      const userScreenWidth = window.innerWidth;
+      let pageSize = 10;
+
+      if (userScreenWidth >= TAILWIND_2_XL) {
+        pageSize = 10;
+      } else if (userScreenWidth >= TAILWIND_XL) {
+        pageSize = 8;
+      } else if (userScreenWidth >= TAILWIND_LG) {
+        pageSize = 7;
+      }
+
+      const newTotalPages = Math.ceil(data.length / pageSize);
+      table.setPageSize(pageSize);
+      setPages(newTotalPages);
+
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages);
+      } else if (currentPage < 1) {
+        setCurrentPage(1);
+      }
+    };
+
+    updateDataTablePageSize();
+
+    window.addEventListener("resize", updateDataTablePageSize);
+    return () => window.removeEventListener("resize", updateDataTablePageSize);
+  }, [table, data]);
+
+  const handlePrev = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < pages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
     <>
@@ -224,23 +279,34 @@ export function ClassesDataTable<TData, TValue>({
           ) : null}
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 2xl:py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className="flex justify-between">
+        <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-end self-center pl-2 text-gray-600">
+          {currentPage} of {pages} pages
+        </h2>
+        <div className="flex items-center justify-end space-x-2 2xl:py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              table.previousPage();
+              handlePrev();
+            }}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              table.nextPage();
+              handleNext();
+            }}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </>
   );

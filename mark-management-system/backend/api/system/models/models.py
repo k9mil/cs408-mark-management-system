@@ -26,6 +26,7 @@ class Student(Base):
 
     reg_no = Column(String(256), unique=True, index=True)
     student_name = Column(String(128), nullable=False)
+    year = Column(Integer, nullable=False)
 
     degree_id = Column(Integer, ForeignKey("degrees.id"), index=True, nullable=False)
 
@@ -42,6 +43,7 @@ class Degree(Base):
 
     level = Column(String(64), nullable=False)
     name = Column(String(256), nullable=False)
+    code = Column(String(16), nullable=False, unique=True)
 
     students = relationship("Student", back_populates="degree")
     classes = relationship("Class", secondary="degree_classes", back_populates="degrees")
@@ -86,6 +88,7 @@ class Marks(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
     mark = Column(Integer, nullable=False)
+    code = Column(String(8))
 
     class_id = Column(Integer, ForeignKey("classes.id"), index=True)
     student_id = Column(Integer, ForeignKey("students.id"), index=True)
@@ -118,7 +121,7 @@ class AcademicMisconduct(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
     date = Column(Date, nullable=False)
-    outcome = Column(String(16), nullable=False)
+    outcome = Column(String(32), nullable=False)
 
     student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
     class_code = Column(String, ForeignKey("classes.code"), index=True)

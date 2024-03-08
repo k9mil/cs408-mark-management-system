@@ -52,6 +52,7 @@ export const StudentsModal = ({
   const [studentMarks, setStudentMarks] = useState<IMarkRow[]>([]);
   const [activeTab, setActiveTab] = useState("class");
   const [mark, setMark] = useState(row.mark ? +row.mark : null);
+  const [code, setCode] = useState(row.code ? row.code : null);
 
   useEffect(() => {
     if (
@@ -162,7 +163,7 @@ export const StudentsModal = ({
         </DialogHeader>
         {activeTab === "class" ? (
           <div className="flex flex-row justify-between gap-14">
-            <div className="space-y-4">
+            <div className="space-y-4 w-1/2">
               <div>
                 <Label htmlFor="name" className="text-right">
                   Name
@@ -187,7 +188,7 @@ export const StudentsModal = ({
               </div>
               <div>
                 <Label htmlFor="code" className="text-right">
-                  Registration Number
+                  Registration No.
                 </Label>
                 <Input
                   id="name"
@@ -197,7 +198,7 @@ export const StudentsModal = ({
                 />
               </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-4 w-1/2">
               <div>
                 <Label htmlFor="degreeLevel" className="text-right">
                   Degree Level
@@ -220,19 +221,35 @@ export const StudentsModal = ({
                   disabled
                 />
               </div>
-              <div>
-                <Label htmlFor="mark" className="text-right">
-                  Mark
-                </Label>
-                <Input
-                  id="mark"
-                  type="text"
-                  className="col-span-3"
-                  defaultValue={row.mark}
-                  onChange={(e) => {
-                    setMark(e.target.value === "" ? null : +e.target.value);
-                  }}
-                />
+              <div className="flex flex-row space-x-12">
+                <div>
+                  <Label htmlFor="mark" className="text-right">
+                    Mark
+                  </Label>
+                  <Input
+                    id="mark"
+                    type="text"
+                    className="col-span-3"
+                    defaultValue={row.mark}
+                    onChange={(e) => {
+                      setMark(e.target.value === "" ? null : +e.target.value);
+                    }}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="mark" className="text-right">
+                    Mark Code
+                  </Label>
+                  <Input
+                    id="mark"
+                    type="text"
+                    className="col-span-3"
+                    defaultValue={row.code !== null ? row.code : ""}
+                    onChange={(e) => {
+                      setCode(e.target.value === "" ? null : e.target.value);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -272,6 +289,7 @@ export const StudentsModal = ({
                 const markDetails: IMarkEdit = {
                   id: row.id,
                   mark: mark === null ? null : +mark,
+                  code: code === null ? null : code,
                 };
 
                 if (validateMarkDetailsOnEdit(markDetails)) {

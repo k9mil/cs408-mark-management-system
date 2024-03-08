@@ -60,7 +60,7 @@ export const StudentProfileDropdown = ({
         <PopoverContent className="w-full p-0">
           <Command>
             <CommandInput placeholder="Search students..." />
-            <CommandEmpty>No lecturer found.</CommandEmpty>
+            <CommandEmpty>No student found.</CommandEmpty>
             <CommandGroup>
               {studentList.map((studentDropdown) => (
                 <CommandItem

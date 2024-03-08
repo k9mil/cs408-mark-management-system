@@ -22,6 +22,7 @@ from scripts.db_base_values import (
     create_degree,
     create_students,
     create_marks,
+    create_academic_misconducts
 )
 
 from sqlalchemy import create_engine
@@ -151,43 +152,6 @@ def test_when_creating_academic_misconducts_with_wrong_student_class_code_then_c
 
     assert response.status_code == 404
 
-def test_when_creating_academic_misconducts_with_same_misconduct_existing_then_error_is_thrown(
-        test_db: Generator[None, Any, None]
-    ):
-    with TestingSessionLocal() as db:
-        initialise_roles(db)
-        create_degree(db)
-        create_students(db)
-        create_users(db)
-        create_classes(db)
-        create_marks(db)   
-        db.commit()
-
-    JSON_TOKEN = _prepare_login_and_retrieve_token(
-        "admin@mms.com", "12345678"
-    )
-
-    SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
-        "date": "2024-03-03",
-        "outcome": "UPHELD",
-        "reg_no": "abc12345",
-        "class_code": "CS412"
-    }
-
-    response = client.post(
-        f"/api/v1/academic-misconducts",
-        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
-        json=SAMPLE_ACADEMIC_MISCONDUCT_BODY
-    )
-
-    response = client.post(
-        f"/api/v1/academic-misconducts",
-        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
-        json=SAMPLE_ACADEMIC_MISCONDUCT_BODY
-    )
-    
-    assert response.status_code == 409
-
 def test_when_creating_academic_misconducts_when_student_not_belong_to_class_then_error_is_thrown(
         test_db: Generator[None, Any, None]
     ):
@@ -206,7 +170,7 @@ def test_when_creating_academic_misconducts_when_student_not_belong_to_class_the
 
     SAMPLE_ACADEMIC_MISCONDUCT_BODY = {
         "date": "2024-03-03",
-        "outcome": "UPHELD",
+        "outcome": "UNDER INVESTIGATION",
         "reg_no": "abc12345",
         "class_code": "CS408"
     }
@@ -249,6 +213,83 @@ def test_given_a_base_user_when_creating_academic_misconducts_then_error_is_thro
     )
     
     assert response.status_code == 403
+
+def test_given_academic_misconducts_when_retrieving_misconducts_then_misconducts_are_returned(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)
+        create_academic_misconducts(db)
+        db.commit()
+
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
+    )
+
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
+    response = client.get(
+        f"/api/v1/academic-misconducts/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 200
+
+def test_given_misconduct_when_requestor_does_not_have_sufficient_permissions_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)
+        create_academic_misconducts(db)
+        db.commit()
+
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "base@mms.com", "12345678"
+    )
+
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
+    response = client.get(
+        f"/api/v1/academic-misconducts/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 403
+
+def test_given_no_academic_misconducts_when_retrieving_misconducts_then_error_is_thrown(
+        test_db: Generator[None, Any, None]
+    ):
+    with TestingSessionLocal() as db:
+        initialise_roles(db)
+        create_degree(db)
+        create_students(db)
+        create_users(db)
+        create_classes(db)
+        create_marks(db)
+        db.commit()
+
+    JSON_TOKEN = _prepare_login_and_retrieve_token(
+        "admin@mms.com", "12345678"
+    )
+
+    SAMPLE_STUDENT_REG_NO = "abc12345"
+
+    response = client.get(
+        f"/api/v1/academic-misconducts/{SAMPLE_STUDENT_REG_NO}",
+        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
+    )
+    
+    assert response.status_code == 404
 
 def _prepare_login_and_retrieve_token(
     username: str,

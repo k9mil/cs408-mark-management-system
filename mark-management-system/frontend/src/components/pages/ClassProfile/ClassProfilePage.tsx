@@ -55,7 +55,7 @@ const ClassProfilePage = () => {
   const accessToken = getAccessToken();
 
   const data = {
-    labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
+    labels: ["0-39%", "40-49%", "50-59%", "60-69%", "70-100%"],
     datasets: [
       {
         label: "Number of Students",

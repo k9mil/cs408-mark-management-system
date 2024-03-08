@@ -67,8 +67,9 @@ def test_when_creating_a_degree_with_correct_details_then_degree_is_created(
     )
 
     SAMPLE_DEGREE_BODY = {
-        "level": "BSc",
+        "level": "BSc (Hons)",
         "name": "Computer Science",
+        "code": "0403",
     }
 
     response = client.post(
@@ -92,8 +93,9 @@ def test_given_a_degree_in_the_system_when_creating_a_degree_with_same_details_t
     )
 
     SAMPLE_DEGREE_BODY = {
-        "level": "BSc",
+        "level": "BSc (Hons)",
         "name": "Computer Science",
+        "code": "0403",
     }
 
     response = client.post(
@@ -123,8 +125,9 @@ def test_given_not_an_administrator_when_creating_a_degree_then_error_is_thrown(
     )
 
     SAMPLE_DEGREE_BODY = {
-        "level": "BSc",
+        "level": "BSc (Hons)",
         "name": "Computer Science",
+        "code": "0403",
     }
 
     response = client.post(
@@ -216,8 +219,9 @@ def test_given_valid_degrees_when_searching_in_bulk_then_degrees_are_returned(
 
     SAMPLE_DEGREE_JSON = [
         {
-            "level": "BSc",
-            "name": "Computer Science"
+            "level": "BSc (Hons)",
+            "name": "Computer Science",
+            "code": "0403",
         }
     ]
 
@@ -244,8 +248,9 @@ def test_given_an_invalid_degree_when_searching_in_bulk_then_error_is_thrown(
 
     SAMPLE_DEGREE_JSON = [
         {
-            "level": "BSc",
-            "name": "Computer Sciance"
+            "level": "BSc (Hons)",
+            "name": "Computer Sciance",
+            "code": "0404",
         }
     ]
 
@@ -272,8 +277,9 @@ def test_given_given_a_user_with_insufficient_permissions_when_searching_in_bulk
 
     SAMPLE_DEGREE_JSON = [
         {
-            "level": "BSc",
-            "name": "Computer Science"
+            "level": "BSc (Hons)",
+            "name": "Computer Science",
+            "code": "0403",
         }
     ]
 

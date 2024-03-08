@@ -43,7 +43,7 @@ const LecturerView = () => {
   const [currentSliceEnd, setCurrentSliceEnd] = useState<number>(3);
 
   const data = {
-    labels: ["0-19%", "20-39%", "40-59%", "60-79%", "80-100%"],
+    labels: ["0-39%", "40-49%", "50-59%", "60-69%", "70-100%"],
     datasets: [
       {
         label: "Number of Students",
@@ -306,7 +306,7 @@ const LecturerView = () => {
               <ChevronLeftIcon
                 className={`h-6 w-6 ${
                   currentSliceStart === 0
-                    ? "text-gray-600"
+                    ? "text-gray-200"
                     : "hover:cursor-pointer text-black"
                 }`}
                 onClick={handlePrev}
@@ -315,7 +315,7 @@ const LecturerView = () => {
                 className={`h-6 w-6 ${
                   lecturer.classes.length === 0 ||
                   currentSliceEnd >= lecturer.classes.length
-                    ? "text-gray-600"
+                    ? "text-gray-200"
                     : "hover:cursor-pointer text-black"
                 }`}
                 onClick={handleNext}

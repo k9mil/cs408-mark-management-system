@@ -73,6 +73,7 @@ def test_when_creating_a_student_with_correct_details_then_student_is_created(
     SAMPLE_CLASS_BODY = {
         "reg_no": "myb21881",
         "student_name": "John Doe",
+        "year": 1,
         "degree_id": 1
     }
 
@@ -100,6 +101,7 @@ def test_given_an_existing_student_when_creating_a_student_with_same_details_the
     SAMPLE_CLASS_BODY = {
         "reg_no": "myb21881",
         "student_name": "John Doe",
+        "year": 1,
         "degree_id": 1
     }
 
@@ -133,6 +135,7 @@ def test_given_a_user_with_insufficient_permissions_when_creating_a_student_then
     SAMPLE_CLASS_BODY = {
         "reg_no": "myb21881",
         "student_name": "John Doe",
+        "year": 1,
         "degree_id": 1
     }
 

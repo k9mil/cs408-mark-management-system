@@ -23,7 +23,7 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 6) {
+    if (Object.keys(row).length < 6) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
@@ -97,6 +97,23 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       return false;
     }
 
+    if (
+      row.code &&
+      row.code !== "FO" &&
+      row.code !== "UM" &&
+      row.code !== "PM" &&
+      row.code !== "EN" &&
+      row.code !== "EX"
+    ) {
+      toast.error(
+        `Row ${
+          i + 2
+        } should have a mark code of: FO, UM, PM, EN, EX, ABS, EX50.`
+      );
+
+      return false;
+    }
+
     if (!("degree_level" in row) || row.degree_level === null) {
       toast.error(
         `Row ${
@@ -139,11 +156,11 @@ export function validateMyPlaceFile(
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 5) {
+    if (Object.keys(row).length < 4) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
-        CLASS_CODE, DATE, REG_NO, CLASS_TOTAL, OVERRIDE_MARK`
+        CLASS_CODE, DATE, REG_NO, CLASS_TOTAL`
       );
 
       return false;
@@ -202,15 +219,6 @@ export function validateMyPlaceFile(
       return false;
     }
 
-    if (!("override_mark" in row) || row.override_mark === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain an override mark. Please fix the file and try again.`
-      );
-      return false;
-    }
-
     if (!isNumber(row.class_total)) {
       toast.error(
         `Row ${i + 2} should have a class total which is an integer.`
@@ -224,14 +232,17 @@ export function validateMyPlaceFile(
       return false;
     }
 
-    if (!isNumber(row.override_mark)) {
+    if (row.override_mark && !isNumber(row.override_mark)) {
       toast.error(
         `Row ${i + 2} should have an override mark which is an integer.`
       );
       return false;
     }
 
-    if (row.override_mark < 0 || row.override_mark > 100) {
+    if (
+      (row.override_mark && row.override_mark < 0) ||
+      (row.override_mark && row.override_mark > 100)
+    ) {
       toast.error(
         `Row ${i + 2} should have an override mark between 0 and 100.`
       );
@@ -259,11 +270,11 @@ export function validatePersonalCircumstancesFile(
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 10) {
+    if (Object.keys(row).length < 5) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
-        REG_NO, NAME, PROGRAMME, YEAR, REG_STATUS, CERT_TYPE, PERSONAL_CIRCUMSTANCE_DETAILS, SEM, CAT, COMMENTS`
+        REG_NO, PERSONAL_CIRCUMSTANCE_DETAILS, SEM, CAT, COMMENTS`
       );
 
       return false;
@@ -274,51 +285,6 @@ export function validatePersonalCircumstancesFile(
         `Row ${
           i + 2
         } doesn't contain a registration number. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("name" in row) || row.name === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a name. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("programme" in row) || row.programme === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a programme. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("year" in row) || row.year === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a year. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("reg_status" in row) || row.reg_status === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a reg status. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("cert_type" in row) || row.cert_type === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a certificate type. Please fix the file and try again.`
       );
       return false;
     }
@@ -382,7 +348,7 @@ export function validateAcademicMisconductFile(
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 5) {
+    if (Object.keys(row).length < 5) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
          The row should have the following: 
@@ -439,11 +405,14 @@ export function validateAcademicMisconductFile(
 
     const outcomeToLower = row.outcome.toLowerCase();
 
-    if (outcomeToLower !== "upheld" && outcomeToLower !== "not upheld") {
+    if (
+      outcomeToLower !== "upheld" &&
+      outcomeToLower !== "under investigation"
+    ) {
       toast.error(
         `Row ${i + 2} contains an invalid outcome: '${
           row.outcome
-        }'. Please use 'upheld' or 'not upheld' and try again.`
+        }'. Please use one of these states: 'upheld' or 'under investigation' and try again.`
       );
       return false;
     }

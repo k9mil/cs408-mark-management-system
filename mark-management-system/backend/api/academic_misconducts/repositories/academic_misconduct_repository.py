@@ -1,11 +1,12 @@
-from typing import Optional
+from typing import List
 
 from sqlalchemy.orm import Session
 
 from api.system.models.models import AcademicMisconduct
 
 from api.system.schemas.schemas import AcademicMisconductBase
-from api.system.schemas.schemas import AcademicMisconductCreate
+
+
 
 
 class AcademicMisconductRepository:
@@ -31,19 +32,14 @@ class AcademicMisconductRepository:
         self.db.commit()
         self.db.refresh(academic_misconduct)
 
-    def find_by_details(self, request: AcademicMisconductCreate) -> Optional[AcademicMisconduct]:
+    def get_by_student_reg_no(self, reg_no: str) -> List[AcademicMisconduct]:
         """
-        Checks whether a given request is already in the database.
+        Get a list of academic misconducts by a registration number of a student.
 
         Args:
-            request: The request containing information that was passed in to create the academic misconduct.
+            reg_no: The student identificator.
         
         Returns:
-            Optional[AcademicMisconduct]: The first result from the database that matches the filter, otherwise None.
+            Optional[AcademicMisconduct]: A List[AcademicMisconduct] from the database.
         """
-        return self.db.query(AcademicMisconduct).filter_by(
-            date=request.date,
-            outcome=request.outcome,
-            student_reg_no=request.reg_no,
-            class_code=request.class_code,
-        ).first()
+        return self.db.query(AcademicMisconduct).filter_by(student_reg_no=reg_no).all()

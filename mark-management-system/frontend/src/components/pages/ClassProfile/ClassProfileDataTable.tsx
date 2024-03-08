@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
@@ -40,6 +40,9 @@ export function ClassProfileDataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pages, setPages] = useState<number>(1);
 
   /**
    * Transforms the data array (TData) by deleting the id, so that the exported data
@@ -90,13 +93,24 @@ export function ClassProfileDataTable<TData, TValue>({
       const TAILWIND_2_XL = 1536;
 
       const userScreenWidth = window.innerWidth;
+      let pageSize = 9;
 
       if (userScreenWidth >= TAILWIND_2_XL) {
-        table.setPageSize(9);
+        pageSize = 9;
       } else if (userScreenWidth >= TAILWIND_XL) {
-        table.setPageSize(6);
+        pageSize = 6;
       } else if (userScreenWidth >= TAILWIND_LG) {
-        table.setPageSize(5);
+        pageSize = 5;
+      }
+
+      const newTotalPages = Math.ceil(data.length / pageSize);
+      table.setPageSize(pageSize);
+      setPages(newTotalPages);
+
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages);
+      } else if (currentPage < 1) {
+        setCurrentPage(1);
       }
     };
 
@@ -104,7 +118,19 @@ export function ClassProfileDataTable<TData, TValue>({
 
     window.addEventListener("resize", updateDataTablePageSize);
     return () => window.removeEventListener("resize", updateDataTablePageSize);
-  }, [table]);
+  }, [table, data]);
+
+  const handlePrev = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < pages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
     <>
@@ -188,23 +214,34 @@ export function ClassProfileDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 2xl:py-4 w-full">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className="flex justify-between">
+        <h2 className="2xl:text-sm xl:text-xs font-regular flex justify-self-end self-center pl-2 text-gray-600">
+          {currentPage} of {pages} pages
+        </h2>
+        <div className="flex items-center justify-end space-x-2 2xl:py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              table.previousPage();
+              handlePrev();
+            }}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              table.nextPage();
+              handleNext();
+            }}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </>
   );

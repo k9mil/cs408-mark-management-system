@@ -67,6 +67,7 @@ class GetMarksForStudentUseCase:
                 degree_level=mark[5],
                 degree_name=mark[6],
                 mark=mark[7],
+                code=mark[8],
             )
 
             marks_data.append(mark_row)

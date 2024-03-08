@@ -17,7 +17,13 @@ import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import MarksUploadedFile from "../Upload/MarksUploadedFile";
 import ConvertSelectionCombobox from "./ConvertSelectionCombobox";
 
-import { IMarkMMS, IMarkMyPlace, IMarkPegasus, IMarkRow } from "@/models/IMark";
+import {
+  IMark,
+  IMarkMMS,
+  IMarkMyPlace,
+  IMarkPegasus,
+  IMarkRow,
+} from "@/models/IMark";
 import { IStudent } from "@/models/IStudent";
 
 import {
@@ -35,6 +41,9 @@ import {
 import { studentService } from "@/services/StudentService";
 
 import ConvertInfoBox from "./ConvertInfoBox";
+import { classService } from "@/services/ClassService";
+import { IClass } from "@/models/IClass";
+import { markService } from "@/services/MarkService";
 
 const ConvertPage = () => {
   const navigate = useNavigate();
@@ -117,13 +126,46 @@ const ConvertPage = () => {
           parsedFileToLower = toLowerCaseIMarkRow(parsedFile);
         }
 
-        if (
-          parsedFileToLower &&
-          validateUploadFile(parsedFileToLower.slice(0))
-        ) {
-          for (const row of parsedFileToLower.slice(0)) {
-            convertedObject = convertToPegasus(row);
-            convertedObjects.push(convertedObject);
+        const fileContents = parsedFileToLower
+          ?.slice(0)
+          .filter(
+            (fileContent) =>
+              !Object.values(fileContent).every((value) => value === "")
+          );
+
+        if (fileContents && validateUploadFile(fileContents)) {
+          for (const [index, row] of fileContents.entries()) {
+            const studentDetails = await retrieveStudentDetails(
+              row.reg_no,
+              index
+            );
+
+            const classDetails = await retrieveClassDetails(
+              row.class_code,
+              index
+            );
+
+            const marksDetails = await retrieveMarkDetails(
+              studentDetails.id,
+              classDetails.id,
+              index
+            );
+
+            if ("mark_code" in row && typeof row["mark_code"] === "string") {
+              row.code = row["mark_code"];
+              delete row["mark_code"];
+            }
+
+            if (studentDetails) {
+              convertedObject = convertToPegasus(
+                row,
+                studentDetails,
+                classDetails,
+                marksDetails
+              );
+
+              convertedObjects.push(convertedObject);
+            }
           }
 
           exportToCSV(
@@ -155,17 +197,31 @@ const ConvertPage = () => {
     };
   };
 
-  const convertToPegasus = (data: IMarkRow): IMarkPegasus => {
+  const convertToPegasus = (
+    data: IMarkRow,
+    studentDetails: IStudent,
+    classDetails: IClass,
+    marksDetails: IMark
+  ): IMarkPegasus => {
     return {
-      class_code: data.class_code,
-      reg_no: data.reg_no,
+      classcode: data.class_code,
+      regno: data.reg_no,
       mark: data.mark,
-      mark_code: "<TO FILL IN>",
-      student_name: data.student_name,
+      code:
+        marksDetails.code !== null && marksDetails.code !== ""
+          ? marksDetails.code
+          : "TO_BE_ADDED",
+      studentname: data.student_name,
       course: data.degree_name,
       degree: data.degree_level,
-      degree_code: "<UNKNOWN>",
-      result: "<TO FILL IN>",
+      degreecode: studentDetails.degree.code + "/" + studentDetails.year,
+      result:
+        (classDetails.credit_level >= 1 &&
+          classDetails.credit_level <= 4 &&
+          data.mark >= 40) ||
+        (classDetails.credit_level === 5 && data.mark >= 50)
+          ? "PASS"
+          : "FAIL",
     };
   };
 
@@ -228,6 +284,65 @@ const ConvertPage = () => {
 
       toast.error(
         `Something went wrong when retrieving student details for Row ${
+          index + 2
+        }.`
+      );
+    }
+  };
+
+  const retrieveClassDetails = async (classCode: string, index: number) => {
+    try {
+      if (accessToken) {
+        const classDetails = await classService.getClass(
+          classCode,
+          accessToken
+        );
+
+        if (classDetails.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when checking for class details of the student. ${classDetails.data}.`
+          );
+        }
+
+        return classDetails.data;
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when retrieving class details for Row ${
+          index + 2
+        }.`
+      );
+    }
+  };
+
+  const retrieveMarkDetails = async (
+    studentId: number,
+    classId: number,
+    index: number
+  ) => {
+    try {
+      if (accessToken) {
+        const markDetails = await markService.getMark(
+          studentId,
+          classId,
+          accessToken
+        );
+
+        if (markDetails.statusCode !== 200) {
+          toast.error(
+            `Something went wrong when checking for mark details of the student. ${markDetails.data}.`
+          );
+        }
+
+        return markDetails.data;
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        `Something went wrong when retrieving class details for Row ${
           index + 2
         }.`
       );

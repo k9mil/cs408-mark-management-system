@@ -31,6 +31,7 @@ class RoleInUser(RoleBase):
 
 class MarksBase(BaseModel):
     mark: int
+    code: str | None = None
 
     class_id: int
     student_id: int
@@ -42,6 +43,7 @@ class MarksEdit(BaseModel):
     id: int
     
     mark: int
+    code: str | None = None
 
 class MarksRow(BaseModel):
     id: int
@@ -50,6 +52,7 @@ class MarksRow(BaseModel):
     class_name: str | None
     reg_no: str
     mark: int
+    code: str | None = None
     student_name: str
     degree_level: str
     degree_name: str
@@ -75,6 +78,7 @@ class MarksStatistics(BaseModel):
 class DegreeBase(BaseModel):
     level: str
     name: str
+    code: str
 
 class DegreeCreate(DegreeBase):
     pass
@@ -180,6 +184,7 @@ class Lecturer(BaseModel):
 class AcademicMisconductBase(BaseModel):
     date: date
     outcome: str
+    class_code: str
     
 class AcademicMisconductCreate(AcademicMisconductBase):
     reg_no: str
@@ -193,7 +198,7 @@ class AcademicMisconduct(AcademicMisconductBase):
 
 
 class ClassWithMisconduct(ClassBase):
-    academic_misconduct: AcademicMisconductCreate | None
+    academic_misconducts: List[AcademicMisconductCreate] | None
 
 class PersonalCircumstancesBase(BaseModel):
     details: str
@@ -213,6 +218,7 @@ class PersonalCircumstances(PersonalCircumstancesBase):
 class StudentBase(BaseModel):
     reg_no: str
     student_name: str
+    year: int
 
     degree_id: int
 
