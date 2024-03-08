@@ -51,7 +51,8 @@ class GetStudentStatisticsUseCase:
         mark_data = []
 
         for current_mark in marks:
-            mark_data.append(current_mark[6])
+            if current_mark[6]:
+                mark_data.append(current_mark[6])
 
         marks_statistics = MarksStatistics(
             mean=round(mean(mark_data)),
