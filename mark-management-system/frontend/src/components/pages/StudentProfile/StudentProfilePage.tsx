@@ -91,11 +91,6 @@ const StudentProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(student);
-    console.log(studentData);
-  }, [student]);
-
-  useEffect(() => {
     if (student !== "") {
       const retrievePersonalCircumstances = async () => {
         try {

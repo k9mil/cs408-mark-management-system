@@ -154,6 +154,12 @@ const ConvertPage = () => {
             if ("mark_code" in row && typeof row["mark_code"] === "string") {
               row.code = row["mark_code"];
               delete row["mark_code"];
+            } else if (
+              "MARK_CODE" in row &&
+              typeof row["MARK_CODE"] === "string"
+            ) {
+              row.code = row["MARK_CODE"];
+              delete row["MARK_CODE"];
             }
 
             if (studentDetails) {

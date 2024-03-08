@@ -98,13 +98,8 @@ const UploadPage = () => {
             for (const [index, row] of parsedFileToLower.slice(0).entries()) {
               await checkStudentExists(row.reg_no, index);
 
-              if ("mark_code" in row && typeof row["mark_code"] === "string") {
-                row.code = row["mark_code"];
-                delete row["mark_code"];
-              }
-
               await checkMarkExists(
-                row.mark,
+                row.mark !== null ? row.mark : undefined,
                 row.class_code,
                 row.reg_no,
                 row.code !== null ? row.code : undefined,
@@ -285,7 +280,7 @@ const UploadPage = () => {
   };
 
   const checkMarkExists = async (
-    mark: number,
+    mark: number | undefined,
     classCode: string,
     regNo: string,
     code: string | undefined,
@@ -305,11 +300,7 @@ const UploadPage = () => {
         if (markDetails.statusCode !== 200) {
           if (markDetails.statusCode === 404) {
             if (classId && studentId) {
-              if (code && code !== undefined) {
-                await createMark(mark, studentId, classId, index, code);
-              } else {
-                await createMark(mark, studentId, classId, index);
-              }
+              await createMark(studentId, classId, index, mark, code);
             }
           } else {
             toast.error(
@@ -336,26 +327,32 @@ const UploadPage = () => {
   };
 
   const createMark = async (
-    mark: number,
     studentId: number,
     classId: number,
     index: number,
-    code?: string
+    mark: number | undefined,
+    code: string | undefined
   ) => {
     try {
       if (accessToken) {
         let markDetails;
 
-        if (code) {
+        if (mark && mark !== undefined && code && code !== undefined) {
           markDetails = {
             mark: mark,
             code: code,
             class_id: classId,
             student_id: studentId,
           };
-        } else {
+        } else if (mark && mark !== undefined) {
           markDetails = {
             mark: mark,
+            class_id: classId,
+            student_id: studentId,
+          };
+        } else if (code && code !== undefined) {
+          markDetails = {
+            code: code,
             class_id: classId,
             student_id: studentId,
           };

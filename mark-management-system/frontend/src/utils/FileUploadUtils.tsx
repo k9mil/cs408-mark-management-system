@@ -77,6 +77,14 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       return false;
     }
 
+    if ("mark_code" in row && typeof row["mark_code"] === "string") {
+      row.code = row["mark_code"];
+      delete row["mark_code"];
+    } else if ("MARK_CODE" in row && typeof row["MARK_CODE"] === "string") {
+      row.code = row["MARK_CODE"];
+      delete row["MARK_CODE"];
+    }
+
     if ("mark" in row && row.mark !== null) {
       if (!isNumber(row.mark)) {
         toast.error(`Row ${i + 2} should have a mark which is an integer.`);
@@ -98,7 +106,7 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
           toast.error(
             `Row ${
               i + 2
-            } has an invalid mark code. The options are: EX, FO, IA, PM`
+            } has an invalid mark code given that there is a mark. The options are: EX, FO, IA, PM`
           );
           return false;
         }
