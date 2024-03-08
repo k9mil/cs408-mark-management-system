@@ -68,26 +68,6 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       return false;
     }
 
-    if (!("mark" in row) || row.mark === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a mark. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!isNumber(row.mark)) {
-      toast.error(`Row ${i + 2} should have a mark which is an integer.`);
-      return false;
-    }
-
-    if (row.mark < 0 || row.mark > 100) {
-      toast.error(`Row ${i + 2} should have a mark between 0 and 100.`);
-
-      return false;
-    }
-
     if (!("student_name" in row) || row.student_name === null) {
       toast.error(
         `Row ${
@@ -97,21 +77,44 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       return false;
     }
 
-    if (
-      row.code &&
-      row.code !== "FO" &&
-      row.code !== "UM" &&
-      row.code !== "PM" &&
-      row.code !== "EN" &&
-      row.code !== "EX"
-    ) {
-      toast.error(
-        `Row ${
-          i + 2
-        } should have a mark code of: FO, UM, PM, EN, EX, ABS, EX50.`
-      );
+    if ("mark" in row && row.mark !== null) {
+      if (!isNumber(row.mark)) {
+        toast.error(`Row ${i + 2} should have a mark which is an integer.`);
+        return false;
+      }
 
-      return false;
+      if (row.mark < 0 || row.mark > 100) {
+        toast.error(`Row ${i + 2} should have a mark between 0 and 100.`);
+        return false;
+      }
+
+      if (row.code) {
+        if (
+          row.code !== "EX" &&
+          row.code !== "FO" &&
+          row.code !== "IA" &&
+          row.code !== "PM"
+        ) {
+          toast.error(
+            `Row ${
+              i + 2
+            } has an invalid mark code. The options are: EX, FO, IA, PM`
+          );
+          return false;
+        }
+      }
+    } else {
+      if (
+        !row.code ||
+        (row.code !== "ABS" && row.code !== "EN" && row.code !== "UM")
+      ) {
+        toast.error(
+          `Row ${
+            i + 2
+          } requires a valid mark code if no mark is provided. The options are: ABS, EN, UM`
+        );
+        return false;
+      }
     }
 
     if (!("degree_level" in row) || row.degree_level === null) {
@@ -122,8 +125,6 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       );
       return false;
     }
-
-    // TODO: Add validation for the "Undergradute Board", i.e. titles like BSc
 
     if (!("degree_name" in row) || row.degree_name === null) {
       toast.error(

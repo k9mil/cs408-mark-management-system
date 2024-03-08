@@ -15,32 +15,42 @@ export function validateMarkDetailsOnEdit(markDetails: IMarkEdit): boolean {
     return false;
   }
 
-  if (!("mark" in markDetails) || markDetails.mark === null) {
-    toast.error("Mark is missing.");
-    return false;
-  }
+  if ("mark" in markDetails && markDetails.mark !== null) {
+    if (!isNumber(markDetails.mark)) {
+      toast.error(`Mark should be an integer.`);
+      return false;
+    }
 
-  if (!isNumber(markDetails.mark)) {
-    toast.error("Mark should be an integer.");
-    return false;
-  }
+    if (markDetails.mark < 0 || markDetails.mark > 100) {
+      toast.error(`Mark should be between 0 and 100.`);
+      return false;
+    }
 
-  if (markDetails.mark < 0 || markDetails.mark > 100) {
-    toast.error("Mark should be between 0 and 100.");
-    return false;
-  }
-
-  if (
-    markDetails.code &&
-    markDetails.code !== "FO" &&
-    markDetails.code !== "UM" &&
-    markDetails.code !== "PM" &&
-    markDetails.code !== "EN" &&
-    markDetails.code !== "EX"
-  ) {
-    toast.error("Mark Code should be one of the following: FO, UM, PM, EN, EX");
-
-    return false;
+    if (markDetails.code) {
+      if (
+        markDetails.code !== "EX" &&
+        markDetails.code !== "FO" &&
+        markDetails.code !== "IA" &&
+        markDetails.code !== "PM"
+      ) {
+        toast.error(
+          `An invalid mark code has been provided. The options are: EX, FO, IA, PM`
+        );
+        return false;
+      }
+    }
+  } else {
+    if (
+      !markDetails.code ||
+      (markDetails.code !== "ABS" &&
+        markDetails.code !== "EN" &&
+        markDetails.code !== "UM")
+    ) {
+      toast.error(
+        `A valid mark code is required if no mark is provided. The options are: ABS, EN, UM`
+      );
+      return false;
+    }
   }
 
   return true;

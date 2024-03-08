@@ -1,7 +1,7 @@
 import { IClassBaseMetric } from "./IClass";
 
 export interface IMark {
-  mark: number;
+  mark: number | null;
   code: string | null;
 
   class_id: number;
@@ -14,7 +14,7 @@ export interface IMarkRow {
   class_name: string | null;
   reg_no: string;
 
-  mark: number;
+  mark: number | null;
   code: string | null;
 
   student_name: string;

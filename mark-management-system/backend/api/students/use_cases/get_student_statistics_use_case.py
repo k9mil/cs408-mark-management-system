@@ -45,9 +45,11 @@ class GetStudentStatisticsUseCase:
 
         if not marks_for_student:
             raise MarkNotFound("No marks found for the student")
+        
+        print(marks_for_student)
 
-        marks = [mark[7] for mark in marks_for_student]
-        weights = [mark[4] for mark in marks_for_student]
+        marks = [mark[7] for mark in marks_for_student if mark[7] is not None]
+        weights = [marks_for_student[i][4] for i, mark in enumerate(marks_for_student) if mark[7] is not None]
 
         if marks:
             weighted_sum = 0
