@@ -34,7 +34,7 @@ export function validateMarkDetailsOnEdit(markDetails: IMarkEdit): boolean {
         markDetails.code !== "PM"
       ) {
         toast.error(
-          `An invalid mark code has been provided. The options are: EX, FO, IA, PM`
+          `An invalid mark code has been provided given that there is a mark. The options are: EX, FO, IA, PM`
         );
         return false;
       }
