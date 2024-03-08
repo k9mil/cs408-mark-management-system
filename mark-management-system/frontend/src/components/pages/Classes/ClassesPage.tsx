@@ -127,7 +127,7 @@ const ClassesPage = () => {
             <h1 className="text-3xl font-bold">Classes</h1>
             <div className="flex justify-between xl:w-full">
               <h2 className="text-gray-600">
-                View a list of classes in the system
+                View a list of classes or a create a new class in the system
               </h2>
               {isAdmin === true ? (
                 <Dialog
@@ -150,7 +150,7 @@ const ClassesPage = () => {
                         Create a Class
                       </DialogTitle>
                       <DialogDescription>
-                        Enter then details of the new class. Click done when
+                        Enter the details of the new class. Click done when
                         you're finished.
                       </DialogDescription>
                     </DialogHeader>
