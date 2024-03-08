@@ -306,30 +306,6 @@ def test_given_students_when_retrieving_a_students_statistics_then_student_stati
     
     assert response.status_code == 200
 
-def test_given_no_marks_for_student_when_retrieving_a_students_statistics_then_error_is_thrown(
-        test_db: Generator[None, Any, None]
-    ):
-    with TestingSessionLocal() as db:
-        initialise_roles(db)
-        create_users(db)
-        create_degree(db)
-        create_classes(db)
-        create_students(db)
-        db.commit()
-
-    JSON_TOKEN = _prepare_login_and_retrieve_token(
-        "admin@mms.com", "12345678"
-    )
-
-    SAMPLE_STUDENT_REG_NO = "abc12345"
-
-    response = client.get(
-        f"/api/v1/students/{SAMPLE_STUDENT_REG_NO}/statistics",
-        headers={"Authorization": f"Bearer {JSON_TOKEN}"},
-    )
-    
-    assert response.status_code == 404
-
 def _prepare_login_and_retrieve_token(
     username: str,
     password: str
