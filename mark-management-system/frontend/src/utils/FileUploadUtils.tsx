@@ -270,11 +270,11 @@ export function validatePersonalCircumstancesFile(
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 10) {
+    if (Object.keys(row).length < 5) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
         The row should have the following: 
-        REG_NO, NAME, PROGRAMME, YEAR, REG_STATUS, CERT_TYPE, PERSONAL_CIRCUMSTANCE_DETAILS, SEM, CAT, COMMENTS`
+        REG_NO, PERSONAL_CIRCUMSTANCE_DETAILS, SEM, CAT, COMMENTS`
       );
 
       return false;
@@ -285,51 +285,6 @@ export function validatePersonalCircumstancesFile(
         `Row ${
           i + 2
         } doesn't contain a registration number. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("name" in row) || row.name === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a name. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("programme" in row) || row.programme === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a programme. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("year" in row) || row.year === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a year. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("reg_status" in row) || row.reg_status === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a reg status. Please fix the file and try again.`
-      );
-      return false;
-    }
-
-    if (!("cert_type" in row) || row.cert_type === null) {
-      toast.error(
-        `Row ${
-          i + 2
-        } doesn't contain a certificate type. Please fix the file and try again.`
       );
       return false;
     }
@@ -393,7 +348,7 @@ export function validateAcademicMisconductFile(
   for (let i = 0; i < fileContents.length; i++) {
     const row = fileContents[i];
 
-    if (Object.keys(row).length != 5) {
+    if (Object.keys(row).length < 5) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
          The row should have the following: 

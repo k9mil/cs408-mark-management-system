@@ -119,11 +119,11 @@ def create_marks(db: Session) -> None:
 
     mark_repository.add(Marks(mark="70", class_id="1", student_id=1))
     mark_repository.add(Marks(mark="54", class_id="2", student_id=1))
-    mark_repository.add(Marks(mark="30", class_id="3", student_id=1))
+    mark_repository.add(Marks(mark="30", code="EN", class_id="3", student_id=1))
     
     mark_repository.add(Marks(mark="61", class_id="1", student_id=2))
     mark_repository.add(Marks(mark="79", class_id="2", student_id=2))
-    mark_repository.add(Marks(mark="55", class_id="3", student_id=2))
+    mark_repository.add(Marks(mark="55", code="EN", class_id="3", student_id=2))
     
     mark_repository.add(Marks(mark="61", class_id="1", student_id=3))
     mark_repository.add(Marks(mark="89", class_id="2", student_id=3))
