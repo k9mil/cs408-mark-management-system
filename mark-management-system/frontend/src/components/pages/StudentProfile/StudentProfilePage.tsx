@@ -246,7 +246,11 @@ const StudentProfilePage = () => {
                     setStudentOpen={setStudentOpen}
                     studentList={studentList}
                   />
-                ) : null}
+                ) : (
+                  <h2 className="font-bold">
+                    No students found in the system.
+                  </h2>
+                )}
               </div>
             </div>
             {student && student !== "" && studentData ? (

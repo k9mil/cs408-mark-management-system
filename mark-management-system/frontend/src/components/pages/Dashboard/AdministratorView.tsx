@@ -118,14 +118,14 @@ const AdministratorView = () => {
             <CardContent className="flex flex-row justify-around space-x-12 p-0">
               <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
                 <h1 className="font-bold text-3xl text-primary-blue">
-                  {globalStatistics ? globalStatistics.pass_rate + "%" : null}
+                  {globalStatistics ? globalStatistics.pass_rate + "%" : "N/A"}
                 </h1>
                 <h1 className="text-xs">Pass Rate</h1>
               </div>
               <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
               <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
                 <h1 className="font-bold text-3xl text-primary-blue">
-                  {globalStatistics ? globalStatistics.mean + "%" : null}
+                  {globalStatistics ? globalStatistics.mean + "%" : "N/A"}
                 </h1>
                 <h1 className="text-xs">Mean</h1>
               </div>
@@ -133,14 +133,14 @@ const AdministratorView = () => {
             <CardContent className="flex flex-row justify-around space-x-12 p-0">
               <div className="flex flex-col pl-12 justify-center items-center w-28 text-center">
                 <h1 className="font-bold text-3xl text-primary-blue">
-                  {globalStatistics ? globalStatistics.median + "%" : null}
+                  {globalStatistics ? globalStatistics.median + "%" : "N/A"}
                 </h1>
                 <h1 className="text-xs">Median</h1>
               </div>
               <div className="border-r-[1px] border-l-[1px] border-gray-200"></div>
               <div className="flex flex-col pr-12 justify-center items-center w-28 text-center">
                 <h1 className="font-bold text-3xl text-primary-blue">
-                  {globalStatistics ? globalStatistics.mode + "%" : null}
+                  {globalStatistics ? globalStatistics.mode + "%" : "N/A"}
                 </h1>
                 <h1 className="text-xs">Mode</h1>
               </div>
