@@ -206,7 +206,9 @@ const ClassProfilePage = () => {
                     setClassOpen={setClassOpen}
                     classList={classList}
                   />
-                ) : null}
+                ) : (
+                  <h2 className="font-bold">No classes found in the system.</h2>
+                )}
               </div>
             </div>
             {class_ && class_ !== "" && markData ? (
