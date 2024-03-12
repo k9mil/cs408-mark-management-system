@@ -264,8 +264,16 @@ export const StudentsModal = ({
                 </CardHeader>
                 <CardDescription>
                   <h2 className="text-sm">
-                    Scored{" "}
-                    <span className="font-semibold">{mark_row.mark}%</span>
+                    Mark:{" "}
+                    <span className="font-semibold">
+                      {mark_row.mark ? mark_row.mark + "%" : "N/A"}
+                    </span>
+                  </h2>
+                  <h2 className="text-sm">
+                    Code:{" "}
+                    <span className="font-semibold">
+                      {mark_row.code ? mark_row.code : "N/A"}
+                    </span>
                   </h2>
                 </CardDescription>
               </Card>
