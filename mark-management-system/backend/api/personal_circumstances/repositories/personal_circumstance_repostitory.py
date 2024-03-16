@@ -31,12 +31,13 @@ class PersonalCircumstanceRepository:
         self.db.commit()
         self.db.refresh(personal_circumstance)
 
-    def find_by_details(self, request: PersonalCircumstancesCreate) -> List[PersonalCircumstance]:
+    def find_by_details(self, request: PersonalCircumstancesCreate, student_id: int) -> List[PersonalCircumstance]:
         """
         Checks whether a given request is already in the database.
 
         Args:
             request: The request containing information that was passed in to create the personal circumstances.
+            student_id: Identifier of the student in the request.
         
         Returns:
             Optional[PersonalCircumstance]: The first result from the database that matches the filter, otherwise None.
@@ -46,17 +47,17 @@ class PersonalCircumstanceRepository:
             semester=request.semester,
             cat=request.cat,
             comments=request.comments,
-            student_reg_no=request.reg_no,
+            student_id=student_id,
         ).first()
 
-    def get_by_student_reg_no(self, reg_no: str) -> List[PersonalCircumstance]:
+    def get_by_student_id(self, student_id: int) -> List[PersonalCircumstance]:
         """
-        Get a list of personal circumstances by a registration number of a student.
+        Get a list of personal circumstances by an id of a student.
 
         Args:
-            reg_no: The student identificator.
+            student_id: The student identificator.
         
         Returns:
             Optional[PersonalCircumstance]: A List[PersonalCircumstance] from the database.
         """
-        return self.db.query(PersonalCircumstance).filter_by(student_reg_no=reg_no).all()
+        return self.db.query(PersonalCircumstance).filter_by(student_id=student_id).all()

@@ -60,22 +60,30 @@ class CreateAcademicMisconductUseCase:
         if not ((user and is_lecturer) or is_admin):
             raise PermissionError("Permission denied to access this resource")
         
-        if self.student_repository.find_by_reg_no(request.reg_no) is None:
+        student = self.student_repository.find_by_reg_no(request.reg_no)
+            
+        if not student:
             raise StudentNotFound("Student not found")
         
-        if self.class_repository.find_by_code(request.class_code) is None:
+        class_ = self.class_repository.find_by_code(request.class_code)
+            
+        if not class_:
             raise ClassNotFound("Class not found")
-
-        if self.class_repository.is_student_in_class(request.class_code, request.reg_no) is False:
-            raise StudentNotFound("Student doesnt belong to the provided class not found")
+        
+        if self.class_repository.is_student_in_class_by_ids(class_.id, student.id) is False:
+            raise StudentNotFound("Student doesnt belong to the provided class")
 
         academic_misconduct = AcademicMisconduct(
             date=request.date,
             outcome=request.outcome,
-            student_reg_no=request.reg_no,
-            class_code = request.class_code,
+            student_id=student.id,
+            class_id=class_.id,
         )
 
         self.academic_misconduct_repository.add(academic_misconduct)
         
-        return academic_misconduct
+        return AcademicMisconductSchema(
+            date=request.date,
+            outcome=request.outcome,
+            class_code=class_.code
+        )

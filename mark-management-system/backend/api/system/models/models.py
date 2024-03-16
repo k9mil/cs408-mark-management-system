@@ -61,8 +61,8 @@ class RoleUsers(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
-    role_id = Column(Integer, ForeignKey("roles.id"), primary_key=True, nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True, nullable=False)
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
 class Class(Base):
     __tablename__ = "classes"
@@ -98,8 +98,8 @@ class DegreeClasses(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
-    degree_id = Column(Integer, ForeignKey("degrees.id"), primary_key=True, nullable=False)
-    class_id = Column(Integer, ForeignKey("classes.id"), primary_key=True, nullable=False)
+    degree_id = Column(Integer, ForeignKey("degrees.id"), nullable=False)
+    class_id = Column(Integer, ForeignKey("classes.id"), nullable=False)
 
 class PersonalCircumstance(Base):
     __tablename__ = "personal_circumstances"
@@ -111,7 +111,7 @@ class PersonalCircumstance(Base):
     cat = Column(Integer, nullable=False)
     comments = Column(String(256), nullable=False)
 
-    student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
+    student_id = Column(Integer, ForeignKey("students.id"), index=True)
 
     student = relationship("Student", back_populates="personal_circumstances")
 
@@ -123,8 +123,8 @@ class AcademicMisconduct(Base):
     date = Column(Date, nullable=False)
     outcome = Column(String(32), nullable=False)
 
-    student_reg_no = Column(String, ForeignKey("students.reg_no"), index=True)
-    class_code = Column(String, ForeignKey("classes.code"), index=True)
+    student_id = Column(Integer, ForeignKey("students.id"), index=True)
+    class_id = Column(Integer, ForeignKey("classes.id"), index=True)
 
     student = relationship("Student", back_populates="academic_misconducts")
     class_ = relationship("Class", back_populates="academic_misconducts")

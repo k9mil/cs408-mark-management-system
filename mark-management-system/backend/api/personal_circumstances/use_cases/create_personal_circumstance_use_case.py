@@ -56,10 +56,12 @@ class CreatePersonalCircumstanceUseCase:
         if not ((user and is_lecturer) or is_admin):
             raise PermissionError("Permission denied to access this resource")
         
-        if self.student_repository.find_by_reg_no(request.reg_no) is None:
+        student = self.student_repository.find_by_reg_no(request.reg_no)
+
+        if not student:
             raise StudentNotFound("Student not found")
         
-        if self.personal_circumstance_repository.find_by_details(request):
+        if self.personal_circumstance_repository.find_by_details(request, student.id):
             raise PersonalCircumstanceAlreadyExists("Personal Circumstance already exists")
 
         personal_circumstance = PersonalCircumstance(
@@ -67,7 +69,7 @@ class CreatePersonalCircumstanceUseCase:
             semester=request.semester,
             cat=request.cat,
             comments=request.comments,
-            student_reg_no=request.reg_no
+            student_id=student.id
         )
 
         self.personal_circumstance_repository.add(personal_circumstance)

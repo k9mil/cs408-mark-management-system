@@ -36,4 +36,6 @@ def get_academic_misconducts_for_student_use_case(
     return GetAcademicMisconductsForStudentUseCase(
         academic_misconduct_repository, 
         user_repository,
+        student_repository,
+        class_repository
     )

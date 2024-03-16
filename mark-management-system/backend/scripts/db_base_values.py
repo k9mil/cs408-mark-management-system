@@ -138,7 +138,7 @@ def create_personal_circumstances(db: Session) -> None:
             semester="1",
             cat="1",
             comments="Consider extension for Coursework",
-            student_reg_no="abc12345"
+            student_id="1"
         )
     )
 
@@ -148,7 +148,7 @@ def create_personal_circumstances(db: Session) -> None:
             semester="1",
             cat="3",
             comments="Discount attempt as CS426",
-            student_reg_no="abc12345",
+            student_id="1",
         )
     )
 
@@ -158,7 +158,7 @@ def create_personal_circumstances(db: Session) -> None:
             semester="2",
             cat="2",
             comments="Discount attempt as CS412",
-            student_reg_no="abc54321",
+            student_id="2",
         )
     )
 
@@ -169,8 +169,8 @@ def create_academic_misconducts(db: Session) -> None:
         AcademicMisconduct(
             date="2024-01-01",
             outcome="UPHELD",
-            student_reg_no="abc12345",
-            class_code="CS412",
+            student_id="1",
+            class_id="2",
         )
     )
 
@@ -178,8 +178,8 @@ def create_academic_misconducts(db: Session) -> None:
         AcademicMisconduct(
             date="2024-02-01",
             outcome="UNDER INVESTIGATION",
-            student_reg_no="abc12345",
-            class_code="CS407",
+            student_id="2",
+            class_id="3",
         )
     )
 
@@ -187,8 +187,8 @@ def create_academic_misconducts(db: Session) -> None:
         AcademicMisconduct(
             date="2023-07-07",
             outcome="UNDER INVESTIGATION",
-            student_reg_no="abc33311",
-            class_code="CS407",
+            student_id="3",
+            class_id="1",
         )
     )
 

@@ -105,6 +105,7 @@ const StudentProfilePage = () => {
           }
         } catch (error) {
           console.error(error);
+          setStudentPersonalCircumstances([]);
         }
       };
 
@@ -121,6 +122,7 @@ const StudentProfilePage = () => {
           }
         } catch (error) {
           console.error(error);
+          setStudentAcademicMisconducts([]);
         }
       };
 

@@ -12,6 +12,7 @@ from api.system.schemas.schemas import PersonalCircumstancesBase
 
 from api.students.repositories.student_repository import StudentRepository
 from api.users.repositories.user_repository import UserRepository
+from api.classes.repositories.class_repository import ClassRepository
 
 from api.students.errors.student_not_found import StudentNotFound
 
@@ -22,9 +23,10 @@ class GetStudentUseCase:
     """
     The Use Case containing business logic for retrieving a student.
     """
-    def __init__(self, student_repository: StudentRepository, user_repository: UserRepository) -> None:
+    def __init__(self, student_repository: StudentRepository, user_repository: UserRepository, class_repository: ClassRepository) -> None:
         self.student_repository = student_repository
         self.user_repository = user_repository
+        self.class_repository = class_repository
     
     def execute(self, reg_no: str, current_user: Tuple[str, bool, bool]) -> StudentSchema:
         """
@@ -72,12 +74,20 @@ class GetStudentUseCase:
         classes_with_academic_misconduct = []
 
         for class_ in student.classes:
-            academic_misconducts = [AcademicMisconductCreate(
-                                    reg_no=misconduct.student_reg_no,
-                                    class_code=misconduct.class_code,
-                                    date=misconduct.date,
-                                    outcome=misconduct.outcome,
-                                ) for misconduct in class_.academic_misconducts if misconduct.student_reg_no == student.reg_no]
+            academic_misconducts = []
+
+            for misconduct in class_.academic_misconducts:
+                if misconduct.student_id == student.id:
+                    class_ = self.class_repository.find_by_id(misconduct.class_id)
+
+                    misconduct_item = AcademicMisconductCreate(
+                        reg_no=student.reg_no,
+                        class_code=class_.code,
+                        date=misconduct.date,
+                        outcome=misconduct.outcome,
+                    )
+
+                    academic_misconducts.append(misconduct_item)
             
             class_with_misconduct = ClassWithMisconduct(
                 name=class_.name,
