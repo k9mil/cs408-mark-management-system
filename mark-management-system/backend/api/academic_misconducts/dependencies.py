@@ -31,9 +31,11 @@ def get_academic_misconducts_for_student_use_case(
         academic_misconduct_repository: AcademicMisconductRepository = Depends(get_academic_misconduct_repository),
         user_repository: UserRepository = Depends(get_user_repository),
         student_repository: StudentRepository = Depends(get_student_repository),
+        class_repository: ClassRepository = Depends(get_class_repository),
     ) -> GetAcademicMisconductsForStudentUseCase:
     return GetAcademicMisconductsForStudentUseCase(
         academic_misconduct_repository, 
         user_repository,
-        student_repository
+        student_repository,
+        class_repository
     )
