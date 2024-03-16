@@ -32,14 +32,14 @@ class AcademicMisconductRepository:
         self.db.commit()
         self.db.refresh(academic_misconduct)
 
-    def get_by_student_reg_no(self, reg_no: str) -> List[AcademicMisconduct]:
+    def get_by_student_id(self, student_id: int) -> List[AcademicMisconduct]:
         """
-        Get a list of academic misconducts by a registration number of a student.
+        Get a list of academic misconducts by an id of a student.
 
         Args:
-            reg_no: The student identificator.
+            student_id: The student identificator.
         
         Returns:
             Optional[AcademicMisconduct]: A List[AcademicMisconduct] from the database.
         """
-        return self.db.query(AcademicMisconduct).filter_by(student_reg_no=reg_no).all()
+        return self.db.query(AcademicMisconduct).filter_by(student_id=student_id).all()

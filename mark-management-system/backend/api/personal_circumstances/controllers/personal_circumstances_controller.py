@@ -86,7 +86,7 @@ def get_personal_circumstances_for_student(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.   
         - `HTTPException`, 403: If the requestor doesn't have the required permissions.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, or the personal circumstances aren't found.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or the personal circumstances aren't found, or if the student cannot be found.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -105,6 +105,8 @@ def get_personal_circumstances_for_student(
     except PersonalCircumstanceNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except StudentNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=403, detail=str(e))

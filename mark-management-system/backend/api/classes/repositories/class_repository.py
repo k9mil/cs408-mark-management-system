@@ -34,6 +34,18 @@ class ClassRepository:
         self.db.commit()
         self.db.refresh(class_)
 
+    def find_by_id(self, class_id: int) -> Optional[Class]:
+        """
+        Retrieves a class by a given identifier.
+
+        Args:
+            class_id: The class id.
+        
+        Returns:
+            Optional[Class]: A `Class` object from the database, however can also return `None` if not found.
+        """
+        return self.db.query(Class).filter_by(id=class_id).first()
+
     def find_by_code(self, code: str) -> Optional[Class]:
         """
         Retrieves a class by a given class code.
@@ -109,6 +121,19 @@ class ClassRepository:
             bool: True if they are a lecturer, false if not.
         """
         return self.db.query(Class).filter_by(id=class_id, lecturer_id=lecturer_id).first() is not None
+    
+    def is_student_in_class_by_ids(self, class_id: int, student_id: int) -> bool:
+        """
+        Checks if a student belongs to a class.
+
+        Args:
+            class_id: The identifier of the class.
+            student_id: The identifier of the student.
+        
+        Returns:
+            bool: True if they belong to the class, false if not.
+        """
+        return self.db.query(Class).join(Class.students).filter(Student.id == student_id, Class.id == class_id).first() is not None
     
     def is_student_in_class(self, class_code: str, reg_no: str) -> bool:
         """

@@ -4,8 +4,10 @@ from api.system.schemas.schemas import AcademicMisconductBase as AcademicMiscond
 
 from api.academic_misconducts.repositories.academic_misconduct_repository import AcademicMisconductRepository
 from api.users.repositories.user_repository import UserRepository
+from api.students.repositories.student_repository import StudentRepository
 
 from api.users.errors.user_not_found import UserNotFound
+from api.students.errors.student_not_found import StudentNotFound
 
 from api.academic_misconducts.errors.academic_misconduct_not_found import AcademicMisconductNotFound
 
@@ -14,9 +16,10 @@ class GetAcademicMisconductsForStudentUseCase:
     """
     The Use Case containing business logic for retrieving all academic misconducts for a student.
     """
-    def __init__(self, academic_misconduct_repository: AcademicMisconductRepository, user_repository: UserRepository) -> None:
+    def __init__(self, academic_misconduct_repository: AcademicMisconductRepository, user_repository: UserRepository, student_repository: StudentRepository) -> None:
         self.academic_misconduct_repository = academic_misconduct_repository
         self.user_repository = user_repository
+        self.student_repository = student_repository
 
     def execute(self, reg_no: str, current_user: Tuple[str, bool, bool]) -> List[AcademicMisconductSchema]:
         """
@@ -44,7 +47,12 @@ class GetAcademicMisconductsForStudentUseCase:
         if not ((user and is_lecturer) or is_admin):
             raise PermissionError("Permission denied to access this resource")
         
-        academic_misconducts = self.academic_misconduct_repository.get_by_student_reg_no(reg_no)
+        student = self.student_repository.find_by_reg_no(reg_no)
+
+        if not student:
+            raise StudentNotFound("Student not found")
+        
+        academic_misconducts = self.academic_misconduct_repository.get_by_student_id(student.id)
 
         if not academic_misconducts:
             raise AcademicMisconductNotFound("No academic misconducts found")

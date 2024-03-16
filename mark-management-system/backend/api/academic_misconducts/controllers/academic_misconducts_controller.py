@@ -10,9 +10,7 @@ from api.academic_misconducts.use_cases.get_academic_misconducts_for_student_use
 from api.academic_misconducts.errors.academic_misconduct_not_found import AcademicMisconductNotFound
 
 from api.users.errors.user_not_found import UserNotFound
-
 from api.classes.errors.class_not_found import ClassNotFound
-
 from api.students.errors.student_not_found import StudentNotFound
 
 from api.middleware.dependencies import get_current_user
@@ -87,7 +85,7 @@ def get_academic_misconducts_for_student(
     Raises:  
         - `HTTPException`, 401: If the `current_user` is None, i.e. if the JWT is invalid, missing or corrupt.   
         - `HTTPException`, 403: If the requestor doesn't have the required permissions.  
-        - `HTTPException`, 404: If the user from the JWT cannot be found, or the academic misconducts aren't found.  
+        - `HTTPException`, 404: If the user from the JWT cannot be found, or the academic misconducts aren't found, or if the student is not found.  
         - `HTTPException`, 500: If any other system exception occurs.  
 
     Returns:  
@@ -106,6 +104,8 @@ def get_academic_misconducts_for_student(
     except AcademicMisconductNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except UserNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except StudentNotFound as e:
         raise HTTPException(status_code=404, detail=str(e))
     except PermissionError as e:
         raise HTTPException(status_code=403, detail=str(e))

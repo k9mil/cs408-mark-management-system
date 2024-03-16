@@ -25,9 +25,11 @@ def create_personal_circumstance_use_case(
 
 def get_personal_circumstances_for_student_use_case(
         personal_circumstance_repository: PersonalCircumstanceRepository = Depends(get_personal_circumstance_repository),
-        user_repository: UserRepository = Depends(get_user_repository)
+        user_repository: UserRepository = Depends(get_user_repository),
+        student_repository: StudentRepository = Depends(get_student_repository),
     ) -> GetPersonalCircumstancesForStudentUseCase:
     return GetPersonalCircumstancesForStudentUseCase(
         personal_circumstance_repository, 
         user_repository, 
+        student_repository
     )
