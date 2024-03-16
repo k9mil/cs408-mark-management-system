@@ -82,4 +82,8 @@ class CreateAcademicMisconductUseCase:
 
         self.academic_misconduct_repository.add(academic_misconduct)
         
-        return academic_misconduct
+        return AcademicMisconductSchema(
+            date=request.date,
+            outcome=request.outcome,
+            class_code=class_.code
+        )
