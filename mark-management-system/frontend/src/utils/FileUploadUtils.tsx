@@ -33,8 +33,6 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       return false;
     }
 
-    console.log(row);
-
     if (row.class_code !== firstClassCode) {
       toast.error(
         `Row ${
