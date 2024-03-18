@@ -64,7 +64,10 @@ def create_students(db: Session) -> None:
     student_repository = StudentRepository(db)
 
     student_repository.add(Student(reg_no="abc12345", student_name="John Doe", year=1, degree_id=1))
-    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", year=4, degree_id=1))
+    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", year=2, degree_id=1))
+    student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", year=3, degree_id=1))
+    student_repository.add(Student(reg_no="abc33355", student_name="Annie Doe", year=4, degree_id=1))
+    student_repository.add(Student(reg_no="abc33356", student_name="Hannie Doe", year=4, degree_id=1))
 
     for _ in range(100):
         student_repository.add(
@@ -150,11 +153,23 @@ def create_marks(db: Session) -> None:
 
     mark_repository = MarkRepository(db)
 
+    mark_repository.add(Marks(mark="70", class_id="1", student_id=1))
+    mark_repository.add(Marks(mark="54", class_id="2", student_id=1))
+    mark_repository.add(Marks(mark="30", code="PM", class_id="3", student_id=1))
+
+    mark_repository.add(Marks(mark="61", class_id="1", student_id=2))
+    mark_repository.add(Marks(mark="79", class_id="2", student_id=2))
+    mark_repository.add(Marks(mark="55", code="EX", class_id="3", student_id=2))
+
+    mark_repository.add(Marks(mark="61", class_id="1", student_id=3))
+    mark_repository.add(Marks(mark="89", class_id="2", student_id=3))
+    mark_repository.add(Marks(code="ABS", class_id="4", student_id=3))
+
     for class_id in range(NUMBER_OF_CLASSES):
         SIGMA: int = randint(MIN_SIGMA, MAX_SIGMA)
         MU: int = randint(MIN_MU, MAX_MU)
 
-        for student_id in range(NUMBER_OF_STUDENTS):
+        for student_id in range(5, NUMBER_OF_STUDENTS):
             mark_code, generated_mark = "", ""
 
             if randint(1, 100) <= 2:
