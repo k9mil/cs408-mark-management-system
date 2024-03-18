@@ -10,6 +10,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 
+from faker import Faker
+
+from typing import Dict, List, Final
+from random import normalvariate, randint, choice
+
 from api.system.models.models import Base
 
 from api.config import DevelopmentConfig
@@ -27,6 +32,20 @@ from api.academic_misconducts.repositories.academic_misconduct_repository import
 from api.system.models.models import Role, Class, Degree, Marks, PersonalCircumstance, Student, User, RoleUsers, AcademicMisconduct
 
 from api.users.hashers.bcrypt_hasher import BCryptHasher
+
+
+faker = Faker()
+
+MIN_MU: Final[int] = 57
+MAX_MU: Final[int] = 73
+
+MIN_SIGMA: Final[int] = 5
+MAX_SIGMA: Final[int] = 25
+
+DP: Final[int] = 0
+
+NUMBER_OF_STUDENTS: Final[int] = 100
+NUMBER_OF_CLASSES: Final[int] = 4
 
 
 def initialise_roles(db: Session) -> None:
@@ -49,6 +68,16 @@ def create_students(db: Session) -> None:
     student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", year=3, degree_id=1))
     student_repository.add(Student(reg_no="abc33355", student_name="Annie Doe", year=4, degree_id=1))
     student_repository.add(Student(reg_no="abc33356", student_name="Hannie Doe", year=4, degree_id=1))
+
+    for _ in range(100):
+        student_repository.add(
+            Student(
+                reg_no=f"{faker.random_lowercase_letter()}{faker.random_lowercase_letter()}{faker.random_lowercase_letter()}{faker.random_number(5)}",
+                student_name=faker.first_name() + " " + faker.last_name(),
+                year=randint(1, 4),
+                degree_id=1
+            )
+        )
 
 def create_users(db: Session) -> None:
     user_repository = UserRepository(db)
@@ -116,19 +145,48 @@ def create_classes(db: Session) -> None:
     class_repository.add(Class(name="Individual Project", code="CS408", credit="40", credit_level="4", lecturer_id=2))
 
 def create_marks(db: Session) -> None:
+    LOWER_MARK_BOUND = 0
+    UPPER_MARK_BOUND = 100
+    
+    mark_codes_absent: List[str] = ["ABS", "EN", "UM"]
+    mark_codes_present: List[str] = ["EX", "FO", "IA", "PM"]
+
     mark_repository = MarkRepository(db)
 
     mark_repository.add(Marks(mark="70", class_id="1", student_id=1))
     mark_repository.add(Marks(mark="54", class_id="2", student_id=1))
     mark_repository.add(Marks(mark="30", code="PM", class_id="3", student_id=1))
-    
+
     mark_repository.add(Marks(mark="61", class_id="1", student_id=2))
     mark_repository.add(Marks(mark="79", class_id="2", student_id=2))
     mark_repository.add(Marks(mark="55", code="EX", class_id="3", student_id=2))
-    
+
     mark_repository.add(Marks(mark="61", class_id="1", student_id=3))
     mark_repository.add(Marks(mark="89", class_id="2", student_id=3))
     mark_repository.add(Marks(code="ABS", class_id="4", student_id=3))
+
+    for class_id in range(NUMBER_OF_CLASSES):
+        SIGMA: int = randint(MIN_SIGMA, MAX_SIGMA)
+        MU: int = randint(MIN_MU, MAX_MU)
+
+        for student_id in range(5, NUMBER_OF_STUDENTS):
+            mark_code, generated_mark = "", ""
+
+            if randint(1, 100) <= 2:
+                mark_code = choice(mark_codes_absent + mark_codes_present)
+
+            if mark_code in mark_codes_absent:
+                generated_mark = ""
+            else:
+                generated_mark = int(round(normalvariate(MU, SIGMA), DP))
+                generated_mark = str(generated_mark) if LOWER_MARK_BOUND <= generated_mark <= UPPER_MARK_BOUND else "100"
+            
+            if generated_mark and mark_code:
+                mark_repository.add(Marks(mark=generated_mark, code=mark_code, class_id=(class_id + 1), student_id=(student_id + 1)))
+            if not generated_mark and mark_code:
+                mark_repository.add(Marks(code=mark_code, class_id=(class_id + 1), student_id=(student_id + 1)))
+            if generated_mark and not mark_code:
+                mark_repository.add(Marks(mark=generated_mark, class_id=(class_id + 1), student_id=(student_id + 1)))
 
 def create_personal_circumstances(db: Session) -> None:
     personal_circumstance_repository = PersonalCircumstanceRepository(db)

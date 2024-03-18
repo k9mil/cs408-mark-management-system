@@ -57,6 +57,7 @@ export function ClassProfileDataTable<TData, TValue>({
         student_name: studentProfileItem.student_name,
         registration_number: studentProfileItem.reg_no,
         mark: studentProfileItem.mark,
+        code: studentProfileItem.code,
       };
 
       preprocessedData.push(processedStudent);
