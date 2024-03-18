@@ -59,6 +59,7 @@ class DataGenerator:
             
             if generated_mark:
                 student_data["MARK"] = generated_mark
+                
             if mark_code:
                 student_data["MARK_CODE"] = mark_code
 

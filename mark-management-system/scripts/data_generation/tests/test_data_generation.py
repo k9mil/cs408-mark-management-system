@@ -37,10 +37,11 @@ class TestCSVWriter(unittest.TestCase):
                 "CLASS_CODE": "CS408",
                 "REG_NO": "qir4079",
                 "MARK": "62",
-                "STUDENT": "Christopher Rocha",
+                "STUDENT_NAME": "Christopher Rocha",
                 "DEGREE_LEVEL": "BSc",
-                "DEGREE": "Computer Science",
-                "UNIQUE_CODE": "CS2020GX"
+                "DEGREE_NAME": "Computer Science",
+                "MARK": "71",
+                "MARK_CODE": "PM"
             },
         ]
         self.SAMPLE_FILE_NAME = "TEST_CSV_WRITER_FILE.csv"
