@@ -1,6 +1,6 @@
 from typing import Any, Dict, Callable
 
-
+# https://stackoverflow.com/questions/6760685/what-is-the-best-way-of-implementing-singleton-in-python
 def singleton(class_: Any) -> Callable:
     instances: Dict = {}
 
