@@ -53,10 +53,12 @@ export function ClassProfileDataTable<TData, TValue>({
     const preprocessedData = [];
 
     for (const studentProfileItem of data) {
+      console.log(studentProfileItem);
       const processedStudent = {
         student_name: studentProfileItem.student_name,
         registration_number: studentProfileItem.reg_no,
         mark: studentProfileItem.mark,
+        code: studentProfileItem.code,
       };
 
       preprocessedData.push(processedStudent);
