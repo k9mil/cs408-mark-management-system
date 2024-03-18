@@ -26,12 +26,14 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
     if (Object.keys(row).length < 6) {
       toast.error(
         `Row ${i + 2} doesn't contain all necessary information. 
-        The row should have the following: 
-        CLASS_CODE, REG_NO, MARK, STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME`
+        The row should have at least the following: 
+        CLASS_CODE, REG_NO, MARK (or MARK_CODE), STUDENT_NAME, DEGREE_LEVEL, DEGREE_NAME`
       );
 
       return false;
     }
+
+    console.log(row);
 
     if (row.class_code !== firstClassCode) {
       toast.error(
@@ -85,7 +87,7 @@ export function validateUploadFile(fileContents: IMarkRow[] | null): boolean {
       delete row["MARK_CODE"];
     }
 
-    if ("mark" in row && row.mark !== null) {
+    if ("mark" in row && row.mark !== null && row.mark !== "") {
       if (!isNumber(row.mark)) {
         toast.error(`Row ${i + 2} should have a mark which is an integer.`);
         return false;

@@ -8,7 +8,7 @@ from datetime import datetime
 
 sys.path.append("../")
 
-from data_generation import DataGenerator, CSVWriter
+from data_generation import DataGenerator, CSVWriter, PSQLInsertGenerator
 
 
 class TestDataGenerator(unittest.TestCase):
@@ -37,12 +37,14 @@ class TestCSVWriter(unittest.TestCase):
                 "CLASS_CODE": "CS408",
                 "REG_NO": "qir4079",
                 "MARK": "62",
-                "STUDENT": "Christopher Rocha",
+                "STUDENT_NAME": "Christopher Rocha",
                 "DEGREE_LEVEL": "BSc",
-                "DEGREE": "Computer Science",
-                "UNIQUE_CODE": "CS2020GX"
+                "DEGREE_NAME": "Computer Science",
+                "MARK": "71",
+                "MARK_CODE": "PM"
             },
         ]
+
         self.SAMPLE_FILE_NAME = "TEST_CSV_WRITER_FILE.csv"
         self.csv_writer = CSVWriter()
 
@@ -78,6 +80,33 @@ class TestCSVWriter(unittest.TestCase):
 
         assert datetime.strptime(timestamp_from_file_name, EXPECTED_FORMAT)
 
+class TestPSQLInsertGenerator(unittest.TestCase):
+    def setUp(self) -> None:
+        self.SAMPLE_DATA: List[Dict[str, str]] = [
+            {
+                "CLASS_CODE": "CS408",
+                "REG_NO": "qir4079",
+                "MARK": "62",
+                "STUDENT_NAME": "Christopher Rocha",
+                "DEGREE_LEVEL": "BSc",
+                "DEGREE_NAME": "Computer Science",
+                "MARK": "71",
+                "MARK_CODE": "PM"
+            },
+        ]
+
+        self.psql_insert_generator = PSQLInsertGenerator()
+    
+    def test_given_a_valid_data_list_when_generating_insert_statements_then_inserts_are_generated_correctly(self) -> None:
+        insert_statements = self.psql_insert_generator.generate_insert_statements(self.SAMPLE_DATA)
+
+        self.assertIn(self.SAMPLE_DATA[0]["REG_NO"], insert_statements)
+        self.assertIn(self.SAMPLE_DATA[0]["STUDENT_NAME"], insert_statements)
+
+    def test_given_no_params_when_calling_generate_insert_statements_then_an_error_is_thrown(self) -> None:
+        with self.assertRaises(TypeError):
+            self.psql_insert_generator.generate_insert_statements()
+    
 
 if __name__ == "__main__":
     unittest.main()

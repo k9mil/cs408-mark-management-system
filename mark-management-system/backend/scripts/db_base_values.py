@@ -48,6 +48,7 @@ def create_students(db: Session) -> None:
     student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", year=2, degree_id=1))
     student_repository.add(Student(reg_no="abc33311", student_name="Jack Doe", year=3, degree_id=1))
     student_repository.add(Student(reg_no="abc33355", student_name="Annie Doe", year=4, degree_id=1))
+    student_repository.add(Student(reg_no="abc33356", student_name="Hannie Doe", year=4, degree_id=1))
 
 def create_users(db: Session) -> None:
     user_repository = UserRepository(db)
