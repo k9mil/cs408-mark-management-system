@@ -11,8 +11,12 @@ from typing_extensions import Annotated
 
 faker = Faker()
 
-MU: Final[int] = 65
-SIGMA: Final[int] = 10
+MIN_MU: Final[int] = 57
+MAX_MU: Final[int] = 73
+
+MIN_SIGMA: Final[int] = 5
+MAX_SIGMA: Final[int] = 25
+
 DP: Final[int] = 0
 
 
@@ -36,6 +40,9 @@ class MarkGenerator:
         """
         mark_codes_absent: List[str] = ["ABS", "EN", "UM"]
         mark_codes_present: List[str] = ["EX", "FO", "IA", "PM"]
+
+        SIGMA: int = randint(MIN_SIGMA, MAX_SIGMA)
+        MU: int = randint(MIN_MU, MAX_MU)
 
         for _ in range(num_students):
             mark_code, generated_mark = "", ""
