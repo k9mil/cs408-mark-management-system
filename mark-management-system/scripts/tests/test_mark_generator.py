@@ -8,27 +8,27 @@ from datetime import datetime
 
 sys.path.append("../")
 
-from data_generation import DataGenerator, CSVWriter, PSQLInsertGenerator
+from mark_generator import MarkGenerator, CSVWriter, PSQLInsertGenerator
 
 
-class TestDataGenerator(unittest.TestCase):
+class TestMarkGenerator(unittest.TestCase):
     def setUp(self) -> None:
         self.SAMPLE_CLASS_CODE: str = "CS408"
         self.SAMPLE_NUM_STUDENTS: int = 5
 
     def test_given_a_valid_class_code_and_num_students_when_generating_data_then_data_is_generated(self) -> None:
-        data_generator = DataGenerator()
-        data_generator.generate_data(
+        mark_generator = MarkGenerator()
+        mark_generator.generate_data(
             self.SAMPLE_CLASS_CODE, self.SAMPLE_NUM_STUDENTS
         )
 
-        self.assertEqual(len(data_generator.data), self.SAMPLE_NUM_STUDENTS)
+        self.assertEqual(len(mark_generator.data), self.SAMPLE_NUM_STUDENTS)
 
     def test_given_no_parameters_when_generating_data_then_a_type_error_is_thrown(self) -> None:
-        data_generator = DataGenerator()
+        mark_generator = MarkGenerator()
 
         with self.assertRaises(TypeError):
-            data_generator.generate_data()
+            mark_generator.generate_data()
 
 class TestCSVWriter(unittest.TestCase):
     def setUp(self) -> None:
@@ -70,7 +70,7 @@ class TestCSVWriter(unittest.TestCase):
 
         file_name = self.csv_writer.generate_filename()
 
-        self.assertTrue(file_name.startswith("mms_data_"))
+        self.assertTrue(file_name.startswith("mms_marks_"))
         self.assertTrue(file_name.endswith(".csv"))
 
         last_underscore_index = file_name.rfind("_")
