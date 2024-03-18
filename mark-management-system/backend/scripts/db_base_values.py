@@ -63,6 +63,9 @@ def create_degree(db: Session) -> None:
 def create_students(db: Session) -> None:
     student_repository = StudentRepository(db)
 
+    student_repository.add(Student(reg_no="abc12345", student_name="John Doe", year=1, degree_id=1))
+    student_repository.add(Student(reg_no="abc54321", student_name="Jane Doe", year=4, degree_id=1))
+
     for _ in range(100):
         student_repository.add(
             Student(
