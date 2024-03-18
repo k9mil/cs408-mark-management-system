@@ -430,7 +430,7 @@ def test_given_a_nonexisting_mark_in_the_system_when_deleting_mark_then_error_is
         "lecturer@mms.com", "12345678"
     )
 
-    SAMPLE_MARK_ID = 191
+    SAMPLE_MARK_ID = 7191
 
     response = client.delete(
         f"/api/v1/marks/{SAMPLE_MARK_ID}",
