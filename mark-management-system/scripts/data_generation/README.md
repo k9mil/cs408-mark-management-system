@@ -17,6 +17,8 @@ INSERT INTO students (reg_no, student_name, year, degree_id) VALUES ('gds21131',
 INSERT INTO students (reg_no, student_name, year, degree_id) VALUES ('xuj58904', 'Arthur Phillips', 1, 1);
 ```
 
+NOTE: This script requires the existence of a degree in the system (as the degree_id is hardcoded to 1). This is attainable by running the base values script present in the /backend/scripts folder.
+
 ## Usage
 
 1. Initialize a virtual environment for packages (yes, a different one to the primary system!).

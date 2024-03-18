@@ -34,8 +34,8 @@ class DataGenerator:
             class_code: A string representing the class code.
             num_students: An integer representing the amount of students taking the class.
         """
-        mark_codes_absent = ["ABS", "EN", "UM"]
-        mark_codes_present = ["EX", "FO", "IA", "PM"]
+        mark_codes_absent: List[str] = ["ABS", "EN", "UM"]
+        mark_codes_present: List[str] = ["EX", "FO", "IA", "PM"]
 
         for _ in range(num_students):
             mark_code, generated_mark = "", ""
@@ -59,7 +59,7 @@ class DataGenerator:
             
             if generated_mark:
                 student_data["MARK"] = generated_mark
-                
+
             if mark_code:
                 student_data["MARK_CODE"] = mark_code
 
