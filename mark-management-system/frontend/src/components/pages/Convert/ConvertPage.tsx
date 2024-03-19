@@ -28,6 +28,7 @@ import { IStudent } from "@/models/IStudent";
 
 import {
   exportToCSV,
+  isEqual,
   toLowerCaseIMarkMyPlace,
   toLowerCaseIMarkRow,
 } from "@/utils/Utils";
@@ -70,6 +71,12 @@ const ConvertPage = () => {
     try {
       if (!accessToken) {
         toast.error("Access token is missing.");
+
+        return;
+      }
+
+      if (file && file.size < 1) {
+        toast.info("The file should not be empty.");
 
         return;
       }
@@ -209,18 +216,29 @@ const ConvertPage = () => {
     classDetails: IClass,
     marksDetails: IMark
   ): IMarkPegasus => {
+    if (
+      !isEqual(data.code, marksDetails.code) ||
+      !isEqual(data.mark, marksDetails.mark)
+    ) {
+      toast.warning(
+        "Warning: The converted data is different to the data on the system."
+      );
+    }
+
     const classCodeAndRegNo = {
       classcode: data.class_code,
       regno: data.reg_no,
     };
 
     const markData =
-      data.mark !== null && data.mark !== undefined ? { mark: data.mark } : {};
+      data.mark !== null && data.mark !== undefined
+        ? { mark: data.mark }
+        : { mark: "" };
 
     const codeData =
-      marksDetails.code !== null && marksDetails.code !== undefined
-        ? { code: marksDetails.code }
-        : {};
+      data.code !== null && data.code !== undefined
+        ? { code: data.code }
+        : { code: "" };
 
     const restOfPegasusFile = {
       studentname: data.student_name,

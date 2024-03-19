@@ -79,6 +79,12 @@ const UploadPage = () => {
         return;
       }
 
+      if (file && file.size < 1) {
+        toast.info("The file should not be empty.");
+
+        return;
+      }
+
       if (uploadType === "student_marks") {
         const parsedFile = await parseStudentMarks();
         let parsedFileToLower;
