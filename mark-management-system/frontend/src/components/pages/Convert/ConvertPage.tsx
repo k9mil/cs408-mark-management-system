@@ -216,9 +216,6 @@ const ConvertPage = () => {
     classDetails: IClass,
     marksDetails: IMark
   ): IMarkPegasus => {
-    console.log(data);
-    console.log(marksDetails);
-
     if (
       !isEqual(data.code, marksDetails.code) ||
       !isEqual(data.mark, marksDetails.mark)
