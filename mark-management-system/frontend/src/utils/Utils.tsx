@@ -70,8 +70,10 @@ export const generateCSVname = (text: string): string => {
 
 /**
  * Exports & triggers a download of the CSV to the user's machine.
- * @param dataToExport - The data to be exported, i.e contained within the downloaded CSV.
- * @param successMessage - A custom success message if no errors happen during the exporting process.
+ * @param dataToExport - The data to be exported, i.e contained within the
+ * downloaded CSV.
+ * @param successMessage - A custom success message if no errors happen during
+ * the exporting process.
  * @param text - Custom text which modifies the name of the generated CSV file.
  * @returns - N/A, an empty return if length of data < 1
  */
@@ -101,4 +103,25 @@ export const exportToCSV = (
   } catch (error) {
     toast.error("Something went wrong when exporting to CSV.");
   }
+};
+
+/**
+ * Checks if two variables are equal. Used in the convertToPegasus() method to
+ * check for data differences.
+ * @param value_1 - The first value.
+ * @param value_2 - The second value.
+ * @returns - A boolean, true if equal or false if not.
+ */
+export const isEqual = (value_1: any, value_2: any): boolean => {
+  let converted_value_1 =
+    value_1 === null || value_1 === undefined ? "" : value_1;
+  let converted_value_2 =
+    value_2 === null || value_2 === undefined ? "" : value_2;
+
+  if (typeof converted_value_1 === "number")
+    converted_value_1 = converted_value_1.toString();
+  if (typeof converted_value_2 === "number")
+    converted_value_2 = converted_value_2.toString();
+
+  return converted_value_1 === converted_value_2;
 };
