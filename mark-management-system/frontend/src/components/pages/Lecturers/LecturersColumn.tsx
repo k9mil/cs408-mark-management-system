@@ -2,6 +2,9 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ILecturer } from "@/models/IUser";
 
+/**
+ * Part of each column class was taken from: https://ui.shadcn.com/docs/components/data-table
+ */
 export const LecturerColumns: ColumnDef<ILecturer>[] = [
   {
     accessorKey: "first_name",

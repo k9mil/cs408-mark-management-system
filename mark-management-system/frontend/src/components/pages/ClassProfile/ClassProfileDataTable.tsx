@@ -32,6 +32,9 @@ interface DataTableProps<TData, TValue> {
   accessToken: string | null;
 }
 
+/**
+ * Part of each data table class was taken from: https://ui.shadcn.com/docs/components/data-table
+ */
 export function ClassProfileDataTable<TData, TValue>({
   columns,
   data,

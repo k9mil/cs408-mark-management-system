@@ -40,6 +40,9 @@ interface DataTableProps<TData, TValue> {
   marksData: () => Promise<void>;
 }
 
+/**
+ * Part of each data table class was taken from: https://ui.shadcn.com/docs/components/data-table
+ */
 export function StudentsDataTable<TData, TValue>({
   columns,
   data,
