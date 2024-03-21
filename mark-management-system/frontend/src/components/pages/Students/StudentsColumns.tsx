@@ -2,6 +2,9 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { IMarkRow } from "../../../models/IMark";
 
+/**
+ * Part of each column class was taken from: https://ui.shadcn.com/docs/components/data-table
+ */
 export const StudentColumns: ColumnDef<IMarkRow>[] = [
   {
     accessorKey: "class_code",
@@ -33,6 +36,9 @@ export const StudentColumns: ColumnDef<IMarkRow>[] = [
   },
 ];
 
+/**
+ * Part of each column class was taken from: https://ui.shadcn.com/docs/components/data-table
+ */
 export const StudentProfileColumns: ColumnDef<IMarkRow>[] = [
   {
     accessorKey: "class_code",
