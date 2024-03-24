@@ -26,7 +26,7 @@ The system will generate two types of users, an administrator and a lecturer whi
 - `admin@mms.com` with the password `12345678`
 - `lecturer@mms.com` with the password `12345678`
 
-You may also want to generate some sample marks data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts/data_generation) which contains a useful, customisable Data Generation Script written in Python alongside documentation.
+You may also want to generate some sample marks data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts) which contains a useful, customisable Mark Generation Script written in Python alongside documentation.
 
 ## Installation
 
