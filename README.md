@@ -76,6 +76,12 @@ To run the frontend, you'll need to ensure that you have [Node](https://nodejs.o
    $ npm run dev
    ```
 
+## Testing
+
+This system contains a large amount of integration tests, which have been written in `pytest` due to its direct compatibility with FastAPI. In order to run the integration test suite, a mocked database (in other words, another PostgreSQL database) has to be setup first in order for the test suite to be ran. Please ensure that `MMS_DATABASE_URL_TEST` is a valid environment variable pointing to the mocked database.
+
+Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running `pytest`. If you wish to run tests on only a single file, you can achieve so by running `pytest <file_name>.py`.
+
 ## Usage
 
 As mentioned before, you can either run the script which generates some default data, or alternatively, you can create an account (and anything else) via the API which can be accessed by either:
