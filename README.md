@@ -57,7 +57,9 @@ If you wish to run this web application locally, [Python](https://www.python.org
    $ pip install -r requirements.txt
    ```
 
-4. Run the FastAPI backend.
+4. With the dependencies now being installed, you now have to modify a few configuration attributes. Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. Modify the keys to whatever you wish, and point the database URL to your database.
+
+5. Run the FastAPI backend.
 
    ```
    $ python asgi.py
