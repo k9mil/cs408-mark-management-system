@@ -81,7 +81,7 @@ const HelpPage = () => {
           <div className="flex flex-col space-y-4">
             <CardContent className="mx-6 text-sm text-muted-foreground p-0">
               If you are wanting to convert from the MyPlace format to the MMS
-              format, see below for the required format:
+              format, see below for a sample format:
             </CardContent>
             <CardContent className="mx-6 text-sm font-semibold text-muted-foreground p-0">
               CLASS_CODE, DATE, REG_NO, CLASS_TOTAL, OVERRIDE_MARK
@@ -94,12 +94,11 @@ const HelpPage = () => {
               format, see below for the required format:
             </CardContent>
             <CardContent className="mx-6 text-sm font-semibold text-muted-foreground p-0">
-              CLASS_CODE, REG_NO, MARK, MARK_CODE, STUDENT_NAME, COURSE, DEGREE,
-              DEGREE_CODE, RESULT
+              CLASS_CODE, REG_NO, MARK, MARK_CODE, STUDENT_NAME, DEGREE_LEVEL,
+              DEGREE_NAME
             </CardContent>
             <CardContent className="mx-6 text-sm text-muted-foreground p-0">
-              (e.g., CS123,abc12345,FILL IN,John Doe,Computer
-              Science,BSc,0403/2,FILL IN).
+              (e.g., CS407,abc33355,79,,Annie Doe,BSc (Hons),Computer Science).
             </CardContent>
           </div>
         </Card>
