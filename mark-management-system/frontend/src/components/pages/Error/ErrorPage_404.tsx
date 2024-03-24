@@ -24,6 +24,7 @@ const ErrorPage = () => {
       <div className="w-1/2 flex flex-col justify-center items-center">
         <div className="flex flex-col -space-y-12 justify-center items-center">
           <div className="w-96 h-96">
+            {/* Illustration provided by: https://undraw.co/illustrations */}
             <img src="/404_error.svg" alt="404 Error Illustration" />
           </div>
           <div className="flex flex-col space-y-8">

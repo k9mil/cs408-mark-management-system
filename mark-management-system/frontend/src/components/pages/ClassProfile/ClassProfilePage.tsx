@@ -220,6 +220,7 @@ const ClassProfilePage = () => {
             ) : (
               <div className="flex flex-col justify-center items-center m-auto h-full space-y-4">
                 <div className="w-96 h-96">
+                  {/* /* Illustration provided by: https://undraw.co/illustrations */}
                   <img src="/empty_state.svg" alt="No data found" />
                 </div>
                 <div className="space-y-2 flex flex-col justify-center items-center">
