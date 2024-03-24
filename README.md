@@ -65,7 +65,9 @@ Any further dependencies will be installed as part of the setting up process.
    $ pip install -r requirements.txt
    ```
 
-4. With the dependencies now being installed, you now have to modify a few configuration attributes. Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. Modify the keys to whatever you wish, and point the database URL to your database. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be ran locally, but the `DATABASE_URL` most of course point to the locally run database.
+4. With the dependencies now being installed, you now have to modify a few configuration attributes.
+
+Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be ran locally, but the `DATABASE_URL` will have to point to your instance of Postgres.
 
 The `DATABASE_URL` is usually structured as follows:
 
