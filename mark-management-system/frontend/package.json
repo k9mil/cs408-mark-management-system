@@ -3,18 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "jest": {
-    "verbose": true,
-    "preset": "ts-jest/presets/js-with-ts",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.ts"
-    ],
-    "testEnvironment": "jsdom"
-  },
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "test": "jest",
     "build": "vite build"
   },
   "dependencies": {
