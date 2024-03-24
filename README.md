@@ -30,9 +30,17 @@ You may also want to generate some sample marks data for the system, head over t
 
 ## Installation
 
-If you wish to run this web application locally, [Python](https://www.python.org/) will be **necessary** for you to be able to run this system.
+To install the Mark Management System locally, here are the prerequisites:
 
-1. Clone the repository.
+- Python >= 3.10.9
+- Node >= 18
+- Vite >= 5.0.11
+- PostgreSQL >= 15.1
+- Git >= 2.43.0
+
+Any further dependencies will be installed as part of the setting up process.
+
+1. Start by cloning the repository.
 
    ```
    $ git clone https://github.com/k9mil/cs408-mark-management-system.git
@@ -57,7 +65,21 @@ If you wish to run this web application locally, [Python](https://www.python.org
    $ pip install -r requirements.txt
    ```
 
-4. With the dependencies now being installed, you now have to modify a few configuration attributes. Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. Modify the keys to whatever you wish, and point the database URL to your database.
+4. With the dependencies now being installed, you now have to modify a few configuration attributes. Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. Modify the keys to whatever you wish, and point the database URL to your database. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be ran locally, but the `DATABASE_URL` most of course point to the locally run database.
+
+The `DATABASE_URL` is usually structured as follows:
+
+```
+postgresql://postgres:admin@localhost:5432/mms
+```
+
+Where the components of this Database URL being as follows:
+
+- `postgres` is the username for the database.
+- `admin` is a sample password for the user.
+- `localhost` is the hostname where the Postgres is running.
+- `5432` is the port number on which Postgres is listening for connections (5432 is the default port).
+- `mms` is the specific database to which the application will connect.
 
 5. Run the FastAPI backend.
 
@@ -82,7 +104,17 @@ To run the frontend, you'll need to ensure that you have [Node](https://nodejs.o
 
 This system contains a large amount of integration tests, which have been written in `pytest` due to its direct compatibility with FastAPI. In order to run the integration test suite, a mocked database (in other words, another PostgreSQL database) has to be setup first in order for the test suite to be ran. Please ensure that `MMS_DATABASE_URL_TEST` is a valid environment variable pointing to the mocked database.
 
-Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running `pytest`. If you wish to run tests on only a single file, you can achieve so by running `pytest <file_name>.py`.
+Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running :
+
+```
+pytest
+```
+
+If you wish to run tests on only a single file, you can achieve so by running :
+
+```
+pytest <file_name>.py
+```
 
 ## Usage
 
