@@ -27,7 +27,7 @@ To install the Mark Management System locally, here are the prerequisites:
 - PostgreSQL >= 14.10
 - Git >= 2.37.1
 
-_note that lower versions may work with the system, however, these are the versions that the system was built with._
+_Please note that lower (or higher) versions may work with the system, however, these are the versions that the system was built with._
 
 Any further dependencies will be installed as part of the setting up process.
 
