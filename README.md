@@ -114,7 +114,7 @@ Additionally, some sample files have been provided to showcase the types of fiel
 
 This system contains a large amount of integration tests, which have been written in `pytest` due to its direct compatibility with FastAPI. In order to run the integration test suite, a mocked database (in other words, another PostgreSQL database) has to be setup first in order for the test suite to be ran. Please ensure that `MMS_DATABASE_URL_TEST` is a valid environment variable pointing to the mocked database.
 
-As before, you have to modify either the environment variable, or hardcode it in the `config.py` file, in the `TestingConfig` class.
+As before, you have to modify either the environment variable, or hardcode it in the `config.py` file, in the `TestingConfig` class. In the case that is not set up, the testing will default to using the primary database, meaning some tests can fail (if there is pre-existing data in the table), therefore, please ensure that the testing database is set up correctly.
 
 Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running:
 
