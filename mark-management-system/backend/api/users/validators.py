@@ -5,10 +5,11 @@ from typing import Dict, Any
 
 class EmailAddressValidator:
     """A utility class which validates user emails."""
-    def __init__(self)-> None:
+    def __init__(self) -> None:
         self.validation_errors = {}
 
-        self.email_address_regex = re.compile(r"^(?!\.)(?!.*\.\.)([A-Z0-9_+\-.]*)[A-Z0-9_+\-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$", re.IGNORECASE)
+        # https://stackoverflow.com/questions/8022530/how-to-check-for-valid-email-address
+        self.email_address_regex = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", re.IGNORECASE)
 
     def validate_email_address(self, email_address: str) -> None:
         if not email_address:
