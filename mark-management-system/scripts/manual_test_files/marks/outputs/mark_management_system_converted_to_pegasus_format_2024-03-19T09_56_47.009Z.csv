@@ -1,0 +1,3 @@
+classcode,regno,mark,studentname,course,degree,degreecode,result
+CS407,abc33355,79,Annie Doe,Computer Science,BSc (Hons),0403/4,PASS
+CS407,abc33356,,Hannie Doe,Computer Science,BSc (Hons),0403/4,FAIL
