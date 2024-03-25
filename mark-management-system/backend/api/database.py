@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from api.config import DevelopmentConfig
 from api.config import TestingConfig
 
+# Some of the code in this file can be found at: https://fastapi.tiangolo.com/tutorial/sql-databases/
 
 database_url = DevelopmentConfig.DATABASE_URL or TestingConfig.DATABASE_URL
 
