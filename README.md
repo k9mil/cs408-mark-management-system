@@ -17,26 +17,17 @@ Mark Management System is a platform that streamlines data aggregation and prese
 
 and much more, such as individual Student Profiles, Class Profiles and Error Pages!
 
-## Sample Data Generation
-
-This system contains a file inside /backend/scripts, which is called `db_base_values.py`. After setting up the dependencies and going through the installation process outlined below, you can run the file to generate some sample data, including roles, users, classes, students, degrees and some marks.
-
-The system will generate two types of users, an administrator and a lecturer which you can access with these details:
-
-- `admin@mms.com` with the password `12345678`
-- `lecturer@mms.com` with the password `12345678`
-
-You may also want to generate some sample marks data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts) which contains a useful, customisable Mark Generation Script written in Python alongside documentation.
-
 ## Installation
 
 To install the Mark Management System locally, here are the prerequisites:
 
 - Python >= 3.10.9
-- Node >= 18
+- Node >= 16
 - Vite >= 5.0.11
-- PostgreSQL >= 15.1
-- Git >= 2.43.0
+- PostgreSQL >= 14.10
+- Git >= 2.37.1
+
+_note that lower versions may work with the system, however, these are the versions that the system was built with._
 
 Any further dependencies will be installed as part of the setting up process.
 
@@ -67,9 +58,9 @@ Any further dependencies will be installed as part of the setting up process.
 
 4. With the dependencies now being installed, you now have to modify a few configuration attributes.
 
-Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be ran locally, but the `DATABASE_URL` will have to point to your instance of Postgres.
+Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be run locally, but the `DATABASE_URL` will have to point to your instance of Postgres.
 
-The `DATABASE_URL` is usually structured as follows:
+This means, that you will have to create a Postgres instance, and point the server correctly to your instance. The `DATABASE_URL` is usually structured as follows:
 
 ```
 postgresql://postgres:admin@localhost:5432/mms
@@ -102,17 +93,30 @@ To run the frontend, you'll need to ensure that you have [Node](https://nodejs.o
    $ npm run dev
    ```
 
+## Sample Data Generation
+
+This system contains a file inside /backend/scripts, which is called `db_base_values.py`. After setting up the dependencies and going through the installation process outlined above, you can run the file to generate some sample data, including roles, users, classes, students, degrees and some marks.
+
+The system will generate two types of users, an administrator and a lecturer which you can access with these details:
+
+- `admin@mms.com` with the password `12345678`
+- `lecturer@mms.com` with the password `12345678`
+
+You may also want to generate some sample marks data for the system, head over to [scripts](https://github.com/k9mil/cs408-mark-management-system/tree/main/mark-management-system/scripts) which contains a useful, customisable Mark Generation Script written in Python alongside documentation.
+
+Additionally, some sample files have been provided to showcase the types of fields that are required for each upload or conversion type, which can be found in `/scripts/manual_test_files`.
+
 ## Testing
 
 This system contains a large amount of integration tests, which have been written in `pytest` due to its direct compatibility with FastAPI. In order to run the integration test suite, a mocked database (in other words, another PostgreSQL database) has to be setup first in order for the test suite to be ran. Please ensure that `MMS_DATABASE_URL_TEST` is a valid environment variable pointing to the mocked database.
 
-Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running :
+Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running:
 
 ```
 pytest
 ```
 
-If you wish to run tests on only a single file, you can achieve so by running :
+If you wish to run tests on only a single file, you can achieve so by running:
 
 ```
 pytest <file_name>.py
