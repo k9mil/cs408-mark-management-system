@@ -3,6 +3,11 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * The documentation for this component can be found at:
+ * https://ui.shadcn.com/docs/components/tooltip
+ */
+
 const TooltipProvider = TooltipPrimitive.Provider;
 
 const Tooltip = TooltipPrimitive.Root;

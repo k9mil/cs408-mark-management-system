@@ -3,6 +3,11 @@ import React, { createContext, useContext, useState } from "react";
 import { IAuthContext, IAuthProvider } from "./models/IAuth";
 import { IRole } from "./models/IRole";
 
+// The development of this AuthProvider was assisted from these sources:
+
+// https://medium.com/@vitorbritto/react-design-patterns-provider-pattern-b273ba665158
+// https://stackoverflow.com/questions/74298603/how-to-better-type-a-react-context-to-assume-that-the-value-will-always-be-defin
+
 const defaultAuthContext: IAuthContext = {
   id: 0,
   isAuthenticated: false,

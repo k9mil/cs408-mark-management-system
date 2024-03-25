@@ -1,3 +1,5 @@
+# This was used to help setup Docker Compose in AWS EC2 - https://medium.com/@fredmanre/how-to-configure-docker-docker-compose-in-aws-ec2-amazon-linux-2023-ami-ab4d10b2bcdc
+
 version: "3.7"
 
 services:

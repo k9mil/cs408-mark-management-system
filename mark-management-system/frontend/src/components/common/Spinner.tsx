@@ -1,5 +1,7 @@
 import React from "react";
 
+// https://flowbite.com/docs/components/spinner/ (modified variant)
+
 const Spinner = () => (
   <svg
     aria-hidden
