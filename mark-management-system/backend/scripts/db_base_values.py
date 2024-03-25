@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 
 from faker import Faker
 
-from typing import Dict, List, Final
+from typing import List, Final
 from random import normalvariate, randint, choice
 
 from api.system.models.models import Base
@@ -87,8 +87,8 @@ def create_users(db: Session) -> None:
 
     admin_user = User(
             email_address="admin@mms.com",
-            first_name="Camil",
-            last_name="Zak",
+            first_name="Kamil",
+            last_name="Zackery",
             password=hashed_password
         )
     
@@ -102,7 +102,7 @@ def create_users(db: Session) -> None:
     base_user = User(
             email_address="base@mms.com",
             first_name="Kamil",
-            last_name="Zack",
+            last_name="Zackington",
             password=hashed_password
         )
 

@@ -27,6 +27,10 @@ from scripts.db_base_values import (
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+# Some of the code below has been taken in parts from the official FastAPI documentation:
+
+# https://fastapi.tiangolo.com/tutorial/testing/
+# https://fastapi.tiangolo.com/advanced/testing-database/
 
 app = create_app()
 
