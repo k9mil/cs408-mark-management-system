@@ -12,10 +12,6 @@
 *.cb2
 .*.lb
 
-## Data Generation files:
-
-*.csv
-
 ## Intermediate documents:
 *.dvi
 *.xdv
