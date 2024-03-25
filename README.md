@@ -58,9 +58,13 @@ Any further dependencies will be installed as part of the setting up process.
 
 4. With the dependencies now being installed, you now have to modify a few configuration attributes.
 
-Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be run locally, but the `DATABASE_URL` will have to point to your instance of Postgres.
+Head over to the `config.py` file located at `/backend/api`, where you will see that `JWT_SECRET_KEY`, `JWT_REFRESH_SECRET_KEY` and `DATABASE_URL` take their values from environment variables. It is important to note that `JWT_SECRET_KEY` and `JWT_REFRESH_SECRET_KEY` can theoretically be anything for the site to be run locally, but the `DATABASE_URL` (in the `DevelopmentConfig` class) will have to point to your instance of Postgres.
 
-This means, that you will have to create a Postgres instance, and point the server correctly to your instance. The `DATABASE_URL` is usually structured as follows:
+The environment variables can either be set on your local machine, or hardcoded in the `config.py` file.
+
+This means, that you will have to create a Postgres database (the tables are automatically generated for you), and point the server correctly to your instance. See the [PostgreSQL documentation](https://www.postgresql.org/docs/current/sql-createdatabase.html) or [StackOverflow](https://stackoverflow.com/questions/30641512/create-database-from-command-line-in-postgresql) for information on how to create a Postgres database.
+
+The `DATABASE_URL` is usually structured as follows:
 
 ```
 postgresql://postgres:admin@localhost:5432/mms
@@ -109,6 +113,8 @@ Additionally, some sample files have been provided to showcase the types of fiel
 ## Testing
 
 This system contains a large amount of integration tests, which have been written in `pytest` due to its direct compatibility with FastAPI. In order to run the integration test suite, a mocked database (in other words, another PostgreSQL database) has to be setup first in order for the test suite to be ran. Please ensure that `MMS_DATABASE_URL_TEST` is a valid environment variable pointing to the mocked database.
+
+As before, you have to modify either the environment variable, or hardcode it in the `config.py` file, in the `TestingConfig` class.
 
 Once you have ensured that the environment variable is set up, you can run the test suite by heading over to the `/tests` directory, in which you can run the entire test suite by running:
 
